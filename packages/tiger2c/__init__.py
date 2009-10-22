@@ -3,6 +3,9 @@
 """Paquete principal de Tiger2C. 
 """
 
+from tiger2c.errors import Tiger2CError
+
+
 __version__ = '0.1'
 
 __authors__ = (
@@ -14,3 +17,4 @@ __authors__ = (
 def translate(tiger_filename, c_filename):
     """Traduce un programa Tiger a un programa C equivalente.
     """
+    raise Tiger2CError()

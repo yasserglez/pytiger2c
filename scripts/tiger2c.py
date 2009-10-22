@@ -3,9 +3,16 @@
 """Script para ejecutar Tiger2C desde la linea de comandos.
 """
 
+
 import os
 import sys
 import optparse
+import subprocess
+
+# Add the directory containing the packages in the source distribution to the path.
+# This should be removed when Tiger2C is installed.
+PACKAGES_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, 'packages'))
+sys.path.insert(0, PACKAGES_DIR)
 
 from tiger2c import __version__, __authors__, translate
 from tiger2c.errors import Tiger2CError
@@ -14,7 +21,7 @@ from tiger2c.errors import Tiger2CError
 EXIT_SUCCESS, EXIT_FAILURE = 0, 1
 
 
-def _parse_args(argv):
+def _parse_args():
     """Reconoce las opciones especificadas como argumentos.
     """
     usage = '%prog [options] <tiger-filename> <output-filename>'
@@ -31,41 +38,40 @@ def _parse_args(argv):
     parser.add_option('-s', '--save-tmp', action='store_true', dest='save_tmp',
                       help="do not remove the C program created for compilation")
     parser.set_default('save_tmp', False)    
-    options, args = parser.parse_args(argv)
+    options, args = parser.parse_args()
     if len(args) != 2:
         parser.error('invalid number of arguments')
     else:
         return options, args
 
 
-def main(argv):
+def main():
     """Función principal del script.
     """
-    options, args = _parse_args(argv[1:])
-    tiger_filename = os.path.abspath(args[0])
+    options, args = _parse_args()
+    tiger_file = os.path.abspath(args[0])
     if options.compile:
-        basename = os.path.basename(tiger_filename)
+        basename = os.path.basename(tiger_file)
         index = basename.rfind('.')
-        c_filename = '{0}.c'.format(basename[:index] if index > 0 else basename)
-        c_filename = os.path.join(os.path.dirname(tiger_filename), c_filename)
-        exec_filename = os.path.abspath(args[1])
+        c_file = '{0}.c'.format(basename[:index] if index > 0 else basename)
+        c_file = os.path.join(os.path.dirname(tiger_file), c_file)
+        exec_file = os.path.abspath(args[1])
     else: 
-        c_filename = os.path.abspath(args[1])
+        c_file = os.path.abspath(args[1])
     try:
-        translate(tiger_filename, c_filename)
+        translate(tiger_file, c_file)
     except Tiger2CError, error:
         # TODO: Print information about sintantic or semantic errors.
         sys.exit(EXIT_FAILURE)
     else:
         if options.compile:
-            CMD = '/usr/bin/gcc "{0}" -o "{1}"'
-            CMD = CMD.format(c_filename.replace('"', '\"'), 
-                             exec_filename.replace('"', '\"'))
-            os.system(CMD)
+            GCC_CMD = ['gcc',  c_file, '-o', exec_file]
+            if subprocess.call(GCC_CMD) != 0:
+                sys.exit(EXIT_FAILURE)
             if not options.save_tmp:
-                os.unlink(c_filename)
+                os.unlink(c_file)
         sys.exit(EXIT_SUCCESS)    
 
 
 if __name__ == '__main__':
-    main(sys.argv)
+    main()
