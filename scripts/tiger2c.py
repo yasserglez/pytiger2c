@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 """Script para ejecutar Tiger2C desde la linea de comandos.
