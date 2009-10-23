@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-"""Script para generar documentación del API.
+"""
+Script para generar documentación del API.
 """
 
 import os
@@ -31,7 +32,8 @@ LATEX_CMD = ['pdflatex', os.path.join(OUTPUT_DIR, 'api.tex')]
 
 
 class Tiger2CLatexWriter(LatexWriter):
-    """LatexWriter personalizado para generar documentación de Tiger2C.
+    """
+    LatexWriter personalizado para generar documentación de Tiger2C.
     """
 
     PREAMBLE = [
@@ -329,7 +331,103 @@ class Tiger2CLatexWriter(LatexWriter):
                                 self.label(base))
                     out(self._FUNC_GROUP_HEADER % (hdr))
                     for var_doc in grouped_inh_vars[base]:
-                        self.write_func_list_box(out, var_doc)        
+                        self.write_func_list_box(out, var_doc)
+                        
+    def write_func_list_box(self, out, var_doc):
+        func_doc = var_doc.value
+        is_inherited = (var_doc.overrides not in (None, UNKNOWN))
+        if not is_inherited:
+            out('    \\label{%s}\n' % self.label(func_doc))
+            out('    %s\n' % self.indexterm(func_doc))
+        # Start box for this function.
+        out('    \\vspace{0.5ex}\n\n')
+        out('\\hspace{.8\\funcindent}')
+        out('\\begin{boxedminipage}{\\funcwidth}\n\n')
+        # Function signature.
+        out('    %s\n\n' % self.function_signature(var_doc))
+        if (func_doc.docstring not in (None, UNKNOWN) and
+            func_doc.docstring.strip() != ''):
+            out('    \\vspace{-1.5ex}\n\n')
+            out('    \\rule{\\textwidth}{0.5\\fboxrule}\n')
+        # Description
+        out("\\setlength{\\parskip}{2ex}\n")
+        if func_doc.descr not in (None, UNKNOWN):
+            out(self.docstring_to_latex(func_doc.descr, 4))
+        # Parameters
+        out("\\setlength{\\parskip}{1ex}\n")
+        if func_doc.arg_descrs or func_doc.arg_types:
+            # Find the longest name.
+            longest = max([0] + [len(n) for n in func_doc.arg_types])
+            for names, descrs in func_doc.arg_descrs:
+                longest = max([longest]+[len(n) for n in names])
+            # Table header.
+            out(' '*6+'\\textbf{Argumentos}\n')
+            out('     \\vspace{-1ex}\n\n')
+            out(' '*6+'\\begin{quote}\n')
+            out('     \\begin{Ventry}{%s}\n\n' % (longest * 'x'))
+            # Add params that have @type but not @param info:
+            arg_descrs = list(func_doc.arg_descrs)
+            args = set()
+            for arg_names, arg_descr in arg_descrs:
+                args.update(arg_names)
+            for arg in var_doc.value.arg_types:
+                if arg not in args:
+                    arg_descrs.append( ([arg],None) )
+            # Display params
+            for (arg_names, arg_descr) in arg_descrs:
+                arg_name = plaintext_to_latex(', '.join(arg_names))
+                out('%s\\item[%s]\n\n' % (' '*10, arg_name))
+                if arg_descr:
+                    out(self.docstring_to_latex(arg_descr, 10))
+                for arg_name in arg_names:
+                    arg_typ = func_doc.arg_types.get(arg_name)
+                    if arg_typ is not None:
+                        if len(arg_names) == 1:
+                            lhs = 'type'
+                        else:
+                            lhs = 'type of %s' % arg_name
+                        rhs = self.docstring_to_latex(arg_typ).strip()
+                        out('%s{\\it (%s=%s)}\n\n' % (' '*12, lhs, rhs))
+            out('        \\end{Ventry}\n\n')
+            out(' '*6+'\\end{quote}\n\n')
+        # Returns
+        rdescr = func_doc.return_descr
+        rtype = func_doc.return_type
+        if rdescr not in (None, UNKNOWN) or rtype not in (None, UNKNOWN):
+            out(' '*6+'\\textbf{Valor de retorno}\n')
+            out('    \\vspace{-1ex}\n\n')
+            out(' '*6+'\\begin{quote}\n')
+            if rdescr not in (None, UNKNOWN):
+                out(self.docstring_to_latex(rdescr, 6))
+                if rtype not in (None, UNKNOWN):
+                    out(' '*6+'{\\it (type=%s)}\n\n' %
+                        self.docstring_to_latex(rtype, 6).strip())
+            elif rtype not in (None, UNKNOWN):
+                out(self.docstring_to_latex(rtype, 6))
+            out(' '*6+'\\end{quote}\n\n')
+        # Raises
+        if func_doc.exception_descrs not in (None, UNKNOWN, [], ()):
+            out(' '*6+'\\textbf{Excepciones}\n')
+            out('    \\vspace{-1ex}\n\n')
+            out(' '*6+'\\begin{quote}\n')
+            out('        \\begin{description}\n\n')
+            for name, descr in func_doc.exception_descrs:
+                out(' '*10+'\\item[\\texttt{%s}]\n\n' %
+                    plaintext_to_latex('%s' % name))
+                out(self.docstring_to_latex(descr, 10))
+            out('        \\end{description}\n\n')
+            out(' '*6+'\\end{quote}\n\n')
+        ## Overrides
+        if var_doc.overrides not in (None, UNKNOWN):
+            out('      Overrides: ' +
+                plaintext_to_latex('%s'%var_doc.overrides.canonical_name))
+            if (func_doc.docstring in (None, UNKNOWN) and
+                var_doc.overrides.value.docstring not in (None, UNKNOWN)):
+                out(' \textit{(inherited documentation)}')
+            out('\n\n')
+        # Add version, author, warnings, requirements, notes, etc.
+        self.write_standard_fields(out, func_doc)
+        out('    \\end{boxedminipage}\n\n')                              
                         
     def write_func_inheritance_list(self, out, doc, listed_inh_vars):
         for base in doc.mro():
@@ -395,11 +493,8 @@ class Tiger2CLatexWriter(LatexWriter):
         
         
 def write_latex(docindex, options, format):
-    """Sustituye la función de igual nombre de Epydoc.
-    
-    Esta función se utiliza para sustituir la función de igual nombre de Epydoc
-    que se encuentra en el módulo cli. Es una forma (bastante pobre) de
-    personalizar el código LaTeX generado por Epydoc.
+    """
+    Sustituye la función de igual nombre de Epydoc.
     """
     latex_writer = Tiger2CLatexWriter(docindex, **options.__dict__)
     log.start_progress('Writing LaTeX docs')
@@ -409,7 +504,8 @@ def write_latex(docindex, options, format):
 
     
 def main():
-    """Función principal del script.
+    """
+    Función principal del script.
     """
     # Generate the documentation of the package using Epydoc.
     cli.write_latex = write_latex

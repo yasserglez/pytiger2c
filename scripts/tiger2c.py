@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-"""Script para ejecutar Tiger2C desde la linea de comandos.
 """
-
+Script para ejecutar Tiger2C desde la linea de comandos.
+"""
 
 import os
 import sys
@@ -22,7 +22,8 @@ EXIT_SUCCESS, EXIT_FAILURE = 0, 1
 
 
 def _parse_args():
-    """Reconoce las opciones especificadas como argumentos.
+    """
+    Reconoce las opciones especificadas como argumentos.
     """
     usage = '%prog [options] <tiger-filename> <output-filename>'
     version = '%prog (Tiger2C) {0}\n'.format(__version__)
@@ -46,7 +47,8 @@ def _parse_args():
 
 
 def main():
-    """Función principal del script.
+    """
+    Función principal del script.
     """
     options, args = _parse_args()
     tiger_file = os.path.abspath(args[0])
