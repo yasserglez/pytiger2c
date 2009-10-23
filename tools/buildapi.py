@@ -129,9 +129,11 @@ class Tiger2CLatexWriter(LatexWriter):
         out('Ariel Hernández Amador \\\\ \\small{gnuaha7@uh.cu}\n}\n')
         out('\\date{}\n')        
         out('\\maketitle\n')
+        out('\\thispagestyle{empty}')
         # Add a table of contents.
         self.write_start_of(out, 'Table of Contents')
         out('\\newpage\n')
+        out('\\setcounter{page}{1}')
         out('\\tableofcontents\n')
         # Include documentation files.
         self.write_start_of(out, 'Includes')

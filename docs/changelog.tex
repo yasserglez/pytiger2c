@@ -3,15 +3,19 @@
 \usepackage[spanish]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage{fullpage}
+\usepackage{longtable}
 
-\title{Historia de los cambios realizados al proyecto}
+\title{
+	\LARGE{Tiger2C} \\
+	\Large{Historia de los cambios realizados al proyecto}
+}
 
 \author{
-  Yasser González Fernández \\
-  \small{\texttt{yglez@uh.cu}}
-  \and
-  Ariel Hernández Amador \\
-  \small{\texttt{gnuaha7@uh.cu}}
+  	Yasser González Fernández \\
+  	\small{yglez@uh.cu}
+  	\and
+  	Ariel Hernández Amador \\
+  	\small{gnuaha7@uh.cu}
 }
 
 \date{}
@@ -20,12 +24,18 @@
 
 \maketitle
 
+\thispagestyle{empty}
+
+\newpage
+
+\setcounter{page}{1}
+
 \begin{center}
-\begin{tabular}{|l|l|p{20em}|}
+\begin{longtable}{|l|l|p{20em}|}
 \hline 
-\textbf{Fecha} & \textbf{Autor} & \textbf{Descripción} \\ 
+\textbf{Fecha} & \textbf{Autor} & \textbf{Descripción} \\
 \hline
 \input{changelog-tmp}
-\end{tabular}
+\end{longtable}
 \end{center}
 \end{document}
