@@ -1,0 +1,9 @@
+\begin{Verbatim}[commandchars=@\[\]]
+@PYaE[# Lista que define los tokens válidos.]
+tokens @PYbd[=] (@PYaB[']@PYaB[NUMBER]@PYaB['], @PYaB[']@PYaB[PLUS]@PYaB['], @PYaB[']@PYaB[MINUS]@PYaB['])
+
+@PYaE[# Expresiones regulares para cada uno de los tokens.]
+t_NUMBER @PYbd[=] @PYaB[r']@PYaB[\]@PYaB[d+]@PYaB[']
+t_PLUS @PYbd[=] @PYaB[r']@PYaB[\]@PYaB[+]@PYaB[']
+t_MINUS @PYbd[=] @PYaB[r']@PYaB[-]@PYaB[']
+\end{Verbatim}

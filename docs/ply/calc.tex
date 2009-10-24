@@ -1,0 +1,81 @@
+\begin{Verbatim}[commandchars=@\[\]]
+@PYaE[# -*- coding: utf-8 -*-]
+
+@PYas["""]
+@PYas[Ejemplo de un evaluador de expresiones aritméticas con PLY.]
+@PYas["""]
+
+@PYay[from] @PYaV[ply] @PYay[import] lex, yacc
+
+@PYaE[# Reglas del lexer.]
+
+tokens @PYbd[=] (@PYaB[']@PYaB[NUMBER]@PYaB['], @PYaB[']@PYaB[PLUS]@PYaB['], @PYaB[']@PYaB[MINUS]@PYaB['], @PYaB[']@PYaB[TIMES]@PYaB['], @PYaB[']@PYaB[DIVIDE]@PYaB['], @PYaB[']@PYaB[LPAREN]@PYaB['], @PYaB[']@PYaB[RPAREN]@PYaB['])
+
+@PYay[def] @PYaL[t_NUMBER](token):
+    @PYaB[r']@PYaB[\]@PYaB[d+]@PYaB[']
+    token@PYbd[.]value @PYbd[=] @PYaX[int](token@PYbd[.]value)
+    @PYay[return] token
+
+t_PLUS @PYbd[=] @PYaB[r']@PYaB[\]@PYaB[+]@PYaB[']
+t_MINUS @PYbd[=] @PYaB[r']@PYaB[-]@PYaB[']
+t_TIMES @PYbd[=] @PYaB[r']@PYaB[\]@PYaB[*]@PYaB[']
+t_DIVIDE @PYbd[=] @PYaB[r']@PYaB[/]@PYaB[']
+t_LPAREN @PYbd[=] @PYaB[r']@PYaB[\]@PYaB[(]@PYaB[']
+t_RPAREN @PYbd[=] @PYaB[r']@PYaB[\]@PYaB[)]@PYaB[']
+t_ignore  @PYbd[=] @PYaB[']@PYaB[ ]@PYao[\t]@PYaB[']
+
+
+@PYaE[# Reglas del parser.]
+
+@PYay[def] @PYaL[p_expr_plus](symbs):
+    @PYaB[r']@PYaB[expr : expr PLUS term]@PYaB[']
+    symbs@lb[]@PYaw[0]@rb[] @PYbd[=] symbs@lb[]@PYaw[1]@rb[] @PYbd[+] symbs@lb[]@PYaw[3]@rb[]
+    
+@PYay[def] @PYaL[p_expr_minus](symbs):
+    @PYaB[r']@PYaB[expr : expr MINUS term]@PYaB[']
+    symbs@lb[]@PYaw[0]@rb[] @PYbd[=] symbs@lb[]@PYaw[1]@rb[] @PYbd[-] symbs@lb[]@PYaw[3]@rb[]
+    
+@PYay[def] @PYaL[p_expr_term](symbs):
+    @PYaB[r']@PYaB[expr : term]@PYaB[']
+    symbs@lb[]@PYaw[0]@rb[] @PYbd[=] symbs@lb[]@PYaw[1]@rb[]
+
+@PYay[def] @PYaL[p_term_times](symbs):
+    @PYaB[r']@PYaB[term : term TIMES factor]@PYaB[']
+    symbs@lb[]@PYaw[0]@rb[] @PYbd[=] symbs@lb[]@PYaw[1]@rb[] @PYbd[*] symbs@lb[]@PYaw[3]@rb[]
+    
+@PYay[def] @PYaL[p_term_divide](symbs):
+    @PYaB[r']@PYaB[term : term DIVIDE factor]@PYaB[']
+    symbs@lb[]@PYaw[0]@rb[] @PYbd[=] symbs@lb[]@PYaw[1]@rb[] @PYbd[/] symbs@lb[]@PYaw[3]@rb[]
+    
+@PYay[def] @PYaL[p_term_factor](symbs):
+    @PYaB[r']@PYaB[term : factor]@PYaB[']
+    symbs@lb[]@PYaw[0]@rb[] @PYbd[=] symbs@lb[]@PYaw[1]@rb[]
+
+@PYay[def] @PYaL[p_factor_number](symbs):
+    @PYaB[r']@PYaB[factor : NUMBER]@PYaB[']
+    symbs@lb[]@PYaw[0]@rb[] @PYbd[=] symbs@lb[]@PYaw[1]@rb[]
+    
+@PYay[def] @PYaL[p_factor_paren](symbs):
+    @PYaB[r']@PYaB[factor : LPAREN expr RPAREN]@PYaB[']
+    symbs@lb[]@PYaw[0]@rb[] @PYbd[=] symbs@lb[]@PYaw[2]@rb[]
+
+
+@PYay[def] @PYaL[main]():
+    @PYas["""]
+@PYas[    Función principal del script.]
+@PYas[    """]
+    lexer @PYbd[=] lex@PYbd[.]lex()
+    parser @PYbd[=] yacc@PYbd[.]yacc()
+    @PYay[while] @PYaA[True]:
+        @PYay[try]:
+            expression @PYbd[=] @PYaX[raw_input](@PYaB[']@PYaB[expression: ]@PYaB['])
+        @PYay[except] @PYbe[EOFError]:
+            @PYay[break]
+        @PYay[if] expression:
+            value @PYbd[=] parser@PYbd[.]parse(expression, lexer@PYbd[=]lexer)
+            @PYay[print] @PYaB[']@PYaB[value: ]@PYaB['], value
+
+
+@PYay[if] __name__ @PYbd[==] @PYaB[']@PYaB[__main__]@PYaB[']:
+    main()
+\end{Verbatim}
