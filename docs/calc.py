@@ -45,6 +45,10 @@ def p_term_times(symbs):
 def p_term_divide(symbs):
     r'term : term DIVIDE factor'
     symbs[0] = symbs[1] / symbs[3]
+    
+def p_term_factor(symbs):
+    r'term : factor'
+    symbs[0] = symbs[1]
 
 def p_factor_number(symbs):
     r'factor : NUMBER'
@@ -63,11 +67,11 @@ def main():
     parser = yacc.yacc()
     while True:
         try:
-            expression = raw_input('expression: ', lexer=lexer)
+            expression = raw_input('expression: ')
         except EOFError:
             break
-        if expr:
-            value = parser.parse(expression)
+        if expression:
+            value = parser.parse(expression, lexer=lexer)
             print 'value: ', value
 
 

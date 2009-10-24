@@ -57,11 +57,12 @@ encarga del análisis lexicográfico, es decir, separa el flujo de entrada en un
 secuencia de \textit{tokens} especificados mediante un conjunto de expresiones
 regulares. \texttt{yacc.py} se ocupa de reconocer la sintáxis del lenguaje
 especificada en la forma de una gramática libre del contexto. \texttt{yacc.py}
-realiza un análisis ascendente o LR y genera las tablas utilizando LALR(1). Los
-dos módulos funcionan de manera conjunta, específicamente \texttt{lex.py}
-presenta una función \texttt{token()} como forma de interfaz externa que es
-ejecutada repetidamente por \texttt{yacc.py} para obtener los \textit{tokens} y
-ejecutar las acciones asociadas a las producciones de la gramática.
+realiza un análisis ascendente o LR y genera las tablas utilizando LALR(1) y
+opcionalme SLR. Los dos módulos funcionan de manera conjunta, específicamente
+\texttt{lex.py} presenta una función \texttt{token()} como forma de interfaz
+externa que es  ejecutada repetidamente por \texttt{yacc.py} para obtener los
+\textit{tokens} y  ejecutar las acciones asociadas a las producciones de la
+gramática. 
 
 La principal diferencia entre \texttt{yacc.py} y la herramienta \texttt{yacc}
 de UNIX es que \texttt{yacc.py} no requiere una fase de generación de código a
