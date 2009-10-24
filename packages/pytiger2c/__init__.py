@@ -22,9 +22,11 @@ __authors__ = (
 def translate(tiger_filename, c_filename):
     """
     Traduce un programa Tiger a un programa C equivalente.
-    
+
+    @type tiger_filename: C{str}
     @param tiger_filename: Ruta absoluta al archivo que contiene el código
         fuente del programa Tiger que se debe traducir al lenguaje C.
+    @type c_filename: C{str}
     @param c_filename: Ruta absoluta al archivo donde se generará el código
         C resultante. Si existe un archivo en la ruta especificada este será
         sobreescrito.
