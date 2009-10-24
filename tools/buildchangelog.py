@@ -13,7 +13,7 @@ DOCS_DIR = os.path.abspath(os.path.join(SRC_DIR, 'docs'))
 
 TMP_FILE = os.path.join(DOCS_DIR, 'changelog-tmp.tex')
 
-GIT_CMD = ['git', 'log', '--pretty=format:%ai & %an & %s%n%n%b%n%n \\\\ \\hline']
+GIT_CMD = ['git', 'log', '--no-merges', '--date-order', '--pretty=format:%ai & %an & %s%n%n%b%n%n \\\\ \\hline']
 
 LATEX_CMD = ['pdflatex', os.path.join(DOCS_DIR, 'changelog.tex')]
 
