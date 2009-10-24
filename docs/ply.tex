@@ -1,0 +1,177 @@
+\documentclass{article}
+
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{fullpage}
+
+\title{
+	\LARGE{Tiger2C} \\
+	\Large{Breve descripción de Python Lex-Yacc}
+}
+
+\author{
+  	Yasser González Fernández \\
+  	\small{yglez@uh.cu}
+  	\and
+  	Ariel Hernández Amador \\
+  	\small{gnuaha7@uh.cu}
+}
+
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\thispagestyle{empty}
+
+\newpage
+
+\setcounter{page}{1}
+
+\section{Introducción}
+
+Python Lex-Yacc ó PLY es una implementación, desarrollada completamente en
+Python, de las herramientas tradicionales para la construcción de compiladores
+Lex y Yacc. PLY intenta seguir de manera bastante fiel la forma en que
+trabajan estas herramientas, incluyendo el soporte para gramáticas LALR(1),
+$\varepsilon$-producciones, resolución de ambiguedades mediante reglas de
+precedencia y recuperación de errores.
+
+Esta herramienta fue creada por David M. Beazley en el año 2001 para ser
+utilizado en un curso de Introducción a Compiladores impartido por el autor en
+la Universidad de Chicago. Fue utilizada por los estudiantes de este curso
+para construir compiladores para un lenguaje simple con características
+semejantes a Pascal. Debido a su origen relacionado con la docencia, se dedicó
+en su implementación un gran esfuerzo a proveer una extensiva comprobación de
+errores.
+
+PLY no soporta funcionalidades presentes en otras herramientas para la
+construcción de compiladores como construcción automática del árbol de sintáxis
+abstracta ni aspectos relacionados con la comprobación semántica. PLY sólo se
+ocupa del análisis lexicográfico y sintáctico.
+
+PLY está compuesto por un paquete Python llamado \texttt{ply} que contiene
+dos módulos \texttt{lex.py} y \texttt{yacc.py}. El módulo \texttt{lex.py} se
+encarga del análisis lexicográfico, es decir, separa el flujo de entrada en una
+secuencia de \textit{tokens} especificados mediante un conjunto de expresiones
+regulares. \texttt{yacc.py} se ocupa de reconocer la sintáxis del lenguaje
+especificada en la forma de una gramática libre del contexto. \texttt{yacc.py}
+realiza un análisis ascendente o LR y genera las tablas utilizando LALR(1). Los
+dos módulos funcionan de manera conjunta, específicamente \texttt{lex.py}
+presenta una función \texttt{token()} como forma de interfaz externa que es
+ejecutada repetidamente por \texttt{yacc.py} para obtener los \textit{tokens} y
+ejecutar las acciones asociadas a las producciones de la gramática.
+
+La principal diferencia entre \texttt{yacc.py} y la herramienta \texttt{yacc}
+de UNIX es que \texttt{yacc.py} no requiere una fase de generación de código a
+partir de la descripción de la gramática. Las especificaciones dadas a PLY son
+programas Python válidos, esto significa que no se requieren archivos de código
+fuente adicionales ni un paso especial en el proceso de construcción del
+compilador para generar el código Python del compilador. PLY hace uso de los
+\emph{docstrings} de Python para asociar las reglas de la gramática con sus
+acciones correspondientes. Como la generación de la tabla LALR(1) puede ser un
+proceso relativamente costoso, PLY guarda la tabla resultante en un archivo y en 
+una próxima ejecución del compilador se comprobará si la gramática ha sido
+modificada para cargar la tabla generada anteriormente en lugar de volverla a
+generar.
+
+\section{Análisis lexicográfico}
+
+\texttt{lex.py} se utiliza para separar el flujo de caracteres de la entrada en
+una secuencia de \textit{tokens}. La descripción de cada uno de los
+\textit{tokens} válidos se realiza mediante expresiones regulares.
+
+Todos los \textit{tokens} válidos se deben especificar previamente en una lista
+llamada \texttt{tokens}. A continuación se muestra un fragmento de código
+Python en el que se definen \textit{tokens} relacionados con operaciones
+aritméticas.
+
+\begin{quote}
+\begin{verbatim}
+# Lista que define los tokens válidos.
+tokens = ('NUMBER', 'PLUS', 'MINUS')
+
+# Expresiones regulares para cada uno de los tokens.
+t_NUMBER = r'\d+'
+t_PLUS = r'\+'
+t_MINUS = r'-'
+\end{verbatim}
+\end{quote}
+
+Todos los \textit{tokens} tienen asociado un nombre determinado por los
+caracteres luego del prefijo \texttt{t\_} y un valor que generalmente es el
+lexema asociado al \textit{token}.
+
+Si es necesario asociar una acción a la regla de un \textit{token} se puede
+especificar el \textit{token} mediante una función. A continuación se muestra
+una regla asociada al \textit{token} \texttt{NUMBER} que convierte la cadena al
+entero correspondiente.
+
+\begin{quote}
+\begin{verbatim}
+def t_NUMBER(token):
+    r'\d+'
+    token.value = int(token.value)
+    return token
+\end{verbatim}
+\end{quote}
+
+Para construir el \textit{lexer} se utiliza la función \texttt{lex.lex()} que
+retorna una instancia de la clase \texttt{Lexer}. Una vez que ha sido
+construído, se pueden utilizar dos funciones para interactuar con el
+\textit{lexer}.
+
+\begin{itemize} 
+  \item \texttt{lexer.input(data)} Permite especificar el flujo de caracteres
+  	de entrada.
+  \item \texttt{lexer.token()} Retorna una instancia de \texttt{LexToken} que
+  	representa el siguiente \textit{token} en el flujo de entrada. Si todos los
+  	\textit{tokens} han sido consumidos retornará \texttt{None}.
+\end{itemize}
+
+\section{Análisis sintáctico}
+
+\texttt{yacc.py} se utiliza para reconocer la sintáxis del lenguaje. Las
+producciones de la gramática se especifican utilizando notación BNF en los
+\textit{docstrings} de las funciones que corresponden a las acciones asociadas
+a estas. La primera producción de la gramática especificada se tomará como el
+símbolo inicial.
+
+A continuación se muestra un ejemplo de una producción que forma parte
+de un evaluador de expresiones cuya implementación completa se muestra en la
+sección~\ref{sec:ejemplo}.
+
+\begin{quote}
+\begin{verbatim}
+def p_expr_plus(symbs):
+    r'expr : expr PLUS term'
+    symbs[0] = symbs[1] + symbs[3]
+\end{verbatim}
+\end{quote}
+
+La función acepta un único argumento \texttt{symbs} que es una secuencia
+que contiene los valores asociados a los símbolos de la gramática presentes en
+la producción. Las posiciones en la secuencia se asignan de izquierda a
+derecha. Es posible asignar cualquier objeto Python como valor asociado a un
+símbolo en una producción.
+
+Para construir el \textit{parser} se utiliza la función \texttt{yacc.yacc()}
+que recibe un \textit{lexer} y una cadena para reconocer y retorna una instancia
+de la clase \texttt{Parser}. Una vez que ha sido construído, se puede utilizar
+el método \texttt{parse()} para indicar que comience a reconocer la cadena y
+ejecutar las acciones asociadas a las producciones.
+
+\section{Ejemplo}
+\label{sec:ejemplo}
+
+A continuación se muestra un programa Python que utiliza PLY para implementar
+un pequeño evaluador de expresiones aritméticas con números. Cuando este
+progama se ejecuta muestra un \textit{prompt} y queda a la espera de que se
+introduzca una expresión para evaluarla y mostrar su valor.
+
+\begin{quote}
+\begin{verbatim}
+\end{verbatim}
+\end{quote}
+\end{document}
