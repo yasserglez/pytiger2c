@@ -39,7 +39,7 @@ Python Lex-Yacc ó PLY es una implementación, desarrollada completamente en
 Python, de las herramientas tradicionales para la construcción de compiladores
 Lex y Yacc. PLY intenta seguir de manera bastante fiel la forma en que
 trabajan estas herramientas, incluyendo el soporte para gramáticas LALR(1),
-$\varepsilon$-producciones, resolución de ambiguedades mediante reglas de
+$\varepsilon$-producciones, resolución de ambigüedades mediante reglas de
 precedencia y recuperación de errores.
 
 Esta herramienta fue creada por David M. Beazley en el año 2001 para ser
@@ -51,7 +51,7 @@ en su implementación un gran esfuerzo a proveer una extensiva comprobación de
 errores.
 
 PLY no soporta funcionalidades presentes en otras herramientas para la
-construcción de compiladores como construcción automática del árbol de sintáxis
+construcción de compiladores como construcción automática del árbol de sintaxis
 abstracta ni aspectos relacionados con la comprobación semántica. PLY sólo se
 ocupa del análisis lexicográfico y sintáctico.
 
@@ -59,10 +59,10 @@ PLY está compuesto por un paquete Python llamado \texttt{ply} que contiene
 dos módulos \texttt{lex.py} y \texttt{yacc.py}. El módulo \texttt{lex.py} se
 encarga del análisis lexicográfico, es decir, separa el flujo de entrada en una
 secuencia de \textit{tokens} especificados mediante un conjunto de expresiones
-regulares. \texttt{yacc.py} se ocupa de reconocer la sintáxis del lenguaje
+regulares. \texttt{yacc.py} se ocupa de reconocer la sintaxis del lenguaje
 especificada en la forma de una gramática libre del contexto. \texttt{yacc.py}
 realiza un análisis ascendente o LR y genera las tablas utilizando LALR(1) y
-opcionalme SLR. Los dos módulos funcionan de manera conjunta, específicamente
+opcionalmente SLR. Los dos módulos funcionan de manera conjunta, específicamente
 \texttt{lex.py} presenta una función \texttt{token()} como forma de interfaz
 externa que es  ejecutada repetidamente por \texttt{yacc.py} para obtener los
 \textit{tokens} y  ejecutar las acciones asociadas a las producciones de la
@@ -76,7 +76,7 @@ fuente adicionales ni un paso especial en el proceso de construcción del
 compilador para generar el código Python del compilador. PLY hace uso de los
 \emph{docstrings} de Python para asociar las reglas de la gramática con sus
 acciones correspondientes. Como la generación de la tabla LALR(1) puede ser un
-proceso relativamente costoso, PLY guarda la tabla resultante en un archivo y en 
+proceso relativamente costoso, PLY guarda la tabla resultante en un archivo y en
 una próxima ejecución del compilador se comprobará si la gramática ha sido
 modificada para cargar la tabla generada anteriormente en lugar de volverla a
 generar.
@@ -111,10 +111,10 @@ entero correspondiente.
 
 Para construir el \textit{lexer} se utiliza la función \texttt{lex.lex()} que
 retorna una instancia de la clase \texttt{Lexer}. Una vez que ha sido
-construído, se pueden utilizar dos funciones para interactuar con el
+construido, se pueden utilizar dos funciones para interactuar con el
 \textit{lexer}.
 
-\begin{itemize} 
+\begin{itemize}
   \item \texttt{lexer.input(data)} Permite especificar el flujo de caracteres
   	de entrada.
   \item \texttt{lexer.token()} Retorna una instancia de \texttt{LexToken} que
@@ -124,7 +124,7 @@ construído, se pueden utilizar dos funciones para interactuar con el
 
 \section{Análisis sintáctico}
 
-\texttt{yacc.py} se utiliza para reconocer la sintáxis del lenguaje. Las
+\texttt{yacc.py} se utiliza para reconocer la sintaxis del lenguaje. Las
 producciones de la gramática se especifican utilizando notación BNF en los
 \textit{docstrings} de las funciones que corresponden a las acciones asociadas
 a estas. La primera producción de la gramática especificada se tomará como el
@@ -146,7 +146,7 @@ símbolo en una producción.
 
 Para construir el \textit{parser} se utiliza la función \texttt{yacc.yacc()}
 que recibe un \textit{lexer} y una cadena para reconocer y retorna una instancia
-de la clase \texttt{Parser}. Una vez que ha sido construído, se puede utilizar
+de la clase \texttt{Parser}. Una vez que ha sido construido, se puede utilizar
 el método \texttt{parse()} para indicar que comience a reconocer la cadena y
 ejecutar las acciones asociadas a las producciones.
 
@@ -155,7 +155,7 @@ ejecutar las acciones asociadas a las producciones.
 
 A continuación se muestra un programa Python que utiliza PLY para implementar
 un pequeño evaluador de expresiones aritméticas con números. Cuando este
-progama se ejecuta muestra un \textit{prompt} y queda a la espera de que se
+programa se ejecuta muestra un \textit{prompt} y queda a la espera de que se
 introduzca una expresión para evaluarla y mostrar su valor.
 
 \begin{quote}
