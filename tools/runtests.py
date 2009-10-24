@@ -11,9 +11,9 @@ import subprocess
 
 SRC_DIR = os.path.join(os.path.dirname(__file__), os.pardir)
 
-TIGER2C_SCRIPT = os.path.abspath(os.path.join(SRC_DIR, 'scripts', 'tiger2c.py'))
+PYTIGER2C_SCRIPT = os.path.abspath(os.path.join(SRC_DIR, 'scripts', 'pytiger2c.py'))
 
-TIGER2C_CMD = ['python', TIGER2C_SCRIPT, '-c']
+PYTIGER2C_CMD = ['python', PYTIGER2C_SCRIPT, '-c']
 
 TESTS_DIR = os.path.abspath(os.path.join(SRC_DIR, 'tests'))
 
@@ -34,7 +34,7 @@ class TigerTestCase(unittest.TestCase):
         super(TigerTestCase, self).__init__()
         self._tiger_file = os.path.join(parent_dir, tiger_file)
         self._exec_file = os.path.join(parent_dir, tiger_file[:-4])
-        self._tiger2c_cmd = TIGER2C_CMD + [self._tiger_file, self._exec_file]
+        self._pytiger2c_cmd = PYTIGER2C_CMD + [self._tiger_file, self._exec_file]
         self._in_file = os.path.join(parent_dir, tiger_file[:-4] + '.in')
         if not os.path.isfile(self._in_file):
             self._in_file = None
@@ -85,7 +85,7 @@ class SuccessTigerTestCase(TigerTestCase):
         Ejecuta la prueba.
         """
         # Compile the program.
-        if subprocess.call(self._tiger2c_cmd) != 0 or not os.path.isfile(self._exec_file):
+        if subprocess.call(self._pytiger2c_cmd) != 0 or not os.path.isfile(self._exec_file):
             self.fail('Compilation failed!')
         # Execute the program.
         exec_stdin = open(self._in_file) if self._in_file is not None else self._in_file
@@ -101,7 +101,7 @@ class FailTigerTestCase(TigerTestCase):
     """
     Representa una prueba de fallo.
     
-    Tiger2C deberá fallar al intentar compilar el programa Tiger utilizado en
+    PyTiger2C deberá fallar al intentar compilar el programa Tiger utilizado en
     esta prueba y el mensaje de error que imprima en la salida estándard de
     errores deberá coincidir con el contenido del archivo .err.
     """
@@ -111,8 +111,8 @@ class FailTigerTestCase(TigerTestCase):
         Ejecuta la prueba.
         """
         # Try to compile the program.
-        with open(self._err_file, 'w') as tiger2c_stderr: 
-            if subprocess.call(self._tiger2c_cmd, stderr=tiger2c_stderr) != 1:
+        with open(self._err_file, 'w') as pytiger2c_stderr: 
+            if subprocess.call(self._pytiger2c_cmd, stderr=pytiger2c_stderr) != 1:
                 self.fail('Compilation succeded and it should fail!')
         # Compare the error output.
         self.failIfDifferent(self._tmp_file, self._err_file)        

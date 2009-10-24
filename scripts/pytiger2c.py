@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Script para ejecutar Tiger2C desde la linea de comandos.
+Script para ejecutar PyTiger2C desde la linea de comandos.
 """
 
 import os
@@ -14,8 +14,8 @@ import subprocess
 PACKAGES_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, 'packages'))
 sys.path.insert(0, PACKAGES_DIR)
 
-from tiger2c import __version__, __authors__, translate
-from tiger2c.errors import Tiger2CError
+from pytiger2c import __version__, __authors__, translate
+from pytiger2c.errors import PyTiger2CError
 
 
 EXIT_SUCCESS, EXIT_FAILURE = 0, 1
@@ -26,7 +26,7 @@ def _parse_args():
     Reconoce las opciones especificadas como argumentos.
     """
     usage = '%prog [options] <tiger-filename> <output-filename>'
-    version = '%prog (Tiger2C) {0}\n'.format(__version__)
+    version = '%prog (PyTiger2C) {0}\n'.format(__version__)
     authors = '\n'.join(['Copyright (C) 2009 {0}'.format(a) for a in __authors__])
     desc = 'Translates a Tiger program received as argument into a C ' \
         'program and then (optionally) compiles the C program into an ' \
@@ -62,7 +62,7 @@ def main():
         c_file = os.path.abspath(args[1])
     try:
         translate(tiger_file, c_file)
-    except Tiger2CError, error:
+    except PyTiger2CError, error:
         # TODO: Print information about sintantic or semantic errors.
         sys.exit(EXIT_FAILURE)
     else:

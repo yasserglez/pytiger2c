@@ -5,7 +5,7 @@ Contiene la jerarquía de las excepciones lanzadas en el paquete.
 """
 
 
-class Tiger2CError(Exception):
+class PyTiger2CError(Exception):
     """
     Clase base de todas las excepciones lanzadas en el paquete.
     """

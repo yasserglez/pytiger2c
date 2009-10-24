@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 
 """
-Paquete principal de Tiger2C.
+Paquete principal de PyTiger2C.
 
-Tiger2C es una implementación de un compilador del lenguaje de programación
+PyTiger2C es una implementación de un compilador del lenguaje de programación
 Tiger que genera código en lenguaje C. Opcionalmente, el código C resultante 
 puede ser compilado con un compilador de C para generar un ejecutable.
 """
 
-from tiger2c.errors import Tiger2CError
+from pytiger2c.errors import PyTiger2CError
 
 
 __version__ = '0.1'
@@ -29,4 +29,4 @@ def translate(tiger_filename, c_filename):
         C resultante. Si existe un archivo en la ruta especificada este será
         sobreescrito.
     """
-    raise Tiger2CError()
+    raise PyTiger2CError()

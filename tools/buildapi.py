@@ -24,9 +24,9 @@ OUTPUT_DIR = os.path.abspath(os.path.join(DOCS_DIR, 'api'))
 
 EPYDOC_CONF = os.path.abspath(os.path.join(SRC_DIR, 'tools', 'epydoc.conf'))
 
-TIGER2C_PACKAGE = os.path.abspath(os.path.join(SRC_DIR, 'packages', 'tiger2c'))
+PYTIGER2C_PACKAGE = os.path.abspath(os.path.join(SRC_DIR, 'packages', 'pytiger2c'))
 
-EPYDOC_CMD = ['epydoc', '--debug', '--conf', EPYDOC_CONF, '-o', OUTPUT_DIR, TIGER2C_PACKAGE]
+EPYDOC_CMD = ['epydoc', '--debug', '--conf', EPYDOC_CONF, '-o', OUTPUT_DIR, PYTIGER2C_PACKAGE]
 
 LATEX_CMD = ['pdflatex', os.path.join(OUTPUT_DIR, 'api.tex')]
 
@@ -125,7 +125,7 @@ class Tiger2CLatexWriter(LatexWriter):
         self.write_start_of(out, 'Header')
         # Write the title.
         self.write_start_of(out, 'Title')
-        out('\\title{\LARGE{Tiger2C} \\\\ \\Large{Documentación del API}}\n')
+        out('\\title{\LARGE{PyTiger2C} \\\\ \\Large{Documentación del API}}\n')
         out('\\author{\n')
         out('Yasser González Fernández \\\\ \\small{yglez@uh.cu}\n\\and\n')
         out('Ariel Hernández Amador \\\\ \\small{gnuaha7@uh.cu}\n}\n')
