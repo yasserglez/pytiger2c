@@ -25,9 +25,9 @@ def _parse_args():
     """
     Reconoce las opciones especificadas como argumentos.
     """
-    usage = '%prog [options] <tiger-filename> <output-filename>'
-    version = '%prog (PyTiger2C) {0}\n'.format(__version__)
-    authors = '\n'.join(['Copyright (C) 2009 {0}'.format(a) for a in __authors__])
+    usage = '%%prog [options] <tiger-filename> <output-filename>'
+    version = '%%prog (PyTiger2C) %s\n' % __version__
+    authors = '\n'.join(['Copyright (C) 2009 %s' % a for a in __authors__])
     desc = 'Translates a Tiger program received as argument into a C ' \
         'program and then (optionally) compiles the C program into an ' \
         'executable using a C compiler.'
@@ -55,7 +55,7 @@ def main():
     if options.compile:
         basename = os.path.basename(tiger_file)
         index = basename.rfind('.')
-        c_file = '{0}.c'.format(basename[:index] if index > 0 else basename)
+        c_file = '%s.c' % basename[:index] if index > 0 else basename
         c_file = os.path.join(os.path.dirname(tiger_file), c_file)
         exec_file = os.path.abspath(args[1])
     else: 
