@@ -67,7 +67,7 @@ def main():
         sys.exit(EXIT_FAILURE)
     else:
         if options.compile:
-            GCC_CMD = ['gcc',  c_file, '-o', exec_file]
+            GCC_CMD = ['gcc', '-std=c99', '-pedantic-errors', '-o', exec_file, c_file]
             if subprocess.call(GCC_CMD) != 0:
                 sys.exit(EXIT_FAILURE)
             if not options.save_tmp:
