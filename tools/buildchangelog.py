@@ -26,6 +26,13 @@ def main():
     os.chdir(SRC_DIR)
     with open(TMP_FILE, 'w') as tmp_file:
         subprocess.call(GIT_CMD, stdout=tmp_file)
+    # Escape underscores in the LaTeX file.
+    with open(TMP_FILE, 'r+') as tmp_file:
+        data = tmp_file.read()
+        tmp_file.seek(0)
+        data = data.replace(r'_', r'\_')
+        tmp_file.write(data)
+    # Compile the LaTeX file.
     os.chdir(DOCS_DIR)
     for i in xrange(2):
         subprocess.call(LATEX_CMD)
