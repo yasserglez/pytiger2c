@@ -1,0 +1,133 @@
+\documentclass{article}
+
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{fullpage}
+\usepackage{fancyvrb}
+\usepackage{color}
+
+\input{common/pygments}
+
+\title{
+    \LARGE{PyTiger2C} \\
+    \Large{Anotaciones sobre el código generado}
+}
+
+\author{
+    Yasser González Fernández \\
+    \small{yglez@uh.cu}
+    \and
+    Ariel Hernández Amador \\
+    \small{gnuaha7@uh.cu}
+}
+
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\thispagestyle{empty}
+
+\newpage
+
+\setcounter{page}{1}
+
+\section{Introducción}
+
+% Dar una introducción sobre el código que se va a generar y 
+% la idea general que se va a seguir.
+
+\section{Identificadores}
+
+% Escribir que el nombre de un identificador en Tiger se va a 
+% traducir a un identificador en C si este no coincide con una
+% palabra reservada o con un identificador utilizado anteriormente.
+% Si un identificador especificado en Tiger no es válido (por las
+% razones anteriores) se añadirán underscores al final del nombre
+% hasta que sea válido.
+
+\section{Comentarios}
+
+% Escribir que los comentarios hechos en el programa Tiger
+% no se van a escribir en el programa C.
+
+\section{Declaraciones de tipos}
+
+% Comentarios sobre las declaraciones de tipos en general.
+
+\subsection{Tipos predefinidos}
+
+% El tipo int de Tiger se va a traducir a un tipo int64_t de C. 
+
+% El tipo string de Tiger se va a traducir a una estructura que
+% guarda la cadena como un char *  y la longitud de la cadena.
+
+\begin{quote}
+\input{codegen/c-string}
+\end{quote}
+
+\subsection{\emph{Records}}
+
+% Records en Tiger equivalen a estructuras en C.
+
+\begin{quote}
+\input{codegen/tig-persona}
+\end{quote}
+
+\begin{quote}
+\input{codegen/c-persona}
+\end{quote}
+
+% Comentarios sobre declaración recursiva de records
+% (records con campos del tipo del record que se está declarando)
+% Poner ejemplo.
+
+\subsection{\emph{Arrays}}
+
+% Arrays en Tigers traducidos a arrays en C con la memoria
+% asignada dinámicamente. Cada record se traduce a un estructura 
+% en C que guarda un puntero al primer elemento y la cantidad de
+% elementos del array. 
+
+\begin{quote}
+\input{codegen/tig-integers}
+\end{quote}
+
+\begin{quote}
+\input{codegen/c-integers}
+\end{quote}
+
+\section{Funciones}
+
+% Una función en Tiger se traduce a una función en C que recibe su 
+% scope padre y todos sus argumentos. El valor de retorno será del tipo
+% correspondiente para las funciones y void apra los procedimientos.
+
+% Para cada scope se declara una estructura funcion_scope que tiene
+% una referencia al scope padre y campos para todas las variables
+% declaradas en el scope. 
+
+% Lo primero que hace el código C de una función es crear su scope.
+
+% Poner ejemplo del código Tiger de una función y su traducción a C.
+
+% Explicar funcionamiento de esta técnica para funciones anidadas
+% y funciones recursivas.
+
+\section{Estructura general del archivo C}
+
+% 1. #includes.
+% 2. Declaraciones de tipos.
+%    2.1 Declaraciones de tipos de la biblioteca standard.
+%    2.2 Declaraciones de tipos del programa.
+% 3. Declaraciones de los scopes.
+% 4. Prototipos de las funciones.
+%    4.1 Prototipos de las funciones de la biblioteca standard.
+%    4.2 Prototipos de las funciones del programa.
+% 5. Cuerpo de las funciones.
+%    5.1 Cuerpo de las funciones de la biblioteca standard.
+%    5.2 Cuerpo de las funciones del programa.
+% 6. Función main.
+
+\end{document}
