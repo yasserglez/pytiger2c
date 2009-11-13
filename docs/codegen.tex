@@ -40,17 +40,24 @@
 
 \section{Identificadores}
 
-% Escribir que el nombre de un identificador en Tiger se va a 
-% traducir a un identificador en C si este no coincide con una
-% palabra reservada o con un identificador utilizado anteriormente.
-% Si un identificador especificado en Tiger no es válido (por las
-% razones anteriores) se añadirán underscores al final del nombre
-% hasta que sea válido.
+En \textit{Tiger} los identificadores son una secuencia de letras, dígitos y
+\textit{underscores (``\_'')}, comenzando siempre por una letra. Según la
+descripción anterior, un identificador de \textit{Tiger} es completamente
+válido en el lenguaje \textit{C}.
+
+Nuestro código \textit{C} generado tratará de asignarle a un identificador
+válido de \textit{Tiger} otro con el mismo nombre en \textit{C} siempre que
+este no coincida con una palabra reservada del propio lenguaje \textit{C} o con
+otro identificador definido anteriormente. En caso de que el identificador no
+sea válido ,se le añadirán \textit{underscores (``\_'')} al final de este hasta
+que lograr un nombre de identificador válido.
 
 \section{Comentarios}
 
-% Escribir que los comentarios hechos en el programa Tiger
-% no se van a escribir en el programa C.
+Un comentario en \textit{Tiger} puede aparecer entre cualquier par
+\textit{tokens} del lenguaje, enmarcándose entre /* al inicio y */ al final.
+Nuestro código \textit{C} generado no reflejará los comentarios del programa
+\textit{Tiger} original.
 
 \section{Declaraciones de tipos}
 
@@ -58,10 +65,18 @@
 
 \subsection{Tipos predefinidos}
 
-% El tipo int de Tiger se va a traducir a un tipo int64_t de C. 
+El lenguaje \textit{Tiger} cuenta con los tipos \texttt{int} (números enteros)
+y \texttt{string} (cadena de caracteres) como únicos tipos predefinidos.
 
-% El tipo string de Tiger se va a traducir a una estructura que
-% guarda la cadena como un char *  y la longitud de la cadena.
+Nuestro código \textit{C} generado va crear una variable de tipo
+\texttt{int64\_t} para cada variable de tipo \texttt{int} en el programa
+\textit{Tiger} de origen.
+
+Por otra parte a las variables de tipo \texttt{string} de un programa
+\textit{Tiger} se les asociará una estructura llamada \texttt{string} cuya
+definición se representa a continuación, donde el campo \texttt{data}
+corresponde a la secuencia de caracteres de esta y el campo \texttt{length}
+corresponde a la longitud de la misma.
 
 \begin{quote}
 \input{codegen/c-string}
@@ -69,7 +84,21 @@
 
 \subsection{\emph{Records}}
 
-% Records en Tiger equivalen a estructuras en C.
+En \textit{Tiger} los tipos \textit{record} son definidos por una lista de sus
+campos encerrados entre llaves (\{\}), donde cada elemento de esta lista
+corresponde a la descripción de un campo y tiene la forma 
+\textit{nombre\_del\_campo}:\textit{Id\_tipo} donde \textit{Id\_tipo} es un
+identificador definido con anterioridad.
+
+Nuestro código \textit{C} generado creará una estructura (\texttt{struct}) para
+cada \textit{record} definido en el programa \textit{Tiger} de origen, donde
+cada campo de la estructura corresponderá con uno equivalente en el
+\textit{record}. En caso de que algún campo tenga un nombre no válido, se
+seguirá la misma estrategia de renombramiento que en el caso de los
+identificadores.
+
+El siguiente ejemplo muestra el código \textit{C} generado equivalente para la
+definición de \textit{record} correspondiente a una \texttt{persona} dada. 
 
 \begin{quote}
 \input{codegen/tig-persona}
@@ -79,16 +108,35 @@
 \input{codegen/c-persona}
 \end{quote}
 
-% Comentarios sobre declaración recursiva de records
-% (records con campos del tipo del record que se está declarando)
-% Poner ejemplo.
+El lenguaje \textit{Tiger} permite la declaración de \textit{records}
+mutuamente recursivos, que son definidos en función de ellos mismos. Esta
+característica de \textit{Tiger} no trae ninguna complicación adicional al
+código \textit{C} equivalente, pues las estructuras de \textit{C} también
+pueden ser declarados en función de elloe mismos. 
+
+El siguiente ejemplo muestra el código \textit{C} generado equivalente a la
+definición de \textit{record} correspondiente a un árbol binario
+(\texttt{arbol\_b}) dada.
+
+\begin{quote}
+\input{codegen/tig-arbol_b}
+\end{quote}
+
+\begin{quote}
+\input{codegen/c-arbol_b}
+\end{quote}
 
 \subsection{\emph{Arrays}}
 
-% Arrays en Tigers traducidos a arrays en C con la memoria
-% asignada dinámicamente. Cada record se traduce a un estructura 
-% en C que guarda un puntero al primer elemento y la cantidad de
-% elementos del array. 
+En \textit{Tiger} se pueden declara \textit{arrays} de cualquier tipo
+previamente declarado mediante la sintaxis \texttt{array of} \textit{Id\_tipo}.
+Nuestro código \textit{C} generado creará una estructura semejante a la usada
+para el manejo del tipo básico \texttt{string} que almacenará en \texttt{data}
+un puntero al primer elemento de la secuencia de datos y en \texttt{length} la
+cantidad de elementos de el mismo.
+
+El siguiente ejemplo ilustra como se crea un \textit{array} en \textit{Tiger} y
+el código \textit{C} generado equivalente.
 
 \begin{quote}
 \input{codegen/tig-integers}
@@ -117,17 +165,50 @@
 
 \section{Estructura general del archivo C}
 
-% 1. #includes.
-% 2. Declaraciones de tipos.
-%    2.1 Declaraciones de tipos de la biblioteca standard.
-%    2.2 Declaraciones de tipos del programa.
-% 3. Declaraciones de los scopes.
-% 4. Prototipos de las funciones.
-%    4.1 Prototipos de las funciones de la biblioteca standard.
-%    4.2 Prototipos de las funciones del programa.
-% 5. Cuerpo de las funciones.
-%    5.1 Cuerpo de las funciones de la biblioteca standard.
-%    5.2 Cuerpo de las funciones del programa.
+Un archivo \textit{C} generado como equivalente a un programa en \textit{Tiger}
+seguirá la siguiente estructura en su código.
+
+\begin{enumerate}
+  \item \texttt{\#include}s: En esta sección se incluyen las cabeceras
+  correspondientes a librerías de \textit{C} que serán usadas en el programa
+  generado.
+  \item Declaraciones de Tipos
+  	\begin{enumerate}
+      \item Tipos de la  \textit{Biblioteca Standard}: En esta parte del código se
+      encontrarán las declaraciones de los tipos \texttt{string} e \texttt{int}
+      además de cualquier tipo que sea necesitado por la librería standard.
+      \item Tipos del Programa: En esta parte del código se encontrarán
+      las declaraciones de los tipos definidos en el programa de origen.
+  	\end{enumerate}
+  \item Declaración de los \textit{Scopes}. En esta parte del código se
+  encontrarán las declaraciones de los Scopes unidos a cada función del
+  programa \textit{Tiger} de origen.
+  \item Prototipos de las funciones: Al colocar los prototipos en esta parte
+  del código se garantiza que las funciones serán accesible para las que los
+  necesiten sin importar el orden.
+	\begin{enumerate}
+      \item Prototipos de las funciones de la \textit{Biblioteca Standard}: En
+      esta parte del código se encuentran la descripción de todas las funciones
+      de la librería standard.
+      \item Prototipos de las funciones del programa: En esta parte del código
+      se muestran la descripción de las funciones que son definidas en el
+      programa \textit{Tiger} original.
+    \end{enumerate}
+  \item Cuerpo de las funciones
+ 	\begin{itemize}
+          \item Cuerpo de las funciones de la biblioteca standard: En esta
+          parte del código se encontrarán las implementaciones de las funciones
+          de la biblioteca standard de \textit{Tiger}.
+          \item Cuerpo de las funciones del programa: En esta parte del código
+          estará el código \textit{C} equivalente a cada función definida en el
+          programa \textit{Tiger} de origen.
+     \end{itemize}
+  \item Función \textit{main}: Esta función recibe un trato especial y en su
+  cuerpo se encontrará el código \textit{C} equivalente las instrucciones que
+  no se encuentran dentro de una declaración de función o de tipo. 
+    
+       
+\end{enumerate}
 % 6. Función main.
 
 \end{document}
