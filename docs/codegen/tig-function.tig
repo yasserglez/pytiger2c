@@ -1,0 +1,6 @@
+let 
+    var c := 0
+    function f(a: int, b:int):int =  a + b
+in
+    c := f(5, 10)
+end

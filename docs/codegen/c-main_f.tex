@@ -1,0 +1,23 @@
+\begin{Verbatim}[commandchars=@\[\]]
+@PYay[struct] main_scope
+{
+    @PYaJ[int64_t] a;
+    @PYaJ[int64_t] b;
+    @PYaJ[int64_t] c;
+};
+
+
+@PYaJ[int] @PYaL[main]()
+{
+    @PYay[struct] main_scope@PYbe[*] scope;
+    
+    @PYaE[/* Reservar memoria para la estructura scope */]
+
+    scope@PYbe[-]@PYbe[>]a @PYbe[=] @PYag[5];
+    scope@PYbe[-]@PYbe[>]b @PYbe[=] @PYag[10];
+    scope@PYbe[-]@PYbe[>]c @PYbe[=] @PYag[0];
+    scope@PYbe[-]@PYbe[>]c @PYbe[=] scope@PYbe[-]@PYbe[>]a @PYbe[+] scope@PYbe[-]@PYbe[>]b;
+
+    @PYaE[/* Liberar memoria de la estructura scope */]
+}
+\end{Verbatim}
