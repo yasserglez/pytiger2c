@@ -148,15 +148,40 @@ el código \textit{C} generado equivalente.
 
 \section{Funciones}
 
-% Una función en Tiger se traduce a una función en C que recibe su 
-% scope padre y todos sus argumentos. El valor de retorno será del tipo
-% correspondiente para las funciones y void apra los procedimientos.
+En \textit{Tiger} existen dos tipos de funciones, las que no tienen valor de
+retorno, a las cuales se denomina \textit{procedimientos} y las que tienen un
+valor y tipo de retorno que se denominan propiamente \textit{funciones}. En
+nuestro código \textit{C} generado para ambas se sigue la misma idea, con la
+diferencia de que los procedimientos son generados como funciones
+\texttt{void}, por lo que nos referiremos a los procedimientos como otra
+función cualquiera.
 
-% Para cada scope se declara una estructura funcion_scope que tiene
-% una referencia al scope padre y campos para todas las variables
-% declaradas en el scope. 
+Tanto las funciones como los procedimientos de \textit{Tiger} definen su propio
+ámbito (\textit{scope}) y a su vez tienen acceso a los identificadores y tipos
+definidos en el ámbito en que fue definido (su \textit{scope} padre).
 
-% Lo primero que hace el código C de una función es crear su scope.
+En nuestro código \textit{C} generado, para cada ámbito se declarará una
+estructura de \textit{C}, que se nombrará \\ \texttt{función\_scope}, con
+campos para todas las variables declaradas en este y una referencia a la
+estructura correspondiente al ámbito donde fue definida la función. En caso de
+que existan conflictos en el nombre de la estructura se seguirá la misma
+estrategia de renombramiento antes expuesta.
+
+Los fragmentos de código \textit{Tiger} que no se encuentren en el
+cuerpo de una función, se tratarán de modo especial, generando su
+código \textit{C} equivalente como cuerpo de la función \texttt{main}. En este
+caso tambien se creará una estructura que defina el ámbito correspondiente,
+llamada \texttt{main\_scope}, con la única diferencia que no tendrá referencia
+al ámbito padre.
+
+Una función de \textit{Tiger} tendrá como equivalente una función de \textit{C}
+de igual nombre, cuyo valor de retorno será del tipo correspondiente al de la
+función de \textit{Tiger} original y \texttt{void} en el caso de los
+procedimientos. Esta función recibirá como primer parámetro la estructura
+correspondiente al ámbito padre y a continuación los parámetros equivalentes a
+los que recibe la función de \textit{Tiger} original. En caso de que existan
+conflictos con el nombre de la función se seguirá la misma estrategia de
+renombramiento antes expuesta.
 
 % Poner ejemplo del código Tiger de una función y su traducción a C.
 
@@ -169,46 +194,44 @@ Un archivo \textit{C} generado como equivalente a un programa en \textit{Tiger}
 seguirá la siguiente estructura en su código.
 
 \begin{enumerate}
-  \item \texttt{\#include}s: En esta sección se incluyen las cabeceras
-  correspondientes a librerías de \textit{C} que serán usadas en el programa
-  generado.
-  \item Declaraciones de Tipos
-  	\begin{enumerate}
-      \item Tipos de la  \textit{Biblioteca Standard}: En esta parte del código se
-      encontrarán las declaraciones de los tipos \texttt{string} e \texttt{int}
-      además de cualquier tipo que sea necesitado por la librería standard.
-      \item Tipos del Programa: En esta parte del código se encontrarán
-      las declaraciones de los tipos definidos en el programa de origen.
-  	\end{enumerate}
-  \item Declaración de los \textit{Scopes}. En esta parte del código se
-  encontrarán las declaraciones de los Scopes unidos a cada función del
-  programa \textit{Tiger} de origen.
-  \item Prototipos de las funciones: Al colocar los prototipos en esta parte
-  del código se garantiza que las funciones serán accesible para las que los
-  necesiten sin importar el orden.
-	\begin{enumerate}
-      \item Prototipos de las funciones de la \textit{Biblioteca Standard}: En
-      esta parte del código se encuentran la descripción de todas las funciones
-      de la librería standard.
-      \item Prototipos de las funciones del programa: En esta parte del código
-      se muestran la descripción de las funciones que son definidas en el
-      programa \textit{Tiger} original.
-    \end{enumerate}
-  \item Cuerpo de las funciones
- 	\begin{itemize}
-          \item Cuerpo de las funciones de la biblioteca standard: En esta
-          parte del código se encontrarán las implementaciones de las funciones
-          de la biblioteca standard de \textit{Tiger}.
-          \item Cuerpo de las funciones del programa: En esta parte del código
-          estará el código \textit{C} equivalente a cada función definida en el
-          programa \textit{Tiger} de origen.
-     \end{itemize}
-  \item Función \textit{main}: Esta función recibe un trato especial y en su
-  cuerpo se encontrará el código \textit{C} equivalente las instrucciones que
-  no se encuentran dentro de una declaración de función o de tipo. 
-    
-       
+    \item \texttt{\#include}s: En esta sección se incluyen las cabeceras
+    correspondientes a librerías de \textit{C} que serán usadas en el programa
+    generado.
+    \item Declaraciones de Tipos
+        \begin{enumerate}
+            \item Tipos de la  \textit{Biblioteca Standard}: En esta parte del
+            código se encontrarán las declaraciones de los tipos
+            \texttt{string} e \texttt{int} además de cualquier tipo que sea
+            necesitado por la librería standard.
+      		\item Tipos del Programa: En esta parte del código se encontrarán
+      		las declaraciones de los tipos definidos en el programa de origen.
+  		\end{enumerate}
+  	\item Declaración de los \textit{Scopes}. En esta parte del código se
+  	encontrarán las declaraciones de los Scopes unidos a cada función del
+  	programa \textit{Tiger} de origen.
+  	\item Prototipos de las funciones: Al colocar los prototipos en esta parte
+  	del código se garantiza que las funciones serán accesible para las que los
+  	necesiten sin importar el orden.
+        \begin{enumerate}
+            \item Prototipos de las funciones de la \textit{Biblioteca
+            Standard}: En esta parte del código se encuentran la descripción de
+            todas las funciones de la librería standard.
+            \item Prototipos de las funciones del programa: En esta parte del
+            código se muestran la descripción de las funciones que son
+            definidas en el programa \textit{Tiger} original.
+        \end{enumerate}
+    \item Cuerpo de las funciones
+        \begin{itemize}
+            \item Cuerpo de las funciones de la biblioteca standard: En esta
+            parte del código se encontrarán las implementaciones de las
+            funciones de la biblioteca standard de \textit{Tiger}.
+            \item Cuerpo de las funciones del programa: En esta parte del código
+            estará el código \textit{C} equivalente a cada función definida en
+            el programa \textit{Tiger} de origen.
+        \end{itemize}
+    \item Función \textit{main}: Esta función recibe un trato especial y en su
+    cuerpo se encontrará el código \textit{C} equivalente las instrucciones que
+    no se encuentran dentro de una declaración de función o de tipo. 
 \end{enumerate}
-% 6. Función main.
 
 \end{document}
