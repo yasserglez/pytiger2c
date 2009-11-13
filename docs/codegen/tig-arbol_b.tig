@@ -1,1 +1,0 @@
-type arbol_b { valor: int, arbol_b, hijo_der: arbol_b }

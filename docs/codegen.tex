@@ -35,108 +35,115 @@
 
 \section{Introducción}
 
-% Dar una introducción sobre el código que se va a generar y 
-% la idea general que se va a seguir.
+Nuestro proyecto se propone desarrollar una implementación de un compilador para
+el lenguaje de programación Tiger que genere código \emph{C}. Posteriormente, el
+código \emph{C} generado se compilará con un compilador de \emph{C} para generar
+un ejecutable para una plataforma específica. El código \emph{C} generado por
+nuestro compilador será conforme al \emph{standard} \emph{ISO/IEC 9899:1999},
+comúnmente conocido como \emph{C99}, lo cual garantiza que pueda ser procesado
+por cualquier compilador de \emph{C} conforme a dicho \emph{standard}.
+
+Este documento brinda una descripción general de la estructura y las
+características del código \emph{C} que generará nuestro compilador.
 
 \section{Identificadores}
 
-En \textit{Tiger} los identificadores son una secuencia de letras, dígitos y
-\textit{underscores (``\_'')}, comenzando siempre por una letra. Según la
-descripción anterior, un identificador de \textit{Tiger} es completamente
-válido en el lenguaje \textit{C}.
+Un identificador en \textit{Tiger} es una secuencia de letras, dígitos y
+\textit{underscores}, comenzando siempre por una letra. Según la descripción
+anterior, un identificador en \textit{Tiger} es completamente válido en el
+lenguaje \textit{C}.
 
 Nuestro código \textit{C} generado tratará de asignarle a un identificador
-válido de \textit{Tiger} otro con el mismo nombre en \textit{C} siempre que
+válido de \textit{Tiger} otro con el mismo nombre en \textit{C}, siempre que
 este no coincida con una palabra reservada del propio lenguaje \textit{C} o con
 otro identificador definido anteriormente. En caso de que el identificador no
-sea válido ,se le añadirán \textit{underscores (``\_'')} al final de este hasta
-que lograr un nombre de identificador válido.
+sea válido, se le añadirán \textit{underscores} al final hasta lograr un
+identificador válido.
 
 \section{Comentarios}
 
-Un comentario en \textit{Tiger} puede aparecer entre cualquier par
-\textit{tokens} del lenguaje, enmarcándose entre /* al inicio y */ al final.
-Nuestro código \textit{C} generado no reflejará los comentarios del programa
-\textit{Tiger} original.
+Los comentarios en \textit{Tiger} puede aparecer entre cualquier par
+\textit{tokens} del lenguaje, enmarcándose entre \texttt{/*} y \texttt{*/}. El
+código \textit{C} generado por nuestro compilador no reflejará los comentarios
+del programa \textit{Tiger} original.
 
 \section{Declaraciones de tipos}
 
-% Comentarios sobre las declaraciones de tipos en general.
-
 \subsection{Tipos predefinidos}
 
-El lenguaje \textit{Tiger} cuenta con los tipos \texttt{int} (números enteros)
-y \texttt{string} (cadena de caracteres) como únicos tipos predefinidos.
+El lenguaje \textit{Tiger} cuenta con dos tipos predefinidos: \texttt{int} para
+los números enteros y \texttt{string} para las cadenas de caracteres. 
 
-Nuestro código \textit{C} generado va crear una variable de tipo
-\texttt{int64\_t} para cada variable de tipo \texttt{int} en el programa
+El código \textit{C} generado por nuestro compilador creará una variable de
+tipo \texttt{int64\_t} para cada variable de tipo \texttt{int} en el programa
 \textit{Tiger} de origen.
 
-Por otra parte a las variables de tipo \texttt{string} de un programa
+Por otra parte, a las variables de tipo \texttt{string} de un programa
 \textit{Tiger} se les asociará una estructura llamada \texttt{string} cuya
-definición se representa a continuación, donde el campo \texttt{data}
-corresponde a la secuencia de caracteres de esta y el campo \texttt{length}
-corresponde a la longitud de la misma.
+definición se muestra a continuación.
 
 \begin{quote}
 \input{codegen/c-string}
 \end{quote}
 
+El campo \texttt{data} corresponde a la secuencia de caracteres de la cadena y
+el campo \texttt{length} almacena a la longitud de la misma.
+
 \subsection{\emph{Records}}
 
-En \textit{Tiger} los tipos \textit{record} son definidos por una lista de sus
-campos encerrados entre llaves (\{\}), donde cada elemento de esta lista
-corresponde a la descripción de un campo y tiene la forma 
-\textit{nombre\_del\_campo}:\textit{Id\_tipo} donde \textit{Id\_tipo} es un
-identificador definido con anterioridad.
+En \textit{Tiger} los \textit{record} son definidos por una lista de sus campos
+encerrados entre llaves. Cada elemento de esta lista corresponde a la
+descripción de un campo y tiene la forma \verb|field_name: field_type| donde
+\texttt{field\_type} es un identificador definido con anterioridad o de el
+propio tipo del \emph{record}.
 
-Nuestro código \textit{C} generado creará una estructura (\texttt{struct}) para
-cada \textit{record} definido en el programa \textit{Tiger} de origen, donde
-cada campo de la estructura corresponderá con uno equivalente en el
-\textit{record}. En caso de que algún campo tenga un nombre no válido, se
-seguirá la misma estrategia de renombramiento que en el caso de los
-identificadores.
+El código \textit{C} generado por nuestro compilador contendrá una estructura
+para cada \textit{record} definido en el programa \textit{Tiger} de origen. 
+Campo de la estructura corresponderá con uno equivalente en el \textit{record}
+definido en \emph{Tiger}. En caso de que algún campo tenga un nombre no válido
+en \emph{C}, se seguirá la misma estrategia de renombramiento que en el caso de
+los identificadores.
 
-El siguiente ejemplo muestra el código \textit{C} generado equivalente para la
-definición de \textit{record} correspondiente a una \texttt{persona} dada. 
+El siguiente ejemplo muestra el código \textit{C} generado para la definición
+del \textit{record} \texttt{people} en \emph{Tiger}.
 
 \begin{quote}
-\input{codegen/tig-persona}
+\input{codegen/tig-people}
 \end{quote}
 
 \begin{quote}
-\input{codegen/c-persona}
+\input{codegen/c-people}
 \end{quote}
 
 El lenguaje \textit{Tiger} permite la declaración de \textit{records}
 mutuamente recursivos, que son definidos en función de ellos mismos. Esta
 característica de \textit{Tiger} no trae ninguna complicación adicional al
 código \textit{C} equivalente, pues las estructuras de \textit{C} también
-pueden ser declarados en función de elloe mismos. 
+pueden contener campos del mismo tipo de la estructura que se está definiendo.
 
 El siguiente ejemplo muestra el código \textit{C} generado equivalente a la
 definición de \textit{record} correspondiente a un árbol binario
-(\texttt{arbol\_b}) dada.
+(\texttt{bianry\_tree}).
 
 \begin{quote}
-\input{codegen/tig-arbol_b}
+\input{codegen/tig-binary_tree}
 \end{quote}
 
 \begin{quote}
-\input{codegen/c-arbol_b}
+\input{codegen/c-binary_tree}
 \end{quote}
 
 \subsection{\emph{Arrays}}
 
-En \textit{Tiger} se pueden declara \textit{arrays} de cualquier tipo
-previamente declarado mediante la sintaxis \texttt{array of} \textit{Id\_tipo}.
-Nuestro código \textit{C} generado creará una estructura semejante a la usada
-para el manejo del tipo básico \texttt{string} que almacenará en \texttt{data}
-un puntero al primer elemento de la secuencia de datos y en \texttt{length} la
-cantidad de elementos de el mismo.
+En el lenguaje \textit{Tiger} es posible declarar \textit{arrays} de cualquier
+tipo previamente declarado utilizando la sintaxis \texttt{array of}
+\textit{type\_name}. Nuestro código \textit{C} creará una estructura
+semejante a la usada para el manejo del tipo básico \texttt{string} que
+almacenará en \texttt{data} un puntero al primer elemento de la secuencia de
+datos y en \texttt{length} la cantidad de elementos de el mismo.
 
-El siguiente ejemplo ilustra como se crea un \textit{array} en \textit{Tiger} y
-el código \textit{C} generado equivalente.
+El siguiente ejemplo ilustra la creación de un \textit{array} en \textit{Tiger}
+y el código \textit{C} equivalente generado.
 
 \begin{quote}
 \input{codegen/tig-integers}
@@ -163,10 +170,10 @@ el código \textit{C} generado equivalente.
 % Explicar funcionamiento de esta técnica para funciones anidadas
 % y funciones recursivas.
 
-\section{Estructura general del archivo C}
+\section{Estructura general del archivo \emph{C}}
 
-Un archivo \textit{C} generado como equivalente a un programa en \textit{Tiger}
-seguirá la siguiente estructura en su código.
+El archivo de un programa \textit{C} generado como equivalente de un programa en
+\textit{Tiger} tendrá la siguiente estructura en su código.
 
 \begin{enumerate}
   \item \texttt{\#include}s: En esta sección se incluyen las cabeceras
@@ -205,7 +212,8 @@ seguirá la siguiente estructura en su código.
      \end{itemize}
   \item Función \textit{main}: Esta función recibe un trato especial y en su
   cuerpo se encontrará el código \textit{C} equivalente las instrucciones que
-  no se encuentran dentro de una declaración de función o de tipo. 
+  no se encuentran dentro de una declaración de función o de 
+  \item tipo. 
     
        
 \end{enumerate}
