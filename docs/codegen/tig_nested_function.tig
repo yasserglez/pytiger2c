@@ -1,8 +1,8 @@
 let 
     var c := 0
-    function f(v: int):int = 
+    function f(v: int): int = 
         let 
-            function g(h: int):int = v + h
+            function g(h: int): int = v + h
         in
             g(5)
         end

@@ -38,10 +38,10 @@
 Nuestro proyecto se propone desarrollar una implementación de un compilador para
 el lenguaje de programación Tiger que genere código \emph{C}. Posteriormente, el
 código \emph{C} generado se compilará con un compilador de \emph{C} para generar
-un ejecutable para una plataforma específica. El código \emph{C} generado por
+un ejecutable para la plataforma específica. El código \emph{C} generado por
 nuestro compilador será conforme al \emph{standard} \emph{ISO/IEC 9899:1999},
 comúnmente conocido como \emph{C99}, lo cual garantiza que pueda ser procesado
-por cualquier compilador de \emph{C} conforme a dicho \emph{standard}.
+por cualquier compilador de \emph{C} que implemente dicho \emph{standard}.
 
 Este documento brinda una descripción general de la estructura y las
 características del código \emph{C} que generará nuestro compilador.
@@ -53,11 +53,11 @@ Un identificador en \textit{Tiger} es una secuencia de letras, dígitos y
 anterior, un identificador en \textit{Tiger} es completamente válido en el
 lenguaje \textit{C}.
 
-Nuestro código \textit{C} generado tratará de asignarle a un identificador
+En el código \textit{C} generado se tratará de asignar a un identificador
 válido de \textit{Tiger} otro con el mismo nombre en \textit{C}, siempre que
 este no coincida con una palabra reservada del propio lenguaje \textit{C} o con
 otro identificador definido anteriormente. En caso de que el identificador no
-sea válido, se le añadirán \textit{underscores} al final hasta lograr un
+sea válido, se le añadirán \textit{underscores} al final hasta lograr un 
 identificador válido.
 
 \section{Comentarios}
@@ -71,8 +71,9 @@ del programa \textit{Tiger} original.
 
 \subsection{Tipos predefinidos}
 
-El lenguaje \textit{Tiger} cuenta con dos tipos predefinidos: \texttt{int} para
-los números enteros y \texttt{string} para las cadenas de caracteres. 
+El lenguaje \textit{Tiger} cuenta con dos tipos básicos predefinidos:
+\texttt{int} para números enteros y \texttt{string} para las cadenas de
+caracteres.
 
 El código \textit{C} generado por nuestro compilador creará una variable de
 tipo \texttt{int64\_t} para cada variable de tipo \texttt{int} en el programa
@@ -83,7 +84,7 @@ Por otra parte, a las variables de tipo \texttt{string} de un programa
 definición se muestra a continuación.
 
 \begin{quote}
-\input{codegen/c-string}
+\input{codegen/c_string}
 \end{quote}
 
 El campo \texttt{data} corresponde a la secuencia de caracteres de la cadena y
@@ -99,58 +100,60 @@ propio tipo del \emph{record}.
 
 El código \textit{C} generado por nuestro compilador contendrá una estructura
 para cada \textit{record} definido en el programa \textit{Tiger} de origen. 
-Campo de la estructura corresponderá con uno equivalente en el \textit{record}
-definido en \emph{Tiger}. En caso de que algún campo tenga un nombre no válido
-en \emph{C}, se seguirá la misma estrategia de renombramiento que en el caso de
-los identificadores.
+Cada campo de la estructura corresponderá con uno equivalente en el
+\textit{record} definido en \emph{Tiger}. En caso de que algún campo tenga un
+nombre no válido en \emph{C}, se seguirá la misma estrategia de renombramiento
+que en el caso de los identificadores.
 
 El siguiente ejemplo muestra el código \textit{C} generado para la definición
-del \textit{record} \texttt{people} en \emph{Tiger}.
+del \textit{record} \texttt{people} en \emph{Tiger} y su representación en el
+lenguaje \emph{C}.
 
 \begin{quote}
-\input{codegen/tig-people}
+\input{codegen/tig_people}
 \end{quote}
 
 \begin{quote}
-\input{codegen/c-people}
+\input{codegen/c_people}
 \end{quote}
 
 El lenguaje \textit{Tiger} permite la declaración de \textit{records}
-mutuamente recursivos, que son definidos en función de ellos mismos. Esta
-característica de \textit{Tiger} no trae ninguna complicación adicional al
-código \textit{C} equivalente, pues las estructuras de \textit{C} también
-pueden contener campos del mismo tipo de la estructura que se está definiendo.
+que tengan campos del propio tipo del \emph{record}, es decir, son definidos en
+función de ellos mismos. Esta característica de \textit{Tiger} no conlleva
+ninguna complicación adicional al código \textit{C} equivalente, pues las
+estructuras de \textit{C} también pueden contener campos del mismo tipo de la
+estructura que se está definiendo.
 
-El siguiente ejemplo muestra el código \textit{C} generado equivalente a la
-definición de \textit{record} correspondiente a un árbol binario
-(\texttt{bianry\_tree}).
+El siguiente ejemplo muestra el código \textit{C} generado para la definición
+de \textit{record} correspondiente a un árbol binario.
 
 \begin{quote}
-\input{codegen/tig-binary_tree}
+\input{codegen/tig_binary_tree}
 \end{quote}
 
 \begin{quote}
-\input{codegen/c-binary_tree}
+\input{codegen/c_binary_tree}
 \end{quote}
 
 \subsection{\emph{Arrays}}
 
 En el lenguaje \textit{Tiger} es posible declarar \textit{arrays} de cualquier
-tipo previamente declarado utilizando la sintaxis \texttt{array of}
-\textit{type\_name}. Nuestro código \textit{C} creará una estructura
+tipo previamente definido utilizando la sintaxis \texttt{array of}
+\texttt{type\_name}. Nuestro código \textit{C} contendrá una estructura
 semejante a la usada para el manejo del tipo básico \texttt{string} que
 almacenará en \texttt{data} un puntero al primer elemento de la secuencia de
-datos y en \texttt{length} la cantidad de elementos de el mismo.
+datos del \emph{array} y en \texttt{length} la cantidad de elementos de el
+mismo.
 
 El siguiente ejemplo ilustra la creación de un \textit{array} en \textit{Tiger}
 y el código \textit{C} equivalente generado.
 
 \begin{quote}
-\input{codegen/tig-integers}
+\input{codegen/tig_integers}
 \end{quote}
 
 \begin{quote}
-\input{codegen/c-integers}
+\input{codegen/c_integers}
 \end{quote}
 
 \section{Funciones}
@@ -164,20 +167,20 @@ diferencia de que los procedimientos son generados como funciones
 función cualquiera.
 
 Tanto las funciones como los procedimientos de \textit{Tiger} definen su propio
-ámbito (\textit{scope}) y a su vez tienen acceso a los identificadores y tipos
-definidos en el ámbito en que fue definido (su \textit{scope} padre).
+ámbito o \textit{scope} y a su vez tienen acceso a los identificadores y tipos
+definidos en el ámbito en que fue definido o su \textit{scope} padre.
 
-En nuestro código \textit{C} generado, para cada ámbito se declarará una
-estructura de \textit{C}, que se nombrará \\ \texttt{función\_scope}, con
-campos para todas las variables declaradas en este y una referencia a la
-estructura correspondiente al ámbito donde fue definida la función. En caso de
-que existan conflictos en el nombre de la estructura se seguirá la misma
-estrategia de renombramiento antes expuesta.
+En nuestro código \textit{C} generado, para cada función se declarará una
+estructura \texttt{function\_name\_scope}, que tendrá campos para todas las
+variables declaradas en este y una referencia a la estructura correspondiente
+al ámbito donde fue definida la función. En caso de que existan conflictos en
+el nombre de la estructura se seguirá la misma estrategia de renombramiento
+antes expuesta.
 
 Los fragmentos de código \textit{Tiger} que no se encuentren en el
 cuerpo de una función, se tratarán de modo especial, generando su
 código \textit{C} equivalente como cuerpo de la función \texttt{main}. En este
-caso tambien se creará una estructura que defina el ámbito correspondiente,
+caso también se creará una estructura que defina el ámbito correspondiente,
 llamada \texttt{main\_scope}, con la única diferencia que no tendrá referencia
 al ámbito padre.
 
@@ -190,96 +193,112 @@ los que recibe la función de \textit{Tiger} original. En caso de que existan
 conflictos con el nombre de la función se seguirá la misma estrategia de
 renombramiento antes expuesta.
 
-Los siguientes ejemplos muestran algunas situaciones de las antes expuestas y
-el código \textit{C} correspondiente.
+A continuación se muestran algunas definiciones de funciones \emph{Tiger} y el
+código \emph{C} generado para estas.
 
 \begin{itemize}
-
-    \item Código que no esté en el cuerpo de ninguna función.
+  \item Código que no se encuentre en el cuerpo de ninguna función.
     
     \begin{quote}
-    \input{codegen/tig-main_f}
+    \input{codegen/tig_main_function}
     \end{quote}
-
-    Código \textit{C} equivalente.
-
-    \begin{quote}
-    \input{codegen/c-main_f}
-    \end{quote}
-
-    \item Declaración de una función simple.
     
     \begin{quote}
-    \input{codegen/tig-function}
+    \input{codegen/c_main_function}
     \end{quote}
-
-    Código \textit{C} equivalente.
-
+    
+  \item Declaración de una función simple.
+    
     \begin{quote}
-    \input{codegen/c-function}
+    \input{codegen/tig_simple_function}
+    \end{quote}
+    
+    \begin{quote}
+    \input{codegen/c_simple_function}
     \end{quote} 
-
 \end{itemize}
 
-En \textit{Tiger} se permiten funciones recursivas y funciones anidadas
-(definidas en el cuerpo de otra función), pero ninguna de estas características
-constituyen un impedimento para la estrategia de generación de código antes
-expuesta. El siguiente ejemplo muestra una función anidad y el código
-\textit{C} equivalente. 
+En \textit{Tiger} se permiten funciones recursivas y funciones definidas en el
+cuerpo de otra función o también llamadas funciones anidadas. Ninguna de estas
+características constituyen un impedimento para la estrategia de generación de
+código antes expuesta. El siguiente ejemplo muestra una función anidada y el
+código \textit{C} equivalente.
 
-    \begin{quote}
-    \input{codegen/tig-nested}
-    \end{quote}
+\begin{quote}
+\input{codegen/tig_nested_function}
+\end{quote}
 
-    Código \textit{C} equivalente.
-
-    \begin{quote}
-    \input{codegen/c-nested}
-    \end{quote}
+\begin{quote}
+\input{codegen/c_nested_function}
+\end{quote}
 
 \section{Estructura general del archivo \emph{C}}
 
-El archivo de un programa \textit{C} generado como equivalente de un programa en
-\textit{Tiger} tendrá la siguiente estructura en su código.
+El código \emph{C} generado por nuestro compilador, para cualquier programa
+\emph{Tiger}, estará contenido en un único archivo \emph{C} y no deberá tener
+ninguna dependencia externa además de los \emph{headers} de la biblioteca
+\emph{standard} de \emph{C}. Este comportamiento hace posible que sólo sea
+necesario copiar el archivo \emph{C} generado hacia otra máquina y compilar
+este código sin la necesidad de instalar \emph{headers} o bibliotecas
+relacionadas con nuestro compilador en esta otra máquina. 
+
+Para cumplir con este requerimiento, el archivo \emph{C} generado debe incluir
+las definiciones de las funciones de la biblioteca \emph{standard} de
+\emph{Tiger} utilizadas en el programa.
+
+De manera general, el archivo de un programa \textit{C} generado como
+equivalente de un programa en \textit{Tiger} tendrá la siguiente estructura en
+su código.
 
 \begin{enumerate}
-    \item \texttt{\#include}s: En esta sección se incluyen las cabeceras
-    correspondientes a librerías de \textit{C} que serán usadas en el programa
-    generado.
-    \item Declaraciones de Tipos
-        \begin{enumerate}
-            \item Tipos de la  \textit{Biblioteca Standard}: En esta parte del
-            código se encontrarán las declaraciones de los tipos
-            \texttt{string} e \texttt{int} además de cualquier tipo que sea
-            necesitado por la librería standard.
-      		\item Tipos del Programa: En esta parte del código se encontrarán
-      		las declaraciones de los tipos definidos en el programa de origen.
-  		\end{enumerate}
-  	\item Declaración de los \textit{Scopes}. En esta parte del código se
-  	encontrarán las declaraciones de los Scopes unidos a cada función del
-  	programa \textit{Tiger} de origen.
-  	\item Prototipos de las funciones: Al colocar los prototipos en esta parte
-  	del código se garantiza que las funciones serán accesible para las que los
-  	necesiten sin importar el orden.
-        \begin{enumerate}
-            \item Prototipos de las funciones de la \textit{Biblioteca
-            Standard}: En esta parte del código se encuentran la descripción de
-            todas las funciones de la librería standard.
-            \item Prototipos de las funciones del programa: En esta parte del
-            código se muestran la descripción de las funciones que son
-            definidas en el programa \textit{Tiger} original.
-        \end{enumerate}
-    \item Cuerpo de las funciones
-        \begin{itemize}
-            \item Cuerpo de las funciones de la biblioteca standard: En esta
-            parte del código se encontrarán las implementaciones de las
-            funciones de la biblioteca standard de \textit{Tiger}.
-            \item Cuerpo de las funciones del programa: En esta parte del código
-            estará el código \textit{C} equivalente a cada función definida en
-            el programa \textit{Tiger} de origen.
-        \end{itemize}
-    \item Función \textit{main}: Esta función recibe un trato especial y en su
-    cuerpo se encontrará el código \textit{C} equivalente las instrucciones que
-    no se encuentran dentro de una declaración de función o de tipo. 
+    \item \textbf{Inclusión de los \emph{headers} correspondientes a las
+    funciones de la biblioteca \emph{standard} de \emph{C} utilizados en el
+    programa.}
+
+    \item \textbf{Declaraciones de tipos.}
+    \begin{enumerate}
+        \item \textbf{Tipos de la biblioteca \emph{standard} de \emph{Tiger}.}
+        En esta parte del código se encontrarán las declaraciones de los tipos
+        \texttt{int} y \texttt{string} además de cualquier tipo que sea
+        necesario para la implementación de las funciones de la biblioteca
+        \emph{standard} de \emph{Tiger}.
+  		    
+  		\item \textbf{Tipos definidos en el programa.} En esta parte del código se
+  		encontrarán las declaraciones equivalentes de los tipos definidos en el
+  		programa \emph{Tiger} de origen.
+    \end{enumerate}
+    
+  	\item \textbf{Declaración de los \textit{scopes}.} En esta parte del código
+  	se encontrarán las declaraciones de los \emph{scopes} asociados a cada función
+  	del programa \textit{Tiger} de origen y a la función \texttt{main} de
+  	\emph{C}.
+  
+  	\item \textbf{Prototipos de las funciones.} Al colocar los prototipos en
+  	esta parte del código se garantiza que las funciones serán accesible para
+  	las que los necesiten sin importar el orden en que estas sean definidas más
+  	adelante.
+    \begin{enumerate}
+        \item \textbf{Prototipos de las funciones de la biblioteca
+        \emph{standard} de \emph{Tiger}}.
+        \item \textbf{Prototipos de las funciones definidas en el programa
+        \emph{Tiger}.}
+    \end{enumerate}
+    
+    \item \textbf{Cuerpo de las funciones.}
+    \begin{itemize}
+        \item \textbf{Cuerpo de las funciones de la biblioteca \emph{standard}.}
+        En esta parte del código se encontrarán las implementaciones de las
+        funciones de la biblioteca \emph{standard} de \textit{Tiger} que se
+        utilicen en el programa \emph{Tiger} en cuestión.
+        \item \textbf{Cuerpo de las funciones definidas en el programa
+        \emph{Tiger}}. En esta parte del código estará el código \textit{C}
+        equivalente a cada función definida en el programa \textit{Tiger} de
+        origen.
+    \end{itemize}
+    
+    \item \textbf{Función \textit{main}}. Esta función recibe un trato especial
+    y en su cuerpo se encontrará el código \textit{C} equivalente las
+    instrucciones que no se encuentran dentro de una declaración de función o
+    de tipo.
 \end{enumerate}
 \end{document}
