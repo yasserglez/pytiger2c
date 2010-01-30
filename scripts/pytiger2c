@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 """
@@ -25,7 +26,7 @@ def _parse_args():
     """
     Reconoce las opciones especificadas como argumentos.
     """
-    usage = '%%prog [options] <tiger-filename> <output-filename>'
+    usage = '%prog [options] <tiger-filename> <output-filename>'
     version = '%%prog (PyTiger2C) %s\n' % __version__
     authors = '\n'.join(['Copyright (C) 2009 %s' % a for a in __authors__])
     desc = 'Translates a Tiger program received as argument into a C ' \
@@ -63,7 +64,7 @@ def main():
     try:
         translate(tiger_file, c_file)
     except PyTiger2CError, error:
-        # TODO: Print information about sintantic or semantic errors.
+        # TODO: Print information about syntactic or semantic errors.
         sys.exit(EXIT_FAILURE)
     else:
         if options.compile:
