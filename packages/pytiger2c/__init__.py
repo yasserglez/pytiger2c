@@ -15,7 +15,8 @@ que implemente dicho standard.
 
 import codecs
 
-from pytiger2c.errors import PyTiger2CError, SyntacticError, SemanticError, CodeGenerationError 
+from pytiger2c.grammar import parser
+from pytiger2c.errors import PyTiger2CError, SyntacticError, SemanticError, CodeGenerationError
 
 
 __version__ = '0.1'
@@ -44,16 +45,19 @@ def syntactic_analysis(input_fd):
         acerca del error, como por ejemplo, la línea y/o columna donde se encontró 
         el error.
     """
-    raise SyntacticError()
+    # TODO: Translate the PLY exceptions for syntactic errors into SyntacticError.
+    program = input_fd.read()
+    ast = parser.parse(program)
+    return ast
 
 
-def check_semantics(syntax_tree):
+def check_semantics(ast):
     """
     Realiza comprobación semántica de un programa Tiger representado por su árbol de
     sintáxis abstracta. 
     
-    @type syntax_tree: C{LanguageNode}
-    @param syntax_tree: Árbol de sintáxis asbtracta correspondiente a un programa Tiger.
+    @type ast: C{LanguageNode}
+    @param ast: Árbol de sintáxis asbtracta correspondiente a un programa Tiger.
     
     @raise SemanticError: Esta excepción se lanzará si se encuentra un error semántico
         en el árbol de sintáxis abstracta. La excepción contendrá información
@@ -62,12 +66,12 @@ def check_semantics(syntax_tree):
     raise SemanticError()
 
 
-def generate_code(syntax_tree, output_fd):
+def generate_code(ast, output_fd):
     """
     Realiza la generación de código.
     
-    @type syntax_tree: C{LanguageNode}
-    @param syntax_tree: Árbol de sintáxis asbtracta correspondiente a un programa Tiger.
+    @type ast: C{LanguageNode}
+    @param ast: Árbol de sintáxis asbtracta correspondiente a un programa Tiger.
     
     @type output_fd: C{file}
     @param output_fd: Descriptor de fichero del archivo donde se debe escribir el
@@ -110,12 +114,12 @@ def translate(tiger_filename, c_filename):
     """
     try:
         with codecs.open(tiger_filename, encoding='utf-8', mode='rb') as input_fd: 
-            syntax_tree = syntactic_analysis(input_fd)
+            ast = syntactic_analysis(input_fd)
     except IOError:
         raise PyTiger2CError(message='Could not open the Tiger input file')
-    check_semantics(syntax_tree)
+    check_semantics(ast)
     try:
         with codecs.open(c_filename, encoding='utf-8', mode='wb') as output_fd:
-            generate_code(syntax_tree, output_fd)
+            generate_code(ast, output_fd)
     except IOError:
         raise PyTiger2CError(error_msg='Could not open the output file')
