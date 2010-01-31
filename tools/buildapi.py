@@ -219,12 +219,10 @@ class Tiger2CLatexWriter(LatexWriter):
         # Add a section marker.
         if self._list_classes_separately:
             seclevel = 0
-            out(self.section('%s %s' % (self.doc_kind(doc),
-                                        doc.canonical_name), seclevel))
+            out(self.section('%s %s' % (self.doc_kind(doc), doc.canonical_name), seclevel))
         else:
             seclevel = 1
-            out(self.section('%s %s' % (self.doc_kind(doc),
-                                        doc.canonical_name[-1]), seclevel))
+            out(self.section('%s %s' % (self.doc_kind(doc), doc.canonical_name[-1]), seclevel))
         # Label our current location.
         out('\\label{%s}\n' % self.label(doc))
         # Add our base list.
@@ -500,7 +498,7 @@ def write_latex(docindex, options, format):
     log.start_progress('Writing LaTeX docs')
     latex_writer.write(options.target)
     log.end_progress()
-    # It is incomplete becouse we only want to generato LaTex output.        
+    # It is incomplete because we only want to generate the LaTeX output.        
 
     
 def main():

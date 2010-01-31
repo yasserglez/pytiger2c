@@ -5,7 +5,12 @@ Paquete principal de PyTiger2C.
 
 PyTiger2C es una implementación de un compilador del lenguaje de programación
 Tiger que genera código en lenguaje C. Opcionalmente, el código C resultante 
-puede ser compilado con un compilador de C para generar un ejecutable.
+puede ser compilado con un compilador de C para generar un ejecutable específico
+para una plataforma.
+
+El código C generado será conforme al standard ISO/IEC 9899:1999, comúnmente conocido 
+como C99, lo cual garantiza que pueda ser procesado por cualquier compilador de C 
+que implemente dicho standard.
 """
 
 import codecs
@@ -23,28 +28,36 @@ __authors__ = (
 
 def syntactic_analysis(input_fd):
     """
-    Realiza análisis léxico-gráfico y sintáctico. 
-    
-    Si se encuentra algún error de sintáxis durante el análisis del programa se lanzará
-    una exepción C{SyntacticError} que contendrá información acerca del error.
+    Realiza análisis léxico-gráfico y sintáctico de un programa Tiger. 
     
     @type input_fd: C{file}
-    @param input_fd: Descriptor de fichero del programa Tiger a traducir.
+    @param input_fd: Descriptor de fichero del programa Tiger al cual se le debe
+        realizar el análisis sintáctico.
+    
     @rtype: C{LanguageNode}
-    @return: Árbol de sintáxis abstracta correspondiente al programa Tiger.
+    @return: Como resultado del análsis sintáctico se obtiene el árbol de sintáxis 
+        abstracta correspondiente al programa Tiger recibido como argumento. El 
+        árbol se retorna a través del nodo de la raíz del árbol.
+    
+    @raise SyntacticError: Esta excepción se lanzará si se encuentra algún error de
+        sintáxis durante el análisis del programa. La excepción contendrá información
+        acerca del error, como por ejemplo, la línea y/o columna donde se encontró 
+        el error.
     """
     raise SyntacticError()
 
 
 def check_semantics(syntax_tree):
     """
-    Realiza comprobación semántica.
-    
-    Si se encuentra algún error semántico se lanzará una excepción C{SemanticError} que
-    contendrá información acerca del error. 
+    Realiza comprobación semántica de un programa Tiger representado por su árbol de
+    sintáxis abstracta. 
     
     @type syntax_tree: C{LanguageNode}
     @param syntax_tree: Árbol de sintáxis asbtracta correspondiente a un programa Tiger.
+    
+    @raise SemanticError: Esta excepción se lanzará si se encuentra un error semántico
+        en el árbol de sintáxis abstracta. La excepción contendrá información
+        acerca del error.
     """
     raise SemanticError()
 
@@ -53,14 +66,17 @@ def generate_code(syntax_tree, output_fd):
     """
     Realiza la generación de código.
     
-    Si se produce algún error durante la generación de código se lanzará una excepción
-    C{CodeGenerationError} que contendrá información acerca del error.
-    
     @type syntax_tree: C{LanguageNode}
     @param syntax_tree: Árbol de sintáxis asbtracta correspondiente a un programa Tiger.
+    
     @type output_fd: C{file}
-    @param output_fd: Descriptor de fichero del archivo donde se generará el programa 
-        resultante de la traducción.
+    @param output_fd: Descriptor de fichero del archivo donde se debe escribir el
+        código resultante de la traducción del programa Tiger descrito por el árbol
+        de sintáxis abstracta.
+        
+    @raise CodeGenerationError: Esta excepción se lanzará si se produce algún error
+        durante la generación de código. La excepción contendrá información acerca
+        del error.
     """
     raise CodeGenerationError()
     
@@ -71,15 +87,26 @@ def translate(tiger_filename, c_filename):
     
     Se utiliza las funciones auxiliares C{syntactic_analysis}, C{check_semantics} 
     y C{generate_code} para llevar a cabo cada una de las fases de la compilación 
-    del programa.
-
+    del programa: análisis léxico-gráfico y sintáctico, comprobación semántica y
+    generación de código respectivamente. Cada una de estas funciones lanzará
+    las excepciones C{SyntacticError}, C{SemanticError} y C{CodeGenerationError} si
+    se produce un error durante alguna de las fases. Consulte la documentación 
+    de cada función para conocer los detalles.
+    
     @type tiger_filename: C{str}
     @param tiger_filename: Ruta absoluta al archivo que contiene el código
         fuente del programa Tiger que se debe traducir al lenguaje C.
+
     @type c_filename: C{str}
     @param c_filename: Ruta absoluta al archivo donde se generará el código
         C resultante. Si existe un archivo en la ruta especificada este será
         sobreescrito.
+        
+    @raise PyTiger2CError: Además de las excepciones lanzadas por cada una de las
+        funciones auxiliares, esta función puede lanzar esta excepción cuando
+        se produce algún error al leer del archivo que contiene el programa
+        Tiger que se quiere traducir o al escribir el código C resultante
+        en el archivo especificado.
     """
     try:
         with codecs.open(tiger_filename, encoding='utf-8', mode='rb') as input_fd: 
