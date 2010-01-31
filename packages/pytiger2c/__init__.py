@@ -112,7 +112,7 @@ def translate(tiger_filename, c_filename):
         with codecs.open(tiger_filename, encoding='utf-8', mode='rb') as input_fd: 
             syntax_tree = syntactic_analysis(input_fd)
     except IOError:
-        raise PyTiger2CError(error_msg='Could not open the Tiger input file')
+        raise PyTiger2CError(message='Could not open the Tiger input file')
     check_semantics(syntax_tree)
     try:
         with codecs.open(c_filename, encoding='utf-8', mode='wb') as output_fd:
