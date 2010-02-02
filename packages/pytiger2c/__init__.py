@@ -45,9 +45,8 @@ def syntactic_analysis(input_fd):
         acerca del error, como por ejemplo, la línea y/o columna donde se encontró 
         el error.
     """
-    # TODO: Translate the PLY exceptions for syntactic errors into SyntacticError.
-    program = input_fd.read()
-    ast = parser.parse(program)
+    data = input_fd.read()
+    ast = parser.parse(data)
     return ast
 
 
