@@ -29,7 +29,7 @@ class TigerTestCase(unittest.TestCase):
     
     def __init__(self, parent_dir, tiger_file):
         """
-        Inicializa el la prueba.
+        Inicializa la prueba.
         """
         super(TigerTestCase, self).__init__()
         self._tiger_file = os.path.join(parent_dir, tiger_file)
@@ -57,9 +57,8 @@ class TigerTestCase(unittest.TestCase):
         Falla si los archivos son diferentes.
         """
         diff_cmd = ['diff', first_file, second_file]
-        with  open('/dev/null', 'w') as devnull:
-            if subprocess.call(diff_cmd, stdout=devnull, stderr=devnull) != 0:
-                self.fail('Output does not match!')
+        if subprocess.call(diff_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE) != 0:
+            self.fail('Output does not match!')
         
     def tearDown(self):
         """
@@ -88,7 +87,7 @@ class SuccessTigerTestCase(TigerTestCase):
         if subprocess.call(self._pytiger2c_cmd) != 0 or not os.path.isfile(self._exec_file):
             self.fail('Compilation failed!')
         # Execute the program.
-        exec_stdin = open(self._in_file) if self._in_file is not None else self._in_file
+        exec_stdin = open(self._in_file) if self._in_file else None
         with open(self._tmp_file, 'w') as exec_stdout:
             subprocess.call([self._exec_file], stdin=exec_stdin, stdout=exec_stdout)
             if exec_stdin is not None:
@@ -111,11 +110,11 @@ class FailTigerTestCase(TigerTestCase):
         Ejecuta la prueba.
         """
         # Try to compile the program.
-        with open(self._err_file, 'w') as pytiger2c_stderr: 
+        with open(self._tmp_file, 'w') as pytiger2c_stderr: 
             if subprocess.call(self._pytiger2c_cmd, stderr=pytiger2c_stderr) != 1:
                 self.fail('Compilation succeded and it should fail!')
         # Compare the error output.
-        self.failIfDifferent(self._tmp_file, self._err_file)        
+        self.failIfDifferent(self._tmp_file, self._err_file)
 
 
 def main():

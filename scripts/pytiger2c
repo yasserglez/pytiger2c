@@ -64,7 +64,7 @@ def main():
     try:
         translate(tiger_file, c_file)
     except PyTiger2CError, error:
-        print error
+        print >> sys.stderr, error
         sys.exit(EXIT_FAILURE)
     if options.compile:
         GCC_CMD = ['gcc', '-std=c99', '-pedantic-errors', '-o', exec_file, c_file]
