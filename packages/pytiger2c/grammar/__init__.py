@@ -10,4 +10,4 @@ resulta difícil incluir los módulos contenidos en este paquete en la documenta
 del API generada automáticamente.  
 """
 
-from pytiger2c.grammar.rules import parser
+from pytiger2c.grammar.parser import parser
