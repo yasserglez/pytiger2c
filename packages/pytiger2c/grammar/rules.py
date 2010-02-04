@@ -4,10 +4,12 @@
 Definición de las reglas de la gramática.
 """
 
-from pytiger2c.contrib.ply import lex, yacc
-from pytiger2c.errors import SyntacticError
+
 import os
 
+from pytiger2c.contrib.ply import lex, yacc
+from pytiger2c.errors import SyntacticError
+from pytiger2c.ast import *
 
 
 def _compute_column(token):
@@ -288,9 +290,6 @@ def p_bin_operator(symbols):
                     | GE 
                     | AND 
                     | OR""" 
-
-
-
 
 # Creating lexer and parser instances.
 
