@@ -105,7 +105,7 @@ class FailTigerTestCase(TigerTestCase):
     errores deberá coincidir con el contenido del archivo .err.
     """
     
-    def  runTest(self):
+    def runTest(self):
         """
         Ejecuta la prueba.
         """

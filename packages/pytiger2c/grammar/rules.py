@@ -8,6 +8,7 @@ import os
 
 from pytiger2c.contrib.ply import lex, yacc
 from pytiger2c.errors import SyntacticError
+from pytiger2c.ast import *
 
 
 def _compute_column(token):
@@ -125,12 +126,9 @@ def p_program(symbols):
     r'program : expr'
 
 def p_expr(symbols):
-    r'expr : epsilon'
+    r'expr :'
     
-def p_epsilon(symbols):
-    r'epsilon :'
 
-    
 # Creating lexer and parser instances.
 
 _cachedir = os.path.abspath(os.path.join(os.path.dirname(__file__), 'cache'))
