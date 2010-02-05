@@ -15,177 +15,200 @@ from pytiger2c.errors import SyntacticError
 # Get the token map defined in the lexer module.
 tokens = lexer.tokens
 
-def p_error(symbols):
-    # TODO: Finish error handling!
-    raise SyntacticError()
+def p_error(token):
+    message = "Unexpected token '{token}' at line {line} column {column}"
+    line, column = token.lexer.lineno, compute_column(token)
+    raise SyntacticError(message.format(token=token.type, line=line, column=column))
 
+# NOTE: When naming a production we follow the following rule: 
+# A "group" a group of items without an "special" character between them.
+# A "list" a group of items separated by commas.
+# A "sequence" (or "seq" for short) is a group of items separated by semicolons.
+
+# The left part of the first production of the grammar (by default) 
+# will be considered the starting symbol of the grammar. 
 def p_program(symbols):
-    r'program : expr'
+    "program : expr"
 
-#expr Productions
-#Literals.
+# Literals.
 def p_expr_nil(symbols):
-    r'expr : NIL'
+    "expr : NIL"
 
 def p_expr_int(symbols):
-    r'expr : INTLIT'
+    "expr : INTLIT"
     
 def p_expr_str(symbols):
-    r'expr : STRLIT'
-
-#Array and Recors creations.
-def p_expr_array(symbols):
-    r'expr : type_id LBRACKET expr RBRACKET OF expr'
-
-def p_expr_record(symbols):
-    r'expr : type_id LBRACE field_list RBRACE'
+    "expr : STRLIT"
     
-#Variables, field, elements of an array.
-def p_expr_lvalue(symbols):
-    r'expr : lvalue'
+# Left values of an assignment. Variables, record fields and elements of arrays.
+def p_expr_left_value(symbols):
+    "expr : left_value"
+    
+# Creating a new array.
+def p_expr_array(symbols):
+    "expr : type_id LBRACKET expr RBRACKET OF expr"
 
-#Operations 
-def p_expr_negative(symbols):
-    r'expr : MINUS expr'
+# Creating a new record.
+def p_expr_record(symbols):
+    "expr : type_id LBRACE field_list RBRACE"
+    
+# Operations over expressions. 
+def p_expr_unary_minus(symbols):
+    "expr : MINUS expr"
 
 def p_expr_bin_op(symbols):
-    r'expr : expr bin_operator expr'
+    "expr : expr bin_op expr"
 
-def p_expr_exprs(symbols):
-    r'expr : LPAREN expr_seq RPAREN'
+# A group of expressions separated by semicolons.
+def p_expr_expr_seq(symbols):
+    "expr : LPAREN expr_seq RPAREN"
 
-#Assigment
+# Assignment.
 def p_expr_assign(symbols):
-    r'expr : lvalue ASSIGN expr'
+    "expr : left_value ASSIGN expr"
 
-#Function Call
+# Function call.
 def p_expr_func(symbols):
-    r'expr : ID LPAREN expr_list RPAREN'
+    "expr : ID LPAREN expr_list RPAREN"
 
-#Control Structures
+# Flow control structures.
 def p_expr_if(symbols):
-    r'expr : IF expr THEN expr'
+    "expr : IF expr THEN expr"
 
 def p_expr_if_else(symbols):
-    r'expr : IF expr THEN expr ELSE expr'
+    "expr : IF expr THEN expr ELSE expr"
 
 def p_expr_while(symbols):
-    r'expr : WHILE expr DO expr'
+    "expr : WHILE expr DO expr"
     
 def p_expr_for(symbols):
-    r'expr : FOR ID ASSIGN expr TO expr DO expr'
+    "expr : FOR ID ASSIGN expr TO expr DO expr"
 
 def p_expr_break(symbols):
-    r'expr : BREAK'
+    "expr : BREAK"
 
+# The let block.
 def p_expr_let(symbols):
-    r'expr : LET declaration_list IN expr_seq END'
+    "expr : LET dec_group IN expr_seq END"
     
-#type_id productions.
+# An id for a type.
 def p_type_id(symbols):
-    r'type_id : ID'
+    "type_id : ID"
 
-#lvalue productions.
-def p_lvalue_id(symbols):
-    r'lvalue : ID'
+# What is a left value of an assignment expression? A variable.
+def p_left_value_id(symbols):
+    "left_value : ID"
     
-def p_lvalue_record(symbols):
-    r'lvalue : lvalue PERIOD ID'
+# What is a left value of an assignment expression? A field of a record.    
+def p_left_value_record(symbols):
+    "left_value : left_value PERIOD ID"
     
-def p_lvalue_array(symbols):
-    r'lvalue : lvalue LBRACKET expr RBRACKET'
+# What is a left value of an assignment expression? An item from an array.    
+def p_left_value_array(symbols):
+    "left_value : left_value LBRACKET expr RBRACKET"
 
-#expr_seq productions.
-def p_expr_seq_expr(symbols):
-    r'expr_seq : expr'
+# A group of expressions separated by semicolons.
+def p_expr_seq_single(symbols):
+    "expr_seq : expr"
 
-def p_expr_seq_expr_seq(symbols):
-    r'expr_seq : expr_seq SEMICOLON expr'
+def p_expr_seq_multiple(symbols):
+    "expr_seq : expr_seq SEMICOLON expr"
     
-#declaration_list productions.
-def p_declaration_list_declaration(symbols):
-    r'declaration_list : declaration'
+# A group of declarations. No "special" characters between declarations!
+def p_dec_group_single(symbols):
+    "dec_group : dec"
 
-def p_declaration_list_declaration_list(symbols):
-    r'declaration_list : declaration_list declaration'
+def p_dec_group_multiple(symbols):
+    "dec_group : dec_group dec"
 
-#field_list productions.
-def p_field_list_field(symbols):
-    r'field_list : ID EQ expr'
+# A list of field names, the equals character and an expression 
+# to assign values for each one of the fields of a record.
+def p_field_list_single(symbols):
+    "field_list : field_assign"
 
-def p_field_list_field_list(symbols):
-    r'field_list : field_list COMMA ID EQ expr'
+def p_field_list_multiple(symbols):
+    "field_list : field_list COMMA field_assign"
+    
+def p_field_assign(symbols):
+    "field_assign : ID EQ expr"
 
-#expr_list productions.
-def p_expr_list_expr(symbols):
-    r'expr_list : expr'
+# A group of expressions separated by commas.
+def p_expr_list_single(symbols):
+    "expr_list : expr"
 
-def p_expr_list_expr_list(symbols):
-    r'expr_list : expr_list COMMA expr'
+def p_expr_list_multiple(symbols):
+    "expr_list : expr_list COMMA expr"
 
-#declaration productions.
-def p_declaration_type(symbols):
-    r'declaration : type_declaration'
+# What is a declaration? A type declaration.
+def p_dec_type(symbols):
+    "dec : type_dec"
 
-def p_declaration_var(symbols):
-    r'declaration : variable_declaration'
+# What is a declaration? A variable declaration.
+def p_dec_var(symbols):
+    "dec : var_dec"
 
-def p_declaration_func(symbols):
-    r'declaration : function_declaration'
+# What is a declaration? A function declaration.
+def p_dec_func(symbols):
+    "dec : func_dec"
 
-#type_declaration productions.
-def p_type_declaration(symbols):
-    r'type_declaration : TYPE type_id EQ type'
+# Type declarations.
+def p_type_dec(symbols):
+    "type_dec : TYPE type_id EQ type"
 
-#type productions.
-def p_type_type_id(symbols):
-    r'type : type_id'
+# What is a valid type? An alias for a previously defined type.
+def p_type_alias(symbols):
+    "type : type_id"
 
+# What is a valid type? The definition of the fields of a record.
 def p_type_record(symbols):
-    r'type : type_fields'
+    "type : LBRACE field_types RBRACE"
 
+# What is a valid type? An array definition.
 def p_type_array(symbols):
-    r'type : ARRAY OF type_id'
+    "type : ARRAY OF type_id"
 
-#type_fields productions
-def p_type_fields_type_field(symbols):
-    r'type_fields : type_field'
+# A list of field types declaration separated by commas.
+def p_field_types_single(symbols):
+    "field_types : field_type"
 
-def p_type_fields_type_fields(symbols):
-    r'type_fields : type_fields COMMA type_field'
+def p_field_types_multiple(symbols):
+    "field_types : field_types COMMA field_type"
 
-#type_field productions
-def p_type_field(symbols):
-    r'type_field : ID COLON type_id'
+# Declaration of the type of a field. An identifier for the
+# field followed by a colon and the type of the field.
+def p_field_type(symbols):
+    "field_type : ID COLON type_id"
 
-#variable_declaration productions
-def p_variable_declaration_simple(symbols):
-    r'variable_declaration : VAR ID ASSIGN expr'
+# Variable declaration.
+def p_var_dec_without_type(symbols):
+    "var_dec : VAR ID ASSIGN expr"
 
-def p_variable_declaration(symbols):
-    r'variable_declaration : VAR ID COLON type_id ASSIGN expr'
+def p_var_dec_with_type(symbols):
+    "var_dec : VAR ID COLON type_id ASSIGN expr"
     
-#function_declaration productions.
-def p_function_declaration_simple(symbols):
-    r'function_declaration : FUNCTION ID LPAREN type_fields RPAREN EQ expr'
+# Function declaration.
+def p_func_dec_without_return(symbols):
+    "func_dec : FUNCTION ID LPAREN field_types RPAREN EQ expr"
 
-def p_function_declaration(symbols):
-    r'function_declaration : FUNCTION ID LPAREN type_fields RPAREN COLON type_id EQ expr'
+def p_func_dec_with_return(symbols):
+    "func_dec : FUNCTION ID LPAREN field_types RPAREN COLON type_id EQ expr"
 
-#bin_operator productions.
-def p_bin_operator(symbols):
-    """bin_operator : PLUS 
-                    | MINUS 
-                    | TIMES 
-                    | DIVIDE 
-                    | EQ 
-                    | NE 
-                    | LT 
-                    | LE 
-                    | GT 
-                    | GE 
-                    | AND 
-                    | OR""" 
+# Binary operators.
+def p_bin_op(symbols):
+    """
+    bin_op : PLUS
+           | MINUS 
+           | TIMES 
+           | DIVIDE 
+           | EQ 
+           | NE 
+           | LT 
+           | LE 
+           | GT 
+           | GE 
+           | AND 
+           | OR
+    """ 
 
 
 parser = yacc.yacc(debug=True, outputdir=cachedir, tabmodule='parser',
