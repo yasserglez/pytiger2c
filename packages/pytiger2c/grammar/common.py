@@ -4,11 +4,6 @@
 Elementos utilizados durante el análisis léxico-gráfico y sintáctico.
 """
 
-import os
-
-
-cachedir = os.path.abspath(os.path.join(os.path.dirname(__file__), 'cache'))
-
 
 def compute_column(token):
     """

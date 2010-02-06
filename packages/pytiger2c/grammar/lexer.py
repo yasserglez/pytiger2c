@@ -4,10 +4,11 @@
 Análisis léxico-gráfico utilizando PLY.
 """
 
+import os
 import re
 
 from pytiger2c.contrib.ply import lex
-from pytiger2c.grammar.common import cachedir, compute_column
+from pytiger2c.grammar.common import compute_column
 from pytiger2c.errors import SyntacticError
 
 
@@ -121,7 +122,8 @@ t_LBRACE = r'\{'
 t_RBRACE = r'\}'
 
 
-lexer = lex.lex(debug=True, outputdir=cachedir, lextab='lexer')
+_cachedir = os.path.abspath(os.path.join(os.path.dirname(__file__), 'cache'))
+lexer = lex.lex(debug=True, outputdir=_cachedir, lextab='lexer')
 # Comment the previous lines and uncomment the following when we are sure
 # the grammar is OK to enable running PLY in optimization mode.
 # lexer = lex.lex(optimize=True, outputdir=_cachedir, lextab='lexer')
