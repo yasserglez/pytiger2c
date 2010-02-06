@@ -25,5 +25,5 @@ def compute_column(token):
     last_newline = data.rfind('\n', 0, token.lexpos)
     if last_newline < 0:
         last_newline = 0
-    column = (token.lexpos - last_newline) + 1
+    column = token.lexpos - last_newline
     return column

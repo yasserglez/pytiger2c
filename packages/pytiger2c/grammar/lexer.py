@@ -4,6 +4,8 @@
 Análisis léxico-gráfico utilizando PLY.
 """
 
+import re
+
 from pytiger2c.contrib.ply import lex
 from pytiger2c.grammar.common import cachedir, compute_column
 from pytiger2c.errors import SyntacticError
@@ -53,12 +55,44 @@ def t_ID(token):
     token.type = _reserved_map.get(token.value, 'ID')
     return token
 
-# Integer literal.
+# Integer literals.
 t_INTLIT = r'\d+'
 
-# String literal (ANSI-C strings).
-t_STRLIT = r'\"((\\[abfnrtv])|(\\[0-7][0-7][0-7])|(\\x[0-9a-fA-F][0-9a-fA-F])|(\\\\)|(\\")|([^\\"]))*\"'
-
+# String literals.
+def t_STRLIT(token):
+    r'\"((\\[nt])|(\\")|(\\\\)|(\\^[@A-Z[\]^_])|(\\[0-9]{3})|(\\\s+\\)|([^\\"]))*\"'
+    # Converting the value of the token into a valid C literal string.
+    def _escape(number):
+        """
+        Recibe un entero representando el número correspondiente a un caracter ASCII y
+        devuelve la secuencia de caracteres necesaria para representar este caracter
+        en un literal de cadena de C. La secuencia de caracteres consiste en un 
+        backslash seguido de 3 dígitos octales.
+        
+        @type number: C{int}
+        @param number: Entero representando el caracter ASCII.
+        
+        @rtype: C{str}
+        @return: Representación válida del caracter en un literal de cadena de C.
+        """
+        if 0 <= number <= 255:
+            return r'\{0}'.format(oct(number)[-3:])
+        else:
+            message = "Invalid string literal at line {line} column {column}"
+            line, column = token.lexer.lineno, compute_column(token)
+            raise SyntacticError(message.format(line=line, column=column))
+    repl = lambda match: _escape(ord(match.group(1)) - 64)
+    token.value = re.sub(r'\\^([@A-Z[\]^_])', repl, token.value)
+    repl = lambda match: _escape(int(match.group(1)))
+    token.value = re.sub(r'\\([0-9]{3})', repl, token.value)
+    # Update the line counter here before stripping whitespaces.
+    token.lexer.lineno += token.value.count('\n')
+    # Strip whitespaces between \s.
+    token.value = re.sub(r'\\\s+\\', '', token.value)
+    # Strip the double quotes.
+    token.value = token.value[1:-1]
+    return token
+    
 # Operators.
 t_PLUS = r'\+'
 t_MINUS = r'-'
