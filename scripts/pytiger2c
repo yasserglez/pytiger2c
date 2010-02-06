@@ -15,65 +15,90 @@ import subprocess
 PACKAGES_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, 'packages'))
 sys.path.insert(0, PACKAGES_DIR)
 
-from pytiger2c import __version__, __authors__, translate
+from pytiger2c import __version__, __authors__, tiger2c, tiger2dot
 from pytiger2c.errors import PyTiger2CError
 
 
 EXIT_SUCCESS, EXIT_FAILURE = 0, 1
 
 
-def _parse_args():
+def _parse_args(argv):
     """
     Reconoce las opciones especificadas como argumentos.
+    
+    @type argv: C{list}
+    @param argv: Lista de argumentos del programa.
+    
+    @rtype: C{tuple}
+    @return: Retorna una tupla donde el primer elemento es una estructura
+        que almacena la información acerca de las opciones especificadas
+        y el segundo elemento es una lista con el resto de los argumentos.
     """
-    usage = '%prog [options] <tiger-filename> <output-filename>'
+    usage = '%prog <tiger-file> --output <output-file> [--output-type <output-type>]'
     version = '%%prog (PyTiger2C) %s\n' % __version__
     authors = '\n'.join(['Copyright (C) 2009 %s' % a for a in __authors__])
-    desc = 'Translates a Tiger program received as argument into a C ' \
-        'program and then (optionally) compiles the C program into an ' \
-        'executable using a C compiler.'
-    parser = optparse.OptionParser(usage=usage, version=version + authors,
-                                   description=desc)
-    parser.add_option('-c', '--compile', action='store_true', dest='compile',
-                      help='compile the C program, generate an executable as output')
-    parser.set_default('compile', False)          
-    parser.add_option('-s', '--save-tmp', action='store_true', dest='save_tmp',
-                      help="do not remove the C program created for compilation")
-    parser.set_default('save_tmp', False)    
-    options, args = parser.parse_args()
-    if len(args) != 2:
+    desc = 'Translates a Tiger program received as argument into a C program ' \
+        'and then compiles the C program into an executable using a C compiler. ' \
+        'This behavior can be modified using the --output-type option.'
+    parser = optparse.OptionParser(usage=usage, 
+                                   version=version + authors, 
+                                   description=desc, 
+                                   prog=os.path.basename(argv[0]))
+    parser.remove_option('--help')
+    parser.add_option('--help', action='help', help='show this help message and exit')
+    parser.add_option('--output', action='store', dest='output', metavar='FILE', 
+                      help='write the output to FILE')
+    parser.add_option('--output-type', action='store', dest='output_type', metavar='TYPE',
+                      type='choice', choices=('ast', 'c', 'binary'),
+                      help="output type: 'ast', 'c' or 'binary' (default '%default')")
+    parser.set_default('output_type', 'binary')
+    options, args = parser.parse_args(args=argv[1:])
+    optparse.check_choice(parser.get_option('--output-type'), '--output-type', options.output_type)
+    if not options.output:
+        parser.error('missing required --output option')
+    elif len(args) != 1:
         parser.error('invalid number of arguments')
     else:
         return options, args
 
 
-def main():
+def main(argv):
     """
     Función principal del script.
+    
+    @type argv: C{list}
+    @param argv: Lista de argumentos del programa.
+    
+    @rtype: C{int}
+    @return: Retorna 0 si no ocurrió ningún error durante la ejecución 
+        del programa y 1 en el caso contrario.
     """
-    options, args = _parse_args()
-    tiger_file = os.path.abspath(args[0])
-    if options.compile:
-        basename = os.path.basename(tiger_file)
-        index = basename.rfind('.')
-        c_file = '%s.c' % basename[:index] if index > 0 else basename
-        c_file = os.path.join(os.path.dirname(tiger_file), c_file)
-        exec_file = os.path.abspath(args[1])
-    else: 
-        c_file = os.path.abspath(args[1])
+    options, args = _parse_args(argv)
+    tiger_filename = os.path.abspath(args[0])
+    output_filename = os.path.abspath(options.output)
     try:
-        translate(tiger_file, c_file)
+        if options.output_type == 'ast':
+            tiger2dot(tiger_filename, output_filename)
+        elif options.output_type == 'c':
+            tiger2c(tiger_filename, output_filename)
+        elif options.output_type == 'binary':
+            basename = os.path.basename(tiger_filename)
+            index = basename.rfind('.')
+            c_filename = '%s.c' % basename[:index] if index > 0 else basename
+            c_filename = os.path.join(os.path.dirname(tiger_filename), c_filename)
+            tiger2c(tiger_filename, c_filename)
+            # Translation completed. Compile using GCC.
+            GCC_CMD = ['gcc', '-std=c99', '-pedantic-errors', '-o', output_filename, c_filename]
+            if subprocess.call(GCC_CMD) != EXIT_SUCCESS:
+                # Leave the temporal c file for debug.
+                sys.exit(EXIT_FAILURE)
+            os.unlink(c_filename)
     except PyTiger2CError, error:
         print >> sys.stderr, error
         sys.exit(EXIT_FAILURE)
-    if options.compile:
-        GCC_CMD = ['gcc', '-std=c99', '-pedantic-errors', '-o', exec_file, c_file]
-        if subprocess.call(GCC_CMD) != 0:
-            sys.exit(EXIT_FAILURE)
-        if not options.save_tmp:
-            os.unlink(c_file)
-    sys.exit(EXIT_SUCCESS)    
+    else:
+        sys.exit(EXIT_SUCCESS)    
 
 
 if __name__ == '__main__':
-    main()
+    main(sys.argv)

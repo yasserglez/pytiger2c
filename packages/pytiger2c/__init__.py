@@ -4,9 +4,8 @@
 Paquete principal de PyTiger2C.
 
 PyTiger2C es una implementación de un compilador del lenguaje de programación
-Tiger que genera código en lenguaje C. Opcionalmente, el código C resultante 
-puede ser compilado con un compilador de C para generar un ejecutable específico
-para una plataforma.
+Tiger que genera código en lenguaje C y luego el código C resultante se compila 
+para generar un ejecutable específico para una plataforma.
 
 El código C generado será conforme al standard ISO/IEC 9899:1999, comúnmente conocido 
 como C99, lo cual garantiza que pueda ser procesado por cualquier compilador de C 
@@ -82,9 +81,61 @@ def generate_code(ast, output_fd):
         del error.
     """
     raise CodeGenerationError()
+
+
+def write_ast(ast, output_fd):
+    """
+    Escribe un árbol de sintáxis abstracta correspondiente a un programa Tiger
+    en un archivo con formato DOT de Graphviz.
+    
+    @type ast: C{LanguageNode}
+    @param ast: Árbol de sintáxis asbtracta correspondiente a un programa Tiger.
+    
+    @type output_fd: C{file}
+    @param output_fd: Descriptor de fichero del archivo donde se debe escribir el
+        árbol de sintáxis abstracta en formato DOT de Graphviz.
+    """
+    raise NotImplementedError()
+
+
+def tiger2dot(tiger_filename, dot_filename):
+    """
+    Genera un archivo en el formato DOT de Graphviz con el árbol de sintáxis
+    abstracta correspondiente a un programa Tiger.
+    
+    Se utiliza la función auxiliar C{syntactic_analysis} para realizar el
+    análisis léxico-gráfico y sintáctico durante el cual se reportará cualquier
+    error en el programa Tiger. Luego, se utiliza la función auxiliar
+    C{write_ast} para escribir el árbol de sintáxis abstracta en el archivo DOT.
+    
+    @type tiger_filename: C{str}
+    @param tiger_filename: Ruta absoluta al archivo que contiene el código
+        fuente del programa Tiger.
+        
+    @type dot_filename: C{str}
+    @param dot_filename: Ruta absoluta al archivo donde se generará el archivo
+        DOT resultante. Si existe un archivo en la ruta especificada este será
+        sobreescrito.
+    
+    @raise PyTiger2CError: Además de las excepciones lanzadas por cada una de las
+        funciones auxiliares, esta función puede lanzar esta excepción cuando
+        se produce algún error al leer del archivo que contiene el programa
+        Tiger que se quiere traducir o al escribir el árbol de sintáxis asbtracta
+        resultante en el archivo DOT especificado.    
+    """ 
+    try:
+        with codecs.open(tiger_filename, encoding='utf-8', mode='rb') as input_fd: 
+            ast = syntactic_analysis(input_fd)
+    except IOError:
+        raise PyTiger2CError(message='Could not open the Tiger input file')
+    try:
+        with codecs.open(dot_filename, encoding='utf-8', mode='wb') as output_fd:
+            write_ast(ast, output_fd)
+    except IOError:
+        raise PyTiger2CError(error_msg='Could not open the output file')
     
 
-def translate(tiger_filename, c_filename):
+def tiger2c(tiger_filename, c_filename):
     """
     Traduce un programa Tiger a un programa C equivalente.
     
@@ -98,7 +149,7 @@ def translate(tiger_filename, c_filename):
     
     @type tiger_filename: C{str}
     @param tiger_filename: Ruta absoluta al archivo que contiene el código
-        fuente del programa Tiger que se debe traducir al lenguaje C.
+        fuente del programa Tiger.
 
     @type c_filename: C{str}
     @param c_filename: Ruta absoluta al archivo donde se generará el código

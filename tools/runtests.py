@@ -13,7 +13,7 @@ SRC_DIR = os.path.join(os.path.dirname(__file__), os.pardir)
 
 PYTIGER2C_SCRIPT = os.path.abspath(os.path.join(SRC_DIR, 'scripts', 'pytiger2c'))
 
-PYTIGER2C_CMD = ['python', PYTIGER2C_SCRIPT, '-c']
+PYTIGER2C_CMD = ['python', PYTIGER2C_SCRIPT]
 
 TESTS_DIR = os.path.abspath(os.path.join(SRC_DIR, 'tests'))
 
@@ -34,7 +34,7 @@ class TigerTestCase(unittest.TestCase):
         super(TigerTestCase, self).__init__()
         self._tiger_file = os.path.join(parent_dir, tiger_file)
         self._exec_file = os.path.join(parent_dir, tiger_file[:-4])
-        self._pytiger2c_cmd = PYTIGER2C_CMD + [self._tiger_file, self._exec_file]
+        self._pytiger2c_cmd = PYTIGER2C_CMD + [self._tiger_file, '--output', self._exec_file]
         self._in_file = os.path.join(parent_dir, tiger_file[:-4] + '.in')
         if not os.path.isfile(self._in_file):
             self._in_file = None
