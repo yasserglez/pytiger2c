@@ -45,8 +45,7 @@ def _parse_ply_file(ply_file):
                     goto_state = int(shift_match.group('goto_state'))
                     shifts[current_state][input_item] = goto_state
                     continue
-                # Ignore the line if it is not the beginning of 
-                # a state, a production or shift information.
+                # Ignore the line if it is not the beginning of a state, a production or shift information.
     return prods, shifts
 
 
