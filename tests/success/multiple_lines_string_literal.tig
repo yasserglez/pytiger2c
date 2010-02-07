@@ -3,6 +3,6 @@ let
              \span multiple lines by ending and \
              \starting each line with a backslash."
 in
-    print(s)
+    print(s);
     print("\n")
 end

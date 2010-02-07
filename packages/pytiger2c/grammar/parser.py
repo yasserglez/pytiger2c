@@ -36,9 +36,13 @@ precedence = (
 )
 
 def p_error(token):
-    message = "Unexpected token '{token}' at line {line} column {column}"
-    line, column = token.lexer.lineno, compute_column(token)
-    raise SyntacticError(message.format(token=token.type, line=line, column=column))
+    if token:
+        message = "Unexpected token '{token}' at line {line} column {column}"
+        line, column = token.lexer.lineno, compute_column(token)
+        raise SyntacticError(message.format(token=token.type, line=line, column=column))
+    else:
+        message = "Unexpected end of the input file"
+        raise SyntacticError(message)
 
 # NOTE: When naming a production we follow the following rule: 
 # A "group" a group of items without an "special" character between them.

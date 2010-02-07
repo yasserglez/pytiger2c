@@ -34,8 +34,31 @@ tokens = _reserved + (
     'PERIOD', 'COMMA', 'COLON', 'SEMICOLON', 'LPAREN', 'RPAREN', 'LBRACKET', 'RBRACKET', 'LBRACE', 'RBRACE', 
 )
 
+# Nested comments are handled using an special COMMENT state.
+states = (
+    ('COMMENT', 'exclusive'),
+)
+
+# The action attached to this token pushes a COMMENT state into the state stack
+# This has to be done in all lexer states because comments can be nested. 
+def t_ANY_comment_begin(token):
+    r'/\*'
+    token.lexer.push_state('COMMENT')
+    # Since nothing is returned, this token is discarded.
+    
+# If the lexer is in the COMMENT state and a comment is closed pop the
+# current state from the state stack.
+def t_COMMENT_comment_end(token):
+    r'\*/'
+    token.lexer.pop_state()
+    # Since nothing is returned, this token is discarded.
+
+# Ignore everything in the COMMENT state. We only need to match /* and */.
+def t_COMMENT_error(token):
+    token.lexer.skip(1)
+
 # Completely ignored characters
-t_ignore = ' \t'
+t_ANY_ignore = ' \t'
 
 # Error handling rule.
 def t_error(token):
@@ -44,10 +67,11 @@ def t_error(token):
     raise SyntacticError(message.format(char=token.value[0], line=line, column=column))
 
 # This rule is used to track newlines (\n\r, \r\n, and \r, and \n, freely intermixed).
-def t_newline(token):
+# The ANY prefix is used to make this a valid token in all lexer states.
+def t_ANY_newline(token):
     r'\r*\n(\r|\n)*'
     token.lexer.lineno += token.value.count('\n')
-    # Since nothing is returned this token is discarded.
+    # Since nothing is returned, this token is discarded.
 
 # Identifiers and _reserved words.
 def t_ID(token):
