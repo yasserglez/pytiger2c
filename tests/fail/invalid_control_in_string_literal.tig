@@ -1,0 +1,4 @@
+let
+    var s := "This is an invalid Control-c sequence: \^0"
+in
+end

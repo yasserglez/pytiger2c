@@ -63,6 +63,7 @@ t_ANY_ignore = ' \t'
 # Error handling rule.
 def t_error(token):
     message = "Illegal character '{char}' at line {line} column {column}"
+    print token
     line, column = token.lexer.lineno, compute_column(token)
     raise SyntacticError(message.format(char=token.value[0], line=line, column=column))
 
@@ -85,7 +86,7 @@ t_INTLIT = r'\d+'
 
 # String literals.
 def t_STRLIT(token):
-    r'\"((\\[nt])|(\\")|(\\\\)|(\\^[@A-Z[\]^_])|(\\[0-9]{3})|(\\\s+\\)|([^\\"]))*\"'
+    r'\"((\\[nt])|(\\")|(\\\\)|(\\\^[@A-Z[\]^_])|(\\[0-9]{3})|(\\\s+\\)|([^\\"]))*\"'
     # Converting the value of the token into a valid C literal string.
     def _escape(number):
         """
