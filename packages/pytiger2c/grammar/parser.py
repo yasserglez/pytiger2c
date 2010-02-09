@@ -27,8 +27,10 @@ precedence = (
     # conflict. If an ELSE if found it should be shifted instead of reducing the 
     # if-then without the else clause.
     ('nonassoc', 'ELSE'),
+    # Operator precedence.
     ('nonassoc', 'ASSIGN'),
-    ('left', 'AND', 'OR'),
+    ('left', 'OR'),
+    ('left', 'AND'),
     ('nonassoc', 'EQ', 'NE', 'LT', 'LE', 'GT', 'GE'),
     ('left', 'PLUS', 'MINUS'),
     ('left', 'TIMES', 'DIVIDE'),
@@ -142,21 +144,31 @@ def p_lvalue_array(symbols):
     "lvalue : lvalue LBRACKET expr RBRACKET"
 
 # A group of expressions separated by semicolons.
+
+# An empty pair of parenthesis () is legal and returns no value.
+def p_expr_seq_empty(symbols):
+    "expr_seq : "
+    
 def p_expr_seq_single(symbols):
-    "expr_seq : expr"
+    "expr_seq : expr"    
 
 def p_expr_seq_multiple(symbols):
     "expr_seq : expr_seq SEMICOLON expr"
     
 # A group of declarations. No "special" characters between declarations!
+
+# A let expression with nothing between the in and end is valid.
 def p_dec_group_single(symbols):
-    "dec_group : dec"
+    "dec_group : "
 
 def p_dec_group_multiple(symbols):
     "dec_group : dec_group dec"
 
 # A list of field names, the equals character and an expression 
 # to assign values for each one of the fields of a record.
+def p_field_list_empty(symbols):
+    "field_list : "
+
 def p_field_list_single(symbols):
     "field_list : field_assign"
 
@@ -167,8 +179,11 @@ def p_field_assign(symbols):
     "field_assign : ID EQ expr"
 
 # A group of expressions separated by commas.
+def p_expr_list_empty(symbols):
+    "expr_list : "
+    
 def p_expr_list_single(symbols):
-    "expr_list : expr"
+    "expr_list : expr"    
 
 def p_expr_list_multiple(symbols):
     "expr_list : expr_list COMMA expr"
