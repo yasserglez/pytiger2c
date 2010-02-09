@@ -63,7 +63,6 @@ t_ANY_ignore = ' \t'
 # Error handling rule.
 def t_error(token):
     message = "Illegal character '{char}' at line {line} column {column}"
-    print token
     line, column = token.lexer.lineno, compute_column(token)
     raise SyntacticError(message.format(char=token.value[0], line=line, column=column))
 
