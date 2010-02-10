@@ -84,12 +84,13 @@ class SuccessTigerTestCase(TigerTestCase):
         Ejecuta la prueba.
         """
         # Compile the program.
-        if subprocess.call(self._pytiger2c_cmd) != 0 or not os.path.isfile(self._exec_file):
+        pytiger2c_ret = subprocess.call(self._pytiger2c_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        if pytiger2c_ret != 0 or not os.path.isfile(self._exec_file):
             self.fail('Compilation failed!')
         # Execute the program.
         exec_stdin = open(self._in_file) if self._in_file else None
         with open(self._tmp_file, 'w') as exec_stdout:
-            subprocess.call([self._exec_file], stdin=exec_stdin, stdout=exec_stdout)
+            subprocess.call([self._exec_file], stdin=exec_stdin, stdout=exec_stdout, stderr=subprocess.PIPE)
             if exec_stdin is not None:
                 exec_stdin.close()
         # Compare the output of the programs.
@@ -110,8 +111,9 @@ class FailTigerTestCase(TigerTestCase):
         Ejecuta la prueba.
         """
         # Try to compile the program.
-        with open(self._tmp_file, 'w') as pytiger2c_stderr: 
-            if subprocess.call(self._pytiger2c_cmd, stderr=pytiger2c_stderr) != 1:
+        with open(self._tmp_file, 'w') as pytiger2c_stderr:
+            pytiger2c_ret = subprocess.call(self._pytiger2c_cmd, stdout=subprocess.PIPE, stderr=pytiger2c_stderr) 
+            if pytiger2c_ret != 1:
                 self.fail('Compilation succeded and it should fail!')
         # Compare the error output.
         self.failIfDifferent(self._tmp_file, self._err_file)
