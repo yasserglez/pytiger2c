@@ -8,12 +8,9 @@ import os
 
 from pytiger2c.contrib.ply import yacc
 from pytiger2c.grammar.common import compute_column
-from pytiger2c.grammar import lexer
+from pytiger2c.grammar.lexer import lexer, tokens
 from pytiger2c.errors import SyntacticError
 
-
-# Get the token map defined in the lexer module.
-tokens = lexer.tokens
 
 # Precedence rules.
 precedence = (
@@ -40,7 +37,7 @@ precedence = (
 def p_error(token):
     if token:
         message = "Unexpected token '{token}' at line {line} column {column}"
-        line, column = token.lexer.lineno, compute_column(token)
+        line, column = lexer.lineno, compute_column(token)
         raise SyntacticError(message.format(token=token.type, line=line, column=column))
     else:
         message = "Unexpected end of the input file"
@@ -55,7 +52,12 @@ def p_error(token):
 # will be considered the starting symbol of the grammar. 
 def p_program(symbols):
     "program : expr"
-
+    if lexer.current_state() != 'INITIAL':
+        message = "A comment was opened but not closed"
+        raise SyntacticError(message)
+    else:
+        symbols[0] = symbols[1]
+         
 # Literals.
 def p_expr_nil(symbols):
     "expr : NIL"

@@ -1,0 +1,4 @@
+let
+    var s := "This is a string literal that begins here...
+in
+end

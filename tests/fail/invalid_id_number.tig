@@ -1,4 +1,4 @@
 let
-    var 1abc := "This is an invalid id for var declaration"
+    var 1abc := "This is an invalid identifier."
 in
 end

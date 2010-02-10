@@ -1,0 +1,7 @@
+/* This is a comment that begins here...
+
+let
+    var s := "Hello, world!\n"
+in
+    print(s)
+end
