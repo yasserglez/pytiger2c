@@ -14,9 +14,6 @@ from pytiger2c.errors import SyntacticError
 
 # Precedence rules.
 precedence = (
-    # The following fixes the shift/reduce conflict between shifting [ in the
-    # array declaration production or reducing the lvalue -> ID production.
-    ('nonassoc', 'LBRACKET'),
     # The following fixes the shift/reduce conflict caused by rules ending with 
     # the non-terminal expr and the rules for binary operators.
     ('nonassoc', 'OF', 'THEN', 'DO'),
@@ -101,7 +98,7 @@ def p_expr_bin_op(symbols):
          | expr OR expr
     """
 
-# A group of expressions separated by semicolons.
+# A group of expressions enclosed by parenthesis separated by semicolons.
 def p_expr_expr_seq(symbols):
     "expr : LPAREN expr_seq RPAREN"
 
@@ -131,7 +128,7 @@ def p_expr_break(symbols):
 
 # The let block.
 def p_expr_let(symbols):
-    "expr : LET dec_group IN expr_seq END"
+    "expr : LET dec_group IN expr_seq END"    
     
 # What is a left value of an assignment expression? A variable.
 def p_lvalue_id(symbols):
@@ -146,23 +143,21 @@ def p_lvalue_array(symbols):
     "lvalue : lvalue LBRACKET expr RBRACKET"
 
 # A group of expressions separated by semicolons.
-
-# An empty pair of parenthesis () is legal and returns no value.
 def p_expr_seq_empty(symbols):
     "expr_seq : "
     
-def p_expr_seq_single(symbols):
-    "expr_seq : expr"    
-
 def p_expr_seq_multiple(symbols):
     "expr_seq : expr_seq SEMICOLON expr"
+
+def p_expr_seq_single(symbols):
+    "expr_seq : expr"
     
 # A group of declarations. No "special" characters between declarations!
 
 # A let expression with nothing between the in and end is valid.
-def p_dec_group_single(symbols):
+def p_dec_group_empty(symbols):
     "dec_group : "
-
+    
 def p_dec_group_multiple(symbols):
     "dec_group : dec_group dec"
 
@@ -184,11 +179,11 @@ def p_field_assign(symbols):
 def p_expr_list_empty(symbols):
     "expr_list : "
     
+def p_expr_list_multiple(symbols):
+    "expr_list : expr_list COMMA expr"    
+    
 def p_expr_list_single(symbols):
     "expr_list : expr"    
-
-def p_expr_list_multiple(symbols):
-    "expr_list : expr_list COMMA expr"
 
 # What is a declaration? A type declaration.
 def p_dec_type(symbols):
@@ -219,6 +214,9 @@ def p_type_array(symbols):
     "type : ARRAY OF ID"
 
 # A list of field types declaration separated by commas.
+def p_field_types_empty(symbols):
+    "field_types : "
+
 def p_field_types_single(symbols):
     "field_types : field_type"
 
