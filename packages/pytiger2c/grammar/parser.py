@@ -18,9 +18,14 @@ precedence = (
     # the non-terminal expr and the rules for binary operators.
     ('nonassoc', 'OF', 'THEN', 'DO'),
     # The token ELSE has higher priority to fix the dangling-else shift/reduce 
-    # conflict. If an ELSE if found it should be shifted instead of reducing the 
+    # conflict. If an ELSE if found it should be shifted instead of reducing the
     # if-then without the else clause.
     ('nonassoc', 'ELSE'),
+    # The following fixes the shift/reduce conflict between shifting the
+    # [ token in the p_expr_array production (array declaration) or reducing 
+    # the p_lvalue_id production.
+    ('nonassoc', 'LVALUE_ID'),
+    ('nonassoc', 'LBRACKET'),
     # Operator precedence.
     ('nonassoc', 'ASSIGN'),
     ('left', 'OR'),
@@ -54,7 +59,7 @@ def p_program(symbols):
         raise SyntacticError(message)
     else:
         symbols[0] = symbols[1]
-         
+
 # Literals.
 def p_expr_nil(symbols):
     "expr : NIL"
@@ -130,18 +135,19 @@ def p_expr_break(symbols):
 def p_expr_let(symbols):
     "expr : LET dec_group IN expr_seq END"    
     
-# What is a left value of an assignment expression? A variable.
+# What is a left value of an assignment expression?
 def p_lvalue_id(symbols):
-    "lvalue : ID"
+    "lvalue : ID %prec LVALUE_ID"
     
-# What is a left value of an assignment expression? A field of a record.    
 def p_lvalue_record(symbols):
     "lvalue : lvalue PERIOD ID"
     
-# What is a left value of an assignment expression? An item from an array.    
 def p_lvalue_array(symbols):
+    "lvalue : ID LBRACKET expr RBRACKET"    
+    
+def p_lvalue_array_lvalue(symbols):
     "lvalue : lvalue LBRACKET expr RBRACKET"
-
+    
 # A group of expressions separated by semicolons.
 def p_expr_seq_empty(symbols):
     "expr_seq : "
@@ -250,3 +256,18 @@ parser = yacc.yacc(debug=True, outputdir=_cachedir, tabmodule='parser',
 # the grammar is OK to enable running PLY in optimization mode.
 # parser = yacc.yacc(optimize=True, outputdir=_cachedir, tabmodule='parser',
 #                    debugfile=os.path.join(_cachedir, 'parser.txt'))
+
+
+# The following is used to debug the parser. It will parse input read from 
+# standard input or from a file specified on the command line. 
+if __name__ == '__main__':
+    # This code was taken from the body of the lex.runmain() function.
+    import sys
+    try:
+        filename = sys.argv[1]
+        with open(filename) as fd:
+            data = fd.read()
+    except IndexError:
+        sys.stdout.write("Reading from standard input (type EOF to end):\n")
+        data = sys.stdin.read()
+    parser.parse(data, debug=True)

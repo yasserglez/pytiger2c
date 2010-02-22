@@ -151,3 +151,9 @@ lexer = lex.lex(debug=True, outputdir=_cachedir, lextab='lexer')
 # Comment the previous lines and uncomment the following when we are sure
 # the grammar is OK to enable running PLY in optimization mode.
 # lexer = lex.lex(optimize=True, outputdir=_cachedir, lextab='lexer')
+
+
+# The following is used to debug the lexer. It will tokenize input read from 
+# standard input or from a file specified on the command line. 
+if __name__ == '__main__':
+    lex.runmain()
