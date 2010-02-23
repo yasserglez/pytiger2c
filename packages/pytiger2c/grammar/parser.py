@@ -250,12 +250,12 @@ def p_func_dec_with_return(symbols):
 
 
 _cachedir = os.path.abspath(os.path.join(os.path.dirname(__file__), 'cache'))
-parser = yacc.yacc(debug=True, outputdir=_cachedir, tabmodule='parser',
-                   debugfile=os.path.join(_cachedir, 'parser.txt'))
-# Comment the previous lines and uncomment the following when we are sure
-# the grammar is OK to enable running PLY in optimization mode.
-# parser = yacc.yacc(optimize=True, outputdir=_cachedir, tabmodule='parser',
+# parser = yacc.yacc(debug=True, outputdir=_cachedir, tabmodule='parser',
 #                    debugfile=os.path.join(_cachedir, 'parser.txt'))
+# Comment the previous line and uncomment the following when
+# the grammar is OK to enable running PLY in optimization mode.
+parser = yacc.yacc(debug=False, optimize=True, outputdir=_cachedir, tabmodule='parser',
+                   debugfile=os.path.join(_cachedir, 'parser.txt'))
 
 
 # The following is used to debug the parser. It will parse input read from 

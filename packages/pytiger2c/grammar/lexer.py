@@ -147,10 +147,10 @@ t_RBRACE = r'\}'
 
 
 _cachedir = os.path.abspath(os.path.join(os.path.dirname(__file__), 'cache'))
-lexer = lex.lex(debug=True, outputdir=_cachedir, lextab='lexer')
-# Comment the previous lines and uncomment the following when we are sure
+# lexer = lex.lex(debug=True, outputdir=_cachedir, lextab='lexer')
+# Comment the previous line and uncomment the following when
 # the grammar is OK to enable running PLY in optimization mode.
-# lexer = lex.lex(optimize=True, outputdir=_cachedir, lextab='lexer')
+lexer = lex.lex(optimize=True, outputdir=_cachedir, lextab='lexer')
 
 
 # The following is used to debug the lexer. It will tokenize input read from 

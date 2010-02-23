@@ -1,0 +1,4506 @@
+Created by PLY version 3.3 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> program
+Rule 1     program -> expr
+Rule 2     expr -> NIL
+Rule 3     expr -> INTLIT
+Rule 4     expr -> STRLIT
+Rule 5     expr -> lvalue
+Rule 6     expr -> ID LBRACKET expr RBRACKET OF expr
+Rule 7     expr -> ID LBRACE field_list RBRACE
+Rule 8     expr -> MINUS expr
+Rule 9     expr -> expr PLUS expr
+Rule 10    expr -> expr MINUS expr
+Rule 11    expr -> expr TIMES expr
+Rule 12    expr -> expr DIVIDE expr
+Rule 13    expr -> expr EQ expr
+Rule 14    expr -> expr NE expr
+Rule 15    expr -> expr LT expr
+Rule 16    expr -> expr LE expr
+Rule 17    expr -> expr GT expr
+Rule 18    expr -> expr GE expr
+Rule 19    expr -> expr AND expr
+Rule 20    expr -> expr OR expr
+Rule 21    expr -> LPAREN expr_seq RPAREN
+Rule 22    expr -> lvalue ASSIGN expr
+Rule 23    expr -> ID LPAREN expr_list RPAREN
+Rule 24    expr -> IF expr THEN expr
+Rule 25    expr -> IF expr THEN expr ELSE expr
+Rule 26    expr -> WHILE expr DO expr
+Rule 27    expr -> FOR ID ASSIGN expr TO expr DO expr
+Rule 28    expr -> BREAK
+Rule 29    expr -> LET dec_group IN expr_seq END
+Rule 30    lvalue -> ID
+Rule 31    lvalue -> lvalue PERIOD ID
+Rule 32    lvalue -> ID LBRACKET expr RBRACKET
+Rule 33    lvalue -> lvalue LBRACKET expr RBRACKET
+Rule 34    expr_seq -> <empty>
+Rule 35    expr_seq -> expr_seq SEMICOLON expr
+Rule 36    expr_seq -> expr
+Rule 37    dec_group -> <empty>
+Rule 38    dec_group -> dec_group dec
+Rule 39    field_list -> <empty>
+Rule 40    field_list -> field_assign
+Rule 41    field_list -> field_list COMMA field_assign
+Rule 42    field_assign -> ID EQ expr
+Rule 43    expr_list -> <empty>
+Rule 44    expr_list -> expr_list COMMA expr
+Rule 45    expr_list -> expr
+Rule 46    dec -> type_dec
+Rule 47    dec -> var_dec
+Rule 48    dec -> func_dec
+Rule 49    type_dec -> TYPE ID EQ type
+Rule 50    type -> ID
+Rule 51    type -> LBRACE field_types RBRACE
+Rule 52    type -> ARRAY OF ID
+Rule 53    field_types -> <empty>
+Rule 54    field_types -> field_type
+Rule 55    field_types -> field_types COMMA field_type
+Rule 56    field_type -> ID COLON ID
+Rule 57    var_dec -> VAR ID ASSIGN expr
+Rule 58    var_dec -> VAR ID COLON ID ASSIGN expr
+Rule 59    func_dec -> FUNCTION ID LPAREN field_types RPAREN EQ expr
+Rule 60    func_dec -> FUNCTION ID LPAREN field_types RPAREN COLON ID EQ expr
+
+Terminals, with rules where they appear
+
+AND                  : 19
+ARRAY                : 52
+ASSIGN               : 22 27 57 58
+BREAK                : 28
+COLON                : 56 58 60
+COMMA                : 41 44 55
+DIVIDE               : 12
+DO                   : 26 27
+ELSE                 : 25
+END                  : 29
+EQ                   : 13 42 49 59 60
+FOR                  : 27
+FUNCTION             : 59 60
+GE                   : 18
+GT                   : 17
+ID                   : 6 7 23 27 30 31 32 42 49 50 52 56 56 57 58 58 59 60 60
+IF                   : 24 25
+IN                   : 29
+INTLIT               : 3
+LBRACE               : 7 51
+LBRACKET             : 6 32 33
+LE                   : 16
+LET                  : 29
+LPAREN               : 21 23 59 60
+LT                   : 15
+MINUS                : 8 10
+NE                   : 14
+NIL                  : 2
+OF                   : 6 52
+OR                   : 20
+PERIOD               : 31
+PLUS                 : 9
+RBRACE               : 7 51
+RBRACKET             : 6 32 33
+RPAREN               : 21 23 59 60
+SEMICOLON            : 35
+STRLIT               : 4
+THEN                 : 24 25
+TIMES                : 11
+TO                   : 27
+TYPE                 : 49
+VAR                  : 57 58
+WHILE                : 26
+error                : 
+
+Nonterminals, with rules where they appear
+
+dec                  : 38
+dec_group            : 29 38
+expr                 : 1 6 6 8 9 9 10 10 11 11 12 12 13 13 14 14 15 15 16 16 17 17 18 18 19 19 20 20 22 24 24 25 25 25 26 26 27 27 27 32 33 35 36 42 44 45 57 58 59 60
+expr_list            : 23 44
+expr_seq             : 21 29 35
+field_assign         : 40 41
+field_list           : 7 41
+field_type           : 54 55
+field_types          : 51 55 59 60
+func_dec             : 48
+lvalue               : 5 22 31 33
+program              : 0
+type                 : 49
+type_dec             : 46
+var_dec              : 47
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . program
+    (1) program -> . expr
+    (2) expr -> . NIL
+    (3) expr -> . INTLIT
+    (4) expr -> . STRLIT
+    (5) expr -> . lvalue
+    (6) expr -> . ID LBRACKET expr RBRACKET OF expr
+    (7) expr -> . ID LBRACE field_list RBRACE
+    (8) expr -> . MINUS expr
+    (9) expr -> . expr PLUS expr
+    (10) expr -> . expr MINUS expr
+    (11) expr -> . expr TIMES expr
+    (12) expr -> . expr DIVIDE expr
+    (13) expr -> . expr EQ expr
+    (14) expr -> . expr NE expr
+    (15) expr -> . expr LT expr
+    (16) expr -> . expr LE expr
+    (17) expr -> . expr GT expr
+    (18) expr -> . expr GE expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . LPAREN expr_seq RPAREN
+    (22) expr -> . lvalue ASSIGN expr
+    (23) expr -> . ID LPAREN expr_list RPAREN
+    (24) expr -> . IF expr THEN expr
+    (25) expr -> . IF expr THEN expr ELSE expr
+    (26) expr -> . WHILE expr DO expr
+    (27) expr -> . FOR ID ASSIGN expr TO expr DO expr
+    (28) expr -> . BREAK
+    (29) expr -> . LET dec_group IN expr_seq END
+    (30) lvalue -> . ID
+    (31) lvalue -> . lvalue PERIOD ID
+    (32) lvalue -> . ID LBRACKET expr RBRACKET
+    (33) lvalue -> . lvalue LBRACKET expr RBRACKET
+
+    NIL             shift and go to state 11
+    INTLIT          shift and go to state 2
+    STRLIT          shift and go to state 3
+    ID              shift and go to state 9
+    MINUS           shift and go to state 5
+    LPAREN          shift and go to state 8
+    IF              shift and go to state 10
+    WHILE           shift and go to state 1
+    FOR             shift and go to state 7
+    BREAK           shift and go to state 12
+    LET             shift and go to state 13
+
+    lvalue                         shift and go to state 4
+    program                        shift and go to state 6
+    expr                           shift and go to state 14
+
+state 1
+
+    (26) expr -> WHILE . expr DO expr
+    (2) expr -> . NIL
+    (3) expr -> . INTLIT
+    (4) expr -> . STRLIT
+    (5) expr -> . lvalue
+    (6) expr -> . ID LBRACKET expr RBRACKET OF expr
+    (7) expr -> . ID LBRACE field_list RBRACE
+    (8) expr -> . MINUS expr
+    (9) expr -> . expr PLUS expr
+    (10) expr -> . expr MINUS expr
+    (11) expr -> . expr TIMES expr
+    (12) expr -> . expr DIVIDE expr
+    (13) expr -> . expr EQ expr
+    (14) expr -> . expr NE expr
+    (15) expr -> . expr LT expr
+    (16) expr -> . expr LE expr
+    (17) expr -> . expr GT expr
+    (18) expr -> . expr GE expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . LPAREN expr_seq RPAREN
+    (22) expr -> . lvalue ASSIGN expr
+    (23) expr -> . ID LPAREN expr_list RPAREN
+    (24) expr -> . IF expr THEN expr
+    (25) expr -> . IF expr THEN expr ELSE expr
+    (26) expr -> . WHILE expr DO expr
+    (27) expr -> . FOR ID ASSIGN expr TO expr DO expr
+    (28) expr -> . BREAK
+    (29) expr -> . LET dec_group IN expr_seq END
+    (30) lvalue -> . ID
+    (31) lvalue -> . lvalue PERIOD ID
+    (32) lvalue -> . ID LBRACKET expr RBRACKET
+    (33) lvalue -> . lvalue LBRACKET expr RBRACKET
+
+    NIL             shift and go to state 11
+    INTLIT          shift and go to state 2
+    STRLIT          shift and go to state 3
+    ID              shift and go to state 9
+    MINUS           shift and go to state 5
+    LPAREN          shift and go to state 8
+    IF              shift and go to state 10
+    WHILE           shift and go to state 1
+    FOR             shift and go to state 7
+    BREAK           shift and go to state 12
+    LET             shift and go to state 13
+
+    lvalue                         shift and go to state 4
+    expr                           shift and go to state 15
+
+state 2
+
+    (3) expr -> INTLIT .
+
+    PLUS            reduce using rule 3 (expr -> INTLIT .)
+    MINUS           reduce using rule 3 (expr -> INTLIT .)
+    TIMES           reduce using rule 3 (expr -> INTLIT .)
+    DIVIDE          reduce using rule 3 (expr -> INTLIT .)
+    EQ              reduce using rule 3 (expr -> INTLIT .)
+    NE              reduce using rule 3 (expr -> INTLIT .)
+    LT              reduce using rule 3 (expr -> INTLIT .)
+    LE              reduce using rule 3 (expr -> INTLIT .)
+    GT              reduce using rule 3 (expr -> INTLIT .)
+    GE              reduce using rule 3 (expr -> INTLIT .)
+    AND             reduce using rule 3 (expr -> INTLIT .)
+    OR              reduce using rule 3 (expr -> INTLIT .)
+    $end            reduce using rule 3 (expr -> INTLIT .)
+    DO              reduce using rule 3 (expr -> INTLIT .)
+    RPAREN          reduce using rule 3 (expr -> INTLIT .)
+    SEMICOLON       reduce using rule 3 (expr -> INTLIT .)
+    THEN            reduce using rule 3 (expr -> INTLIT .)
+    RBRACKET        reduce using rule 3 (expr -> INTLIT .)
+    COMMA           reduce using rule 3 (expr -> INTLIT .)
+    TO              reduce using rule 3 (expr -> INTLIT .)
+    END             reduce using rule 3 (expr -> INTLIT .)
+    ELSE            reduce using rule 3 (expr -> INTLIT .)
+    RBRACE          reduce using rule 3 (expr -> INTLIT .)
+    IN              reduce using rule 3 (expr -> INTLIT .)
+    TYPE            reduce using rule 3 (expr -> INTLIT .)
+    VAR             reduce using rule 3 (expr -> INTLIT .)
+    FUNCTION        reduce using rule 3 (expr -> INTLIT .)
+
+
+state 3
+
+    (4) expr -> STRLIT .
+
+    PLUS            reduce using rule 4 (expr -> STRLIT .)
+    MINUS           reduce using rule 4 (expr -> STRLIT .)
+    TIMES           reduce using rule 4 (expr -> STRLIT .)
+    DIVIDE          reduce using rule 4 (expr -> STRLIT .)
+    EQ              reduce using rule 4 (expr -> STRLIT .)
+    NE              reduce using rule 4 (expr -> STRLIT .)
+    LT              reduce using rule 4 (expr -> STRLIT .)
+    LE              reduce using rule 4 (expr -> STRLIT .)
+    GT              reduce using rule 4 (expr -> STRLIT .)
+    GE              reduce using rule 4 (expr -> STRLIT .)
+    AND             reduce using rule 4 (expr -> STRLIT .)
+    OR              reduce using rule 4 (expr -> STRLIT .)
+    $end            reduce using rule 4 (expr -> STRLIT .)
+    DO              reduce using rule 4 (expr -> STRLIT .)
+    RPAREN          reduce using rule 4 (expr -> STRLIT .)
+    SEMICOLON       reduce using rule 4 (expr -> STRLIT .)
+    THEN            reduce using rule 4 (expr -> STRLIT .)
+    RBRACKET        reduce using rule 4 (expr -> STRLIT .)
+    COMMA           reduce using rule 4 (expr -> STRLIT .)
+    TO              reduce using rule 4 (expr -> STRLIT .)
+    END             reduce using rule 4 (expr -> STRLIT .)
+    ELSE            reduce using rule 4 (expr -> STRLIT .)
+    RBRACE          reduce using rule 4 (expr -> STRLIT .)
+    IN              reduce using rule 4 (expr -> STRLIT .)
+    TYPE            reduce using rule 4 (expr -> STRLIT .)
+    VAR             reduce using rule 4 (expr -> STRLIT .)
+    FUNCTION        reduce using rule 4 (expr -> STRLIT .)
+
+
+state 4
+
+    (5) expr -> lvalue .
+    (22) expr -> lvalue . ASSIGN expr
+    (31) lvalue -> lvalue . PERIOD ID
+    (33) lvalue -> lvalue . LBRACKET expr RBRACKET
+
+    PLUS            reduce using rule 5 (expr -> lvalue .)
+    MINUS           reduce using rule 5 (expr -> lvalue .)
+    TIMES           reduce using rule 5 (expr -> lvalue .)
+    DIVIDE          reduce using rule 5 (expr -> lvalue .)
+    EQ              reduce using rule 5 (expr -> lvalue .)
+    NE              reduce using rule 5 (expr -> lvalue .)
+    LT              reduce using rule 5 (expr -> lvalue .)
+    LE              reduce using rule 5 (expr -> lvalue .)
+    GT              reduce using rule 5 (expr -> lvalue .)
+    GE              reduce using rule 5 (expr -> lvalue .)
+    AND             reduce using rule 5 (expr -> lvalue .)
+    OR              reduce using rule 5 (expr -> lvalue .)
+    $end            reduce using rule 5 (expr -> lvalue .)
+    DO              reduce using rule 5 (expr -> lvalue .)
+    RPAREN          reduce using rule 5 (expr -> lvalue .)
+    SEMICOLON       reduce using rule 5 (expr -> lvalue .)
+    THEN            reduce using rule 5 (expr -> lvalue .)
+    RBRACKET        reduce using rule 5 (expr -> lvalue .)
+    COMMA           reduce using rule 5 (expr -> lvalue .)
+    TO              reduce using rule 5 (expr -> lvalue .)
+    END             reduce using rule 5 (expr -> lvalue .)
+    ELSE            reduce using rule 5 (expr -> lvalue .)
+    RBRACE          reduce using rule 5 (expr -> lvalue .)
+    IN              reduce using rule 5 (expr -> lvalue .)
+    TYPE            reduce using rule 5 (expr -> lvalue .)
+    VAR             reduce using rule 5 (expr -> lvalue .)
+    FUNCTION        reduce using rule 5 (expr -> lvalue .)
+    ASSIGN          shift and go to state 17
+    PERIOD          shift and go to state 16
+    LBRACKET        shift and go to state 18
+
+
+state 5
+
+    (8) expr -> MINUS . expr
+    (2) expr -> . NIL
+    (3) expr -> . INTLIT
+    (4) expr -> . STRLIT
+    (5) expr -> . lvalue
+    (6) expr -> . ID LBRACKET expr RBRACKET OF expr
+    (7) expr -> . ID LBRACE field_list RBRACE
+    (8) expr -> . MINUS expr
+    (9) expr -> . expr PLUS expr
+    (10) expr -> . expr MINUS expr
+    (11) expr -> . expr TIMES expr
+    (12) expr -> . expr DIVIDE expr
+    (13) expr -> . expr EQ expr
+    (14) expr -> . expr NE expr
+    (15) expr -> . expr LT expr
+    (16) expr -> . expr LE expr
+    (17) expr -> . expr GT expr
+    (18) expr -> . expr GE expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . LPAREN expr_seq RPAREN
+    (22) expr -> . lvalue ASSIGN expr
+    (23) expr -> . ID LPAREN expr_list RPAREN
+    (24) expr -> . IF expr THEN expr
+    (25) expr -> . IF expr THEN expr ELSE expr
+    (26) expr -> . WHILE expr DO expr
+    (27) expr -> . FOR ID ASSIGN expr TO expr DO expr
+    (28) expr -> . BREAK
+    (29) expr -> . LET dec_group IN expr_seq END
+    (30) lvalue -> . ID
+    (31) lvalue -> . lvalue PERIOD ID
+    (32) lvalue -> . ID LBRACKET expr RBRACKET
+    (33) lvalue -> . lvalue LBRACKET expr RBRACKET
+
+    NIL             shift and go to state 11
+    INTLIT          shift and go to state 2
+    STRLIT          shift and go to state 3
+    ID              shift and go to state 9
+    MINUS           shift and go to state 5
+    LPAREN          shift and go to state 8
+    IF              shift and go to state 10
+    WHILE           shift and go to state 1
+    FOR             shift and go to state 7
+    BREAK           shift and go to state 12
+    LET             shift and go to state 13
+
+    lvalue                         shift and go to state 4
+    expr                           shift and go to state 19
+
+state 6
+
+    (0) S' -> program .
+
+
+
+state 7
+
+    (27) expr -> FOR . ID ASSIGN expr TO expr DO expr
+
+    ID              shift and go to state 20
+
+
+state 8
+
+    (21) expr -> LPAREN . expr_seq RPAREN
+    (34) expr_seq -> .
+    (35) expr_seq -> . expr_seq SEMICOLON expr
+    (36) expr_seq -> . expr
+    (2) expr -> . NIL
+    (3) expr -> . INTLIT
+    (4) expr -> . STRLIT
+    (5) expr -> . lvalue
+    (6) expr -> . ID LBRACKET expr RBRACKET OF expr
+    (7) expr -> . ID LBRACE field_list RBRACE
+    (8) expr -> . MINUS expr
+    (9) expr -> . expr PLUS expr
+    (10) expr -> . expr MINUS expr
+    (11) expr -> . expr TIMES expr
+    (12) expr -> . expr DIVIDE expr
+    (13) expr -> . expr EQ expr
+    (14) expr -> . expr NE expr
+    (15) expr -> . expr LT expr
+    (16) expr -> . expr LE expr
+    (17) expr -> . expr GT expr
+    (18) expr -> . expr GE expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . LPAREN expr_seq RPAREN
+    (22) expr -> . lvalue ASSIGN expr
+    (23) expr -> . ID LPAREN expr_list RPAREN
+    (24) expr -> . IF expr THEN expr
+    (25) expr -> . IF expr THEN expr ELSE expr
+    (26) expr -> . WHILE expr DO expr
+    (27) expr -> . FOR ID ASSIGN expr TO expr DO expr
+    (28) expr -> . BREAK
+    (29) expr -> . LET dec_group IN expr_seq END
+    (30) lvalue -> . ID
+    (31) lvalue -> . lvalue PERIOD ID
+    (32) lvalue -> . ID LBRACKET expr RBRACKET
+    (33) lvalue -> . lvalue LBRACKET expr RBRACKET
+
+    RPAREN          reduce using rule 34 (expr_seq -> .)
+    SEMICOLON       reduce using rule 34 (expr_seq -> .)
+    NIL             shift and go to state 11
+    INTLIT          shift and go to state 2
+    STRLIT          shift and go to state 3
+    ID              shift and go to state 9
+    MINUS           shift and go to state 5
+    LPAREN          shift and go to state 8
+    IF              shift and go to state 10
+    WHILE           shift and go to state 1
+    FOR             shift and go to state 7
+    BREAK           shift and go to state 12
+    LET             shift and go to state 13
+
+    lvalue                         shift and go to state 4
+    expr_seq                       shift and go to state 21
+    expr                           shift and go to state 22
+
+state 9
+
+    (6) expr -> ID . LBRACKET expr RBRACKET OF expr
+    (7) expr -> ID . LBRACE field_list RBRACE
+    (23) expr -> ID . LPAREN expr_list RPAREN
+    (30) lvalue -> ID .
+    (32) lvalue -> ID . LBRACKET expr RBRACKET
+
+    LBRACE          shift and go to state 23
+    LPAREN          shift and go to state 25
+    ASSIGN          reduce using rule 30 (lvalue -> ID .)
+    PERIOD          reduce using rule 30 (lvalue -> ID .)
+    DO              reduce using rule 30 (lvalue -> ID .)
+    PLUS            reduce using rule 30 (lvalue -> ID .)
+    MINUS           reduce using rule 30 (lvalue -> ID .)
+    TIMES           reduce using rule 30 (lvalue -> ID .)
+    DIVIDE          reduce using rule 30 (lvalue -> ID .)
+    EQ              reduce using rule 30 (lvalue -> ID .)
+    NE              reduce using rule 30 (lvalue -> ID .)
+    LT              reduce using rule 30 (lvalue -> ID .)
+    LE              reduce using rule 30 (lvalue -> ID .)
+    GT              reduce using rule 30 (lvalue -> ID .)
+    GE              reduce using rule 30 (lvalue -> ID .)
+    AND             reduce using rule 30 (lvalue -> ID .)
+    OR              reduce using rule 30 (lvalue -> ID .)
+    RBRACE          reduce using rule 30 (lvalue -> ID .)
+    COMMA           reduce using rule 30 (lvalue -> ID .)
+    $end            reduce using rule 30 (lvalue -> ID .)
+    RPAREN          reduce using rule 30 (lvalue -> ID .)
+    SEMICOLON       reduce using rule 30 (lvalue -> ID .)
+    THEN            reduce using rule 30 (lvalue -> ID .)
+    RBRACKET        reduce using rule 30 (lvalue -> ID .)
+    TO              reduce using rule 30 (lvalue -> ID .)
+    END             reduce using rule 30 (lvalue -> ID .)
+    ELSE            reduce using rule 30 (lvalue -> ID .)
+    IN              reduce using rule 30 (lvalue -> ID .)
+    TYPE            reduce using rule 30 (lvalue -> ID .)
+    VAR             reduce using rule 30 (lvalue -> ID .)
+    FUNCTION        reduce using rule 30 (lvalue -> ID .)
+    LBRACKET        shift and go to state 24
+
+  ! LBRACKET        [ reduce using rule 30 (lvalue -> ID .) ]
+
+
+state 10
+
+    (24) expr -> IF . expr THEN expr
+    (25) expr -> IF . expr THEN expr ELSE expr
+    (2) expr -> . NIL
+    (3) expr -> . INTLIT
+    (4) expr -> . STRLIT
+    (5) expr -> . lvalue
+    (6) expr -> . ID LBRACKET expr RBRACKET OF expr
+    (7) expr -> . ID LBRACE field_list RBRACE
+    (8) expr -> . MINUS expr
+    (9) expr -> . expr PLUS expr
+    (10) expr -> . expr MINUS expr
+    (11) expr -> . expr TIMES expr
+    (12) expr -> . expr DIVIDE expr
+    (13) expr -> . expr EQ expr
+    (14) expr -> . expr NE expr
+    (15) expr -> . expr LT expr
+    (16) expr -> . expr LE expr
+    (17) expr -> . expr GT expr
+    (18) expr -> . expr GE expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . LPAREN expr_seq RPAREN
+    (22) expr -> . lvalue ASSIGN expr
+    (23) expr -> . ID LPAREN expr_list RPAREN
+    (24) expr -> . IF expr THEN expr
+    (25) expr -> . IF expr THEN expr ELSE expr
+    (26) expr -> . WHILE expr DO expr
+    (27) expr -> . FOR ID ASSIGN expr TO expr DO expr
+    (28) expr -> . BREAK
+    (29) expr -> . LET dec_group IN expr_seq END
+    (30) lvalue -> . ID
+    (31) lvalue -> . lvalue PERIOD ID
+    (32) lvalue -> . ID LBRACKET expr RBRACKET
+    (33) lvalue -> . lvalue LBRACKET expr RBRACKET
+
+    NIL             shift and go to state 11
+    INTLIT          shift and go to state 2
+    STRLIT          shift and go to state 3
+    ID              shift and go to state 9
+    MINUS           shift and go to state 5
+    LPAREN          shift and go to state 8
+    IF              shift and go to state 10
+    WHILE           shift and go to state 1
+    FOR             shift and go to state 7
+    BREAK           shift and go to state 12
+    LET             shift and go to state 13
+
+    lvalue                         shift and go to state 4
+    expr                           shift and go to state 26
+
+state 11
+
+    (2) expr -> NIL .
+
+    PLUS            reduce using rule 2 (expr -> NIL .)
+    MINUS           reduce using rule 2 (expr -> NIL .)
+    TIMES           reduce using rule 2 (expr -> NIL .)
+    DIVIDE          reduce using rule 2 (expr -> NIL .)
+    EQ              reduce using rule 2 (expr -> NIL .)
+    NE              reduce using rule 2 (expr -> NIL .)
+    LT              reduce using rule 2 (expr -> NIL .)
+    LE              reduce using rule 2 (expr -> NIL .)
+    GT              reduce using rule 2 (expr -> NIL .)
+    GE              reduce using rule 2 (expr -> NIL .)
+    AND             reduce using rule 2 (expr -> NIL .)
+    OR              reduce using rule 2 (expr -> NIL .)
+    $end            reduce using rule 2 (expr -> NIL .)
+    DO              reduce using rule 2 (expr -> NIL .)
+    RPAREN          reduce using rule 2 (expr -> NIL .)
+    SEMICOLON       reduce using rule 2 (expr -> NIL .)
+    THEN            reduce using rule 2 (expr -> NIL .)
+    RBRACKET        reduce using rule 2 (expr -> NIL .)
+    COMMA           reduce using rule 2 (expr -> NIL .)
+    TO              reduce using rule 2 (expr -> NIL .)
+    END             reduce using rule 2 (expr -> NIL .)
+    ELSE            reduce using rule 2 (expr -> NIL .)
+    RBRACE          reduce using rule 2 (expr -> NIL .)
+    IN              reduce using rule 2 (expr -> NIL .)
+    TYPE            reduce using rule 2 (expr -> NIL .)
+    VAR             reduce using rule 2 (expr -> NIL .)
+    FUNCTION        reduce using rule 2 (expr -> NIL .)
+
+
+state 12
+
+    (28) expr -> BREAK .
+
+    PLUS            reduce using rule 28 (expr -> BREAK .)
+    MINUS           reduce using rule 28 (expr -> BREAK .)
+    TIMES           reduce using rule 28 (expr -> BREAK .)
+    DIVIDE          reduce using rule 28 (expr -> BREAK .)
+    EQ              reduce using rule 28 (expr -> BREAK .)
+    NE              reduce using rule 28 (expr -> BREAK .)
+    LT              reduce using rule 28 (expr -> BREAK .)
+    LE              reduce using rule 28 (expr -> BREAK .)
+    GT              reduce using rule 28 (expr -> BREAK .)
+    GE              reduce using rule 28 (expr -> BREAK .)
+    AND             reduce using rule 28 (expr -> BREAK .)
+    OR              reduce using rule 28 (expr -> BREAK .)
+    $end            reduce using rule 28 (expr -> BREAK .)
+    DO              reduce using rule 28 (expr -> BREAK .)
+    RPAREN          reduce using rule 28 (expr -> BREAK .)
+    SEMICOLON       reduce using rule 28 (expr -> BREAK .)
+    THEN            reduce using rule 28 (expr -> BREAK .)
+    RBRACKET        reduce using rule 28 (expr -> BREAK .)
+    COMMA           reduce using rule 28 (expr -> BREAK .)
+    TO              reduce using rule 28 (expr -> BREAK .)
+    END             reduce using rule 28 (expr -> BREAK .)
+    ELSE            reduce using rule 28 (expr -> BREAK .)
+    RBRACE          reduce using rule 28 (expr -> BREAK .)
+    IN              reduce using rule 28 (expr -> BREAK .)
+    TYPE            reduce using rule 28 (expr -> BREAK .)
+    VAR             reduce using rule 28 (expr -> BREAK .)
+    FUNCTION        reduce using rule 28 (expr -> BREAK .)
+
+
+state 13
+
+    (29) expr -> LET . dec_group IN expr_seq END
+    (37) dec_group -> .
+    (38) dec_group -> . dec_group dec
+
+    IN              reduce using rule 37 (dec_group -> .)
+    TYPE            reduce using rule 37 (dec_group -> .)
+    VAR             reduce using rule 37 (dec_group -> .)
+    FUNCTION        reduce using rule 37 (dec_group -> .)
+
+    dec_group                      shift and go to state 27
+
+state 14
+
+    (1) program -> expr .
+    (9) expr -> expr . PLUS expr
+    (10) expr -> expr . MINUS expr
+    (11) expr -> expr . TIMES expr
+    (12) expr -> expr . DIVIDE expr
+    (13) expr -> expr . EQ expr
+    (14) expr -> expr . NE expr
+    (15) expr -> expr . LT expr
+    (16) expr -> expr . LE expr
+    (17) expr -> expr . GT expr
+    (18) expr -> expr . GE expr
+    (19) expr -> expr . AND expr
+    (20) expr -> expr . OR expr
+
+    $end            reduce using rule 1 (program -> expr .)
+    PLUS            shift and go to state 36
+    MINUS           shift and go to state 38
+    TIMES           shift and go to state 33
+    DIVIDE          shift and go to state 31
+    EQ              shift and go to state 37
+    NE              shift and go to state 32
+    LT              shift and go to state 34
+    LE              shift and go to state 29
+    GT              shift and go to state 35
+    GE              shift and go to state 30
+    AND             shift and go to state 28
+    OR              shift and go to state 39
+
+
+state 15
+
+    (26) expr -> WHILE expr . DO expr
+    (9) expr -> expr . PLUS expr
+    (10) expr -> expr . MINUS expr
+    (11) expr -> expr . TIMES expr
+    (12) expr -> expr . DIVIDE expr
+    (13) expr -> expr . EQ expr
+    (14) expr -> expr . NE expr
+    (15) expr -> expr . LT expr
+    (16) expr -> expr . LE expr
+    (17) expr -> expr . GT expr
+    (18) expr -> expr . GE expr
+    (19) expr -> expr . AND expr
+    (20) expr -> expr . OR expr
+
+    DO              shift and go to state 40
+    PLUS            shift and go to state 36
+    MINUS           shift and go to state 38
+    TIMES           shift and go to state 33
+    DIVIDE          shift and go to state 31
+    EQ              shift and go to state 37
+    NE              shift and go to state 32
+    LT              shift and go to state 34
+    LE              shift and go to state 29
+    GT              shift and go to state 35
+    GE              shift and go to state 30
+    AND             shift and go to state 28
+    OR              shift and go to state 39
+
+
+state 16
+
+    (31) lvalue -> lvalue PERIOD . ID
+
+    ID              shift and go to state 41
+
+
+state 17
+
+    (22) expr -> lvalue ASSIGN . expr
+    (2) expr -> . NIL
+    (3) expr -> . INTLIT
+    (4) expr -> . STRLIT
+    (5) expr -> . lvalue
+    (6) expr -> . ID LBRACKET expr RBRACKET OF expr
+    (7) expr -> . ID LBRACE field_list RBRACE
+    (8) expr -> . MINUS expr
+    (9) expr -> . expr PLUS expr
+    (10) expr -> . expr MINUS expr
+    (11) expr -> . expr TIMES expr
+    (12) expr -> . expr DIVIDE expr
+    (13) expr -> . expr EQ expr
+    (14) expr -> . expr NE expr
+    (15) expr -> . expr LT expr
+    (16) expr -> . expr LE expr
+    (17) expr -> . expr GT expr
+    (18) expr -> . expr GE expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . LPAREN expr_seq RPAREN
+    (22) expr -> . lvalue ASSIGN expr
+    (23) expr -> . ID LPAREN expr_list RPAREN
+    (24) expr -> . IF expr THEN expr
+    (25) expr -> . IF expr THEN expr ELSE expr
+    (26) expr -> . WHILE expr DO expr
+    (27) expr -> . FOR ID ASSIGN expr TO expr DO expr
+    (28) expr -> . BREAK
+    (29) expr -> . LET dec_group IN expr_seq END
+    (30) lvalue -> . ID
+    (31) lvalue -> . lvalue PERIOD ID
+    (32) lvalue -> . ID LBRACKET expr RBRACKET
+    (33) lvalue -> . lvalue LBRACKET expr RBRACKET
+
+    NIL             shift and go to state 11
+    INTLIT          shift and go to state 2
+    STRLIT          shift and go to state 3
+    ID              shift and go to state 9
+    MINUS           shift and go to state 5
+    LPAREN          shift and go to state 8
+    IF              shift and go to state 10
+    WHILE           shift and go to state 1
+    FOR             shift and go to state 7
+    BREAK           shift and go to state 12
+    LET             shift and go to state 13
+
+    expr                           shift and go to state 42
+    lvalue                         shift and go to state 4
+
+state 18
+
+    (33) lvalue -> lvalue LBRACKET . expr RBRACKET
+    (2) expr -> . NIL
+    (3) expr -> . INTLIT
+    (4) expr -> . STRLIT
+    (5) expr -> . lvalue
+    (6) expr -> . ID LBRACKET expr RBRACKET OF expr
+    (7) expr -> . ID LBRACE field_list RBRACE
+    (8) expr -> . MINUS expr
+    (9) expr -> . expr PLUS expr
+    (10) expr -> . expr MINUS expr
+    (11) expr -> . expr TIMES expr
+    (12) expr -> . expr DIVIDE expr
+    (13) expr -> . expr EQ expr
+    (14) expr -> . expr NE expr
+    (15) expr -> . expr LT expr
+    (16) expr -> . expr LE expr
+    (17) expr -> . expr GT expr
+    (18) expr -> . expr GE expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . LPAREN expr_seq RPAREN
+    (22) expr -> . lvalue ASSIGN expr
+    (23) expr -> . ID LPAREN expr_list RPAREN
+    (24) expr -> . IF expr THEN expr
+    (25) expr -> . IF expr THEN expr ELSE expr
+    (26) expr -> . WHILE expr DO expr
+    (27) expr -> . FOR ID ASSIGN expr TO expr DO expr
+    (28) expr -> . BREAK
+    (29) expr -> . LET dec_group IN expr_seq END
+    (30) lvalue -> . ID
+    (31) lvalue -> . lvalue PERIOD ID
+    (32) lvalue -> . ID LBRACKET expr RBRACKET
+    (33) lvalue -> . lvalue LBRACKET expr RBRACKET
+
+    NIL             shift and go to state 11
+    INTLIT          shift and go to state 2
+    STRLIT          shift and go to state 3
+    ID              shift and go to state 9
+    MINUS           shift and go to state 5
+    LPAREN          shift and go to state 8
+    IF              shift and go to state 10
+    WHILE           shift and go to state 1
+    FOR             shift and go to state 7
+    BREAK           shift and go to state 12
+    LET             shift and go to state 13
+
+    expr                           shift and go to state 43
+    lvalue                         shift and go to state 4
+
+state 19
+
+    (8) expr -> MINUS expr .
+    (9) expr -> expr . PLUS expr
+    (10) expr -> expr . MINUS expr
+    (11) expr -> expr . TIMES expr
+    (12) expr -> expr . DIVIDE expr
+    (13) expr -> expr . EQ expr
+    (14) expr -> expr . NE expr
+    (15) expr -> expr . LT expr
+    (16) expr -> expr . LE expr
+    (17) expr -> expr . GT expr
+    (18) expr -> expr . GE expr
+    (19) expr -> expr . AND expr
+    (20) expr -> expr . OR expr
+
+    PLUS            reduce using rule 8 (expr -> MINUS expr .)
+    MINUS           reduce using rule 8 (expr -> MINUS expr .)
+    TIMES           reduce using rule 8 (expr -> MINUS expr .)
+    DIVIDE          reduce using rule 8 (expr -> MINUS expr .)
+    EQ              reduce using rule 8 (expr -> MINUS expr .)
+    NE              reduce using rule 8 (expr -> MINUS expr .)
+    LT              reduce using rule 8 (expr -> MINUS expr .)
+    LE              reduce using rule 8 (expr -> MINUS expr .)
+    GT              reduce using rule 8 (expr -> MINUS expr .)
+    GE              reduce using rule 8 (expr -> MINUS expr .)
+    AND             reduce using rule 8 (expr -> MINUS expr .)
+    OR              reduce using rule 8 (expr -> MINUS expr .)
+    $end            reduce using rule 8 (expr -> MINUS expr .)
+    DO              reduce using rule 8 (expr -> MINUS expr .)
+    RPAREN          reduce using rule 8 (expr -> MINUS expr .)
+    SEMICOLON       reduce using rule 8 (expr -> MINUS expr .)
+    THEN            reduce using rule 8 (expr -> MINUS expr .)
+    RBRACKET        reduce using rule 8 (expr -> MINUS expr .)
+    COMMA           reduce using rule 8 (expr -> MINUS expr .)
+    TO              reduce using rule 8 (expr -> MINUS expr .)
+    END             reduce using rule 8 (expr -> MINUS expr .)
+    ELSE            reduce using rule 8 (expr -> MINUS expr .)
+    RBRACE          reduce using rule 8 (expr -> MINUS expr .)
+    IN              reduce using rule 8 (expr -> MINUS expr .)
+    TYPE            reduce using rule 8 (expr -> MINUS expr .)
+    VAR             reduce using rule 8 (expr -> MINUS expr .)
+    FUNCTION        reduce using rule 8 (expr -> MINUS expr .)
+
+  ! PLUS            [ shift and go to state 36 ]
+  ! MINUS           [ shift and go to state 38 ]
+  ! TIMES           [ shift and go to state 33 ]
+  ! DIVIDE          [ shift and go to state 31 ]
+  ! EQ              [ shift and go to state 37 ]
+  ! NE              [ shift and go to state 32 ]
+  ! LT              [ shift and go to state 34 ]
+  ! LE              [ shift and go to state 29 ]
+  ! GT              [ shift and go to state 35 ]
+  ! GE              [ shift and go to state 30 ]
+  ! AND             [ shift and go to state 28 ]
+  ! OR              [ shift and go to state 39 ]
+
+
+state 20
+
+    (27) expr -> FOR ID . ASSIGN expr TO expr DO expr
+
+    ASSIGN          shift and go to state 44
+
+
+state 21
+
+    (21) expr -> LPAREN expr_seq . RPAREN
+    (35) expr_seq -> expr_seq . SEMICOLON expr
+
+    RPAREN          shift and go to state 46
+    SEMICOLON       shift and go to state 45
+
+
+state 22
+
+    (36) expr_seq -> expr .
+    (9) expr -> expr . PLUS expr
+    (10) expr -> expr . MINUS expr
+    (11) expr -> expr . TIMES expr
+    (12) expr -> expr . DIVIDE expr
+    (13) expr -> expr . EQ expr
+    (14) expr -> expr . NE expr
+    (15) expr -> expr . LT expr
+    (16) expr -> expr . LE expr
+    (17) expr -> expr . GT expr
+    (18) expr -> expr . GE expr
+    (19) expr -> expr . AND expr
+    (20) expr -> expr . OR expr
+
+    RPAREN          reduce using rule 36 (expr_seq -> expr .)
+    SEMICOLON       reduce using rule 36 (expr_seq -> expr .)
+    END             reduce using rule 36 (expr_seq -> expr .)
+    PLUS            shift and go to state 36
+    MINUS           shift and go to state 38
+    TIMES           shift and go to state 33
+    DIVIDE          shift and go to state 31
+    EQ              shift and go to state 37
+    NE              shift and go to state 32
+    LT              shift and go to state 34
+    LE              shift and go to state 29
+    GT              shift and go to state 35
+    GE              shift and go to state 30
+    AND             shift and go to state 28
+    OR              shift and go to state 39
+
+
+state 23
+
+    (7) expr -> ID LBRACE . field_list RBRACE
+    (39) field_list -> .
+    (40) field_list -> . field_assign
+    (41) field_list -> . field_list COMMA field_assign
+    (42) field_assign -> . ID EQ expr
+
+    RBRACE          reduce using rule 39 (field_list -> .)
+    COMMA           reduce using rule 39 (field_list -> .)
+    ID              shift and go to state 49
+
+    field_assign                   shift and go to state 47
+    field_list                     shift and go to state 48
+
+state 24
+
+    (6) expr -> ID LBRACKET . expr RBRACKET OF expr
+    (32) lvalue -> ID LBRACKET . expr RBRACKET
+    (2) expr -> . NIL
+    (3) expr -> . INTLIT
+    (4) expr -> . STRLIT
+    (5) expr -> . lvalue
+    (6) expr -> . ID LBRACKET expr RBRACKET OF expr
+    (7) expr -> . ID LBRACE field_list RBRACE
+    (8) expr -> . MINUS expr
+    (9) expr -> . expr PLUS expr
+    (10) expr -> . expr MINUS expr
+    (11) expr -> . expr TIMES expr
+    (12) expr -> . expr DIVIDE expr
+    (13) expr -> . expr EQ expr
+    (14) expr -> . expr NE expr
+    (15) expr -> . expr LT expr
+    (16) expr -> . expr LE expr
+    (17) expr -> . expr GT expr
+    (18) expr -> . expr GE expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . LPAREN expr_seq RPAREN
+    (22) expr -> . lvalue ASSIGN expr
+    (23) expr -> . ID LPAREN expr_list RPAREN
+    (24) expr -> . IF expr THEN expr
+    (25) expr -> . IF expr THEN expr ELSE expr
+    (26) expr -> . WHILE expr DO expr
+    (27) expr -> . FOR ID ASSIGN expr TO expr DO expr
+    (28) expr -> . BREAK
+    (29) expr -> . LET dec_group IN expr_seq END
+    (30) lvalue -> . ID
+    (31) lvalue -> . lvalue PERIOD ID
+    (32) lvalue -> . ID LBRACKET expr RBRACKET
+    (33) lvalue -> . lvalue LBRACKET expr RBRACKET
+
+    NIL             shift and go to state 11
+    INTLIT          shift and go to state 2
+    STRLIT          shift and go to state 3
+    ID              shift and go to state 9
+    MINUS           shift and go to state 5
+    LPAREN          shift and go to state 8
+    IF              shift and go to state 10
+    WHILE           shift and go to state 1
+    FOR             shift and go to state 7
+    BREAK           shift and go to state 12
+    LET             shift and go to state 13
+
+    lvalue                         shift and go to state 4
+    expr                           shift and go to state 50
+
+state 25
+
+    (23) expr -> ID LPAREN . expr_list RPAREN
+    (43) expr_list -> .
+    (44) expr_list -> . expr_list COMMA expr
+    (45) expr_list -> . expr
+    (2) expr -> . NIL
+    (3) expr -> . INTLIT
+    (4) expr -> . STRLIT
+    (5) expr -> . lvalue
+    (6) expr -> . ID LBRACKET expr RBRACKET OF expr
+    (7) expr -> . ID LBRACE field_list RBRACE
+    (8) expr -> . MINUS expr
+    (9) expr -> . expr PLUS expr
+    (10) expr -> . expr MINUS expr
+    (11) expr -> . expr TIMES expr
+    (12) expr -> . expr DIVIDE expr
+    (13) expr -> . expr EQ expr
+    (14) expr -> . expr NE expr
+    (15) expr -> . expr LT expr
+    (16) expr -> . expr LE expr
+    (17) expr -> . expr GT expr
+    (18) expr -> . expr GE expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . LPAREN expr_seq RPAREN
+    (22) expr -> . lvalue ASSIGN expr
+    (23) expr -> . ID LPAREN expr_list RPAREN
+    (24) expr -> . IF expr THEN expr
+    (25) expr -> . IF expr THEN expr ELSE expr
+    (26) expr -> . WHILE expr DO expr
+    (27) expr -> . FOR ID ASSIGN expr TO expr DO expr
+    (28) expr -> . BREAK
+    (29) expr -> . LET dec_group IN expr_seq END
+    (30) lvalue -> . ID
+    (31) lvalue -> . lvalue PERIOD ID
+    (32) lvalue -> . ID LBRACKET expr RBRACKET
+    (33) lvalue -> . lvalue LBRACKET expr RBRACKET
+
+    RPAREN          reduce using rule 43 (expr_list -> .)
+    COMMA           reduce using rule 43 (expr_list -> .)
+    NIL             shift and go to state 11
+    INTLIT          shift and go to state 2
+    STRLIT          shift and go to state 3
+    ID              shift and go to state 9
+    MINUS           shift and go to state 5
+    LPAREN          shift and go to state 8
+    IF              shift and go to state 10
+    WHILE           shift and go to state 1
+    FOR             shift and go to state 7
+    BREAK           shift and go to state 12
+    LET             shift and go to state 13
+
+    expr                           shift and go to state 52
+    expr_list                      shift and go to state 51
+    lvalue                         shift and go to state 4
+
+state 26
+
+    (24) expr -> IF expr . THEN expr
+    (25) expr -> IF expr . THEN expr ELSE expr
+    (9) expr -> expr . PLUS expr
+    (10) expr -> expr . MINUS expr
+    (11) expr -> expr . TIMES expr
+    (12) expr -> expr . DIVIDE expr
+    (13) expr -> expr . EQ expr
+    (14) expr -> expr . NE expr
+    (15) expr -> expr . LT expr
+    (16) expr -> expr . LE expr
+    (17) expr -> expr . GT expr
+    (18) expr -> expr . GE expr
+    (19) expr -> expr . AND expr
+    (20) expr -> expr . OR expr
+
+    THEN            shift and go to state 53
+    PLUS            shift and go to state 36
+    MINUS           shift and go to state 38
+    TIMES           shift and go to state 33
+    DIVIDE          shift and go to state 31
+    EQ              shift and go to state 37
+    NE              shift and go to state 32
+    LT              shift and go to state 34
+    LE              shift and go to state 29
+    GT              shift and go to state 35
+    GE              shift and go to state 30
+    AND             shift and go to state 28
+    OR              shift and go to state 39
+
+
+state 27
+
+    (29) expr -> LET dec_group . IN expr_seq END
+    (38) dec_group -> dec_group . dec
+    (46) dec -> . type_dec
+    (47) dec -> . var_dec
+    (48) dec -> . func_dec
+    (49) type_dec -> . TYPE ID EQ type
+    (57) var_dec -> . VAR ID ASSIGN expr
+    (58) var_dec -> . VAR ID COLON ID ASSIGN expr
+    (59) func_dec -> . FUNCTION ID LPAREN field_types RPAREN EQ expr
+    (60) func_dec -> . FUNCTION ID LPAREN field_types RPAREN COLON ID EQ expr
+
+    IN              shift and go to state 57
+    TYPE            shift and go to state 61
+    VAR             shift and go to state 58
+    FUNCTION        shift and go to state 54
+
+    func_dec                       shift and go to state 55
+    var_dec                        shift and go to state 56
+    type_dec                       shift and go to state 59
+    dec                            shift and go to state 60
+
+state 28
+
+    (19) expr -> expr AND . expr
+    (2) expr -> . NIL
+    (3) expr -> . INTLIT
+    (4) expr -> . STRLIT
+    (5) expr -> . lvalue
+    (6) expr -> . ID LBRACKET expr RBRACKET OF expr
+    (7) expr -> . ID LBRACE field_list RBRACE
+    (8) expr -> . MINUS expr
+    (9) expr -> . expr PLUS expr
+    (10) expr -> . expr MINUS expr
+    (11) expr -> . expr TIMES expr
+    (12) expr -> . expr DIVIDE expr
+    (13) expr -> . expr EQ expr
+    (14) expr -> . expr NE expr
+    (15) expr -> . expr LT expr
+    (16) expr -> . expr LE expr
+    (17) expr -> . expr GT expr
+    (18) expr -> . expr GE expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . LPAREN expr_seq RPAREN
+    (22) expr -> . lvalue ASSIGN expr
+    (23) expr -> . ID LPAREN expr_list RPAREN
+    (24) expr -> . IF expr THEN expr
+    (25) expr -> . IF expr THEN expr ELSE expr
+    (26) expr -> . WHILE expr DO expr
+    (27) expr -> . FOR ID ASSIGN expr TO expr DO expr
+    (28) expr -> . BREAK
+    (29) expr -> . LET dec_group IN expr_seq END
+    (30) lvalue -> . ID
+    (31) lvalue -> . lvalue PERIOD ID
+    (32) lvalue -> . ID LBRACKET expr RBRACKET
+    (33) lvalue -> . lvalue LBRACKET expr RBRACKET
+
+    NIL             shift and go to state 11
+    INTLIT          shift and go to state 2
+    STRLIT          shift and go to state 3
+    ID              shift and go to state 9
+    MINUS           shift and go to state 5
+    LPAREN          shift and go to state 8
+    IF              shift and go to state 10
+    WHILE           shift and go to state 1
+    FOR             shift and go to state 7
+    BREAK           shift and go to state 12
+    LET             shift and go to state 13
+
+    lvalue                         shift and go to state 4
+    expr                           shift and go to state 62
+
+state 29
+
+    (16) expr -> expr LE . expr
+    (2) expr -> . NIL
+    (3) expr -> . INTLIT
+    (4) expr -> . STRLIT
+    (5) expr -> . lvalue
+    (6) expr -> . ID LBRACKET expr RBRACKET OF expr
+    (7) expr -> . ID LBRACE field_list RBRACE
+    (8) expr -> . MINUS expr
+    (9) expr -> . expr PLUS expr
+    (10) expr -> . expr MINUS expr
+    (11) expr -> . expr TIMES expr
+    (12) expr -> . expr DIVIDE expr
+    (13) expr -> . expr EQ expr
+    (14) expr -> . expr NE expr
+    (15) expr -> . expr LT expr
+    (16) expr -> . expr LE expr
+    (17) expr -> . expr GT expr
+    (18) expr -> . expr GE expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . LPAREN expr_seq RPAREN
+    (22) expr -> . lvalue ASSIGN expr
+    (23) expr -> . ID LPAREN expr_list RPAREN
+    (24) expr -> . IF expr THEN expr
+    (25) expr -> . IF expr THEN expr ELSE expr
+    (26) expr -> . WHILE expr DO expr
+    (27) expr -> . FOR ID ASSIGN expr TO expr DO expr
+    (28) expr -> . BREAK
+    (29) expr -> . LET dec_group IN expr_seq END
+    (30) lvalue -> . ID
+    (31) lvalue -> . lvalue PERIOD ID
+    (32) lvalue -> . ID LBRACKET expr RBRACKET
+    (33) lvalue -> . lvalue LBRACKET expr RBRACKET
+
+    NIL             shift and go to state 11
+    INTLIT          shift and go to state 2
+    STRLIT          shift and go to state 3
+    ID              shift and go to state 9
+    MINUS           shift and go to state 5
+    LPAREN          shift and go to state 8
+    IF              shift and go to state 10
+    WHILE           shift and go to state 1
+    FOR             shift and go to state 7
+    BREAK           shift and go to state 12
+    LET             shift and go to state 13
+
+    lvalue                         shift and go to state 4
+    expr                           shift and go to state 63
+
+state 30
+
+    (18) expr -> expr GE . expr
+    (2) expr -> . NIL
+    (3) expr -> . INTLIT
+    (4) expr -> . STRLIT
+    (5) expr -> . lvalue
+    (6) expr -> . ID LBRACKET expr RBRACKET OF expr
+    (7) expr -> . ID LBRACE field_list RBRACE
+    (8) expr -> . MINUS expr
+    (9) expr -> . expr PLUS expr
+    (10) expr -> . expr MINUS expr
+    (11) expr -> . expr TIMES expr
+    (12) expr -> . expr DIVIDE expr
+    (13) expr -> . expr EQ expr
+    (14) expr -> . expr NE expr
+    (15) expr -> . expr LT expr
+    (16) expr -> . expr LE expr
+    (17) expr -> . expr GT expr
+    (18) expr -> . expr GE expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . LPAREN expr_seq RPAREN
+    (22) expr -> . lvalue ASSIGN expr
+    (23) expr -> . ID LPAREN expr_list RPAREN
+    (24) expr -> . IF expr THEN expr
+    (25) expr -> . IF expr THEN expr ELSE expr
+    (26) expr -> . WHILE expr DO expr
+    (27) expr -> . FOR ID ASSIGN expr TO expr DO expr
+    (28) expr -> . BREAK
+    (29) expr -> . LET dec_group IN expr_seq END
+    (30) lvalue -> . ID
+    (31) lvalue -> . lvalue PERIOD ID
+    (32) lvalue -> . ID LBRACKET expr RBRACKET
+    (33) lvalue -> . lvalue LBRACKET expr RBRACKET
+
+    NIL             shift and go to state 11
+    INTLIT          shift and go to state 2
+    STRLIT          shift and go to state 3
+    ID              shift and go to state 9
+    MINUS           shift and go to state 5
+    LPAREN          shift and go to state 8
+    IF              shift and go to state 10
+    WHILE           shift and go to state 1
+    FOR             shift and go to state 7
+    BREAK           shift and go to state 12
+    LET             shift and go to state 13
+
+    lvalue                         shift and go to state 4
+    expr                           shift and go to state 64
+
+state 31
+
+    (12) expr -> expr DIVIDE . expr
+    (2) expr -> . NIL
+    (3) expr -> . INTLIT
+    (4) expr -> . STRLIT
+    (5) expr -> . lvalue
+    (6) expr -> . ID LBRACKET expr RBRACKET OF expr
+    (7) expr -> . ID LBRACE field_list RBRACE
+    (8) expr -> . MINUS expr
+    (9) expr -> . expr PLUS expr
+    (10) expr -> . expr MINUS expr
+    (11) expr -> . expr TIMES expr
+    (12) expr -> . expr DIVIDE expr
+    (13) expr -> . expr EQ expr
+    (14) expr -> . expr NE expr
+    (15) expr -> . expr LT expr
+    (16) expr -> . expr LE expr
+    (17) expr -> . expr GT expr
+    (18) expr -> . expr GE expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . LPAREN expr_seq RPAREN
+    (22) expr -> . lvalue ASSIGN expr
+    (23) expr -> . ID LPAREN expr_list RPAREN
+    (24) expr -> . IF expr THEN expr
+    (25) expr -> . IF expr THEN expr ELSE expr
+    (26) expr -> . WHILE expr DO expr
+    (27) expr -> . FOR ID ASSIGN expr TO expr DO expr
+    (28) expr -> . BREAK
+    (29) expr -> . LET dec_group IN expr_seq END
+    (30) lvalue -> . ID
+    (31) lvalue -> . lvalue PERIOD ID
+    (32) lvalue -> . ID LBRACKET expr RBRACKET
+    (33) lvalue -> . lvalue LBRACKET expr RBRACKET
+
+    NIL             shift and go to state 11
+    INTLIT          shift and go to state 2
+    STRLIT          shift and go to state 3
+    ID              shift and go to state 9
+    MINUS           shift and go to state 5
+    LPAREN          shift and go to state 8
+    IF              shift and go to state 10
+    WHILE           shift and go to state 1
+    FOR             shift and go to state 7
+    BREAK           shift and go to state 12
+    LET             shift and go to state 13
+
+    lvalue                         shift and go to state 4
+    expr                           shift and go to state 65
+
+state 32
+
+    (14) expr -> expr NE . expr
+    (2) expr -> . NIL
+    (3) expr -> . INTLIT
+    (4) expr -> . STRLIT
+    (5) expr -> . lvalue
+    (6) expr -> . ID LBRACKET expr RBRACKET OF expr
+    (7) expr -> . ID LBRACE field_list RBRACE
+    (8) expr -> . MINUS expr
+    (9) expr -> . expr PLUS expr
+    (10) expr -> . expr MINUS expr
+    (11) expr -> . expr TIMES expr
+    (12) expr -> . expr DIVIDE expr
+    (13) expr -> . expr EQ expr
+    (14) expr -> . expr NE expr
+    (15) expr -> . expr LT expr
+    (16) expr -> . expr LE expr
+    (17) expr -> . expr GT expr
+    (18) expr -> . expr GE expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . LPAREN expr_seq RPAREN
+    (22) expr -> . lvalue ASSIGN expr
+    (23) expr -> . ID LPAREN expr_list RPAREN
+    (24) expr -> . IF expr THEN expr
+    (25) expr -> . IF expr THEN expr ELSE expr
+    (26) expr -> . WHILE expr DO expr
+    (27) expr -> . FOR ID ASSIGN expr TO expr DO expr
+    (28) expr -> . BREAK
+    (29) expr -> . LET dec_group IN expr_seq END
+    (30) lvalue -> . ID
+    (31) lvalue -> . lvalue PERIOD ID
+    (32) lvalue -> . ID LBRACKET expr RBRACKET
+    (33) lvalue -> . lvalue LBRACKET expr RBRACKET
+
+    NIL             shift and go to state 11
+    INTLIT          shift and go to state 2
+    STRLIT          shift and go to state 3
+    ID              shift and go to state 9
+    MINUS           shift and go to state 5
+    LPAREN          shift and go to state 8
+    IF              shift and go to state 10
+    WHILE           shift and go to state 1
+    FOR             shift and go to state 7
+    BREAK           shift and go to state 12
+    LET             shift and go to state 13
+
+    lvalue                         shift and go to state 4
+    expr                           shift and go to state 66
+
+state 33
+
+    (11) expr -> expr TIMES . expr
+    (2) expr -> . NIL
+    (3) expr -> . INTLIT
+    (4) expr -> . STRLIT
+    (5) expr -> . lvalue
+    (6) expr -> . ID LBRACKET expr RBRACKET OF expr
+    (7) expr -> . ID LBRACE field_list RBRACE
+    (8) expr -> . MINUS expr
+    (9) expr -> . expr PLUS expr
+    (10) expr -> . expr MINUS expr
+    (11) expr -> . expr TIMES expr
+    (12) expr -> . expr DIVIDE expr
+    (13) expr -> . expr EQ expr
+    (14) expr -> . expr NE expr
+    (15) expr -> . expr LT expr
+    (16) expr -> . expr LE expr
+    (17) expr -> . expr GT expr
+    (18) expr -> . expr GE expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . LPAREN expr_seq RPAREN
+    (22) expr -> . lvalue ASSIGN expr
+    (23) expr -> . ID LPAREN expr_list RPAREN
+    (24) expr -> . IF expr THEN expr
+    (25) expr -> . IF expr THEN expr ELSE expr
+    (26) expr -> . WHILE expr DO expr
+    (27) expr -> . FOR ID ASSIGN expr TO expr DO expr
+    (28) expr -> . BREAK
+    (29) expr -> . LET dec_group IN expr_seq END
+    (30) lvalue -> . ID
+    (31) lvalue -> . lvalue PERIOD ID
+    (32) lvalue -> . ID LBRACKET expr RBRACKET
+    (33) lvalue -> . lvalue LBRACKET expr RBRACKET
+
+    NIL             shift and go to state 11
+    INTLIT          shift and go to state 2
+    STRLIT          shift and go to state 3
+    ID              shift and go to state 9
+    MINUS           shift and go to state 5
+    LPAREN          shift and go to state 8
+    IF              shift and go to state 10
+    WHILE           shift and go to state 1
+    FOR             shift and go to state 7
+    BREAK           shift and go to state 12
+    LET             shift and go to state 13
+
+    lvalue                         shift and go to state 4
+    expr                           shift and go to state 67
+
+state 34
+
+    (15) expr -> expr LT . expr
+    (2) expr -> . NIL
+    (3) expr -> . INTLIT
+    (4) expr -> . STRLIT
+    (5) expr -> . lvalue
+    (6) expr -> . ID LBRACKET expr RBRACKET OF expr
+    (7) expr -> . ID LBRACE field_list RBRACE
+    (8) expr -> . MINUS expr
+    (9) expr -> . expr PLUS expr
+    (10) expr -> . expr MINUS expr
+    (11) expr -> . expr TIMES expr
+    (12) expr -> . expr DIVIDE expr
+    (13) expr -> . expr EQ expr
+    (14) expr -> . expr NE expr
+    (15) expr -> . expr LT expr
+    (16) expr -> . expr LE expr
+    (17) expr -> . expr GT expr
+    (18) expr -> . expr GE expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . LPAREN expr_seq RPAREN
+    (22) expr -> . lvalue ASSIGN expr
+    (23) expr -> . ID LPAREN expr_list RPAREN
+    (24) expr -> . IF expr THEN expr
+    (25) expr -> . IF expr THEN expr ELSE expr
+    (26) expr -> . WHILE expr DO expr
+    (27) expr -> . FOR ID ASSIGN expr TO expr DO expr
+    (28) expr -> . BREAK
+    (29) expr -> . LET dec_group IN expr_seq END
+    (30) lvalue -> . ID
+    (31) lvalue -> . lvalue PERIOD ID
+    (32) lvalue -> . ID LBRACKET expr RBRACKET
+    (33) lvalue -> . lvalue LBRACKET expr RBRACKET
+
+    NIL             shift and go to state 11
+    INTLIT          shift and go to state 2
+    STRLIT          shift and go to state 3
+    ID              shift and go to state 9
+    MINUS           shift and go to state 5
+    LPAREN          shift and go to state 8
+    IF              shift and go to state 10
+    WHILE           shift and go to state 1
+    FOR             shift and go to state 7
+    BREAK           shift and go to state 12
+    LET             shift and go to state 13
+
+    lvalue                         shift and go to state 4
+    expr                           shift and go to state 68
+
+state 35
+
+    (17) expr -> expr GT . expr
+    (2) expr -> . NIL
+    (3) expr -> . INTLIT
+    (4) expr -> . STRLIT
+    (5) expr -> . lvalue
+    (6) expr -> . ID LBRACKET expr RBRACKET OF expr
+    (7) expr -> . ID LBRACE field_list RBRACE
+    (8) expr -> . MINUS expr
+    (9) expr -> . expr PLUS expr
+    (10) expr -> . expr MINUS expr
+    (11) expr -> . expr TIMES expr
+    (12) expr -> . expr DIVIDE expr
+    (13) expr -> . expr EQ expr
+    (14) expr -> . expr NE expr
+    (15) expr -> . expr LT expr
+    (16) expr -> . expr LE expr
+    (17) expr -> . expr GT expr
+    (18) expr -> . expr GE expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . LPAREN expr_seq RPAREN
+    (22) expr -> . lvalue ASSIGN expr
+    (23) expr -> . ID LPAREN expr_list RPAREN
+    (24) expr -> . IF expr THEN expr
+    (25) expr -> . IF expr THEN expr ELSE expr
+    (26) expr -> . WHILE expr DO expr
+    (27) expr -> . FOR ID ASSIGN expr TO expr DO expr
+    (28) expr -> . BREAK
+    (29) expr -> . LET dec_group IN expr_seq END
+    (30) lvalue -> . ID
+    (31) lvalue -> . lvalue PERIOD ID
+    (32) lvalue -> . ID LBRACKET expr RBRACKET
+    (33) lvalue -> . lvalue LBRACKET expr RBRACKET
+
+    NIL             shift and go to state 11
+    INTLIT          shift and go to state 2
+    STRLIT          shift and go to state 3
+    ID              shift and go to state 9
+    MINUS           shift and go to state 5
+    LPAREN          shift and go to state 8
+    IF              shift and go to state 10
+    WHILE           shift and go to state 1
+    FOR             shift and go to state 7
+    BREAK           shift and go to state 12
+    LET             shift and go to state 13
+
+    lvalue                         shift and go to state 4
+    expr                           shift and go to state 69
+
+state 36
+
+    (9) expr -> expr PLUS . expr
+    (2) expr -> . NIL
+    (3) expr -> . INTLIT
+    (4) expr -> . STRLIT
+    (5) expr -> . lvalue
+    (6) expr -> . ID LBRACKET expr RBRACKET OF expr
+    (7) expr -> . ID LBRACE field_list RBRACE
+    (8) expr -> . MINUS expr
+    (9) expr -> . expr PLUS expr
+    (10) expr -> . expr MINUS expr
+    (11) expr -> . expr TIMES expr
+    (12) expr -> . expr DIVIDE expr
+    (13) expr -> . expr EQ expr
+    (14) expr -> . expr NE expr
+    (15) expr -> . expr LT expr
+    (16) expr -> . expr LE expr
+    (17) expr -> . expr GT expr
+    (18) expr -> . expr GE expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . LPAREN expr_seq RPAREN
+    (22) expr -> . lvalue ASSIGN expr
+    (23) expr -> . ID LPAREN expr_list RPAREN
+    (24) expr -> . IF expr THEN expr
+    (25) expr -> . IF expr THEN expr ELSE expr
+    (26) expr -> . WHILE expr DO expr
+    (27) expr -> . FOR ID ASSIGN expr TO expr DO expr
+    (28) expr -> . BREAK
+    (29) expr -> . LET dec_group IN expr_seq END
+    (30) lvalue -> . ID
+    (31) lvalue -> . lvalue PERIOD ID
+    (32) lvalue -> . ID LBRACKET expr RBRACKET
+    (33) lvalue -> . lvalue LBRACKET expr RBRACKET
+
+    NIL             shift and go to state 11
+    INTLIT          shift and go to state 2
+    STRLIT          shift and go to state 3
+    ID              shift and go to state 9
+    MINUS           shift and go to state 5
+    LPAREN          shift and go to state 8
+    IF              shift and go to state 10
+    WHILE           shift and go to state 1
+    FOR             shift and go to state 7
+    BREAK           shift and go to state 12
+    LET             shift and go to state 13
+
+    lvalue                         shift and go to state 4
+    expr                           shift and go to state 70
+
+state 37
+
+    (13) expr -> expr EQ . expr
+    (2) expr -> . NIL
+    (3) expr -> . INTLIT
+    (4) expr -> . STRLIT
+    (5) expr -> . lvalue
+    (6) expr -> . ID LBRACKET expr RBRACKET OF expr
+    (7) expr -> . ID LBRACE field_list RBRACE
+    (8) expr -> . MINUS expr
+    (9) expr -> . expr PLUS expr
+    (10) expr -> . expr MINUS expr
+    (11) expr -> . expr TIMES expr
+    (12) expr -> . expr DIVIDE expr
+    (13) expr -> . expr EQ expr
+    (14) expr -> . expr NE expr
+    (15) expr -> . expr LT expr
+    (16) expr -> . expr LE expr
+    (17) expr -> . expr GT expr
+    (18) expr -> . expr GE expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . LPAREN expr_seq RPAREN
+    (22) expr -> . lvalue ASSIGN expr
+    (23) expr -> . ID LPAREN expr_list RPAREN
+    (24) expr -> . IF expr THEN expr
+    (25) expr -> . IF expr THEN expr ELSE expr
+    (26) expr -> . WHILE expr DO expr
+    (27) expr -> . FOR ID ASSIGN expr TO expr DO expr
+    (28) expr -> . BREAK
+    (29) expr -> . LET dec_group IN expr_seq END
+    (30) lvalue -> . ID
+    (31) lvalue -> . lvalue PERIOD ID
+    (32) lvalue -> . ID LBRACKET expr RBRACKET
+    (33) lvalue -> . lvalue LBRACKET expr RBRACKET
+
+    NIL             shift and go to state 11
+    INTLIT          shift and go to state 2
+    STRLIT          shift and go to state 3
+    ID              shift and go to state 9
+    MINUS           shift and go to state 5
+    LPAREN          shift and go to state 8
+    IF              shift and go to state 10
+    WHILE           shift and go to state 1
+    FOR             shift and go to state 7
+    BREAK           shift and go to state 12
+    LET             shift and go to state 13
+
+    lvalue                         shift and go to state 4
+    expr                           shift and go to state 71
+
+state 38
+
+    (10) expr -> expr MINUS . expr
+    (2) expr -> . NIL
+    (3) expr -> . INTLIT
+    (4) expr -> . STRLIT
+    (5) expr -> . lvalue
+    (6) expr -> . ID LBRACKET expr RBRACKET OF expr
+    (7) expr -> . ID LBRACE field_list RBRACE
+    (8) expr -> . MINUS expr
+    (9) expr -> . expr PLUS expr
+    (10) expr -> . expr MINUS expr
+    (11) expr -> . expr TIMES expr
+    (12) expr -> . expr DIVIDE expr
+    (13) expr -> . expr EQ expr
+    (14) expr -> . expr NE expr
+    (15) expr -> . expr LT expr
+    (16) expr -> . expr LE expr
+    (17) expr -> . expr GT expr
+    (18) expr -> . expr GE expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . LPAREN expr_seq RPAREN
+    (22) expr -> . lvalue ASSIGN expr
+    (23) expr -> . ID LPAREN expr_list RPAREN
+    (24) expr -> . IF expr THEN expr
+    (25) expr -> . IF expr THEN expr ELSE expr
+    (26) expr -> . WHILE expr DO expr
+    (27) expr -> . FOR ID ASSIGN expr TO expr DO expr
+    (28) expr -> . BREAK
+    (29) expr -> . LET dec_group IN expr_seq END
+    (30) lvalue -> . ID
+    (31) lvalue -> . lvalue PERIOD ID
+    (32) lvalue -> . ID LBRACKET expr RBRACKET
+    (33) lvalue -> . lvalue LBRACKET expr RBRACKET
+
+    NIL             shift and go to state 11
+    INTLIT          shift and go to state 2
+    STRLIT          shift and go to state 3
+    ID              shift and go to state 9
+    MINUS           shift and go to state 5
+    LPAREN          shift and go to state 8
+    IF              shift and go to state 10
+    WHILE           shift and go to state 1
+    FOR             shift and go to state 7
+    BREAK           shift and go to state 12
+    LET             shift and go to state 13
+
+    lvalue                         shift and go to state 4
+    expr                           shift and go to state 72
+
+state 39
+
+    (20) expr -> expr OR . expr
+    (2) expr -> . NIL
+    (3) expr -> . INTLIT
+    (4) expr -> . STRLIT
+    (5) expr -> . lvalue
+    (6) expr -> . ID LBRACKET expr RBRACKET OF expr
+    (7) expr -> . ID LBRACE field_list RBRACE
+    (8) expr -> . MINUS expr
+    (9) expr -> . expr PLUS expr
+    (10) expr -> . expr MINUS expr
+    (11) expr -> . expr TIMES expr
+    (12) expr -> . expr DIVIDE expr
+    (13) expr -> . expr EQ expr
+    (14) expr -> . expr NE expr
+    (15) expr -> . expr LT expr
+    (16) expr -> . expr LE expr
+    (17) expr -> . expr GT expr
+    (18) expr -> . expr GE expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . LPAREN expr_seq RPAREN
+    (22) expr -> . lvalue ASSIGN expr
+    (23) expr -> . ID LPAREN expr_list RPAREN
+    (24) expr -> . IF expr THEN expr
+    (25) expr -> . IF expr THEN expr ELSE expr
+    (26) expr -> . WHILE expr DO expr
+    (27) expr -> . FOR ID ASSIGN expr TO expr DO expr
+    (28) expr -> . BREAK
+    (29) expr -> . LET dec_group IN expr_seq END
+    (30) lvalue -> . ID
+    (31) lvalue -> . lvalue PERIOD ID
+    (32) lvalue -> . ID LBRACKET expr RBRACKET
+    (33) lvalue -> . lvalue LBRACKET expr RBRACKET
+
+    NIL             shift and go to state 11
+    INTLIT          shift and go to state 2
+    STRLIT          shift and go to state 3
+    ID              shift and go to state 9
+    MINUS           shift and go to state 5
+    LPAREN          shift and go to state 8
+    IF              shift and go to state 10
+    WHILE           shift and go to state 1
+    FOR             shift and go to state 7
+    BREAK           shift and go to state 12
+    LET             shift and go to state 13
+
+    lvalue                         shift and go to state 4
+    expr                           shift and go to state 73
+
+state 40
+
+    (26) expr -> WHILE expr DO . expr
+    (2) expr -> . NIL
+    (3) expr -> . INTLIT
+    (4) expr -> . STRLIT
+    (5) expr -> . lvalue
+    (6) expr -> . ID LBRACKET expr RBRACKET OF expr
+    (7) expr -> . ID LBRACE field_list RBRACE
+    (8) expr -> . MINUS expr
+    (9) expr -> . expr PLUS expr
+    (10) expr -> . expr MINUS expr
+    (11) expr -> . expr TIMES expr
+    (12) expr -> . expr DIVIDE expr
+    (13) expr -> . expr EQ expr
+    (14) expr -> . expr NE expr
+    (15) expr -> . expr LT expr
+    (16) expr -> . expr LE expr
+    (17) expr -> . expr GT expr
+    (18) expr -> . expr GE expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . LPAREN expr_seq RPAREN
+    (22) expr -> . lvalue ASSIGN expr
+    (23) expr -> . ID LPAREN expr_list RPAREN
+    (24) expr -> . IF expr THEN expr
+    (25) expr -> . IF expr THEN expr ELSE expr
+    (26) expr -> . WHILE expr DO expr
+    (27) expr -> . FOR ID ASSIGN expr TO expr DO expr
+    (28) expr -> . BREAK
+    (29) expr -> . LET dec_group IN expr_seq END
+    (30) lvalue -> . ID
+    (31) lvalue -> . lvalue PERIOD ID
+    (32) lvalue -> . ID LBRACKET expr RBRACKET
+    (33) lvalue -> . lvalue LBRACKET expr RBRACKET
+
+    NIL             shift and go to state 11
+    INTLIT          shift and go to state 2
+    STRLIT          shift and go to state 3
+    ID              shift and go to state 9
+    MINUS           shift and go to state 5
+    LPAREN          shift and go to state 8
+    IF              shift and go to state 10
+    WHILE           shift and go to state 1
+    FOR             shift and go to state 7
+    BREAK           shift and go to state 12
+    LET             shift and go to state 13
+
+    lvalue                         shift and go to state 4
+    expr                           shift and go to state 74
+
+state 41
+
+    (31) lvalue -> lvalue PERIOD ID .
+
+    ASSIGN          reduce using rule 31 (lvalue -> lvalue PERIOD ID .)
+    PERIOD          reduce using rule 31 (lvalue -> lvalue PERIOD ID .)
+    LBRACKET        reduce using rule 31 (lvalue -> lvalue PERIOD ID .)
+    DO              reduce using rule 31 (lvalue -> lvalue PERIOD ID .)
+    PLUS            reduce using rule 31 (lvalue -> lvalue PERIOD ID .)
+    MINUS           reduce using rule 31 (lvalue -> lvalue PERIOD ID .)
+    TIMES           reduce using rule 31 (lvalue -> lvalue PERIOD ID .)
+    DIVIDE          reduce using rule 31 (lvalue -> lvalue PERIOD ID .)
+    EQ              reduce using rule 31 (lvalue -> lvalue PERIOD ID .)
+    NE              reduce using rule 31 (lvalue -> lvalue PERIOD ID .)
+    LT              reduce using rule 31 (lvalue -> lvalue PERIOD ID .)
+    LE              reduce using rule 31 (lvalue -> lvalue PERIOD ID .)
+    GT              reduce using rule 31 (lvalue -> lvalue PERIOD ID .)
+    GE              reduce using rule 31 (lvalue -> lvalue PERIOD ID .)
+    AND             reduce using rule 31 (lvalue -> lvalue PERIOD ID .)
+    OR              reduce using rule 31 (lvalue -> lvalue PERIOD ID .)
+    RBRACE          reduce using rule 31 (lvalue -> lvalue PERIOD ID .)
+    COMMA           reduce using rule 31 (lvalue -> lvalue PERIOD ID .)
+    $end            reduce using rule 31 (lvalue -> lvalue PERIOD ID .)
+    RPAREN          reduce using rule 31 (lvalue -> lvalue PERIOD ID .)
+    SEMICOLON       reduce using rule 31 (lvalue -> lvalue PERIOD ID .)
+    THEN            reduce using rule 31 (lvalue -> lvalue PERIOD ID .)
+    RBRACKET        reduce using rule 31 (lvalue -> lvalue PERIOD ID .)
+    TO              reduce using rule 31 (lvalue -> lvalue PERIOD ID .)
+    END             reduce using rule 31 (lvalue -> lvalue PERIOD ID .)
+    ELSE            reduce using rule 31 (lvalue -> lvalue PERIOD ID .)
+    IN              reduce using rule 31 (lvalue -> lvalue PERIOD ID .)
+    TYPE            reduce using rule 31 (lvalue -> lvalue PERIOD ID .)
+    VAR             reduce using rule 31 (lvalue -> lvalue PERIOD ID .)
+    FUNCTION        reduce using rule 31 (lvalue -> lvalue PERIOD ID .)
+
+
+state 42
+
+    (22) expr -> lvalue ASSIGN expr .
+    (9) expr -> expr . PLUS expr
+    (10) expr -> expr . MINUS expr
+    (11) expr -> expr . TIMES expr
+    (12) expr -> expr . DIVIDE expr
+    (13) expr -> expr . EQ expr
+    (14) expr -> expr . NE expr
+    (15) expr -> expr . LT expr
+    (16) expr -> expr . LE expr
+    (17) expr -> expr . GT expr
+    (18) expr -> expr . GE expr
+    (19) expr -> expr . AND expr
+    (20) expr -> expr . OR expr
+
+    $end            reduce using rule 22 (expr -> lvalue ASSIGN expr .)
+    DO              reduce using rule 22 (expr -> lvalue ASSIGN expr .)
+    RPAREN          reduce using rule 22 (expr -> lvalue ASSIGN expr .)
+    SEMICOLON       reduce using rule 22 (expr -> lvalue ASSIGN expr .)
+    THEN            reduce using rule 22 (expr -> lvalue ASSIGN expr .)
+    RBRACKET        reduce using rule 22 (expr -> lvalue ASSIGN expr .)
+    COMMA           reduce using rule 22 (expr -> lvalue ASSIGN expr .)
+    TO              reduce using rule 22 (expr -> lvalue ASSIGN expr .)
+    END             reduce using rule 22 (expr -> lvalue ASSIGN expr .)
+    ELSE            reduce using rule 22 (expr -> lvalue ASSIGN expr .)
+    RBRACE          reduce using rule 22 (expr -> lvalue ASSIGN expr .)
+    IN              reduce using rule 22 (expr -> lvalue ASSIGN expr .)
+    TYPE            reduce using rule 22 (expr -> lvalue ASSIGN expr .)
+    VAR             reduce using rule 22 (expr -> lvalue ASSIGN expr .)
+    FUNCTION        reduce using rule 22 (expr -> lvalue ASSIGN expr .)
+    PLUS            shift and go to state 36
+    MINUS           shift and go to state 38
+    TIMES           shift and go to state 33
+    DIVIDE          shift and go to state 31
+    EQ              shift and go to state 37
+    NE              shift and go to state 32
+    LT              shift and go to state 34
+    LE              shift and go to state 29
+    GT              shift and go to state 35
+    GE              shift and go to state 30
+    AND             shift and go to state 28
+    OR              shift and go to state 39
+
+  ! PLUS            [ reduce using rule 22 (expr -> lvalue ASSIGN expr .) ]
+  ! MINUS           [ reduce using rule 22 (expr -> lvalue ASSIGN expr .) ]
+  ! TIMES           [ reduce using rule 22 (expr -> lvalue ASSIGN expr .) ]
+  ! DIVIDE          [ reduce using rule 22 (expr -> lvalue ASSIGN expr .) ]
+  ! EQ              [ reduce using rule 22 (expr -> lvalue ASSIGN expr .) ]
+  ! NE              [ reduce using rule 22 (expr -> lvalue ASSIGN expr .) ]
+  ! LT              [ reduce using rule 22 (expr -> lvalue ASSIGN expr .) ]
+  ! LE              [ reduce using rule 22 (expr -> lvalue ASSIGN expr .) ]
+  ! GT              [ reduce using rule 22 (expr -> lvalue ASSIGN expr .) ]
+  ! GE              [ reduce using rule 22 (expr -> lvalue ASSIGN expr .) ]
+  ! AND             [ reduce using rule 22 (expr -> lvalue ASSIGN expr .) ]
+  ! OR              [ reduce using rule 22 (expr -> lvalue ASSIGN expr .) ]
+
+
+state 43
+
+    (33) lvalue -> lvalue LBRACKET expr . RBRACKET
+    (9) expr -> expr . PLUS expr
+    (10) expr -> expr . MINUS expr
+    (11) expr -> expr . TIMES expr
+    (12) expr -> expr . DIVIDE expr
+    (13) expr -> expr . EQ expr
+    (14) expr -> expr . NE expr
+    (15) expr -> expr . LT expr
+    (16) expr -> expr . LE expr
+    (17) expr -> expr . GT expr
+    (18) expr -> expr . GE expr
+    (19) expr -> expr . AND expr
+    (20) expr -> expr . OR expr
+
+    RBRACKET        shift and go to state 75
+    PLUS            shift and go to state 36
+    MINUS           shift and go to state 38
+    TIMES           shift and go to state 33
+    DIVIDE          shift and go to state 31
+    EQ              shift and go to state 37
+    NE              shift and go to state 32
+    LT              shift and go to state 34
+    LE              shift and go to state 29
+    GT              shift and go to state 35
+    GE              shift and go to state 30
+    AND             shift and go to state 28
+    OR              shift and go to state 39
+
+
+state 44
+
+    (27) expr -> FOR ID ASSIGN . expr TO expr DO expr
+    (2) expr -> . NIL
+    (3) expr -> . INTLIT
+    (4) expr -> . STRLIT
+    (5) expr -> . lvalue
+    (6) expr -> . ID LBRACKET expr RBRACKET OF expr
+    (7) expr -> . ID LBRACE field_list RBRACE
+    (8) expr -> . MINUS expr
+    (9) expr -> . expr PLUS expr
+    (10) expr -> . expr MINUS expr
+    (11) expr -> . expr TIMES expr
+    (12) expr -> . expr DIVIDE expr
+    (13) expr -> . expr EQ expr
+    (14) expr -> . expr NE expr
+    (15) expr -> . expr LT expr
+    (16) expr -> . expr LE expr
+    (17) expr -> . expr GT expr
+    (18) expr -> . expr GE expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . LPAREN expr_seq RPAREN
+    (22) expr -> . lvalue ASSIGN expr
+    (23) expr -> . ID LPAREN expr_list RPAREN
+    (24) expr -> . IF expr THEN expr
+    (25) expr -> . IF expr THEN expr ELSE expr
+    (26) expr -> . WHILE expr DO expr
+    (27) expr -> . FOR ID ASSIGN expr TO expr DO expr
+    (28) expr -> . BREAK
+    (29) expr -> . LET dec_group IN expr_seq END
+    (30) lvalue -> . ID
+    (31) lvalue -> . lvalue PERIOD ID
+    (32) lvalue -> . ID LBRACKET expr RBRACKET
+    (33) lvalue -> . lvalue LBRACKET expr RBRACKET
+
+    NIL             shift and go to state 11
+    INTLIT          shift and go to state 2
+    STRLIT          shift and go to state 3
+    ID              shift and go to state 9
+    MINUS           shift and go to state 5
+    LPAREN          shift and go to state 8
+    IF              shift and go to state 10
+    WHILE           shift and go to state 1
+    FOR             shift and go to state 7
+    BREAK           shift and go to state 12
+    LET             shift and go to state 13
+
+    lvalue                         shift and go to state 4
+    expr                           shift and go to state 76
+
+state 45
+
+    (35) expr_seq -> expr_seq SEMICOLON . expr
+    (2) expr -> . NIL
+    (3) expr -> . INTLIT
+    (4) expr -> . STRLIT
+    (5) expr -> . lvalue
+    (6) expr -> . ID LBRACKET expr RBRACKET OF expr
+    (7) expr -> . ID LBRACE field_list RBRACE
+    (8) expr -> . MINUS expr
+    (9) expr -> . expr PLUS expr
+    (10) expr -> . expr MINUS expr
+    (11) expr -> . expr TIMES expr
+    (12) expr -> . expr DIVIDE expr
+    (13) expr -> . expr EQ expr
+    (14) expr -> . expr NE expr
+    (15) expr -> . expr LT expr
+    (16) expr -> . expr LE expr
+    (17) expr -> . expr GT expr
+    (18) expr -> . expr GE expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . LPAREN expr_seq RPAREN
+    (22) expr -> . lvalue ASSIGN expr
+    (23) expr -> . ID LPAREN expr_list RPAREN
+    (24) expr -> . IF expr THEN expr
+    (25) expr -> . IF expr THEN expr ELSE expr
+    (26) expr -> . WHILE expr DO expr
+    (27) expr -> . FOR ID ASSIGN expr TO expr DO expr
+    (28) expr -> . BREAK
+    (29) expr -> . LET dec_group IN expr_seq END
+    (30) lvalue -> . ID
+    (31) lvalue -> . lvalue PERIOD ID
+    (32) lvalue -> . ID LBRACKET expr RBRACKET
+    (33) lvalue -> . lvalue LBRACKET expr RBRACKET
+
+    NIL             shift and go to state 11
+    INTLIT          shift and go to state 2
+    STRLIT          shift and go to state 3
+    ID              shift and go to state 9
+    MINUS           shift and go to state 5
+    LPAREN          shift and go to state 8
+    IF              shift and go to state 10
+    WHILE           shift and go to state 1
+    FOR             shift and go to state 7
+    BREAK           shift and go to state 12
+    LET             shift and go to state 13
+
+    lvalue                         shift and go to state 4
+    expr                           shift and go to state 77
+
+state 46
+
+    (21) expr -> LPAREN expr_seq RPAREN .
+
+    PLUS            reduce using rule 21 (expr -> LPAREN expr_seq RPAREN .)
+    MINUS           reduce using rule 21 (expr -> LPAREN expr_seq RPAREN .)
+    TIMES           reduce using rule 21 (expr -> LPAREN expr_seq RPAREN .)
+    DIVIDE          reduce using rule 21 (expr -> LPAREN expr_seq RPAREN .)
+    EQ              reduce using rule 21 (expr -> LPAREN expr_seq RPAREN .)
+    NE              reduce using rule 21 (expr -> LPAREN expr_seq RPAREN .)
+    LT              reduce using rule 21 (expr -> LPAREN expr_seq RPAREN .)
+    LE              reduce using rule 21 (expr -> LPAREN expr_seq RPAREN .)
+    GT              reduce using rule 21 (expr -> LPAREN expr_seq RPAREN .)
+    GE              reduce using rule 21 (expr -> LPAREN expr_seq RPAREN .)
+    AND             reduce using rule 21 (expr -> LPAREN expr_seq RPAREN .)
+    OR              reduce using rule 21 (expr -> LPAREN expr_seq RPAREN .)
+    $end            reduce using rule 21 (expr -> LPAREN expr_seq RPAREN .)
+    DO              reduce using rule 21 (expr -> LPAREN expr_seq RPAREN .)
+    RPAREN          reduce using rule 21 (expr -> LPAREN expr_seq RPAREN .)
+    SEMICOLON       reduce using rule 21 (expr -> LPAREN expr_seq RPAREN .)
+    THEN            reduce using rule 21 (expr -> LPAREN expr_seq RPAREN .)
+    RBRACKET        reduce using rule 21 (expr -> LPAREN expr_seq RPAREN .)
+    COMMA           reduce using rule 21 (expr -> LPAREN expr_seq RPAREN .)
+    TO              reduce using rule 21 (expr -> LPAREN expr_seq RPAREN .)
+    END             reduce using rule 21 (expr -> LPAREN expr_seq RPAREN .)
+    ELSE            reduce using rule 21 (expr -> LPAREN expr_seq RPAREN .)
+    RBRACE          reduce using rule 21 (expr -> LPAREN expr_seq RPAREN .)
+    IN              reduce using rule 21 (expr -> LPAREN expr_seq RPAREN .)
+    TYPE            reduce using rule 21 (expr -> LPAREN expr_seq RPAREN .)
+    VAR             reduce using rule 21 (expr -> LPAREN expr_seq RPAREN .)
+    FUNCTION        reduce using rule 21 (expr -> LPAREN expr_seq RPAREN .)
+
+
+state 47
+
+    (40) field_list -> field_assign .
+
+    RBRACE          reduce using rule 40 (field_list -> field_assign .)
+    COMMA           reduce using rule 40 (field_list -> field_assign .)
+
+
+state 48
+
+    (7) expr -> ID LBRACE field_list . RBRACE
+    (41) field_list -> field_list . COMMA field_assign
+
+    RBRACE          shift and go to state 78
+    COMMA           shift and go to state 79
+
+
+state 49
+
+    (42) field_assign -> ID . EQ expr
+
+    EQ              shift and go to state 80
+
+
+state 50
+
+    (6) expr -> ID LBRACKET expr . RBRACKET OF expr
+    (32) lvalue -> ID LBRACKET expr . RBRACKET
+    (9) expr -> expr . PLUS expr
+    (10) expr -> expr . MINUS expr
+    (11) expr -> expr . TIMES expr
+    (12) expr -> expr . DIVIDE expr
+    (13) expr -> expr . EQ expr
+    (14) expr -> expr . NE expr
+    (15) expr -> expr . LT expr
+    (16) expr -> expr . LE expr
+    (17) expr -> expr . GT expr
+    (18) expr -> expr . GE expr
+    (19) expr -> expr . AND expr
+    (20) expr -> expr . OR expr
+
+    RBRACKET        shift and go to state 81
+    PLUS            shift and go to state 36
+    MINUS           shift and go to state 38
+    TIMES           shift and go to state 33
+    DIVIDE          shift and go to state 31
+    EQ              shift and go to state 37
+    NE              shift and go to state 32
+    LT              shift and go to state 34
+    LE              shift and go to state 29
+    GT              shift and go to state 35
+    GE              shift and go to state 30
+    AND             shift and go to state 28
+    OR              shift and go to state 39
+
+
+state 51
+
+    (23) expr -> ID LPAREN expr_list . RPAREN
+    (44) expr_list -> expr_list . COMMA expr
+
+    RPAREN          shift and go to state 82
+    COMMA           shift and go to state 83
+
+
+state 52
+
+    (45) expr_list -> expr .
+    (9) expr -> expr . PLUS expr
+    (10) expr -> expr . MINUS expr
+    (11) expr -> expr . TIMES expr
+    (12) expr -> expr . DIVIDE expr
+    (13) expr -> expr . EQ expr
+    (14) expr -> expr . NE expr
+    (15) expr -> expr . LT expr
+    (16) expr -> expr . LE expr
+    (17) expr -> expr . GT expr
+    (18) expr -> expr . GE expr
+    (19) expr -> expr . AND expr
+    (20) expr -> expr . OR expr
+
+    RPAREN          reduce using rule 45 (expr_list -> expr .)
+    COMMA           reduce using rule 45 (expr_list -> expr .)
+    PLUS            shift and go to state 36
+    MINUS           shift and go to state 38
+    TIMES           shift and go to state 33
+    DIVIDE          shift and go to state 31
+    EQ              shift and go to state 37
+    NE              shift and go to state 32
+    LT              shift and go to state 34
+    LE              shift and go to state 29
+    GT              shift and go to state 35
+    GE              shift and go to state 30
+    AND             shift and go to state 28
+    OR              shift and go to state 39
+
+
+state 53
+
+    (24) expr -> IF expr THEN . expr
+    (25) expr -> IF expr THEN . expr ELSE expr
+    (2) expr -> . NIL
+    (3) expr -> . INTLIT
+    (4) expr -> . STRLIT
+    (5) expr -> . lvalue
+    (6) expr -> . ID LBRACKET expr RBRACKET OF expr
+    (7) expr -> . ID LBRACE field_list RBRACE
+    (8) expr -> . MINUS expr
+    (9) expr -> . expr PLUS expr
+    (10) expr -> . expr MINUS expr
+    (11) expr -> . expr TIMES expr
+    (12) expr -> . expr DIVIDE expr
+    (13) expr -> . expr EQ expr
+    (14) expr -> . expr NE expr
+    (15) expr -> . expr LT expr
+    (16) expr -> . expr LE expr
+    (17) expr -> . expr GT expr
+    (18) expr -> . expr GE expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . LPAREN expr_seq RPAREN
+    (22) expr -> . lvalue ASSIGN expr
+    (23) expr -> . ID LPAREN expr_list RPAREN
+    (24) expr -> . IF expr THEN expr
+    (25) expr -> . IF expr THEN expr ELSE expr
+    (26) expr -> . WHILE expr DO expr
+    (27) expr -> . FOR ID ASSIGN expr TO expr DO expr
+    (28) expr -> . BREAK
+    (29) expr -> . LET dec_group IN expr_seq END
+    (30) lvalue -> . ID
+    (31) lvalue -> . lvalue PERIOD ID
+    (32) lvalue -> . ID LBRACKET expr RBRACKET
+    (33) lvalue -> . lvalue LBRACKET expr RBRACKET
+
+    NIL             shift and go to state 11
+    INTLIT          shift and go to state 2
+    STRLIT          shift and go to state 3
+    ID              shift and go to state 9
+    MINUS           shift and go to state 5
+    LPAREN          shift and go to state 8
+    IF              shift and go to state 10
+    WHILE           shift and go to state 1
+    FOR             shift and go to state 7
+    BREAK           shift and go to state 12
+    LET             shift and go to state 13
+
+    lvalue                         shift and go to state 4
+    expr                           shift and go to state 84
+
+state 54
+
+    (59) func_dec -> FUNCTION . ID LPAREN field_types RPAREN EQ expr
+    (60) func_dec -> FUNCTION . ID LPAREN field_types RPAREN COLON ID EQ expr
+
+    ID              shift and go to state 85
+
+
+state 55
+
+    (48) dec -> func_dec .
+
+    IN              reduce using rule 48 (dec -> func_dec .)
+    TYPE            reduce using rule 48 (dec -> func_dec .)
+    VAR             reduce using rule 48 (dec -> func_dec .)
+    FUNCTION        reduce using rule 48 (dec -> func_dec .)
+
+
+state 56
+
+    (47) dec -> var_dec .
+
+    IN              reduce using rule 47 (dec -> var_dec .)
+    TYPE            reduce using rule 47 (dec -> var_dec .)
+    VAR             reduce using rule 47 (dec -> var_dec .)
+    FUNCTION        reduce using rule 47 (dec -> var_dec .)
+
+
+state 57
+
+    (29) expr -> LET dec_group IN . expr_seq END
+    (34) expr_seq -> .
+    (35) expr_seq -> . expr_seq SEMICOLON expr
+    (36) expr_seq -> . expr
+    (2) expr -> . NIL
+    (3) expr -> . INTLIT
+    (4) expr -> . STRLIT
+    (5) expr -> . lvalue
+    (6) expr -> . ID LBRACKET expr RBRACKET OF expr
+    (7) expr -> . ID LBRACE field_list RBRACE
+    (8) expr -> . MINUS expr
+    (9) expr -> . expr PLUS expr
+    (10) expr -> . expr MINUS expr
+    (11) expr -> . expr TIMES expr
+    (12) expr -> . expr DIVIDE expr
+    (13) expr -> . expr EQ expr
+    (14) expr -> . expr NE expr
+    (15) expr -> . expr LT expr
+    (16) expr -> . expr LE expr
+    (17) expr -> . expr GT expr
+    (18) expr -> . expr GE expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . LPAREN expr_seq RPAREN
+    (22) expr -> . lvalue ASSIGN expr
+    (23) expr -> . ID LPAREN expr_list RPAREN
+    (24) expr -> . IF expr THEN expr
+    (25) expr -> . IF expr THEN expr ELSE expr
+    (26) expr -> . WHILE expr DO expr
+    (27) expr -> . FOR ID ASSIGN expr TO expr DO expr
+    (28) expr -> . BREAK
+    (29) expr -> . LET dec_group IN expr_seq END
+    (30) lvalue -> . ID
+    (31) lvalue -> . lvalue PERIOD ID
+    (32) lvalue -> . ID LBRACKET expr RBRACKET
+    (33) lvalue -> . lvalue LBRACKET expr RBRACKET
+
+    END             reduce using rule 34 (expr_seq -> .)
+    SEMICOLON       reduce using rule 34 (expr_seq -> .)
+    NIL             shift and go to state 11
+    INTLIT          shift and go to state 2
+    STRLIT          shift and go to state 3
+    ID              shift and go to state 9
+    MINUS           shift and go to state 5
+    LPAREN          shift and go to state 8
+    IF              shift and go to state 10
+    WHILE           shift and go to state 1
+    FOR             shift and go to state 7
+    BREAK           shift and go to state 12
+    LET             shift and go to state 13
+
+    lvalue                         shift and go to state 4
+    expr_seq                       shift and go to state 86
+    expr                           shift and go to state 22
+
+state 58
+
+    (57) var_dec -> VAR . ID ASSIGN expr
+    (58) var_dec -> VAR . ID COLON ID ASSIGN expr
+
+    ID              shift and go to state 87
+
+
+state 59
+
+    (46) dec -> type_dec .
+
+    IN              reduce using rule 46 (dec -> type_dec .)
+    TYPE            reduce using rule 46 (dec -> type_dec .)
+    VAR             reduce using rule 46 (dec -> type_dec .)
+    FUNCTION        reduce using rule 46 (dec -> type_dec .)
+
+
+state 60
+
+    (38) dec_group -> dec_group dec .
+
+    IN              reduce using rule 38 (dec_group -> dec_group dec .)
+    TYPE            reduce using rule 38 (dec_group -> dec_group dec .)
+    VAR             reduce using rule 38 (dec_group -> dec_group dec .)
+    FUNCTION        reduce using rule 38 (dec_group -> dec_group dec .)
+
+
+state 61
+
+    (49) type_dec -> TYPE . ID EQ type
+
+    ID              shift and go to state 88
+
+
+state 62
+
+    (19) expr -> expr AND expr .
+    (9) expr -> expr . PLUS expr
+    (10) expr -> expr . MINUS expr
+    (11) expr -> expr . TIMES expr
+    (12) expr -> expr . DIVIDE expr
+    (13) expr -> expr . EQ expr
+    (14) expr -> expr . NE expr
+    (15) expr -> expr . LT expr
+    (16) expr -> expr . LE expr
+    (17) expr -> expr . GT expr
+    (18) expr -> expr . GE expr
+    (19) expr -> expr . AND expr
+    (20) expr -> expr . OR expr
+
+    AND             reduce using rule 19 (expr -> expr AND expr .)
+    OR              reduce using rule 19 (expr -> expr AND expr .)
+    $end            reduce using rule 19 (expr -> expr AND expr .)
+    DO              reduce using rule 19 (expr -> expr AND expr .)
+    RPAREN          reduce using rule 19 (expr -> expr AND expr .)
+    SEMICOLON       reduce using rule 19 (expr -> expr AND expr .)
+    THEN            reduce using rule 19 (expr -> expr AND expr .)
+    RBRACKET        reduce using rule 19 (expr -> expr AND expr .)
+    COMMA           reduce using rule 19 (expr -> expr AND expr .)
+    TO              reduce using rule 19 (expr -> expr AND expr .)
+    END             reduce using rule 19 (expr -> expr AND expr .)
+    ELSE            reduce using rule 19 (expr -> expr AND expr .)
+    RBRACE          reduce using rule 19 (expr -> expr AND expr .)
+    IN              reduce using rule 19 (expr -> expr AND expr .)
+    TYPE            reduce using rule 19 (expr -> expr AND expr .)
+    VAR             reduce using rule 19 (expr -> expr AND expr .)
+    FUNCTION        reduce using rule 19 (expr -> expr AND expr .)
+    PLUS            shift and go to state 36
+    MINUS           shift and go to state 38
+    TIMES           shift and go to state 33
+    DIVIDE          shift and go to state 31
+    EQ              shift and go to state 37
+    NE              shift and go to state 32
+    LT              shift and go to state 34
+    LE              shift and go to state 29
+    GT              shift and go to state 35
+    GE              shift and go to state 30
+
+  ! PLUS            [ reduce using rule 19 (expr -> expr AND expr .) ]
+  ! MINUS           [ reduce using rule 19 (expr -> expr AND expr .) ]
+  ! TIMES           [ reduce using rule 19 (expr -> expr AND expr .) ]
+  ! DIVIDE          [ reduce using rule 19 (expr -> expr AND expr .) ]
+  ! EQ              [ reduce using rule 19 (expr -> expr AND expr .) ]
+  ! NE              [ reduce using rule 19 (expr -> expr AND expr .) ]
+  ! LT              [ reduce using rule 19 (expr -> expr AND expr .) ]
+  ! LE              [ reduce using rule 19 (expr -> expr AND expr .) ]
+  ! GT              [ reduce using rule 19 (expr -> expr AND expr .) ]
+  ! GE              [ reduce using rule 19 (expr -> expr AND expr .) ]
+  ! AND             [ shift and go to state 28 ]
+  ! OR              [ shift and go to state 39 ]
+
+
+state 63
+
+    (16) expr -> expr LE expr .
+    (9) expr -> expr . PLUS expr
+    (10) expr -> expr . MINUS expr
+    (11) expr -> expr . TIMES expr
+    (12) expr -> expr . DIVIDE expr
+    (13) expr -> expr . EQ expr
+    (14) expr -> expr . NE expr
+    (15) expr -> expr . LT expr
+    (16) expr -> expr . LE expr
+    (17) expr -> expr . GT expr
+    (18) expr -> expr . GE expr
+    (19) expr -> expr . AND expr
+    (20) expr -> expr . OR expr
+
+    EQ              reduce using rule 16 (expr -> expr LE expr .)
+    NE              reduce using rule 16 (expr -> expr LE expr .)
+    LT              reduce using rule 16 (expr -> expr LE expr .)
+    LE              reduce using rule 16 (expr -> expr LE expr .)
+    GT              reduce using rule 16 (expr -> expr LE expr .)
+    GE              reduce using rule 16 (expr -> expr LE expr .)
+    AND             reduce using rule 16 (expr -> expr LE expr .)
+    OR              reduce using rule 16 (expr -> expr LE expr .)
+    $end            reduce using rule 16 (expr -> expr LE expr .)
+    DO              reduce using rule 16 (expr -> expr LE expr .)
+    RPAREN          reduce using rule 16 (expr -> expr LE expr .)
+    SEMICOLON       reduce using rule 16 (expr -> expr LE expr .)
+    THEN            reduce using rule 16 (expr -> expr LE expr .)
+    RBRACKET        reduce using rule 16 (expr -> expr LE expr .)
+    COMMA           reduce using rule 16 (expr -> expr LE expr .)
+    TO              reduce using rule 16 (expr -> expr LE expr .)
+    END             reduce using rule 16 (expr -> expr LE expr .)
+    ELSE            reduce using rule 16 (expr -> expr LE expr .)
+    RBRACE          reduce using rule 16 (expr -> expr LE expr .)
+    IN              reduce using rule 16 (expr -> expr LE expr .)
+    TYPE            reduce using rule 16 (expr -> expr LE expr .)
+    VAR             reduce using rule 16 (expr -> expr LE expr .)
+    FUNCTION        reduce using rule 16 (expr -> expr LE expr .)
+    PLUS            shift and go to state 36
+    MINUS           shift and go to state 38
+    TIMES           shift and go to state 33
+    DIVIDE          shift and go to state 31
+
+  ! PLUS            [ reduce using rule 16 (expr -> expr LE expr .) ]
+  ! MINUS           [ reduce using rule 16 (expr -> expr LE expr .) ]
+  ! TIMES           [ reduce using rule 16 (expr -> expr LE expr .) ]
+  ! DIVIDE          [ reduce using rule 16 (expr -> expr LE expr .) ]
+  ! EQ              [ shift and go to state 37 ]
+  ! NE              [ shift and go to state 32 ]
+  ! LT              [ shift and go to state 34 ]
+  ! LE              [ shift and go to state 29 ]
+  ! GT              [ shift and go to state 35 ]
+  ! GE              [ shift and go to state 30 ]
+  ! AND             [ shift and go to state 28 ]
+  ! OR              [ shift and go to state 39 ]
+
+
+state 64
+
+    (18) expr -> expr GE expr .
+    (9) expr -> expr . PLUS expr
+    (10) expr -> expr . MINUS expr
+    (11) expr -> expr . TIMES expr
+    (12) expr -> expr . DIVIDE expr
+    (13) expr -> expr . EQ expr
+    (14) expr -> expr . NE expr
+    (15) expr -> expr . LT expr
+    (16) expr -> expr . LE expr
+    (17) expr -> expr . GT expr
+    (18) expr -> expr . GE expr
+    (19) expr -> expr . AND expr
+    (20) expr -> expr . OR expr
+
+    EQ              reduce using rule 18 (expr -> expr GE expr .)
+    NE              reduce using rule 18 (expr -> expr GE expr .)
+    LT              reduce using rule 18 (expr -> expr GE expr .)
+    LE              reduce using rule 18 (expr -> expr GE expr .)
+    GT              reduce using rule 18 (expr -> expr GE expr .)
+    GE              reduce using rule 18 (expr -> expr GE expr .)
+    AND             reduce using rule 18 (expr -> expr GE expr .)
+    OR              reduce using rule 18 (expr -> expr GE expr .)
+    $end            reduce using rule 18 (expr -> expr GE expr .)
+    DO              reduce using rule 18 (expr -> expr GE expr .)
+    RPAREN          reduce using rule 18 (expr -> expr GE expr .)
+    SEMICOLON       reduce using rule 18 (expr -> expr GE expr .)
+    THEN            reduce using rule 18 (expr -> expr GE expr .)
+    RBRACKET        reduce using rule 18 (expr -> expr GE expr .)
+    COMMA           reduce using rule 18 (expr -> expr GE expr .)
+    TO              reduce using rule 18 (expr -> expr GE expr .)
+    END             reduce using rule 18 (expr -> expr GE expr .)
+    ELSE            reduce using rule 18 (expr -> expr GE expr .)
+    RBRACE          reduce using rule 18 (expr -> expr GE expr .)
+    IN              reduce using rule 18 (expr -> expr GE expr .)
+    TYPE            reduce using rule 18 (expr -> expr GE expr .)
+    VAR             reduce using rule 18 (expr -> expr GE expr .)
+    FUNCTION        reduce using rule 18 (expr -> expr GE expr .)
+    PLUS            shift and go to state 36
+    MINUS           shift and go to state 38
+    TIMES           shift and go to state 33
+    DIVIDE          shift and go to state 31
+
+  ! PLUS            [ reduce using rule 18 (expr -> expr GE expr .) ]
+  ! MINUS           [ reduce using rule 18 (expr -> expr GE expr .) ]
+  ! TIMES           [ reduce using rule 18 (expr -> expr GE expr .) ]
+  ! DIVIDE          [ reduce using rule 18 (expr -> expr GE expr .) ]
+  ! EQ              [ shift and go to state 37 ]
+  ! NE              [ shift and go to state 32 ]
+  ! LT              [ shift and go to state 34 ]
+  ! LE              [ shift and go to state 29 ]
+  ! GT              [ shift and go to state 35 ]
+  ! GE              [ shift and go to state 30 ]
+  ! AND             [ shift and go to state 28 ]
+  ! OR              [ shift and go to state 39 ]
+
+
+state 65
+
+    (12) expr -> expr DIVIDE expr .
+    (9) expr -> expr . PLUS expr
+    (10) expr -> expr . MINUS expr
+    (11) expr -> expr . TIMES expr
+    (12) expr -> expr . DIVIDE expr
+    (13) expr -> expr . EQ expr
+    (14) expr -> expr . NE expr
+    (15) expr -> expr . LT expr
+    (16) expr -> expr . LE expr
+    (17) expr -> expr . GT expr
+    (18) expr -> expr . GE expr
+    (19) expr -> expr . AND expr
+    (20) expr -> expr . OR expr
+
+    PLUS            reduce using rule 12 (expr -> expr DIVIDE expr .)
+    MINUS           reduce using rule 12 (expr -> expr DIVIDE expr .)
+    TIMES           reduce using rule 12 (expr -> expr DIVIDE expr .)
+    DIVIDE          reduce using rule 12 (expr -> expr DIVIDE expr .)
+    EQ              reduce using rule 12 (expr -> expr DIVIDE expr .)
+    NE              reduce using rule 12 (expr -> expr DIVIDE expr .)
+    LT              reduce using rule 12 (expr -> expr DIVIDE expr .)
+    LE              reduce using rule 12 (expr -> expr DIVIDE expr .)
+    GT              reduce using rule 12 (expr -> expr DIVIDE expr .)
+    GE              reduce using rule 12 (expr -> expr DIVIDE expr .)
+    AND             reduce using rule 12 (expr -> expr DIVIDE expr .)
+    OR              reduce using rule 12 (expr -> expr DIVIDE expr .)
+    $end            reduce using rule 12 (expr -> expr DIVIDE expr .)
+    DO              reduce using rule 12 (expr -> expr DIVIDE expr .)
+    RPAREN          reduce using rule 12 (expr -> expr DIVIDE expr .)
+    SEMICOLON       reduce using rule 12 (expr -> expr DIVIDE expr .)
+    THEN            reduce using rule 12 (expr -> expr DIVIDE expr .)
+    RBRACKET        reduce using rule 12 (expr -> expr DIVIDE expr .)
+    COMMA           reduce using rule 12 (expr -> expr DIVIDE expr .)
+    TO              reduce using rule 12 (expr -> expr DIVIDE expr .)
+    END             reduce using rule 12 (expr -> expr DIVIDE expr .)
+    ELSE            reduce using rule 12 (expr -> expr DIVIDE expr .)
+    RBRACE          reduce using rule 12 (expr -> expr DIVIDE expr .)
+    IN              reduce using rule 12 (expr -> expr DIVIDE expr .)
+    TYPE            reduce using rule 12 (expr -> expr DIVIDE expr .)
+    VAR             reduce using rule 12 (expr -> expr DIVIDE expr .)
+    FUNCTION        reduce using rule 12 (expr -> expr DIVIDE expr .)
+
+  ! PLUS            [ shift and go to state 36 ]
+  ! MINUS           [ shift and go to state 38 ]
+  ! TIMES           [ shift and go to state 33 ]
+  ! DIVIDE          [ shift and go to state 31 ]
+  ! EQ              [ shift and go to state 37 ]
+  ! NE              [ shift and go to state 32 ]
+  ! LT              [ shift and go to state 34 ]
+  ! LE              [ shift and go to state 29 ]
+  ! GT              [ shift and go to state 35 ]
+  ! GE              [ shift and go to state 30 ]
+  ! AND             [ shift and go to state 28 ]
+  ! OR              [ shift and go to state 39 ]
+
+
+state 66
+
+    (14) expr -> expr NE expr .
+    (9) expr -> expr . PLUS expr
+    (10) expr -> expr . MINUS expr
+    (11) expr -> expr . TIMES expr
+    (12) expr -> expr . DIVIDE expr
+    (13) expr -> expr . EQ expr
+    (14) expr -> expr . NE expr
+    (15) expr -> expr . LT expr
+    (16) expr -> expr . LE expr
+    (17) expr -> expr . GT expr
+    (18) expr -> expr . GE expr
+    (19) expr -> expr . AND expr
+    (20) expr -> expr . OR expr
+
+    EQ              reduce using rule 14 (expr -> expr NE expr .)
+    NE              reduce using rule 14 (expr -> expr NE expr .)
+    LT              reduce using rule 14 (expr -> expr NE expr .)
+    LE              reduce using rule 14 (expr -> expr NE expr .)
+    GT              reduce using rule 14 (expr -> expr NE expr .)
+    GE              reduce using rule 14 (expr -> expr NE expr .)
+    AND             reduce using rule 14 (expr -> expr NE expr .)
+    OR              reduce using rule 14 (expr -> expr NE expr .)
+    $end            reduce using rule 14 (expr -> expr NE expr .)
+    DO              reduce using rule 14 (expr -> expr NE expr .)
+    RPAREN          reduce using rule 14 (expr -> expr NE expr .)
+    SEMICOLON       reduce using rule 14 (expr -> expr NE expr .)
+    THEN            reduce using rule 14 (expr -> expr NE expr .)
+    RBRACKET        reduce using rule 14 (expr -> expr NE expr .)
+    COMMA           reduce using rule 14 (expr -> expr NE expr .)
+    TO              reduce using rule 14 (expr -> expr NE expr .)
+    END             reduce using rule 14 (expr -> expr NE expr .)
+    ELSE            reduce using rule 14 (expr -> expr NE expr .)
+    RBRACE          reduce using rule 14 (expr -> expr NE expr .)
+    IN              reduce using rule 14 (expr -> expr NE expr .)
+    TYPE            reduce using rule 14 (expr -> expr NE expr .)
+    VAR             reduce using rule 14 (expr -> expr NE expr .)
+    FUNCTION        reduce using rule 14 (expr -> expr NE expr .)
+    PLUS            shift and go to state 36
+    MINUS           shift and go to state 38
+    TIMES           shift and go to state 33
+    DIVIDE          shift and go to state 31
+
+  ! PLUS            [ reduce using rule 14 (expr -> expr NE expr .) ]
+  ! MINUS           [ reduce using rule 14 (expr -> expr NE expr .) ]
+  ! TIMES           [ reduce using rule 14 (expr -> expr NE expr .) ]
+  ! DIVIDE          [ reduce using rule 14 (expr -> expr NE expr .) ]
+  ! EQ              [ shift and go to state 37 ]
+  ! NE              [ shift and go to state 32 ]
+  ! LT              [ shift and go to state 34 ]
+  ! LE              [ shift and go to state 29 ]
+  ! GT              [ shift and go to state 35 ]
+  ! GE              [ shift and go to state 30 ]
+  ! AND             [ shift and go to state 28 ]
+  ! OR              [ shift and go to state 39 ]
+
+
+state 67
+
+    (11) expr -> expr TIMES expr .
+    (9) expr -> expr . PLUS expr
+    (10) expr -> expr . MINUS expr
+    (11) expr -> expr . TIMES expr
+    (12) expr -> expr . DIVIDE expr
+    (13) expr -> expr . EQ expr
+    (14) expr -> expr . NE expr
+    (15) expr -> expr . LT expr
+    (16) expr -> expr . LE expr
+    (17) expr -> expr . GT expr
+    (18) expr -> expr . GE expr
+    (19) expr -> expr . AND expr
+    (20) expr -> expr . OR expr
+
+    PLUS            reduce using rule 11 (expr -> expr TIMES expr .)
+    MINUS           reduce using rule 11 (expr -> expr TIMES expr .)
+    TIMES           reduce using rule 11 (expr -> expr TIMES expr .)
+    DIVIDE          reduce using rule 11 (expr -> expr TIMES expr .)
+    EQ              reduce using rule 11 (expr -> expr TIMES expr .)
+    NE              reduce using rule 11 (expr -> expr TIMES expr .)
+    LT              reduce using rule 11 (expr -> expr TIMES expr .)
+    LE              reduce using rule 11 (expr -> expr TIMES expr .)
+    GT              reduce using rule 11 (expr -> expr TIMES expr .)
+    GE              reduce using rule 11 (expr -> expr TIMES expr .)
+    AND             reduce using rule 11 (expr -> expr TIMES expr .)
+    OR              reduce using rule 11 (expr -> expr TIMES expr .)
+    $end            reduce using rule 11 (expr -> expr TIMES expr .)
+    DO              reduce using rule 11 (expr -> expr TIMES expr .)
+    RPAREN          reduce using rule 11 (expr -> expr TIMES expr .)
+    SEMICOLON       reduce using rule 11 (expr -> expr TIMES expr .)
+    THEN            reduce using rule 11 (expr -> expr TIMES expr .)
+    RBRACKET        reduce using rule 11 (expr -> expr TIMES expr .)
+    COMMA           reduce using rule 11 (expr -> expr TIMES expr .)
+    TO              reduce using rule 11 (expr -> expr TIMES expr .)
+    END             reduce using rule 11 (expr -> expr TIMES expr .)
+    ELSE            reduce using rule 11 (expr -> expr TIMES expr .)
+    RBRACE          reduce using rule 11 (expr -> expr TIMES expr .)
+    IN              reduce using rule 11 (expr -> expr TIMES expr .)
+    TYPE            reduce using rule 11 (expr -> expr TIMES expr .)
+    VAR             reduce using rule 11 (expr -> expr TIMES expr .)
+    FUNCTION        reduce using rule 11 (expr -> expr TIMES expr .)
+
+  ! PLUS            [ shift and go to state 36 ]
+  ! MINUS           [ shift and go to state 38 ]
+  ! TIMES           [ shift and go to state 33 ]
+  ! DIVIDE          [ shift and go to state 31 ]
+  ! EQ              [ shift and go to state 37 ]
+  ! NE              [ shift and go to state 32 ]
+  ! LT              [ shift and go to state 34 ]
+  ! LE              [ shift and go to state 29 ]
+  ! GT              [ shift and go to state 35 ]
+  ! GE              [ shift and go to state 30 ]
+  ! AND             [ shift and go to state 28 ]
+  ! OR              [ shift and go to state 39 ]
+
+
+state 68
+
+    (15) expr -> expr LT expr .
+    (9) expr -> expr . PLUS expr
+    (10) expr -> expr . MINUS expr
+    (11) expr -> expr . TIMES expr
+    (12) expr -> expr . DIVIDE expr
+    (13) expr -> expr . EQ expr
+    (14) expr -> expr . NE expr
+    (15) expr -> expr . LT expr
+    (16) expr -> expr . LE expr
+    (17) expr -> expr . GT expr
+    (18) expr -> expr . GE expr
+    (19) expr -> expr . AND expr
+    (20) expr -> expr . OR expr
+
+    EQ              reduce using rule 15 (expr -> expr LT expr .)
+    NE              reduce using rule 15 (expr -> expr LT expr .)
+    LT              reduce using rule 15 (expr -> expr LT expr .)
+    LE              reduce using rule 15 (expr -> expr LT expr .)
+    GT              reduce using rule 15 (expr -> expr LT expr .)
+    GE              reduce using rule 15 (expr -> expr LT expr .)
+    AND             reduce using rule 15 (expr -> expr LT expr .)
+    OR              reduce using rule 15 (expr -> expr LT expr .)
+    $end            reduce using rule 15 (expr -> expr LT expr .)
+    DO              reduce using rule 15 (expr -> expr LT expr .)
+    RPAREN          reduce using rule 15 (expr -> expr LT expr .)
+    SEMICOLON       reduce using rule 15 (expr -> expr LT expr .)
+    THEN            reduce using rule 15 (expr -> expr LT expr .)
+    RBRACKET        reduce using rule 15 (expr -> expr LT expr .)
+    COMMA           reduce using rule 15 (expr -> expr LT expr .)
+    TO              reduce using rule 15 (expr -> expr LT expr .)
+    END             reduce using rule 15 (expr -> expr LT expr .)
+    ELSE            reduce using rule 15 (expr -> expr LT expr .)
+    RBRACE          reduce using rule 15 (expr -> expr LT expr .)
+    IN              reduce using rule 15 (expr -> expr LT expr .)
+    TYPE            reduce using rule 15 (expr -> expr LT expr .)
+    VAR             reduce using rule 15 (expr -> expr LT expr .)
+    FUNCTION        reduce using rule 15 (expr -> expr LT expr .)
+    PLUS            shift and go to state 36
+    MINUS           shift and go to state 38
+    TIMES           shift and go to state 33
+    DIVIDE          shift and go to state 31
+
+  ! PLUS            [ reduce using rule 15 (expr -> expr LT expr .) ]
+  ! MINUS           [ reduce using rule 15 (expr -> expr LT expr .) ]
+  ! TIMES           [ reduce using rule 15 (expr -> expr LT expr .) ]
+  ! DIVIDE          [ reduce using rule 15 (expr -> expr LT expr .) ]
+  ! EQ              [ shift and go to state 37 ]
+  ! NE              [ shift and go to state 32 ]
+  ! LT              [ shift and go to state 34 ]
+  ! LE              [ shift and go to state 29 ]
+  ! GT              [ shift and go to state 35 ]
+  ! GE              [ shift and go to state 30 ]
+  ! AND             [ shift and go to state 28 ]
+  ! OR              [ shift and go to state 39 ]
+
+
+state 69
+
+    (17) expr -> expr GT expr .
+    (9) expr -> expr . PLUS expr
+    (10) expr -> expr . MINUS expr
+    (11) expr -> expr . TIMES expr
+    (12) expr -> expr . DIVIDE expr
+    (13) expr -> expr . EQ expr
+    (14) expr -> expr . NE expr
+    (15) expr -> expr . LT expr
+    (16) expr -> expr . LE expr
+    (17) expr -> expr . GT expr
+    (18) expr -> expr . GE expr
+    (19) expr -> expr . AND expr
+    (20) expr -> expr . OR expr
+
+    EQ              reduce using rule 17 (expr -> expr GT expr .)
+    NE              reduce using rule 17 (expr -> expr GT expr .)
+    LT              reduce using rule 17 (expr -> expr GT expr .)
+    LE              reduce using rule 17 (expr -> expr GT expr .)
+    GT              reduce using rule 17 (expr -> expr GT expr .)
+    GE              reduce using rule 17 (expr -> expr GT expr .)
+    AND             reduce using rule 17 (expr -> expr GT expr .)
+    OR              reduce using rule 17 (expr -> expr GT expr .)
+    $end            reduce using rule 17 (expr -> expr GT expr .)
+    DO              reduce using rule 17 (expr -> expr GT expr .)
+    RPAREN          reduce using rule 17 (expr -> expr GT expr .)
+    SEMICOLON       reduce using rule 17 (expr -> expr GT expr .)
+    THEN            reduce using rule 17 (expr -> expr GT expr .)
+    RBRACKET        reduce using rule 17 (expr -> expr GT expr .)
+    COMMA           reduce using rule 17 (expr -> expr GT expr .)
+    TO              reduce using rule 17 (expr -> expr GT expr .)
+    END             reduce using rule 17 (expr -> expr GT expr .)
+    ELSE            reduce using rule 17 (expr -> expr GT expr .)
+    RBRACE          reduce using rule 17 (expr -> expr GT expr .)
+    IN              reduce using rule 17 (expr -> expr GT expr .)
+    TYPE            reduce using rule 17 (expr -> expr GT expr .)
+    VAR             reduce using rule 17 (expr -> expr GT expr .)
+    FUNCTION        reduce using rule 17 (expr -> expr GT expr .)
+    PLUS            shift and go to state 36
+    MINUS           shift and go to state 38
+    TIMES           shift and go to state 33
+    DIVIDE          shift and go to state 31
+
+  ! PLUS            [ reduce using rule 17 (expr -> expr GT expr .) ]
+  ! MINUS           [ reduce using rule 17 (expr -> expr GT expr .) ]
+  ! TIMES           [ reduce using rule 17 (expr -> expr GT expr .) ]
+  ! DIVIDE          [ reduce using rule 17 (expr -> expr GT expr .) ]
+  ! EQ              [ shift and go to state 37 ]
+  ! NE              [ shift and go to state 32 ]
+  ! LT              [ shift and go to state 34 ]
+  ! LE              [ shift and go to state 29 ]
+  ! GT              [ shift and go to state 35 ]
+  ! GE              [ shift and go to state 30 ]
+  ! AND             [ shift and go to state 28 ]
+  ! OR              [ shift and go to state 39 ]
+
+
+state 70
+
+    (9) expr -> expr PLUS expr .
+    (9) expr -> expr . PLUS expr
+    (10) expr -> expr . MINUS expr
+    (11) expr -> expr . TIMES expr
+    (12) expr -> expr . DIVIDE expr
+    (13) expr -> expr . EQ expr
+    (14) expr -> expr . NE expr
+    (15) expr -> expr . LT expr
+    (16) expr -> expr . LE expr
+    (17) expr -> expr . GT expr
+    (18) expr -> expr . GE expr
+    (19) expr -> expr . AND expr
+    (20) expr -> expr . OR expr
+
+    PLUS            reduce using rule 9 (expr -> expr PLUS expr .)
+    MINUS           reduce using rule 9 (expr -> expr PLUS expr .)
+    EQ              reduce using rule 9 (expr -> expr PLUS expr .)
+    NE              reduce using rule 9 (expr -> expr PLUS expr .)
+    LT              reduce using rule 9 (expr -> expr PLUS expr .)
+    LE              reduce using rule 9 (expr -> expr PLUS expr .)
+    GT              reduce using rule 9 (expr -> expr PLUS expr .)
+    GE              reduce using rule 9 (expr -> expr PLUS expr .)
+    AND             reduce using rule 9 (expr -> expr PLUS expr .)
+    OR              reduce using rule 9 (expr -> expr PLUS expr .)
+    $end            reduce using rule 9 (expr -> expr PLUS expr .)
+    DO              reduce using rule 9 (expr -> expr PLUS expr .)
+    RPAREN          reduce using rule 9 (expr -> expr PLUS expr .)
+    SEMICOLON       reduce using rule 9 (expr -> expr PLUS expr .)
+    THEN            reduce using rule 9 (expr -> expr PLUS expr .)
+    RBRACKET        reduce using rule 9 (expr -> expr PLUS expr .)
+    COMMA           reduce using rule 9 (expr -> expr PLUS expr .)
+    TO              reduce using rule 9 (expr -> expr PLUS expr .)
+    END             reduce using rule 9 (expr -> expr PLUS expr .)
+    ELSE            reduce using rule 9 (expr -> expr PLUS expr .)
+    RBRACE          reduce using rule 9 (expr -> expr PLUS expr .)
+    IN              reduce using rule 9 (expr -> expr PLUS expr .)
+    TYPE            reduce using rule 9 (expr -> expr PLUS expr .)
+    VAR             reduce using rule 9 (expr -> expr PLUS expr .)
+    FUNCTION        reduce using rule 9 (expr -> expr PLUS expr .)
+    TIMES           shift and go to state 33
+    DIVIDE          shift and go to state 31
+
+  ! TIMES           [ reduce using rule 9 (expr -> expr PLUS expr .) ]
+  ! DIVIDE          [ reduce using rule 9 (expr -> expr PLUS expr .) ]
+  ! PLUS            [ shift and go to state 36 ]
+  ! MINUS           [ shift and go to state 38 ]
+  ! EQ              [ shift and go to state 37 ]
+  ! NE              [ shift and go to state 32 ]
+  ! LT              [ shift and go to state 34 ]
+  ! LE              [ shift and go to state 29 ]
+  ! GT              [ shift and go to state 35 ]
+  ! GE              [ shift and go to state 30 ]
+  ! AND             [ shift and go to state 28 ]
+  ! OR              [ shift and go to state 39 ]
+
+
+state 71
+
+    (13) expr -> expr EQ expr .
+    (9) expr -> expr . PLUS expr
+    (10) expr -> expr . MINUS expr
+    (11) expr -> expr . TIMES expr
+    (12) expr -> expr . DIVIDE expr
+    (13) expr -> expr . EQ expr
+    (14) expr -> expr . NE expr
+    (15) expr -> expr . LT expr
+    (16) expr -> expr . LE expr
+    (17) expr -> expr . GT expr
+    (18) expr -> expr . GE expr
+    (19) expr -> expr . AND expr
+    (20) expr -> expr . OR expr
+
+    EQ              reduce using rule 13 (expr -> expr EQ expr .)
+    NE              reduce using rule 13 (expr -> expr EQ expr .)
+    LT              reduce using rule 13 (expr -> expr EQ expr .)
+    LE              reduce using rule 13 (expr -> expr EQ expr .)
+    GT              reduce using rule 13 (expr -> expr EQ expr .)
+    GE              reduce using rule 13 (expr -> expr EQ expr .)
+    AND             reduce using rule 13 (expr -> expr EQ expr .)
+    OR              reduce using rule 13 (expr -> expr EQ expr .)
+    $end            reduce using rule 13 (expr -> expr EQ expr .)
+    DO              reduce using rule 13 (expr -> expr EQ expr .)
+    RPAREN          reduce using rule 13 (expr -> expr EQ expr .)
+    SEMICOLON       reduce using rule 13 (expr -> expr EQ expr .)
+    THEN            reduce using rule 13 (expr -> expr EQ expr .)
+    RBRACKET        reduce using rule 13 (expr -> expr EQ expr .)
+    COMMA           reduce using rule 13 (expr -> expr EQ expr .)
+    TO              reduce using rule 13 (expr -> expr EQ expr .)
+    END             reduce using rule 13 (expr -> expr EQ expr .)
+    ELSE            reduce using rule 13 (expr -> expr EQ expr .)
+    RBRACE          reduce using rule 13 (expr -> expr EQ expr .)
+    IN              reduce using rule 13 (expr -> expr EQ expr .)
+    TYPE            reduce using rule 13 (expr -> expr EQ expr .)
+    VAR             reduce using rule 13 (expr -> expr EQ expr .)
+    FUNCTION        reduce using rule 13 (expr -> expr EQ expr .)
+    PLUS            shift and go to state 36
+    MINUS           shift and go to state 38
+    TIMES           shift and go to state 33
+    DIVIDE          shift and go to state 31
+
+  ! PLUS            [ reduce using rule 13 (expr -> expr EQ expr .) ]
+  ! MINUS           [ reduce using rule 13 (expr -> expr EQ expr .) ]
+  ! TIMES           [ reduce using rule 13 (expr -> expr EQ expr .) ]
+  ! DIVIDE          [ reduce using rule 13 (expr -> expr EQ expr .) ]
+  ! EQ              [ shift and go to state 37 ]
+  ! NE              [ shift and go to state 32 ]
+  ! LT              [ shift and go to state 34 ]
+  ! LE              [ shift and go to state 29 ]
+  ! GT              [ shift and go to state 35 ]
+  ! GE              [ shift and go to state 30 ]
+  ! AND             [ shift and go to state 28 ]
+  ! OR              [ shift and go to state 39 ]
+
+
+state 72
+
+    (10) expr -> expr MINUS expr .
+    (9) expr -> expr . PLUS expr
+    (10) expr -> expr . MINUS expr
+    (11) expr -> expr . TIMES expr
+    (12) expr -> expr . DIVIDE expr
+    (13) expr -> expr . EQ expr
+    (14) expr -> expr . NE expr
+    (15) expr -> expr . LT expr
+    (16) expr -> expr . LE expr
+    (17) expr -> expr . GT expr
+    (18) expr -> expr . GE expr
+    (19) expr -> expr . AND expr
+    (20) expr -> expr . OR expr
+
+    PLUS            reduce using rule 10 (expr -> expr MINUS expr .)
+    MINUS           reduce using rule 10 (expr -> expr MINUS expr .)
+    EQ              reduce using rule 10 (expr -> expr MINUS expr .)
+    NE              reduce using rule 10 (expr -> expr MINUS expr .)
+    LT              reduce using rule 10 (expr -> expr MINUS expr .)
+    LE              reduce using rule 10 (expr -> expr MINUS expr .)
+    GT              reduce using rule 10 (expr -> expr MINUS expr .)
+    GE              reduce using rule 10 (expr -> expr MINUS expr .)
+    AND             reduce using rule 10 (expr -> expr MINUS expr .)
+    OR              reduce using rule 10 (expr -> expr MINUS expr .)
+    $end            reduce using rule 10 (expr -> expr MINUS expr .)
+    DO              reduce using rule 10 (expr -> expr MINUS expr .)
+    RPAREN          reduce using rule 10 (expr -> expr MINUS expr .)
+    SEMICOLON       reduce using rule 10 (expr -> expr MINUS expr .)
+    THEN            reduce using rule 10 (expr -> expr MINUS expr .)
+    RBRACKET        reduce using rule 10 (expr -> expr MINUS expr .)
+    COMMA           reduce using rule 10 (expr -> expr MINUS expr .)
+    TO              reduce using rule 10 (expr -> expr MINUS expr .)
+    END             reduce using rule 10 (expr -> expr MINUS expr .)
+    ELSE            reduce using rule 10 (expr -> expr MINUS expr .)
+    RBRACE          reduce using rule 10 (expr -> expr MINUS expr .)
+    IN              reduce using rule 10 (expr -> expr MINUS expr .)
+    TYPE            reduce using rule 10 (expr -> expr MINUS expr .)
+    VAR             reduce using rule 10 (expr -> expr MINUS expr .)
+    FUNCTION        reduce using rule 10 (expr -> expr MINUS expr .)
+    TIMES           shift and go to state 33
+    DIVIDE          shift and go to state 31
+
+  ! TIMES           [ reduce using rule 10 (expr -> expr MINUS expr .) ]
+  ! DIVIDE          [ reduce using rule 10 (expr -> expr MINUS expr .) ]
+  ! PLUS            [ shift and go to state 36 ]
+  ! MINUS           [ shift and go to state 38 ]
+  ! EQ              [ shift and go to state 37 ]
+  ! NE              [ shift and go to state 32 ]
+  ! LT              [ shift and go to state 34 ]
+  ! LE              [ shift and go to state 29 ]
+  ! GT              [ shift and go to state 35 ]
+  ! GE              [ shift and go to state 30 ]
+  ! AND             [ shift and go to state 28 ]
+  ! OR              [ shift and go to state 39 ]
+
+
+state 73
+
+    (20) expr -> expr OR expr .
+    (9) expr -> expr . PLUS expr
+    (10) expr -> expr . MINUS expr
+    (11) expr -> expr . TIMES expr
+    (12) expr -> expr . DIVIDE expr
+    (13) expr -> expr . EQ expr
+    (14) expr -> expr . NE expr
+    (15) expr -> expr . LT expr
+    (16) expr -> expr . LE expr
+    (17) expr -> expr . GT expr
+    (18) expr -> expr . GE expr
+    (19) expr -> expr . AND expr
+    (20) expr -> expr . OR expr
+
+    OR              reduce using rule 20 (expr -> expr OR expr .)
+    $end            reduce using rule 20 (expr -> expr OR expr .)
+    DO              reduce using rule 20 (expr -> expr OR expr .)
+    RPAREN          reduce using rule 20 (expr -> expr OR expr .)
+    SEMICOLON       reduce using rule 20 (expr -> expr OR expr .)
+    THEN            reduce using rule 20 (expr -> expr OR expr .)
+    RBRACKET        reduce using rule 20 (expr -> expr OR expr .)
+    COMMA           reduce using rule 20 (expr -> expr OR expr .)
+    TO              reduce using rule 20 (expr -> expr OR expr .)
+    END             reduce using rule 20 (expr -> expr OR expr .)
+    ELSE            reduce using rule 20 (expr -> expr OR expr .)
+    RBRACE          reduce using rule 20 (expr -> expr OR expr .)
+    IN              reduce using rule 20 (expr -> expr OR expr .)
+    TYPE            reduce using rule 20 (expr -> expr OR expr .)
+    VAR             reduce using rule 20 (expr -> expr OR expr .)
+    FUNCTION        reduce using rule 20 (expr -> expr OR expr .)
+    PLUS            shift and go to state 36
+    MINUS           shift and go to state 38
+    TIMES           shift and go to state 33
+    DIVIDE          shift and go to state 31
+    EQ              shift and go to state 37
+    NE              shift and go to state 32
+    LT              shift and go to state 34
+    LE              shift and go to state 29
+    GT              shift and go to state 35
+    GE              shift and go to state 30
+    AND             shift and go to state 28
+
+  ! PLUS            [ reduce using rule 20 (expr -> expr OR expr .) ]
+  ! MINUS           [ reduce using rule 20 (expr -> expr OR expr .) ]
+  ! TIMES           [ reduce using rule 20 (expr -> expr OR expr .) ]
+  ! DIVIDE          [ reduce using rule 20 (expr -> expr OR expr .) ]
+  ! EQ              [ reduce using rule 20 (expr -> expr OR expr .) ]
+  ! NE              [ reduce using rule 20 (expr -> expr OR expr .) ]
+  ! LT              [ reduce using rule 20 (expr -> expr OR expr .) ]
+  ! LE              [ reduce using rule 20 (expr -> expr OR expr .) ]
+  ! GT              [ reduce using rule 20 (expr -> expr OR expr .) ]
+  ! GE              [ reduce using rule 20 (expr -> expr OR expr .) ]
+  ! AND             [ reduce using rule 20 (expr -> expr OR expr .) ]
+  ! OR              [ shift and go to state 39 ]
+
+
+state 74
+
+    (26) expr -> WHILE expr DO expr .
+    (9) expr -> expr . PLUS expr
+    (10) expr -> expr . MINUS expr
+    (11) expr -> expr . TIMES expr
+    (12) expr -> expr . DIVIDE expr
+    (13) expr -> expr . EQ expr
+    (14) expr -> expr . NE expr
+    (15) expr -> expr . LT expr
+    (16) expr -> expr . LE expr
+    (17) expr -> expr . GT expr
+    (18) expr -> expr . GE expr
+    (19) expr -> expr . AND expr
+    (20) expr -> expr . OR expr
+
+    $end            reduce using rule 26 (expr -> WHILE expr DO expr .)
+    DO              reduce using rule 26 (expr -> WHILE expr DO expr .)
+    RPAREN          reduce using rule 26 (expr -> WHILE expr DO expr .)
+    SEMICOLON       reduce using rule 26 (expr -> WHILE expr DO expr .)
+    THEN            reduce using rule 26 (expr -> WHILE expr DO expr .)
+    RBRACKET        reduce using rule 26 (expr -> WHILE expr DO expr .)
+    COMMA           reduce using rule 26 (expr -> WHILE expr DO expr .)
+    TO              reduce using rule 26 (expr -> WHILE expr DO expr .)
+    END             reduce using rule 26 (expr -> WHILE expr DO expr .)
+    ELSE            reduce using rule 26 (expr -> WHILE expr DO expr .)
+    RBRACE          reduce using rule 26 (expr -> WHILE expr DO expr .)
+    IN              reduce using rule 26 (expr -> WHILE expr DO expr .)
+    TYPE            reduce using rule 26 (expr -> WHILE expr DO expr .)
+    VAR             reduce using rule 26 (expr -> WHILE expr DO expr .)
+    FUNCTION        reduce using rule 26 (expr -> WHILE expr DO expr .)
+    PLUS            shift and go to state 36
+    MINUS           shift and go to state 38
+    TIMES           shift and go to state 33
+    DIVIDE          shift and go to state 31
+    EQ              shift and go to state 37
+    NE              shift and go to state 32
+    LT              shift and go to state 34
+    LE              shift and go to state 29
+    GT              shift and go to state 35
+    GE              shift and go to state 30
+    AND             shift and go to state 28
+    OR              shift and go to state 39
+
+  ! PLUS            [ reduce using rule 26 (expr -> WHILE expr DO expr .) ]
+  ! MINUS           [ reduce using rule 26 (expr -> WHILE expr DO expr .) ]
+  ! TIMES           [ reduce using rule 26 (expr -> WHILE expr DO expr .) ]
+  ! DIVIDE          [ reduce using rule 26 (expr -> WHILE expr DO expr .) ]
+  ! EQ              [ reduce using rule 26 (expr -> WHILE expr DO expr .) ]
+  ! NE              [ reduce using rule 26 (expr -> WHILE expr DO expr .) ]
+  ! LT              [ reduce using rule 26 (expr -> WHILE expr DO expr .) ]
+  ! LE              [ reduce using rule 26 (expr -> WHILE expr DO expr .) ]
+  ! GT              [ reduce using rule 26 (expr -> WHILE expr DO expr .) ]
+  ! GE              [ reduce using rule 26 (expr -> WHILE expr DO expr .) ]
+  ! AND             [ reduce using rule 26 (expr -> WHILE expr DO expr .) ]
+  ! OR              [ reduce using rule 26 (expr -> WHILE expr DO expr .) ]
+
+
+state 75
+
+    (33) lvalue -> lvalue LBRACKET expr RBRACKET .
+
+    ASSIGN          reduce using rule 33 (lvalue -> lvalue LBRACKET expr RBRACKET .)
+    PERIOD          reduce using rule 33 (lvalue -> lvalue LBRACKET expr RBRACKET .)
+    LBRACKET        reduce using rule 33 (lvalue -> lvalue LBRACKET expr RBRACKET .)
+    DO              reduce using rule 33 (lvalue -> lvalue LBRACKET expr RBRACKET .)
+    PLUS            reduce using rule 33 (lvalue -> lvalue LBRACKET expr RBRACKET .)
+    MINUS           reduce using rule 33 (lvalue -> lvalue LBRACKET expr RBRACKET .)
+    TIMES           reduce using rule 33 (lvalue -> lvalue LBRACKET expr RBRACKET .)
+    DIVIDE          reduce using rule 33 (lvalue -> lvalue LBRACKET expr RBRACKET .)
+    EQ              reduce using rule 33 (lvalue -> lvalue LBRACKET expr RBRACKET .)
+    NE              reduce using rule 33 (lvalue -> lvalue LBRACKET expr RBRACKET .)
+    LT              reduce using rule 33 (lvalue -> lvalue LBRACKET expr RBRACKET .)
+    LE              reduce using rule 33 (lvalue -> lvalue LBRACKET expr RBRACKET .)
+    GT              reduce using rule 33 (lvalue -> lvalue LBRACKET expr RBRACKET .)
+    GE              reduce using rule 33 (lvalue -> lvalue LBRACKET expr RBRACKET .)
+    AND             reduce using rule 33 (lvalue -> lvalue LBRACKET expr RBRACKET .)
+    OR              reduce using rule 33 (lvalue -> lvalue LBRACKET expr RBRACKET .)
+    RBRACE          reduce using rule 33 (lvalue -> lvalue LBRACKET expr RBRACKET .)
+    COMMA           reduce using rule 33 (lvalue -> lvalue LBRACKET expr RBRACKET .)
+    $end            reduce using rule 33 (lvalue -> lvalue LBRACKET expr RBRACKET .)
+    RPAREN          reduce using rule 33 (lvalue -> lvalue LBRACKET expr RBRACKET .)
+    SEMICOLON       reduce using rule 33 (lvalue -> lvalue LBRACKET expr RBRACKET .)
+    THEN            reduce using rule 33 (lvalue -> lvalue LBRACKET expr RBRACKET .)
+    RBRACKET        reduce using rule 33 (lvalue -> lvalue LBRACKET expr RBRACKET .)
+    TO              reduce using rule 33 (lvalue -> lvalue LBRACKET expr RBRACKET .)
+    END             reduce using rule 33 (lvalue -> lvalue LBRACKET expr RBRACKET .)
+    ELSE            reduce using rule 33 (lvalue -> lvalue LBRACKET expr RBRACKET .)
+    IN              reduce using rule 33 (lvalue -> lvalue LBRACKET expr RBRACKET .)
+    TYPE            reduce using rule 33 (lvalue -> lvalue LBRACKET expr RBRACKET .)
+    VAR             reduce using rule 33 (lvalue -> lvalue LBRACKET expr RBRACKET .)
+    FUNCTION        reduce using rule 33 (lvalue -> lvalue LBRACKET expr RBRACKET .)
+
+
+state 76
+
+    (27) expr -> FOR ID ASSIGN expr . TO expr DO expr
+    (9) expr -> expr . PLUS expr
+    (10) expr -> expr . MINUS expr
+    (11) expr -> expr . TIMES expr
+    (12) expr -> expr . DIVIDE expr
+    (13) expr -> expr . EQ expr
+    (14) expr -> expr . NE expr
+    (15) expr -> expr . LT expr
+    (16) expr -> expr . LE expr
+    (17) expr -> expr . GT expr
+    (18) expr -> expr . GE expr
+    (19) expr -> expr . AND expr
+    (20) expr -> expr . OR expr
+
+    TO              shift and go to state 89
+    PLUS            shift and go to state 36
+    MINUS           shift and go to state 38
+    TIMES           shift and go to state 33
+    DIVIDE          shift and go to state 31
+    EQ              shift and go to state 37
+    NE              shift and go to state 32
+    LT              shift and go to state 34
+    LE              shift and go to state 29
+    GT              shift and go to state 35
+    GE              shift and go to state 30
+    AND             shift and go to state 28
+    OR              shift and go to state 39
+
+
+state 77
+
+    (35) expr_seq -> expr_seq SEMICOLON expr .
+    (9) expr -> expr . PLUS expr
+    (10) expr -> expr . MINUS expr
+    (11) expr -> expr . TIMES expr
+    (12) expr -> expr . DIVIDE expr
+    (13) expr -> expr . EQ expr
+    (14) expr -> expr . NE expr
+    (15) expr -> expr . LT expr
+    (16) expr -> expr . LE expr
+    (17) expr -> expr . GT expr
+    (18) expr -> expr . GE expr
+    (19) expr -> expr . AND expr
+    (20) expr -> expr . OR expr
+
+    RPAREN          reduce using rule 35 (expr_seq -> expr_seq SEMICOLON expr .)
+    SEMICOLON       reduce using rule 35 (expr_seq -> expr_seq SEMICOLON expr .)
+    END             reduce using rule 35 (expr_seq -> expr_seq SEMICOLON expr .)
+    PLUS            shift and go to state 36
+    MINUS           shift and go to state 38
+    TIMES           shift and go to state 33
+    DIVIDE          shift and go to state 31
+    EQ              shift and go to state 37
+    NE              shift and go to state 32
+    LT              shift and go to state 34
+    LE              shift and go to state 29
+    GT              shift and go to state 35
+    GE              shift and go to state 30
+    AND             shift and go to state 28
+    OR              shift and go to state 39
+
+
+state 78
+
+    (7) expr -> ID LBRACE field_list RBRACE .
+
+    PLUS            reduce using rule 7 (expr -> ID LBRACE field_list RBRACE .)
+    MINUS           reduce using rule 7 (expr -> ID LBRACE field_list RBRACE .)
+    TIMES           reduce using rule 7 (expr -> ID LBRACE field_list RBRACE .)
+    DIVIDE          reduce using rule 7 (expr -> ID LBRACE field_list RBRACE .)
+    EQ              reduce using rule 7 (expr -> ID LBRACE field_list RBRACE .)
+    NE              reduce using rule 7 (expr -> ID LBRACE field_list RBRACE .)
+    LT              reduce using rule 7 (expr -> ID LBRACE field_list RBRACE .)
+    LE              reduce using rule 7 (expr -> ID LBRACE field_list RBRACE .)
+    GT              reduce using rule 7 (expr -> ID LBRACE field_list RBRACE .)
+    GE              reduce using rule 7 (expr -> ID LBRACE field_list RBRACE .)
+    AND             reduce using rule 7 (expr -> ID LBRACE field_list RBRACE .)
+    OR              reduce using rule 7 (expr -> ID LBRACE field_list RBRACE .)
+    $end            reduce using rule 7 (expr -> ID LBRACE field_list RBRACE .)
+    DO              reduce using rule 7 (expr -> ID LBRACE field_list RBRACE .)
+    RPAREN          reduce using rule 7 (expr -> ID LBRACE field_list RBRACE .)
+    SEMICOLON       reduce using rule 7 (expr -> ID LBRACE field_list RBRACE .)
+    THEN            reduce using rule 7 (expr -> ID LBRACE field_list RBRACE .)
+    RBRACKET        reduce using rule 7 (expr -> ID LBRACE field_list RBRACE .)
+    COMMA           reduce using rule 7 (expr -> ID LBRACE field_list RBRACE .)
+    TO              reduce using rule 7 (expr -> ID LBRACE field_list RBRACE .)
+    END             reduce using rule 7 (expr -> ID LBRACE field_list RBRACE .)
+    ELSE            reduce using rule 7 (expr -> ID LBRACE field_list RBRACE .)
+    RBRACE          reduce using rule 7 (expr -> ID LBRACE field_list RBRACE .)
+    IN              reduce using rule 7 (expr -> ID LBRACE field_list RBRACE .)
+    TYPE            reduce using rule 7 (expr -> ID LBRACE field_list RBRACE .)
+    VAR             reduce using rule 7 (expr -> ID LBRACE field_list RBRACE .)
+    FUNCTION        reduce using rule 7 (expr -> ID LBRACE field_list RBRACE .)
+
+
+state 79
+
+    (41) field_list -> field_list COMMA . field_assign
+    (42) field_assign -> . ID EQ expr
+
+    ID              shift and go to state 49
+
+    field_assign                   shift and go to state 90
+
+state 80
+
+    (42) field_assign -> ID EQ . expr
+    (2) expr -> . NIL
+    (3) expr -> . INTLIT
+    (4) expr -> . STRLIT
+    (5) expr -> . lvalue
+    (6) expr -> . ID LBRACKET expr RBRACKET OF expr
+    (7) expr -> . ID LBRACE field_list RBRACE
+    (8) expr -> . MINUS expr
+    (9) expr -> . expr PLUS expr
+    (10) expr -> . expr MINUS expr
+    (11) expr -> . expr TIMES expr
+    (12) expr -> . expr DIVIDE expr
+    (13) expr -> . expr EQ expr
+    (14) expr -> . expr NE expr
+    (15) expr -> . expr LT expr
+    (16) expr -> . expr LE expr
+    (17) expr -> . expr GT expr
+    (18) expr -> . expr GE expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . LPAREN expr_seq RPAREN
+    (22) expr -> . lvalue ASSIGN expr
+    (23) expr -> . ID LPAREN expr_list RPAREN
+    (24) expr -> . IF expr THEN expr
+    (25) expr -> . IF expr THEN expr ELSE expr
+    (26) expr -> . WHILE expr DO expr
+    (27) expr -> . FOR ID ASSIGN expr TO expr DO expr
+    (28) expr -> . BREAK
+    (29) expr -> . LET dec_group IN expr_seq END
+    (30) lvalue -> . ID
+    (31) lvalue -> . lvalue PERIOD ID
+    (32) lvalue -> . ID LBRACKET expr RBRACKET
+    (33) lvalue -> . lvalue LBRACKET expr RBRACKET
+
+    NIL             shift and go to state 11
+    INTLIT          shift and go to state 2
+    STRLIT          shift and go to state 3
+    ID              shift and go to state 9
+    MINUS           shift and go to state 5
+    LPAREN          shift and go to state 8
+    IF              shift and go to state 10
+    WHILE           shift and go to state 1
+    FOR             shift and go to state 7
+    BREAK           shift and go to state 12
+    LET             shift and go to state 13
+
+    lvalue                         shift and go to state 4
+    expr                           shift and go to state 91
+
+state 81
+
+    (6) expr -> ID LBRACKET expr RBRACKET . OF expr
+    (32) lvalue -> ID LBRACKET expr RBRACKET .
+
+    OF              shift and go to state 92
+    ASSIGN          reduce using rule 32 (lvalue -> ID LBRACKET expr RBRACKET .)
+    PERIOD          reduce using rule 32 (lvalue -> ID LBRACKET expr RBRACKET .)
+    LBRACKET        reduce using rule 32 (lvalue -> ID LBRACKET expr RBRACKET .)
+    DO              reduce using rule 32 (lvalue -> ID LBRACKET expr RBRACKET .)
+    PLUS            reduce using rule 32 (lvalue -> ID LBRACKET expr RBRACKET .)
+    MINUS           reduce using rule 32 (lvalue -> ID LBRACKET expr RBRACKET .)
+    TIMES           reduce using rule 32 (lvalue -> ID LBRACKET expr RBRACKET .)
+    DIVIDE          reduce using rule 32 (lvalue -> ID LBRACKET expr RBRACKET .)
+    EQ              reduce using rule 32 (lvalue -> ID LBRACKET expr RBRACKET .)
+    NE              reduce using rule 32 (lvalue -> ID LBRACKET expr RBRACKET .)
+    LT              reduce using rule 32 (lvalue -> ID LBRACKET expr RBRACKET .)
+    LE              reduce using rule 32 (lvalue -> ID LBRACKET expr RBRACKET .)
+    GT              reduce using rule 32 (lvalue -> ID LBRACKET expr RBRACKET .)
+    GE              reduce using rule 32 (lvalue -> ID LBRACKET expr RBRACKET .)
+    AND             reduce using rule 32 (lvalue -> ID LBRACKET expr RBRACKET .)
+    OR              reduce using rule 32 (lvalue -> ID LBRACKET expr RBRACKET .)
+    RBRACE          reduce using rule 32 (lvalue -> ID LBRACKET expr RBRACKET .)
+    COMMA           reduce using rule 32 (lvalue -> ID LBRACKET expr RBRACKET .)
+    $end            reduce using rule 32 (lvalue -> ID LBRACKET expr RBRACKET .)
+    RPAREN          reduce using rule 32 (lvalue -> ID LBRACKET expr RBRACKET .)
+    SEMICOLON       reduce using rule 32 (lvalue -> ID LBRACKET expr RBRACKET .)
+    THEN            reduce using rule 32 (lvalue -> ID LBRACKET expr RBRACKET .)
+    RBRACKET        reduce using rule 32 (lvalue -> ID LBRACKET expr RBRACKET .)
+    TO              reduce using rule 32 (lvalue -> ID LBRACKET expr RBRACKET .)
+    END             reduce using rule 32 (lvalue -> ID LBRACKET expr RBRACKET .)
+    ELSE            reduce using rule 32 (lvalue -> ID LBRACKET expr RBRACKET .)
+    IN              reduce using rule 32 (lvalue -> ID LBRACKET expr RBRACKET .)
+    TYPE            reduce using rule 32 (lvalue -> ID LBRACKET expr RBRACKET .)
+    VAR             reduce using rule 32 (lvalue -> ID LBRACKET expr RBRACKET .)
+    FUNCTION        reduce using rule 32 (lvalue -> ID LBRACKET expr RBRACKET .)
+
+
+state 82
+
+    (23) expr -> ID LPAREN expr_list RPAREN .
+
+    PLUS            reduce using rule 23 (expr -> ID LPAREN expr_list RPAREN .)
+    MINUS           reduce using rule 23 (expr -> ID LPAREN expr_list RPAREN .)
+    TIMES           reduce using rule 23 (expr -> ID LPAREN expr_list RPAREN .)
+    DIVIDE          reduce using rule 23 (expr -> ID LPAREN expr_list RPAREN .)
+    EQ              reduce using rule 23 (expr -> ID LPAREN expr_list RPAREN .)
+    NE              reduce using rule 23 (expr -> ID LPAREN expr_list RPAREN .)
+    LT              reduce using rule 23 (expr -> ID LPAREN expr_list RPAREN .)
+    LE              reduce using rule 23 (expr -> ID LPAREN expr_list RPAREN .)
+    GT              reduce using rule 23 (expr -> ID LPAREN expr_list RPAREN .)
+    GE              reduce using rule 23 (expr -> ID LPAREN expr_list RPAREN .)
+    AND             reduce using rule 23 (expr -> ID LPAREN expr_list RPAREN .)
+    OR              reduce using rule 23 (expr -> ID LPAREN expr_list RPAREN .)
+    $end            reduce using rule 23 (expr -> ID LPAREN expr_list RPAREN .)
+    DO              reduce using rule 23 (expr -> ID LPAREN expr_list RPAREN .)
+    RPAREN          reduce using rule 23 (expr -> ID LPAREN expr_list RPAREN .)
+    SEMICOLON       reduce using rule 23 (expr -> ID LPAREN expr_list RPAREN .)
+    THEN            reduce using rule 23 (expr -> ID LPAREN expr_list RPAREN .)
+    RBRACKET        reduce using rule 23 (expr -> ID LPAREN expr_list RPAREN .)
+    COMMA           reduce using rule 23 (expr -> ID LPAREN expr_list RPAREN .)
+    TO              reduce using rule 23 (expr -> ID LPAREN expr_list RPAREN .)
+    END             reduce using rule 23 (expr -> ID LPAREN expr_list RPAREN .)
+    ELSE            reduce using rule 23 (expr -> ID LPAREN expr_list RPAREN .)
+    RBRACE          reduce using rule 23 (expr -> ID LPAREN expr_list RPAREN .)
+    IN              reduce using rule 23 (expr -> ID LPAREN expr_list RPAREN .)
+    TYPE            reduce using rule 23 (expr -> ID LPAREN expr_list RPAREN .)
+    VAR             reduce using rule 23 (expr -> ID LPAREN expr_list RPAREN .)
+    FUNCTION        reduce using rule 23 (expr -> ID LPAREN expr_list RPAREN .)
+
+
+state 83
+
+    (44) expr_list -> expr_list COMMA . expr
+    (2) expr -> . NIL
+    (3) expr -> . INTLIT
+    (4) expr -> . STRLIT
+    (5) expr -> . lvalue
+    (6) expr -> . ID LBRACKET expr RBRACKET OF expr
+    (7) expr -> . ID LBRACE field_list RBRACE
+    (8) expr -> . MINUS expr
+    (9) expr -> . expr PLUS expr
+    (10) expr -> . expr MINUS expr
+    (11) expr -> . expr TIMES expr
+    (12) expr -> . expr DIVIDE expr
+    (13) expr -> . expr EQ expr
+    (14) expr -> . expr NE expr
+    (15) expr -> . expr LT expr
+    (16) expr -> . expr LE expr
+    (17) expr -> . expr GT expr
+    (18) expr -> . expr GE expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . LPAREN expr_seq RPAREN
+    (22) expr -> . lvalue ASSIGN expr
+    (23) expr -> . ID LPAREN expr_list RPAREN
+    (24) expr -> . IF expr THEN expr
+    (25) expr -> . IF expr THEN expr ELSE expr
+    (26) expr -> . WHILE expr DO expr
+    (27) expr -> . FOR ID ASSIGN expr TO expr DO expr
+    (28) expr -> . BREAK
+    (29) expr -> . LET dec_group IN expr_seq END
+    (30) lvalue -> . ID
+    (31) lvalue -> . lvalue PERIOD ID
+    (32) lvalue -> . ID LBRACKET expr RBRACKET
+    (33) lvalue -> . lvalue LBRACKET expr RBRACKET
+
+    NIL             shift and go to state 11
+    INTLIT          shift and go to state 2
+    STRLIT          shift and go to state 3
+    ID              shift and go to state 9
+    MINUS           shift and go to state 5
+    LPAREN          shift and go to state 8
+    IF              shift and go to state 10
+    WHILE           shift and go to state 1
+    FOR             shift and go to state 7
+    BREAK           shift and go to state 12
+    LET             shift and go to state 13
+
+    expr                           shift and go to state 93
+    lvalue                         shift and go to state 4
+
+state 84
+
+    (24) expr -> IF expr THEN expr .
+    (25) expr -> IF expr THEN expr . ELSE expr
+    (9) expr -> expr . PLUS expr
+    (10) expr -> expr . MINUS expr
+    (11) expr -> expr . TIMES expr
+    (12) expr -> expr . DIVIDE expr
+    (13) expr -> expr . EQ expr
+    (14) expr -> expr . NE expr
+    (15) expr -> expr . LT expr
+    (16) expr -> expr . LE expr
+    (17) expr -> expr . GT expr
+    (18) expr -> expr . GE expr
+    (19) expr -> expr . AND expr
+    (20) expr -> expr . OR expr
+
+    $end            reduce using rule 24 (expr -> IF expr THEN expr .)
+    DO              reduce using rule 24 (expr -> IF expr THEN expr .)
+    RPAREN          reduce using rule 24 (expr -> IF expr THEN expr .)
+    SEMICOLON       reduce using rule 24 (expr -> IF expr THEN expr .)
+    THEN            reduce using rule 24 (expr -> IF expr THEN expr .)
+    RBRACKET        reduce using rule 24 (expr -> IF expr THEN expr .)
+    COMMA           reduce using rule 24 (expr -> IF expr THEN expr .)
+    TO              reduce using rule 24 (expr -> IF expr THEN expr .)
+    END             reduce using rule 24 (expr -> IF expr THEN expr .)
+    RBRACE          reduce using rule 24 (expr -> IF expr THEN expr .)
+    IN              reduce using rule 24 (expr -> IF expr THEN expr .)
+    TYPE            reduce using rule 24 (expr -> IF expr THEN expr .)
+    VAR             reduce using rule 24 (expr -> IF expr THEN expr .)
+    FUNCTION        reduce using rule 24 (expr -> IF expr THEN expr .)
+    ELSE            shift and go to state 94
+    PLUS            shift and go to state 36
+    MINUS           shift and go to state 38
+    TIMES           shift and go to state 33
+    DIVIDE          shift and go to state 31
+    EQ              shift and go to state 37
+    NE              shift and go to state 32
+    LT              shift and go to state 34
+    LE              shift and go to state 29
+    GT              shift and go to state 35
+    GE              shift and go to state 30
+    AND             shift and go to state 28
+    OR              shift and go to state 39
+
+  ! PLUS            [ reduce using rule 24 (expr -> IF expr THEN expr .) ]
+  ! MINUS           [ reduce using rule 24 (expr -> IF expr THEN expr .) ]
+  ! TIMES           [ reduce using rule 24 (expr -> IF expr THEN expr .) ]
+  ! DIVIDE          [ reduce using rule 24 (expr -> IF expr THEN expr .) ]
+  ! EQ              [ reduce using rule 24 (expr -> IF expr THEN expr .) ]
+  ! NE              [ reduce using rule 24 (expr -> IF expr THEN expr .) ]
+  ! LT              [ reduce using rule 24 (expr -> IF expr THEN expr .) ]
+  ! LE              [ reduce using rule 24 (expr -> IF expr THEN expr .) ]
+  ! GT              [ reduce using rule 24 (expr -> IF expr THEN expr .) ]
+  ! GE              [ reduce using rule 24 (expr -> IF expr THEN expr .) ]
+  ! AND             [ reduce using rule 24 (expr -> IF expr THEN expr .) ]
+  ! OR              [ reduce using rule 24 (expr -> IF expr THEN expr .) ]
+  ! ELSE            [ reduce using rule 24 (expr -> IF expr THEN expr .) ]
+
+
+state 85
+
+    (59) func_dec -> FUNCTION ID . LPAREN field_types RPAREN EQ expr
+    (60) func_dec -> FUNCTION ID . LPAREN field_types RPAREN COLON ID EQ expr
+
+    LPAREN          shift and go to state 95
+
+
+state 86
+
+    (29) expr -> LET dec_group IN expr_seq . END
+    (35) expr_seq -> expr_seq . SEMICOLON expr
+
+    END             shift and go to state 96
+    SEMICOLON       shift and go to state 45
+
+
+state 87
+
+    (57) var_dec -> VAR ID . ASSIGN expr
+    (58) var_dec -> VAR ID . COLON ID ASSIGN expr
+
+    ASSIGN          shift and go to state 98
+    COLON           shift and go to state 97
+
+
+state 88
+
+    (49) type_dec -> TYPE ID . EQ type
+
+    EQ              shift and go to state 99
+
+
+state 89
+
+    (27) expr -> FOR ID ASSIGN expr TO . expr DO expr
+    (2) expr -> . NIL
+    (3) expr -> . INTLIT
+    (4) expr -> . STRLIT
+    (5) expr -> . lvalue
+    (6) expr -> . ID LBRACKET expr RBRACKET OF expr
+    (7) expr -> . ID LBRACE field_list RBRACE
+    (8) expr -> . MINUS expr
+    (9) expr -> . expr PLUS expr
+    (10) expr -> . expr MINUS expr
+    (11) expr -> . expr TIMES expr
+    (12) expr -> . expr DIVIDE expr
+    (13) expr -> . expr EQ expr
+    (14) expr -> . expr NE expr
+    (15) expr -> . expr LT expr
+    (16) expr -> . expr LE expr
+    (17) expr -> . expr GT expr
+    (18) expr -> . expr GE expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . LPAREN expr_seq RPAREN
+    (22) expr -> . lvalue ASSIGN expr
+    (23) expr -> . ID LPAREN expr_list RPAREN
+    (24) expr -> . IF expr THEN expr
+    (25) expr -> . IF expr THEN expr ELSE expr
+    (26) expr -> . WHILE expr DO expr
+    (27) expr -> . FOR ID ASSIGN expr TO expr DO expr
+    (28) expr -> . BREAK
+    (29) expr -> . LET dec_group IN expr_seq END
+    (30) lvalue -> . ID
+    (31) lvalue -> . lvalue PERIOD ID
+    (32) lvalue -> . ID LBRACKET expr RBRACKET
+    (33) lvalue -> . lvalue LBRACKET expr RBRACKET
+
+    NIL             shift and go to state 11
+    INTLIT          shift and go to state 2
+    STRLIT          shift and go to state 3
+    ID              shift and go to state 9
+    MINUS           shift and go to state 5
+    LPAREN          shift and go to state 8
+    IF              shift and go to state 10
+    WHILE           shift and go to state 1
+    FOR             shift and go to state 7
+    BREAK           shift and go to state 12
+    LET             shift and go to state 13
+
+    lvalue                         shift and go to state 4
+    expr                           shift and go to state 100
+
+state 90
+
+    (41) field_list -> field_list COMMA field_assign .
+
+    RBRACE          reduce using rule 41 (field_list -> field_list COMMA field_assign .)
+    COMMA           reduce using rule 41 (field_list -> field_list COMMA field_assign .)
+
+
+state 91
+
+    (42) field_assign -> ID EQ expr .
+    (9) expr -> expr . PLUS expr
+    (10) expr -> expr . MINUS expr
+    (11) expr -> expr . TIMES expr
+    (12) expr -> expr . DIVIDE expr
+    (13) expr -> expr . EQ expr
+    (14) expr -> expr . NE expr
+    (15) expr -> expr . LT expr
+    (16) expr -> expr . LE expr
+    (17) expr -> expr . GT expr
+    (18) expr -> expr . GE expr
+    (19) expr -> expr . AND expr
+    (20) expr -> expr . OR expr
+
+    RBRACE          reduce using rule 42 (field_assign -> ID EQ expr .)
+    COMMA           reduce using rule 42 (field_assign -> ID EQ expr .)
+    PLUS            shift and go to state 36
+    MINUS           shift and go to state 38
+    TIMES           shift and go to state 33
+    DIVIDE          shift and go to state 31
+    EQ              shift and go to state 37
+    NE              shift and go to state 32
+    LT              shift and go to state 34
+    LE              shift and go to state 29
+    GT              shift and go to state 35
+    GE              shift and go to state 30
+    AND             shift and go to state 28
+    OR              shift and go to state 39
+
+
+state 92
+
+    (6) expr -> ID LBRACKET expr RBRACKET OF . expr
+    (2) expr -> . NIL
+    (3) expr -> . INTLIT
+    (4) expr -> . STRLIT
+    (5) expr -> . lvalue
+    (6) expr -> . ID LBRACKET expr RBRACKET OF expr
+    (7) expr -> . ID LBRACE field_list RBRACE
+    (8) expr -> . MINUS expr
+    (9) expr -> . expr PLUS expr
+    (10) expr -> . expr MINUS expr
+    (11) expr -> . expr TIMES expr
+    (12) expr -> . expr DIVIDE expr
+    (13) expr -> . expr EQ expr
+    (14) expr -> . expr NE expr
+    (15) expr -> . expr LT expr
+    (16) expr -> . expr LE expr
+    (17) expr -> . expr GT expr
+    (18) expr -> . expr GE expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . LPAREN expr_seq RPAREN
+    (22) expr -> . lvalue ASSIGN expr
+    (23) expr -> . ID LPAREN expr_list RPAREN
+    (24) expr -> . IF expr THEN expr
+    (25) expr -> . IF expr THEN expr ELSE expr
+    (26) expr -> . WHILE expr DO expr
+    (27) expr -> . FOR ID ASSIGN expr TO expr DO expr
+    (28) expr -> . BREAK
+    (29) expr -> . LET dec_group IN expr_seq END
+    (30) lvalue -> . ID
+    (31) lvalue -> . lvalue PERIOD ID
+    (32) lvalue -> . ID LBRACKET expr RBRACKET
+    (33) lvalue -> . lvalue LBRACKET expr RBRACKET
+
+    NIL             shift and go to state 11
+    INTLIT          shift and go to state 2
+    STRLIT          shift and go to state 3
+    ID              shift and go to state 9
+    MINUS           shift and go to state 5
+    LPAREN          shift and go to state 8
+    IF              shift and go to state 10
+    WHILE           shift and go to state 1
+    FOR             shift and go to state 7
+    BREAK           shift and go to state 12
+    LET             shift and go to state 13
+
+    lvalue                         shift and go to state 4
+    expr                           shift and go to state 101
+
+state 93
+
+    (44) expr_list -> expr_list COMMA expr .
+    (9) expr -> expr . PLUS expr
+    (10) expr -> expr . MINUS expr
+    (11) expr -> expr . TIMES expr
+    (12) expr -> expr . DIVIDE expr
+    (13) expr -> expr . EQ expr
+    (14) expr -> expr . NE expr
+    (15) expr -> expr . LT expr
+    (16) expr -> expr . LE expr
+    (17) expr -> expr . GT expr
+    (18) expr -> expr . GE expr
+    (19) expr -> expr . AND expr
+    (20) expr -> expr . OR expr
+
+    RPAREN          reduce using rule 44 (expr_list -> expr_list COMMA expr .)
+    COMMA           reduce using rule 44 (expr_list -> expr_list COMMA expr .)
+    PLUS            shift and go to state 36
+    MINUS           shift and go to state 38
+    TIMES           shift and go to state 33
+    DIVIDE          shift and go to state 31
+    EQ              shift and go to state 37
+    NE              shift and go to state 32
+    LT              shift and go to state 34
+    LE              shift and go to state 29
+    GT              shift and go to state 35
+    GE              shift and go to state 30
+    AND             shift and go to state 28
+    OR              shift and go to state 39
+
+
+state 94
+
+    (25) expr -> IF expr THEN expr ELSE . expr
+    (2) expr -> . NIL
+    (3) expr -> . INTLIT
+    (4) expr -> . STRLIT
+    (5) expr -> . lvalue
+    (6) expr -> . ID LBRACKET expr RBRACKET OF expr
+    (7) expr -> . ID LBRACE field_list RBRACE
+    (8) expr -> . MINUS expr
+    (9) expr -> . expr PLUS expr
+    (10) expr -> . expr MINUS expr
+    (11) expr -> . expr TIMES expr
+    (12) expr -> . expr DIVIDE expr
+    (13) expr -> . expr EQ expr
+    (14) expr -> . expr NE expr
+    (15) expr -> . expr LT expr
+    (16) expr -> . expr LE expr
+    (17) expr -> . expr GT expr
+    (18) expr -> . expr GE expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . LPAREN expr_seq RPAREN
+    (22) expr -> . lvalue ASSIGN expr
+    (23) expr -> . ID LPAREN expr_list RPAREN
+    (24) expr -> . IF expr THEN expr
+    (25) expr -> . IF expr THEN expr ELSE expr
+    (26) expr -> . WHILE expr DO expr
+    (27) expr -> . FOR ID ASSIGN expr TO expr DO expr
+    (28) expr -> . BREAK
+    (29) expr -> . LET dec_group IN expr_seq END
+    (30) lvalue -> . ID
+    (31) lvalue -> . lvalue PERIOD ID
+    (32) lvalue -> . ID LBRACKET expr RBRACKET
+    (33) lvalue -> . lvalue LBRACKET expr RBRACKET
+
+    NIL             shift and go to state 11
+    INTLIT          shift and go to state 2
+    STRLIT          shift and go to state 3
+    ID              shift and go to state 9
+    MINUS           shift and go to state 5
+    LPAREN          shift and go to state 8
+    IF              shift and go to state 10
+    WHILE           shift and go to state 1
+    FOR             shift and go to state 7
+    BREAK           shift and go to state 12
+    LET             shift and go to state 13
+
+    lvalue                         shift and go to state 4
+    expr                           shift and go to state 102
+
+state 95
+
+    (59) func_dec -> FUNCTION ID LPAREN . field_types RPAREN EQ expr
+    (60) func_dec -> FUNCTION ID LPAREN . field_types RPAREN COLON ID EQ expr
+    (53) field_types -> .
+    (54) field_types -> . field_type
+    (55) field_types -> . field_types COMMA field_type
+    (56) field_type -> . ID COLON ID
+
+    RPAREN          reduce using rule 53 (field_types -> .)
+    COMMA           reduce using rule 53 (field_types -> .)
+    ID              shift and go to state 105
+
+    field_types                    shift and go to state 104
+    field_type                     shift and go to state 103
+
+state 96
+
+    (29) expr -> LET dec_group IN expr_seq END .
+
+    PLUS            reduce using rule 29 (expr -> LET dec_group IN expr_seq END .)
+    MINUS           reduce using rule 29 (expr -> LET dec_group IN expr_seq END .)
+    TIMES           reduce using rule 29 (expr -> LET dec_group IN expr_seq END .)
+    DIVIDE          reduce using rule 29 (expr -> LET dec_group IN expr_seq END .)
+    EQ              reduce using rule 29 (expr -> LET dec_group IN expr_seq END .)
+    NE              reduce using rule 29 (expr -> LET dec_group IN expr_seq END .)
+    LT              reduce using rule 29 (expr -> LET dec_group IN expr_seq END .)
+    LE              reduce using rule 29 (expr -> LET dec_group IN expr_seq END .)
+    GT              reduce using rule 29 (expr -> LET dec_group IN expr_seq END .)
+    GE              reduce using rule 29 (expr -> LET dec_group IN expr_seq END .)
+    AND             reduce using rule 29 (expr -> LET dec_group IN expr_seq END .)
+    OR              reduce using rule 29 (expr -> LET dec_group IN expr_seq END .)
+    $end            reduce using rule 29 (expr -> LET dec_group IN expr_seq END .)
+    DO              reduce using rule 29 (expr -> LET dec_group IN expr_seq END .)
+    RPAREN          reduce using rule 29 (expr -> LET dec_group IN expr_seq END .)
+    SEMICOLON       reduce using rule 29 (expr -> LET dec_group IN expr_seq END .)
+    THEN            reduce using rule 29 (expr -> LET dec_group IN expr_seq END .)
+    RBRACKET        reduce using rule 29 (expr -> LET dec_group IN expr_seq END .)
+    COMMA           reduce using rule 29 (expr -> LET dec_group IN expr_seq END .)
+    TO              reduce using rule 29 (expr -> LET dec_group IN expr_seq END .)
+    END             reduce using rule 29 (expr -> LET dec_group IN expr_seq END .)
+    ELSE            reduce using rule 29 (expr -> LET dec_group IN expr_seq END .)
+    RBRACE          reduce using rule 29 (expr -> LET dec_group IN expr_seq END .)
+    IN              reduce using rule 29 (expr -> LET dec_group IN expr_seq END .)
+    TYPE            reduce using rule 29 (expr -> LET dec_group IN expr_seq END .)
+    VAR             reduce using rule 29 (expr -> LET dec_group IN expr_seq END .)
+    FUNCTION        reduce using rule 29 (expr -> LET dec_group IN expr_seq END .)
+
+
+state 97
+
+    (58) var_dec -> VAR ID COLON . ID ASSIGN expr
+
+    ID              shift and go to state 106
+
+
+state 98
+
+    (57) var_dec -> VAR ID ASSIGN . expr
+    (2) expr -> . NIL
+    (3) expr -> . INTLIT
+    (4) expr -> . STRLIT
+    (5) expr -> . lvalue
+    (6) expr -> . ID LBRACKET expr RBRACKET OF expr
+    (7) expr -> . ID LBRACE field_list RBRACE
+    (8) expr -> . MINUS expr
+    (9) expr -> . expr PLUS expr
+    (10) expr -> . expr MINUS expr
+    (11) expr -> . expr TIMES expr
+    (12) expr -> . expr DIVIDE expr
+    (13) expr -> . expr EQ expr
+    (14) expr -> . expr NE expr
+    (15) expr -> . expr LT expr
+    (16) expr -> . expr LE expr
+    (17) expr -> . expr GT expr
+    (18) expr -> . expr GE expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . LPAREN expr_seq RPAREN
+    (22) expr -> . lvalue ASSIGN expr
+    (23) expr -> . ID LPAREN expr_list RPAREN
+    (24) expr -> . IF expr THEN expr
+    (25) expr -> . IF expr THEN expr ELSE expr
+    (26) expr -> . WHILE expr DO expr
+    (27) expr -> . FOR ID ASSIGN expr TO expr DO expr
+    (28) expr -> . BREAK
+    (29) expr -> . LET dec_group IN expr_seq END
+    (30) lvalue -> . ID
+    (31) lvalue -> . lvalue PERIOD ID
+    (32) lvalue -> . ID LBRACKET expr RBRACKET
+    (33) lvalue -> . lvalue LBRACKET expr RBRACKET
+
+    NIL             shift and go to state 11
+    INTLIT          shift and go to state 2
+    STRLIT          shift and go to state 3
+    ID              shift and go to state 9
+    MINUS           shift and go to state 5
+    LPAREN          shift and go to state 8
+    IF              shift and go to state 10
+    WHILE           shift and go to state 1
+    FOR             shift and go to state 7
+    BREAK           shift and go to state 12
+    LET             shift and go to state 13
+
+    lvalue                         shift and go to state 4
+    expr                           shift and go to state 107
+
+state 99
+
+    (49) type_dec -> TYPE ID EQ . type
+    (50) type -> . ID
+    (51) type -> . LBRACE field_types RBRACE
+    (52) type -> . ARRAY OF ID
+
+    ID              shift and go to state 111
+    LBRACE          shift and go to state 108
+    ARRAY           shift and go to state 110
+
+    type                           shift and go to state 109
+
+state 100
+
+    (27) expr -> FOR ID ASSIGN expr TO expr . DO expr
+    (9) expr -> expr . PLUS expr
+    (10) expr -> expr . MINUS expr
+    (11) expr -> expr . TIMES expr
+    (12) expr -> expr . DIVIDE expr
+    (13) expr -> expr . EQ expr
+    (14) expr -> expr . NE expr
+    (15) expr -> expr . LT expr
+    (16) expr -> expr . LE expr
+    (17) expr -> expr . GT expr
+    (18) expr -> expr . GE expr
+    (19) expr -> expr . AND expr
+    (20) expr -> expr . OR expr
+
+    DO              shift and go to state 112
+    PLUS            shift and go to state 36
+    MINUS           shift and go to state 38
+    TIMES           shift and go to state 33
+    DIVIDE          shift and go to state 31
+    EQ              shift and go to state 37
+    NE              shift and go to state 32
+    LT              shift and go to state 34
+    LE              shift and go to state 29
+    GT              shift and go to state 35
+    GE              shift and go to state 30
+    AND             shift and go to state 28
+    OR              shift and go to state 39
+
+
+state 101
+
+    (6) expr -> ID LBRACKET expr RBRACKET OF expr .
+    (9) expr -> expr . PLUS expr
+    (10) expr -> expr . MINUS expr
+    (11) expr -> expr . TIMES expr
+    (12) expr -> expr . DIVIDE expr
+    (13) expr -> expr . EQ expr
+    (14) expr -> expr . NE expr
+    (15) expr -> expr . LT expr
+    (16) expr -> expr . LE expr
+    (17) expr -> expr . GT expr
+    (18) expr -> expr . GE expr
+    (19) expr -> expr . AND expr
+    (20) expr -> expr . OR expr
+
+    $end            reduce using rule 6 (expr -> ID LBRACKET expr RBRACKET OF expr .)
+    DO              reduce using rule 6 (expr -> ID LBRACKET expr RBRACKET OF expr .)
+    RPAREN          reduce using rule 6 (expr -> ID LBRACKET expr RBRACKET OF expr .)
+    SEMICOLON       reduce using rule 6 (expr -> ID LBRACKET expr RBRACKET OF expr .)
+    THEN            reduce using rule 6 (expr -> ID LBRACKET expr RBRACKET OF expr .)
+    RBRACKET        reduce using rule 6 (expr -> ID LBRACKET expr RBRACKET OF expr .)
+    COMMA           reduce using rule 6 (expr -> ID LBRACKET expr RBRACKET OF expr .)
+    TO              reduce using rule 6 (expr -> ID LBRACKET expr RBRACKET OF expr .)
+    END             reduce using rule 6 (expr -> ID LBRACKET expr RBRACKET OF expr .)
+    ELSE            reduce using rule 6 (expr -> ID LBRACKET expr RBRACKET OF expr .)
+    RBRACE          reduce using rule 6 (expr -> ID LBRACKET expr RBRACKET OF expr .)
+    IN              reduce using rule 6 (expr -> ID LBRACKET expr RBRACKET OF expr .)
+    TYPE            reduce using rule 6 (expr -> ID LBRACKET expr RBRACKET OF expr .)
+    VAR             reduce using rule 6 (expr -> ID LBRACKET expr RBRACKET OF expr .)
+    FUNCTION        reduce using rule 6 (expr -> ID LBRACKET expr RBRACKET OF expr .)
+    PLUS            shift and go to state 36
+    MINUS           shift and go to state 38
+    TIMES           shift and go to state 33
+    DIVIDE          shift and go to state 31
+    EQ              shift and go to state 37
+    NE              shift and go to state 32
+    LT              shift and go to state 34
+    LE              shift and go to state 29
+    GT              shift and go to state 35
+    GE              shift and go to state 30
+    AND             shift and go to state 28
+    OR              shift and go to state 39
+
+  ! PLUS            [ reduce using rule 6 (expr -> ID LBRACKET expr RBRACKET OF expr .) ]
+  ! MINUS           [ reduce using rule 6 (expr -> ID LBRACKET expr RBRACKET OF expr .) ]
+  ! TIMES           [ reduce using rule 6 (expr -> ID LBRACKET expr RBRACKET OF expr .) ]
+  ! DIVIDE          [ reduce using rule 6 (expr -> ID LBRACKET expr RBRACKET OF expr .) ]
+  ! EQ              [ reduce using rule 6 (expr -> ID LBRACKET expr RBRACKET OF expr .) ]
+  ! NE              [ reduce using rule 6 (expr -> ID LBRACKET expr RBRACKET OF expr .) ]
+  ! LT              [ reduce using rule 6 (expr -> ID LBRACKET expr RBRACKET OF expr .) ]
+  ! LE              [ reduce using rule 6 (expr -> ID LBRACKET expr RBRACKET OF expr .) ]
+  ! GT              [ reduce using rule 6 (expr -> ID LBRACKET expr RBRACKET OF expr .) ]
+  ! GE              [ reduce using rule 6 (expr -> ID LBRACKET expr RBRACKET OF expr .) ]
+  ! AND             [ reduce using rule 6 (expr -> ID LBRACKET expr RBRACKET OF expr .) ]
+  ! OR              [ reduce using rule 6 (expr -> ID LBRACKET expr RBRACKET OF expr .) ]
+
+
+state 102
+
+    (25) expr -> IF expr THEN expr ELSE expr .
+    (9) expr -> expr . PLUS expr
+    (10) expr -> expr . MINUS expr
+    (11) expr -> expr . TIMES expr
+    (12) expr -> expr . DIVIDE expr
+    (13) expr -> expr . EQ expr
+    (14) expr -> expr . NE expr
+    (15) expr -> expr . LT expr
+    (16) expr -> expr . LE expr
+    (17) expr -> expr . GT expr
+    (18) expr -> expr . GE expr
+    (19) expr -> expr . AND expr
+    (20) expr -> expr . OR expr
+
+    $end            reduce using rule 25 (expr -> IF expr THEN expr ELSE expr .)
+    DO              reduce using rule 25 (expr -> IF expr THEN expr ELSE expr .)
+    RPAREN          reduce using rule 25 (expr -> IF expr THEN expr ELSE expr .)
+    SEMICOLON       reduce using rule 25 (expr -> IF expr THEN expr ELSE expr .)
+    THEN            reduce using rule 25 (expr -> IF expr THEN expr ELSE expr .)
+    RBRACKET        reduce using rule 25 (expr -> IF expr THEN expr ELSE expr .)
+    COMMA           reduce using rule 25 (expr -> IF expr THEN expr ELSE expr .)
+    TO              reduce using rule 25 (expr -> IF expr THEN expr ELSE expr .)
+    END             reduce using rule 25 (expr -> IF expr THEN expr ELSE expr .)
+    ELSE            reduce using rule 25 (expr -> IF expr THEN expr ELSE expr .)
+    RBRACE          reduce using rule 25 (expr -> IF expr THEN expr ELSE expr .)
+    IN              reduce using rule 25 (expr -> IF expr THEN expr ELSE expr .)
+    TYPE            reduce using rule 25 (expr -> IF expr THEN expr ELSE expr .)
+    VAR             reduce using rule 25 (expr -> IF expr THEN expr ELSE expr .)
+    FUNCTION        reduce using rule 25 (expr -> IF expr THEN expr ELSE expr .)
+    PLUS            shift and go to state 36
+    MINUS           shift and go to state 38
+    TIMES           shift and go to state 33
+    DIVIDE          shift and go to state 31
+    EQ              shift and go to state 37
+    NE              shift and go to state 32
+    LT              shift and go to state 34
+    LE              shift and go to state 29
+    GT              shift and go to state 35
+    GE              shift and go to state 30
+    AND             shift and go to state 28
+    OR              shift and go to state 39
+
+  ! PLUS            [ reduce using rule 25 (expr -> IF expr THEN expr ELSE expr .) ]
+  ! MINUS           [ reduce using rule 25 (expr -> IF expr THEN expr ELSE expr .) ]
+  ! TIMES           [ reduce using rule 25 (expr -> IF expr THEN expr ELSE expr .) ]
+  ! DIVIDE          [ reduce using rule 25 (expr -> IF expr THEN expr ELSE expr .) ]
+  ! EQ              [ reduce using rule 25 (expr -> IF expr THEN expr ELSE expr .) ]
+  ! NE              [ reduce using rule 25 (expr -> IF expr THEN expr ELSE expr .) ]
+  ! LT              [ reduce using rule 25 (expr -> IF expr THEN expr ELSE expr .) ]
+  ! LE              [ reduce using rule 25 (expr -> IF expr THEN expr ELSE expr .) ]
+  ! GT              [ reduce using rule 25 (expr -> IF expr THEN expr ELSE expr .) ]
+  ! GE              [ reduce using rule 25 (expr -> IF expr THEN expr ELSE expr .) ]
+  ! AND             [ reduce using rule 25 (expr -> IF expr THEN expr ELSE expr .) ]
+  ! OR              [ reduce using rule 25 (expr -> IF expr THEN expr ELSE expr .) ]
+
+
+state 103
+
+    (54) field_types -> field_type .
+
+    RBRACE          reduce using rule 54 (field_types -> field_type .)
+    COMMA           reduce using rule 54 (field_types -> field_type .)
+    RPAREN          reduce using rule 54 (field_types -> field_type .)
+
+
+state 104
+
+    (59) func_dec -> FUNCTION ID LPAREN field_types . RPAREN EQ expr
+    (60) func_dec -> FUNCTION ID LPAREN field_types . RPAREN COLON ID EQ expr
+    (55) field_types -> field_types . COMMA field_type
+
+    RPAREN          shift and go to state 113
+    COMMA           shift and go to state 114
+
+
+state 105
+
+    (56) field_type -> ID . COLON ID
+
+    COLON           shift and go to state 115
+
+
+state 106
+
+    (58) var_dec -> VAR ID COLON ID . ASSIGN expr
+
+    ASSIGN          shift and go to state 116
+
+
+state 107
+
+    (57) var_dec -> VAR ID ASSIGN expr .
+    (9) expr -> expr . PLUS expr
+    (10) expr -> expr . MINUS expr
+    (11) expr -> expr . TIMES expr
+    (12) expr -> expr . DIVIDE expr
+    (13) expr -> expr . EQ expr
+    (14) expr -> expr . NE expr
+    (15) expr -> expr . LT expr
+    (16) expr -> expr . LE expr
+    (17) expr -> expr . GT expr
+    (18) expr -> expr . GE expr
+    (19) expr -> expr . AND expr
+    (20) expr -> expr . OR expr
+
+    IN              reduce using rule 57 (var_dec -> VAR ID ASSIGN expr .)
+    TYPE            reduce using rule 57 (var_dec -> VAR ID ASSIGN expr .)
+    VAR             reduce using rule 57 (var_dec -> VAR ID ASSIGN expr .)
+    FUNCTION        reduce using rule 57 (var_dec -> VAR ID ASSIGN expr .)
+    PLUS            shift and go to state 36
+    MINUS           shift and go to state 38
+    TIMES           shift and go to state 33
+    DIVIDE          shift and go to state 31
+    EQ              shift and go to state 37
+    NE              shift and go to state 32
+    LT              shift and go to state 34
+    LE              shift and go to state 29
+    GT              shift and go to state 35
+    GE              shift and go to state 30
+    AND             shift and go to state 28
+    OR              shift and go to state 39
+
+
+state 108
+
+    (51) type -> LBRACE . field_types RBRACE
+    (53) field_types -> .
+    (54) field_types -> . field_type
+    (55) field_types -> . field_types COMMA field_type
+    (56) field_type -> . ID COLON ID
+
+    RBRACE          reduce using rule 53 (field_types -> .)
+    COMMA           reduce using rule 53 (field_types -> .)
+    ID              shift and go to state 105
+
+    field_types                    shift and go to state 117
+    field_type                     shift and go to state 103
+
+state 109
+
+    (49) type_dec -> TYPE ID EQ type .
+
+    IN              reduce using rule 49 (type_dec -> TYPE ID EQ type .)
+    TYPE            reduce using rule 49 (type_dec -> TYPE ID EQ type .)
+    VAR             reduce using rule 49 (type_dec -> TYPE ID EQ type .)
+    FUNCTION        reduce using rule 49 (type_dec -> TYPE ID EQ type .)
+
+
+state 110
+
+    (52) type -> ARRAY . OF ID
+
+    OF              shift and go to state 118
+
+
+state 111
+
+    (50) type -> ID .
+
+    IN              reduce using rule 50 (type -> ID .)
+    TYPE            reduce using rule 50 (type -> ID .)
+    VAR             reduce using rule 50 (type -> ID .)
+    FUNCTION        reduce using rule 50 (type -> ID .)
+
+
+state 112
+
+    (27) expr -> FOR ID ASSIGN expr TO expr DO . expr
+    (2) expr -> . NIL
+    (3) expr -> . INTLIT
+    (4) expr -> . STRLIT
+    (5) expr -> . lvalue
+    (6) expr -> . ID LBRACKET expr RBRACKET OF expr
+    (7) expr -> . ID LBRACE field_list RBRACE
+    (8) expr -> . MINUS expr
+    (9) expr -> . expr PLUS expr
+    (10) expr -> . expr MINUS expr
+    (11) expr -> . expr TIMES expr
+    (12) expr -> . expr DIVIDE expr
+    (13) expr -> . expr EQ expr
+    (14) expr -> . expr NE expr
+    (15) expr -> . expr LT expr
+    (16) expr -> . expr LE expr
+    (17) expr -> . expr GT expr
+    (18) expr -> . expr GE expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . LPAREN expr_seq RPAREN
+    (22) expr -> . lvalue ASSIGN expr
+    (23) expr -> . ID LPAREN expr_list RPAREN
+    (24) expr -> . IF expr THEN expr
+    (25) expr -> . IF expr THEN expr ELSE expr
+    (26) expr -> . WHILE expr DO expr
+    (27) expr -> . FOR ID ASSIGN expr TO expr DO expr
+    (28) expr -> . BREAK
+    (29) expr -> . LET dec_group IN expr_seq END
+    (30) lvalue -> . ID
+    (31) lvalue -> . lvalue PERIOD ID
+    (32) lvalue -> . ID LBRACKET expr RBRACKET
+    (33) lvalue -> . lvalue LBRACKET expr RBRACKET
+
+    NIL             shift and go to state 11
+    INTLIT          shift and go to state 2
+    STRLIT          shift and go to state 3
+    ID              shift and go to state 9
+    MINUS           shift and go to state 5
+    LPAREN          shift and go to state 8
+    IF              shift and go to state 10
+    WHILE           shift and go to state 1
+    FOR             shift and go to state 7
+    BREAK           shift and go to state 12
+    LET             shift and go to state 13
+
+    lvalue                         shift and go to state 4
+    expr                           shift and go to state 119
+
+state 113
+
+    (59) func_dec -> FUNCTION ID LPAREN field_types RPAREN . EQ expr
+    (60) func_dec -> FUNCTION ID LPAREN field_types RPAREN . COLON ID EQ expr
+
+    EQ              shift and go to state 121
+    COLON           shift and go to state 120
+
+
+state 114
+
+    (55) field_types -> field_types COMMA . field_type
+    (56) field_type -> . ID COLON ID
+
+    ID              shift and go to state 105
+
+    field_type                     shift and go to state 122
+
+state 115
+
+    (56) field_type -> ID COLON . ID
+
+    ID              shift and go to state 123
+
+
+state 116
+
+    (58) var_dec -> VAR ID COLON ID ASSIGN . expr
+    (2) expr -> . NIL
+    (3) expr -> . INTLIT
+    (4) expr -> . STRLIT
+    (5) expr -> . lvalue
+    (6) expr -> . ID LBRACKET expr RBRACKET OF expr
+    (7) expr -> . ID LBRACE field_list RBRACE
+    (8) expr -> . MINUS expr
+    (9) expr -> . expr PLUS expr
+    (10) expr -> . expr MINUS expr
+    (11) expr -> . expr TIMES expr
+    (12) expr -> . expr DIVIDE expr
+    (13) expr -> . expr EQ expr
+    (14) expr -> . expr NE expr
+    (15) expr -> . expr LT expr
+    (16) expr -> . expr LE expr
+    (17) expr -> . expr GT expr
+    (18) expr -> . expr GE expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . LPAREN expr_seq RPAREN
+    (22) expr -> . lvalue ASSIGN expr
+    (23) expr -> . ID LPAREN expr_list RPAREN
+    (24) expr -> . IF expr THEN expr
+    (25) expr -> . IF expr THEN expr ELSE expr
+    (26) expr -> . WHILE expr DO expr
+    (27) expr -> . FOR ID ASSIGN expr TO expr DO expr
+    (28) expr -> . BREAK
+    (29) expr -> . LET dec_group IN expr_seq END
+    (30) lvalue -> . ID
+    (31) lvalue -> . lvalue PERIOD ID
+    (32) lvalue -> . ID LBRACKET expr RBRACKET
+    (33) lvalue -> . lvalue LBRACKET expr RBRACKET
+
+    NIL             shift and go to state 11
+    INTLIT          shift and go to state 2
+    STRLIT          shift and go to state 3
+    ID              shift and go to state 9
+    MINUS           shift and go to state 5
+    LPAREN          shift and go to state 8
+    IF              shift and go to state 10
+    WHILE           shift and go to state 1
+    FOR             shift and go to state 7
+    BREAK           shift and go to state 12
+    LET             shift and go to state 13
+
+    lvalue                         shift and go to state 4
+    expr                           shift and go to state 124
+
+state 117
+
+    (51) type -> LBRACE field_types . RBRACE
+    (55) field_types -> field_types . COMMA field_type
+
+    RBRACE          shift and go to state 125
+    COMMA           shift and go to state 114
+
+
+state 118
+
+    (52) type -> ARRAY OF . ID
+
+    ID              shift and go to state 126
+
+
+state 119
+
+    (27) expr -> FOR ID ASSIGN expr TO expr DO expr .
+    (9) expr -> expr . PLUS expr
+    (10) expr -> expr . MINUS expr
+    (11) expr -> expr . TIMES expr
+    (12) expr -> expr . DIVIDE expr
+    (13) expr -> expr . EQ expr
+    (14) expr -> expr . NE expr
+    (15) expr -> expr . LT expr
+    (16) expr -> expr . LE expr
+    (17) expr -> expr . GT expr
+    (18) expr -> expr . GE expr
+    (19) expr -> expr . AND expr
+    (20) expr -> expr . OR expr
+
+    $end            reduce using rule 27 (expr -> FOR ID ASSIGN expr TO expr DO expr .)
+    DO              reduce using rule 27 (expr -> FOR ID ASSIGN expr TO expr DO expr .)
+    RPAREN          reduce using rule 27 (expr -> FOR ID ASSIGN expr TO expr DO expr .)
+    SEMICOLON       reduce using rule 27 (expr -> FOR ID ASSIGN expr TO expr DO expr .)
+    THEN            reduce using rule 27 (expr -> FOR ID ASSIGN expr TO expr DO expr .)
+    RBRACKET        reduce using rule 27 (expr -> FOR ID ASSIGN expr TO expr DO expr .)
+    COMMA           reduce using rule 27 (expr -> FOR ID ASSIGN expr TO expr DO expr .)
+    TO              reduce using rule 27 (expr -> FOR ID ASSIGN expr TO expr DO expr .)
+    END             reduce using rule 27 (expr -> FOR ID ASSIGN expr TO expr DO expr .)
+    ELSE            reduce using rule 27 (expr -> FOR ID ASSIGN expr TO expr DO expr .)
+    RBRACE          reduce using rule 27 (expr -> FOR ID ASSIGN expr TO expr DO expr .)
+    IN              reduce using rule 27 (expr -> FOR ID ASSIGN expr TO expr DO expr .)
+    TYPE            reduce using rule 27 (expr -> FOR ID ASSIGN expr TO expr DO expr .)
+    VAR             reduce using rule 27 (expr -> FOR ID ASSIGN expr TO expr DO expr .)
+    FUNCTION        reduce using rule 27 (expr -> FOR ID ASSIGN expr TO expr DO expr .)
+    PLUS            shift and go to state 36
+    MINUS           shift and go to state 38
+    TIMES           shift and go to state 33
+    DIVIDE          shift and go to state 31
+    EQ              shift and go to state 37
+    NE              shift and go to state 32
+    LT              shift and go to state 34
+    LE              shift and go to state 29
+    GT              shift and go to state 35
+    GE              shift and go to state 30
+    AND             shift and go to state 28
+    OR              shift and go to state 39
+
+  ! PLUS            [ reduce using rule 27 (expr -> FOR ID ASSIGN expr TO expr DO expr .) ]
+  ! MINUS           [ reduce using rule 27 (expr -> FOR ID ASSIGN expr TO expr DO expr .) ]
+  ! TIMES           [ reduce using rule 27 (expr -> FOR ID ASSIGN expr TO expr DO expr .) ]
+  ! DIVIDE          [ reduce using rule 27 (expr -> FOR ID ASSIGN expr TO expr DO expr .) ]
+  ! EQ              [ reduce using rule 27 (expr -> FOR ID ASSIGN expr TO expr DO expr .) ]
+  ! NE              [ reduce using rule 27 (expr -> FOR ID ASSIGN expr TO expr DO expr .) ]
+  ! LT              [ reduce using rule 27 (expr -> FOR ID ASSIGN expr TO expr DO expr .) ]
+  ! LE              [ reduce using rule 27 (expr -> FOR ID ASSIGN expr TO expr DO expr .) ]
+  ! GT              [ reduce using rule 27 (expr -> FOR ID ASSIGN expr TO expr DO expr .) ]
+  ! GE              [ reduce using rule 27 (expr -> FOR ID ASSIGN expr TO expr DO expr .) ]
+  ! AND             [ reduce using rule 27 (expr -> FOR ID ASSIGN expr TO expr DO expr .) ]
+  ! OR              [ reduce using rule 27 (expr -> FOR ID ASSIGN expr TO expr DO expr .) ]
+
+
+state 120
+
+    (60) func_dec -> FUNCTION ID LPAREN field_types RPAREN COLON . ID EQ expr
+
+    ID              shift and go to state 127
+
+
+state 121
+
+    (59) func_dec -> FUNCTION ID LPAREN field_types RPAREN EQ . expr
+    (2) expr -> . NIL
+    (3) expr -> . INTLIT
+    (4) expr -> . STRLIT
+    (5) expr -> . lvalue
+    (6) expr -> . ID LBRACKET expr RBRACKET OF expr
+    (7) expr -> . ID LBRACE field_list RBRACE
+    (8) expr -> . MINUS expr
+    (9) expr -> . expr PLUS expr
+    (10) expr -> . expr MINUS expr
+    (11) expr -> . expr TIMES expr
+    (12) expr -> . expr DIVIDE expr
+    (13) expr -> . expr EQ expr
+    (14) expr -> . expr NE expr
+    (15) expr -> . expr LT expr
+    (16) expr -> . expr LE expr
+    (17) expr -> . expr GT expr
+    (18) expr -> . expr GE expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . LPAREN expr_seq RPAREN
+    (22) expr -> . lvalue ASSIGN expr
+    (23) expr -> . ID LPAREN expr_list RPAREN
+    (24) expr -> . IF expr THEN expr
+    (25) expr -> . IF expr THEN expr ELSE expr
+    (26) expr -> . WHILE expr DO expr
+    (27) expr -> . FOR ID ASSIGN expr TO expr DO expr
+    (28) expr -> . BREAK
+    (29) expr -> . LET dec_group IN expr_seq END
+    (30) lvalue -> . ID
+    (31) lvalue -> . lvalue PERIOD ID
+    (32) lvalue -> . ID LBRACKET expr RBRACKET
+    (33) lvalue -> . lvalue LBRACKET expr RBRACKET
+
+    NIL             shift and go to state 11
+    INTLIT          shift and go to state 2
+    STRLIT          shift and go to state 3
+    ID              shift and go to state 9
+    MINUS           shift and go to state 5
+    LPAREN          shift and go to state 8
+    IF              shift and go to state 10
+    WHILE           shift and go to state 1
+    FOR             shift and go to state 7
+    BREAK           shift and go to state 12
+    LET             shift and go to state 13
+
+    expr                           shift and go to state 128
+    lvalue                         shift and go to state 4
+
+state 122
+
+    (55) field_types -> field_types COMMA field_type .
+
+    RBRACE          reduce using rule 55 (field_types -> field_types COMMA field_type .)
+    COMMA           reduce using rule 55 (field_types -> field_types COMMA field_type .)
+    RPAREN          reduce using rule 55 (field_types -> field_types COMMA field_type .)
+
+
+state 123
+
+    (56) field_type -> ID COLON ID .
+
+    RPAREN          reduce using rule 56 (field_type -> ID COLON ID .)
+    COMMA           reduce using rule 56 (field_type -> ID COLON ID .)
+    RBRACE          reduce using rule 56 (field_type -> ID COLON ID .)
+
+
+state 124
+
+    (58) var_dec -> VAR ID COLON ID ASSIGN expr .
+    (9) expr -> expr . PLUS expr
+    (10) expr -> expr . MINUS expr
+    (11) expr -> expr . TIMES expr
+    (12) expr -> expr . DIVIDE expr
+    (13) expr -> expr . EQ expr
+    (14) expr -> expr . NE expr
+    (15) expr -> expr . LT expr
+    (16) expr -> expr . LE expr
+    (17) expr -> expr . GT expr
+    (18) expr -> expr . GE expr
+    (19) expr -> expr . AND expr
+    (20) expr -> expr . OR expr
+
+    IN              reduce using rule 58 (var_dec -> VAR ID COLON ID ASSIGN expr .)
+    TYPE            reduce using rule 58 (var_dec -> VAR ID COLON ID ASSIGN expr .)
+    VAR             reduce using rule 58 (var_dec -> VAR ID COLON ID ASSIGN expr .)
+    FUNCTION        reduce using rule 58 (var_dec -> VAR ID COLON ID ASSIGN expr .)
+    PLUS            shift and go to state 36
+    MINUS           shift and go to state 38
+    TIMES           shift and go to state 33
+    DIVIDE          shift and go to state 31
+    EQ              shift and go to state 37
+    NE              shift and go to state 32
+    LT              shift and go to state 34
+    LE              shift and go to state 29
+    GT              shift and go to state 35
+    GE              shift and go to state 30
+    AND             shift and go to state 28
+    OR              shift and go to state 39
+
+
+state 125
+
+    (51) type -> LBRACE field_types RBRACE .
+
+    IN              reduce using rule 51 (type -> LBRACE field_types RBRACE .)
+    TYPE            reduce using rule 51 (type -> LBRACE field_types RBRACE .)
+    VAR             reduce using rule 51 (type -> LBRACE field_types RBRACE .)
+    FUNCTION        reduce using rule 51 (type -> LBRACE field_types RBRACE .)
+
+
+state 126
+
+    (52) type -> ARRAY OF ID .
+
+    IN              reduce using rule 52 (type -> ARRAY OF ID .)
+    TYPE            reduce using rule 52 (type -> ARRAY OF ID .)
+    VAR             reduce using rule 52 (type -> ARRAY OF ID .)
+    FUNCTION        reduce using rule 52 (type -> ARRAY OF ID .)
+
+
+state 127
+
+    (60) func_dec -> FUNCTION ID LPAREN field_types RPAREN COLON ID . EQ expr
+
+    EQ              shift and go to state 129
+
+
+state 128
+
+    (59) func_dec -> FUNCTION ID LPAREN field_types RPAREN EQ expr .
+    (9) expr -> expr . PLUS expr
+    (10) expr -> expr . MINUS expr
+    (11) expr -> expr . TIMES expr
+    (12) expr -> expr . DIVIDE expr
+    (13) expr -> expr . EQ expr
+    (14) expr -> expr . NE expr
+    (15) expr -> expr . LT expr
+    (16) expr -> expr . LE expr
+    (17) expr -> expr . GT expr
+    (18) expr -> expr . GE expr
+    (19) expr -> expr . AND expr
+    (20) expr -> expr . OR expr
+
+    IN              reduce using rule 59 (func_dec -> FUNCTION ID LPAREN field_types RPAREN EQ expr .)
+    TYPE            reduce using rule 59 (func_dec -> FUNCTION ID LPAREN field_types RPAREN EQ expr .)
+    VAR             reduce using rule 59 (func_dec -> FUNCTION ID LPAREN field_types RPAREN EQ expr .)
+    FUNCTION        reduce using rule 59 (func_dec -> FUNCTION ID LPAREN field_types RPAREN EQ expr .)
+    PLUS            shift and go to state 36
+    MINUS           shift and go to state 38
+    TIMES           shift and go to state 33
+    DIVIDE          shift and go to state 31
+    EQ              shift and go to state 37
+    NE              shift and go to state 32
+    LT              shift and go to state 34
+    LE              shift and go to state 29
+    GT              shift and go to state 35
+    GE              shift and go to state 30
+    AND             shift and go to state 28
+    OR              shift and go to state 39
+
+
+state 129
+
+    (60) func_dec -> FUNCTION ID LPAREN field_types RPAREN COLON ID EQ . expr
+    (2) expr -> . NIL
+    (3) expr -> . INTLIT
+    (4) expr -> . STRLIT
+    (5) expr -> . lvalue
+    (6) expr -> . ID LBRACKET expr RBRACKET OF expr
+    (7) expr -> . ID LBRACE field_list RBRACE
+    (8) expr -> . MINUS expr
+    (9) expr -> . expr PLUS expr
+    (10) expr -> . expr MINUS expr
+    (11) expr -> . expr TIMES expr
+    (12) expr -> . expr DIVIDE expr
+    (13) expr -> . expr EQ expr
+    (14) expr -> . expr NE expr
+    (15) expr -> . expr LT expr
+    (16) expr -> . expr LE expr
+    (17) expr -> . expr GT expr
+    (18) expr -> . expr GE expr
+    (19) expr -> . expr AND expr
+    (20) expr -> . expr OR expr
+    (21) expr -> . LPAREN expr_seq RPAREN
+    (22) expr -> . lvalue ASSIGN expr
+    (23) expr -> . ID LPAREN expr_list RPAREN
+    (24) expr -> . IF expr THEN expr
+    (25) expr -> . IF expr THEN expr ELSE expr
+    (26) expr -> . WHILE expr DO expr
+    (27) expr -> . FOR ID ASSIGN expr TO expr DO expr
+    (28) expr -> . BREAK
+    (29) expr -> . LET dec_group IN expr_seq END
+    (30) lvalue -> . ID
+    (31) lvalue -> . lvalue PERIOD ID
+    (32) lvalue -> . ID LBRACKET expr RBRACKET
+    (33) lvalue -> . lvalue LBRACKET expr RBRACKET
+
+    NIL             shift and go to state 11
+    INTLIT          shift and go to state 2
+    STRLIT          shift and go to state 3
+    ID              shift and go to state 9
+    MINUS           shift and go to state 5
+    LPAREN          shift and go to state 8
+    IF              shift and go to state 10
+    WHILE           shift and go to state 1
+    FOR             shift and go to state 7
+    BREAK           shift and go to state 12
+    LET             shift and go to state 13
+
+    expr                           shift and go to state 130
+    lvalue                         shift and go to state 4
+
+state 130
+
+    (60) func_dec -> FUNCTION ID LPAREN field_types RPAREN COLON ID EQ expr .
+    (9) expr -> expr . PLUS expr
+    (10) expr -> expr . MINUS expr
+    (11) expr -> expr . TIMES expr
+    (12) expr -> expr . DIVIDE expr
+    (13) expr -> expr . EQ expr
+    (14) expr -> expr . NE expr
+    (15) expr -> expr . LT expr
+    (16) expr -> expr . LE expr
+    (17) expr -> expr . GT expr
+    (18) expr -> expr . GE expr
+    (19) expr -> expr . AND expr
+    (20) expr -> expr . OR expr
+
+    IN              reduce using rule 60 (func_dec -> FUNCTION ID LPAREN field_types RPAREN COLON ID EQ expr .)
+    TYPE            reduce using rule 60 (func_dec -> FUNCTION ID LPAREN field_types RPAREN COLON ID EQ expr .)
+    VAR             reduce using rule 60 (func_dec -> FUNCTION ID LPAREN field_types RPAREN COLON ID EQ expr .)
+    FUNCTION        reduce using rule 60 (func_dec -> FUNCTION ID LPAREN field_types RPAREN COLON ID EQ expr .)
+    PLUS            shift and go to state 36
+    MINUS           shift and go to state 38
+    TIMES           shift and go to state 33
+    DIVIDE          shift and go to state 31
+    EQ              shift and go to state 37
+    NE              shift and go to state 32
+    LT              shift and go to state 34
+    LE              shift and go to state 29
+    GT              shift and go to state 35
+    GE              shift and go to state 30
+    AND             shift and go to state 28
+    OR              shift and go to state 39
+
