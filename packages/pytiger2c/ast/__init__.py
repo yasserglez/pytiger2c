@@ -5,10 +5,8 @@ Definición de las clases correspondientes a los nodos del árbol de sintáxis a
 
 Todas las clases deben heredar de la clase base C{LanguageNode} e implementar 
 los métodos C{check_semantics} y C{generate_code} según corresponda a la estructura 
-del lenguaje que representa. 
+del lenguaje que representa.
 """
-
-from pytiger2c.errors import SemanticError, CodeGenerationError
 
 
 class LanguageNode(object):
