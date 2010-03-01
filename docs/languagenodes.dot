@@ -1,0 +1,32 @@
+graph LanguageNodes {
+    node [fontname="monospace",fontsize="10",shape="box"];
+    edge [fontname="monospace",fontsize="10"];
+    
+    LanguageNode -- DeclarationNode;
+    LanguageNode -- ExpressionNode;
+    
+    DeclarationNode -- FunctionDeclarationNode;
+    DeclarationNode -- TypeDeclarationNode;
+    DeclarationNode -- VariableDeclarationNode;
+    
+    ExpressionNode -- ArithmeticOperatorNode; 
+    ExpressionNode -- LogicalOperatorNode;
+    ExpressionNode -- NilExpressionNode;
+    ExpressionNode -- IntegerLiteralExpressionNode;
+    ExpressionNode -- StringLiteralExpressionNode;
+    
+    ArithmeticOperatorNode -- UnaryMinusOperatorNode;
+    ArithmeticOperatorNode -- PlusOperatorNode;
+    ArithmeticOperatorNode -- MinusOperatorNode;    
+    ArithmeticOperatorNode -- TimesOperatorNode;
+    ArithmeticOperatorNode -- DivideOperatorNode;
+
+    LogicalOperatorNode -- EqualsOperatorNode;
+    LogicalOperatorNode -- NotEqualsOperatorNode;
+    LogicalOperatorNode -- LessThanOperatorNode;
+    LogicalOperatorNode -- LessEqualsThanOperatorNode;
+    LogicalOperatorNode -- GreaterThanOperatorNode;
+    LogicalOperatorNode -- GreaterEqualsThanOperatorNode;
+    LogicalOperatorNode -- AndOperatorNode;
+    LogicalOperatorNode -- OrOperatorNode;
+}

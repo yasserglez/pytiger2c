@@ -69,7 +69,7 @@ _NODE_TEMPLATE = 'state{number} [label="{label}"];'
 
 _TRANS_TEMPLATE = 'state{origin} -> state{destination} [label="{label}"];'
 
-_DOT_TEMPLATE = """digraph automata {{
+_DOT_TEMPLATE = """digraph LRAutomata {{
     rankdir="LR";
     node [fontname="monospace",fontsize="10"];
     edge [fontname="monospace",fontsize="10"];
