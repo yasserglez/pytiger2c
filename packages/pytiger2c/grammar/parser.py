@@ -10,6 +10,7 @@ from pytiger2c.contrib.ply import yacc
 from pytiger2c.grammar.common import compute_column
 from pytiger2c.grammar.lexer import lexer, tokens
 from pytiger2c.errors import SyntacticError
+from pytiger2c.ast import *
 
 
 # Precedence rules.
