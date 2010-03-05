@@ -71,15 +71,21 @@ _MODULE_TEMPLATE = \
 """
 # -*- coding: utf-8 -*-
 
+\"\"\"
+Clase {node_class} del árbol de sintáxis abstracta.
+\"\"\"
+
 from pytiger2c.ast.{parent_module} import {parent_class}
 
 
 class {node_class}({parent_class}):
     \"\"\"
+    Clase {node_class} del árbol de sintáxis abstracta.
     \"\"\"
     
     def __init__(self):
         \"\"\"
+        Inicializa la clase {node_class}.
         \"\"\"
         super({node_class}, self).__init__()
 """.lstrip()
