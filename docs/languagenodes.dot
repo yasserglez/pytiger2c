@@ -2,25 +2,55 @@ graph LanguageNodes {
     node [fontname="monospace",fontsize="10",shape="box"];
     edge [fontname="monospace",fontsize="10"];
     
-    LanguageNode -- DeclarationNode;
-    LanguageNode -- ExpressionNode;
+    LanguageNode -- NonValuedExpressionNode;
+    LanguageNode -- ValuedExpressionNode;
     
-    DeclarationNode -- FunctionDeclarationNode;
-    DeclarationNode -- TypeDeclarationNode;
+    
+    NonValuedExpressionNode -- DeclarationNode;
+    NonValuedExpressionNode -- AssignmentNode;
+    NonValuedExpressionNode -- IfThenStatementNode;
+    NonValuedExpressionNode -- WhileStatementNode;
+    NonValuedExpressionNode -- ForStatementNode;
+    NonValuedExpressionNode -- BreakStatementNode;
+    
+    DeclarationNode -- CallableDeclarationNode;
     DeclarationNode -- VariableDeclarationNode;
+    DeclarationNode -- TypeDeclarationNode;
     
-    ExpressionNode -- ArithmeticOperatorNode; 
-    ExpressionNode -- LogicalOperatorNode;
-    ExpressionNode -- NilExpressionNode;
-    ExpressionNode -- IntegerLiteralExpressionNode;
-    ExpressionNode -- StringLiteralExpressionNode;
+    CallableDeclarationNode -- FunctionDeclarationNode;
+    CallableDeclarationNode -- ProcedurDeclarationNode;
+    
+    VariableDeclarationNode -- InferredVariableDeclarationNode;
+    VariableDeclarationNode -- StaticVariableDeclarationNode;
+    
+    TypeDeclarationNode -- AliasTypeDeclarationNode;
+    TypeDeclarationNode -- RecordDeclarationNode;
+    TypeDeclarationNode -- ArrayDeclarationNode;
+    
+    
+	ValuedExpressionNode -- NilExpressionNode;
+    ValuedExpressionNode -- IntegerLiteralExpressionNode;
+    ValuedExpressionNode -- StringLiteralExpressionNode;
+    ValuedExpressionNode -- IfThenElseNode;
+    ValuedExpressionNode -- FunctionCallNode;
+    ValuedExpressionNode -- LetNode;
+    ValuedExpressionNode -- ExpressionSequenceNode;
+    ValuedExpressionNode -- AccessNode; 
+    ValuedExpressionNode -- OperatorNode;
+    
+    AccessNode -- VariableAccessNode;
+    AccessNode -- RecordAccessNode;
+    AccessNode -- ArrayAccessNode;
+    
+    OperatorNode -- ArithmeticOperatorNode;
+    OperatorNode -- LogicalOperatorNode;
     
     ArithmeticOperatorNode -- UnaryMinusOperatorNode;
     ArithmeticOperatorNode -- PlusOperatorNode;
     ArithmeticOperatorNode -- MinusOperatorNode;    
     ArithmeticOperatorNode -- TimesOperatorNode;
     ArithmeticOperatorNode -- DivideOperatorNode;
-
+    
     LogicalOperatorNode -- EqualsOperatorNode;
     LogicalOperatorNode -- NotEqualsOperatorNode;
     LogicalOperatorNode -- LessThanOperatorNode;
