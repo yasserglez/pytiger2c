@@ -17,4 +17,3 @@ class GreaterEqualsThanOperatorNode(LogicalOperatorNode):
         Inicializa la clase C{GreaterEqualsThanOperatorNode}.
         """
         super(GreaterEqualsThanOperatorNode, self).__init__()
-

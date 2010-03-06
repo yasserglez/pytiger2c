@@ -64,12 +64,17 @@ def p_program(symbols):
 # Literals.
 def p_expr_nil(symbols):
     "expr : NIL"
+    symbols[0] = NilExpressionNode()
 
 def p_expr_int(symbols):
     "expr : INTLIT"
-    
+    integer = int(symbols[1].value)
+    symbols[0] = IntegerLiteralExpressionNode(integer)
+
 def p_expr_str(symbols):
     "expr : STRLIT"
+    string = symbols[1].value
+    symbols[0] = StringLiteralExpressionNode(string)
     
 # Left values of an assignment. Variables, record fields and elements of arrays.
 def p_expr_lvalue(symbols):

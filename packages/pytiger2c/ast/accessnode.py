@@ -17,4 +17,3 @@ class AccessNode(ValuedExpressionNode):
         Inicializa la clase C{AccessNode}.
         """
         super(AccessNode, self).__init__()
-

@@ -20,14 +20,15 @@ class LanguageNode(object):
         """
         super(LanguageNode, self).__init__()
     
-    def check_semantics(self):
+    def check_semantics(self, error_list):
         """
         Comprueba que la estructura del lenguaje Tiger representada por el nodo 
         sea correcta semánticamente.
         
-        @raise SemanticError: Esta excepción se lanzará cuando se encuentre algún 
-            error semántico en la estructura del lenguaje representada por el nodo.
-            La excepción contendrá información acerca del error.   
+        @param error_list: Lista a la cual se deben añadir los mensajes de error de
+            los errores semánticos encontrados durante la comprobación de la
+            estructura del lenguaje representada por el nodo del árbol de 
+            sintáxis abstracta.
         """
         raise NotImplementedError()
     

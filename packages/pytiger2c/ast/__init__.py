@@ -1,19 +1,14 @@
 # -*- coding: utf-8 -*-
 
 """
-Definición de las clases correspondientes a los nodos del árbol de sintáxis abstracta. 
+Definición de los nodos del árbol de sintáxis abstracta. 
 """
 
-from pytiger2c.ast.languagenode import LanguageNode
-from pytiger2c.ast.nonvaluedexpressionnode import NonValuedExpressionNode
-from pytiger2c.ast.valuedexpressionnode import ValuedExpressionNode
-from pytiger2c.ast.declarationnode import DeclarationNode
 from pytiger2c.ast.assignmentnode import AssignmentNode
 from pytiger2c.ast.ifthenstatementnode import IfThenStatementNode
 from pytiger2c.ast.whilestatementnode import WhileStatementNode
 from pytiger2c.ast.forstatementnode import ForStatementNode
 from pytiger2c.ast.breakstatementnode import BreakStatementNode
-from pytiger2c.ast.callabledeclarationnode import CallableDeclarationNode
 from pytiger2c.ast.variabledeclarationnode import VariableDeclarationNode
 from pytiger2c.ast.typedeclarationnode import TypeDeclarationNode
 from pytiger2c.ast.functiondeclarationnode import FunctionDeclarationNode
@@ -30,13 +25,9 @@ from pytiger2c.ast.ifthenelsenode import IfThenElseNode
 from pytiger2c.ast.functioncallnode import FunctionCallNode
 from pytiger2c.ast.letnode import LetNode
 from pytiger2c.ast.expressionsequencenode import ExpressionSequenceNode
-from pytiger2c.ast.accessnode import AccessNode
-from pytiger2c.ast.operatornode import OperatorNode
 from pytiger2c.ast.variableaccessnode import VariableAccessNode
 from pytiger2c.ast.recordaccessnode import RecordAccessNode
 from pytiger2c.ast.arrayaccessnode import ArrayAccessNode
-from pytiger2c.ast.arithmeticoperatornode import ArithmeticOperatorNode
-from pytiger2c.ast.logicaloperatornode import LogicalOperatorNode
 from pytiger2c.ast.unaryminusoperatornode import UnaryMinusOperatorNode
 from pytiger2c.ast.plusoperatornode import PlusOperatorNode
 from pytiger2c.ast.minusoperatornode import MinusOperatorNode
@@ -54,16 +45,11 @@ from pytiger2c.ast.oroperatornode import OrOperatorNode
 
 # Members that should be imported when "from pytiger2c.ast import *" is used.
 __all__ = [
-    'LanguageNode',
-    'NonValuedExpressionNode',
-    'ValuedExpressionNode',
-    'DeclarationNode',
     'AssignmentNode',
     'IfThenStatementNode',
     'WhileStatementNode',
     'ForStatementNode',
     'BreakStatementNode',
-    'CallableDeclarationNode',
     'VariableDeclarationNode',
     'TypeDeclarationNode',
     'FunctionDeclarationNode',
@@ -80,13 +66,9 @@ __all__ = [
     'FunctionCallNode',
     'LetNode',
     'ExpressionSequenceNode',
-    'AccessNode',
-    'OperatorNode',
     'VariableAccessNode',
     'RecordAccessNode',
     'ArrayAccessNode',
-    'ArithmeticOperatorNode',
-    'LogicalOperatorNode',
     'UnaryMinusOperatorNode',
     'PlusOperatorNode',
     'MinusOperatorNode',
