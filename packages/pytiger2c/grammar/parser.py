@@ -60,19 +60,23 @@ def p_program(symbols):
         raise SyntacticError(message)
     else:
         symbols[0] = symbols[1]
+        symbols[0].line_number = symbols.lineno(1)
 
 # Literals.
 def p_expr_nil(symbols):
     "expr : NIL"
     symbols[0] = NilExpressionNode()
+    symbols[0].line_number = symbols.lineno(1)
 
 def p_expr_int(symbols):
     "expr : INTLIT"
     symbols[0] = IntegerLiteralExpressionNode(int(symbols[1]))
+    symbols[0].line_number = symbols.lineno(1)
 
 def p_expr_str(symbols):
     "expr : STRLIT"
     symbols[0] = StringLiteralExpressionNode(symbols[1])
+    symbols[0].line_number = symbols.lineno(1)
     
 # Left values of an assignment. Variables, record fields and elements of arrays.
 def p_expr_lvalue(symbols):

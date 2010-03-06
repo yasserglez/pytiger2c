@@ -25,7 +25,7 @@ class ValuedExpressionNode(LanguageNode):
         """
         return self._return_type
     
-    return_type = property(_get_return_type, None, 'Tipo del valor retornado por la expresión')
+    return_type = property(_get_return_type)
     
     def __init__(self):
         """

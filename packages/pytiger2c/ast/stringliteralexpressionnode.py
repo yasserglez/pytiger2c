@@ -22,7 +22,7 @@ class StringLiteralExpressionNode(ValuedExpressionNode):
         """
         return self._string
     
-    string = property(_get_string, None, 'Valor del literal de cadena')    
+    string = property(_get_string)    
     
     def __init__(self, string):
         """

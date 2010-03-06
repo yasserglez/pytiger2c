@@ -14,11 +14,26 @@ class LanguageNode(object):
     del lenguaje que representa.
     """
     
+    def _get_line_number(self):
+        """
+        Método para obtener el valor de la propiedad C{line_number}.
+        """
+        return self._line_number
+    
+    def _set_line_number(self, line_number):
+        """
+        Método para cambiar el valor de la propiedad C{line_number}.
+        """
+        self._line_number = line_number
+    
+    line_number = property(_get_line_number, _set_line_number)
+    
     def __init__(self):
         """
         Inicializa el nodo del árbol de sintáxis abstracta.
         """
         super(LanguageNode, self).__init__()
+        self._line_number = None
     
     def check_semantics(self, errors):
         """

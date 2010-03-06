@@ -22,7 +22,7 @@ class IntegerLiteralExpressionNode(ValuedExpressionNode):
         """
         return self._integer
     
-    integer = property(_get_integer, None, 'Valor del número entero literal')
+    integer = property(_get_integer)
     
     def __init__(self, integer):
         """
