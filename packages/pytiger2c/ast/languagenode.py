@@ -20,12 +20,13 @@ class LanguageNode(object):
         """
         super(LanguageNode, self).__init__()
     
-    def check_semantics(self, error_list):
+    def check_semantics(self, errors):
         """
         Comprueba que la estructura del lenguaje Tiger representada por el nodo 
         sea correcta semánticamente.
-        
-        @param error_list: Lista a la cual se deben añadir los mensajes de error de
+
+        @type errors: C{list}
+        @param errors: Lista a la cual se deben añadir los mensajes de error de
             los errores semánticos encontrados durante la comprobación de la
             estructura del lenguaje representada por el nodo del árbol de 
             sintáxis abstracta.

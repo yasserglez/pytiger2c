@@ -51,15 +51,30 @@ class SemanticError(PyTiger2CError):
     Excepción lanzada durante el análisis semántico.
     """
     
-    def __init__(self, message='An error occurred during the semantic analysis'):
+    def __init__(self, messages=None):
         """
         Representa un error semántico en un programa Tiger.
         
-        @type message: C{str}
-        @param message: Descripción del error.        
+        @type messages: C{list}
+        @param message: Lista de los mensajes de error ocurridos durante el
+            análisis semántico..        
         """
+        if messages is None:
+            messages = ['An error occurred during the semantic analysis']
+        self.messages = messages
+        if len(self.messages) == 1:
+            message = self.messages[0]
+        else:
+            message = 'Various semantic errors'
         super(SemanticError, self).__init__('Semantic Error', message)
-
+        
+    def __str__(self):
+        """
+        Retorna una cadena con el tipo de error ocurrido y una descripción del error.
+        """
+        messages = ['{error}: {message}.'.format(error=self.error, message=message) for message in self.messages]
+        return '\n'.join(messages)
+            
 
 class CodeGenerationError(PyTiger2CError):
     """

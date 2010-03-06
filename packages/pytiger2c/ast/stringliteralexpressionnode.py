@@ -27,13 +27,14 @@ class StringLiteralExpressionNode(ValuedExpressionNode):
     def __init__(self, string):
         """
         Inicializa la clase C{StringLiteralExpressionNode}.
-        
+
+        @type string: C{str}
         @param string: Valor del literal de cadena.
         """
         super(StringLiteralExpressionNode, self).__init__()
         self._string = string
         
-    def check_semantics(self, error_list):
+    def check_semantics(self, errors):
         """
         Para obtener información acerca de los parámetros recibidos por
         el método consulte la documentación del método C{check_semantics}

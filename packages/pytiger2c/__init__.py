@@ -61,7 +61,10 @@ def check_semantics(ast):
         en el árbol de sintáxis abstracta. La excepción contendrá información
         acerca del error.
     """
-    raise SemanticError()
+    errors = []
+    ast.check_semantics(errors)
+    if errors:
+        raise SemanticError(errors)
 
 
 def generate_code(ast, output_fd):

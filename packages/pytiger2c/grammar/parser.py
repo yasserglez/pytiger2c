@@ -68,13 +68,11 @@ def p_expr_nil(symbols):
 
 def p_expr_int(symbols):
     "expr : INTLIT"
-    integer = int(symbols[1].value)
-    symbols[0] = IntegerLiteralExpressionNode(integer)
+    symbols[0] = IntegerLiteralExpressionNode(int(symbols[1]))
 
 def p_expr_str(symbols):
     "expr : STRLIT"
-    string = symbols[1].value
-    symbols[0] = StringLiteralExpressionNode(string)
+    symbols[0] = StringLiteralExpressionNode(symbols[1])
     
 # Left values of an assignment. Variables, record fields and elements of arrays.
 def p_expr_lvalue(symbols):

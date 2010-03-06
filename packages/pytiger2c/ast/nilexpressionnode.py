@@ -22,7 +22,7 @@ class NilExpressionNode(ValuedExpressionNode):
         """
         super(NilExpressionNode, self).__init__()
         
-    def check_semantics(self, error_list):
+    def check_semantics(self, errors):
         """
         Para obtener información acerca de los parámetros recibidos por
         el método consulte la documentación del método C{check_semantics}

@@ -28,12 +28,13 @@ class IntegerLiteralExpressionNode(ValuedExpressionNode):
         """
         Inicializa la clase C{IntegerLiteralExpressionNode}.
         
+        @type integer: C{int}
         @param integer: Valor del número entero literal.
         """
         super(IntegerLiteralExpressionNode, self).__init__()
         self._integer = integer
 
-    def check_semantics(self, error_list):
+    def check_semantics(self, errors):
         """
         Para obtener información acerca de los parámetros recibidos por
         el método consulte la documentación del método C{check_semantics}
