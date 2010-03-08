@@ -61,6 +61,7 @@ def p_program(symbols):
     else:
         symbols[0] = symbols[1]
         symbols[0].line_number = symbols.lineno(1)
+        symbols[0].parent_node = None
 
 # Literals.
 def p_expr_nil(symbols):

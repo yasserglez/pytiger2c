@@ -17,16 +17,42 @@ class LanguageNode(object):
     def _get_line_number(self):
         """
         Método para obtener el valor de la propiedad C{line_number}.
+        
+        @rtype: C{int}
+        @return: Línea del flujo de caracteres de entrada donde se definió la
+            estructura representada por el nodo del árbol de sintáxis abstracta.
         """
         return self._line_number
     
     def _set_line_number(self, line_number):
         """
         Método para cambiar el valor de la propiedad C{line_number}.
+        
+        @type line_number: C{int}
+        @param line_number: Línea del flujo de caracteres de entrada donde se definió
+            la estructura representada por el nodo del árbol de sintáxis abstracta.
         """
         self._line_number = line_number
     
     line_number = property(_get_line_number, _set_line_number)
+    
+    def _get_parent_node(self):
+        """
+        Método para obtener el valor de la propiedad C{parent_node}.
+        
+        @rtype: C{LanguageNode}
+        @return: Referencia al nodo padre en el árbol de sintáxis abstracta.
+        """
+        return self._parent_node
+    
+    def _set_parent_node(self, parent_node):
+        """
+        Método para cambiar el valor de la propiedad C{parent_node}.
+        
+        @type parent_node: C{LanguageNode}
+        @param parent_node: Referencia al nodo padre en el árbol de sintáxis abstracta.
+        """
+        self._parent_node = parent_node
     
     def __init__(self):
         """
@@ -34,6 +60,7 @@ class LanguageNode(object):
         """
         super(LanguageNode, self).__init__()
         self._line_number = None
+        self._parent_node = None
     
     def check_semantics(self, errors):
         """
