@@ -53,6 +53,8 @@ class LanguageNode(object):
         @param parent_node: Referencia al nodo padre en el árbol de sintáxis abstracta.
         """
         self._parent_node = parent_node
+        
+    parent_node = property(_get_parent_node, _set_parent_node)
     
     def __init__(self):
         """

@@ -39,6 +39,10 @@ class StringLiteralExpressionNode(ValuedExpressionNode):
         Para obtener información acerca de los parámetros recibidos por
         el método consulte la documentación del método C{check_semantics}
         en la clase C{LanguageNode}.
+        
+        Este nodo del árbol de sintáxis abstracta no requiere comprobación
+        semántica, solamente se da valor al tipo de retorno del nodo que 
+        siempre será C{StringType}.
         """
         # Set the return type of the expression.
         self._return_type = StringType()

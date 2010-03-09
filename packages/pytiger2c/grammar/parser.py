@@ -60,7 +60,6 @@ def p_program(symbols):
         raise SyntacticError(message)
     else:
         symbols[0] = symbols[1]
-        symbols[0].line_number = symbols.lineno(1)
         symbols[0].parent_node = None
 
 # Literals.
@@ -139,6 +138,8 @@ def p_expr_for(symbols):
 
 def p_expr_break(symbols):
     "expr : BREAK"
+    symbols[0] = BreakStatementNode()
+    symbols[0].line_number = symbols.lineno(1)
 
 # The let block.
 def p_expr_let(symbols):
