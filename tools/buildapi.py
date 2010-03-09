@@ -142,10 +142,6 @@ class Tiger2CLatexWriter(LatexWriter):
         for val_doc in self.valdocs:
             if isinstance(val_doc, ModuleDoc):
                 out('\\include{%s-module}\n' % val_doc.canonical_name)
-        # Add the index, if requested.
-        if self._index:
-            self.write_start_of(out, 'Index')
-            out('\\printindex\n\n')
         # Add the footer.
         self.write_start_of(out, 'Footer')
         out('\\end{document}\n')
@@ -169,7 +165,6 @@ class Tiger2CLatexWriter(LatexWriter):
         if self._list_classes_separately:
             self.write_class_list(out, doc)
         self.write_func_list(out, 'Funciones', doc, 'function')
-        self.write_var_list(out, 'Variables', doc, 'other')
         # Class list.
         if not self._list_classes_separately:
             classes = doc.select_variables(imported=False, value_type='class',
@@ -213,7 +208,7 @@ class Tiger2CLatexWriter(LatexWriter):
     def write_class(self, out, doc):
         if self._list_classes_separately:
             self.write_header(out, doc)
-        self.write_start_of(out, 'Class Description')
+        self.write_start_of(out, 'Descripción de la clase')
         # Add this class to the index.
         out(self.indexterm(doc, 'start'))
         # Add a section marker.
@@ -295,7 +290,7 @@ class Tiger2CLatexWriter(LatexWriter):
                     out(self._VAR_GROUP_HEADER % (hdr))
                     out('\\cline{1-2}\n')
                     for var_doc in grouped_inh_vars[base]:
-                        if isinstance(var_doc.value3, PropertyDoc):
+                        if isinstance(var_doc.value, PropertyDoc):
                             self.write_property_list_line(out, var_doc)
                         else:
                             self.write_var_list_line(out, var_doc)
@@ -325,7 +320,7 @@ class Tiger2CLatexWriter(LatexWriter):
                     hdr = ('Heredadas de  %s' %
                            plaintext_to_latex('%s' % base.canonical_name))
                     if self._crossref and base in self.class_set:
-                        hdr += ('\\textit{(Sección \\ref{%s})}' %
+                        hdr += (' \\textit{(Sección \\ref{%s})}' %
                                 self.label(base))
                     out(self._FUNC_GROUP_HEADER % (hdr))
                     for var_doc in grouped_inh_vars[base]:
@@ -436,16 +431,29 @@ class Tiger2CLatexWriter(LatexWriter):
                 var_docs = [v for v in var_docs if v.is_public]
             if var_docs:
                 hdr = ('Heredados de %s' %
-                       plaintext_to_latex('%s' % base.canonical_name))
+                       plaintext_to_latex('%s' % self._base_name(base)))
                 if self._crossref and base in self.class_set:
-                    hdr += ('\\textit{(Section \\ref{%s})}' %
+                    hdr += (' \\textit{(Sección \\ref{%s})}' %
                             self.label(base))
                 out(self._FUNC_GROUP_HEADER % hdr)
                 out('\\begin{quote}\n')
                 out('%s\n' % ', '.join(
                     ['%s()' % plaintext_to_latex(var_doc.name)
                      for var_doc in var_docs]))
-                out('\\end{quote}\n')         
+                out('\\end{quote}\n')        
+                
+    def _base_name(self, doc):
+        if doc.canonical_name is None:
+            if doc.parse_repr is not None:
+                return doc.parse_repr
+            else:
+                return '??'
+        else:
+            s = '%s' % doc.canonical_name
+            if '.' in s:
+                return s[s.rfind('.')+1:]
+            else:
+                return s
                                
     def write_var_inheritance_list(self, out, doc, listed_inh_vars):
         for base in doc.mro():
@@ -456,9 +464,9 @@ class Tiger2CLatexWriter(LatexWriter):
                 var_docs = [v for v in var_docs if v.is_public]
             if var_docs:
                 hdr = ('Heredadas de %s' %
-                       plaintext_to_latex('%s' % base.canonical_name))
+                       plaintext_to_latex('%s' % self._base_name(base)))
                 if self._crossref and base in self.class_set:
-                    hdr += (' \\textit{(Section \\ref{%s})}' %
+                    hdr += (' \\textit{(Sección \\ref{%s})}' %
                             self.label(base))
                 out(self._VAR_GROUP_HEADER % hdr)
                 out('\\multicolumn{2}{|p{\\varwidth}|}{'
@@ -511,7 +519,7 @@ def main():
     cli.cli()
     # Generate the PDF document.
     os.chdir(OUTPUT_DIR)
-    for i in xrange(2):
+    for i in xrange(3):
         subprocess.call(LATEX_CMD)
     # Cleanup and move the PDF to the docs directory.
     pdf_file = os.path.join(DOCS_DIR, 'api.pdf')
