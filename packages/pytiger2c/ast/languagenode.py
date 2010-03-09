@@ -32,7 +32,7 @@ class LanguageNode(object):
         @param line_number: Línea del flujo de caracteres de entrada donde se definió
             la estructura representada por el nodo del árbol de sintáxis abstracta.
         """
-        self._line_number = line_number
+        self._line_number = line_number    
     
     line_number = property(_get_line_number, _set_line_number)
     
@@ -52,7 +52,7 @@ class LanguageNode(object):
         @type parent_node: C{LanguageNode}
         @param parent_node: Referencia al nodo padre en el árbol de sintáxis abstracta.
         """
-        self._parent_node = parent_node
+        self._parent_node = parent_node    
         
     parent_node = property(_get_parent_node, _set_parent_node)
     
@@ -85,5 +85,39 @@ class LanguageNode(object):
         @raise CodeGenerationError: Esta excepción se lanzará cuando se produzca
             algún error durante la generación del código correspondiente al nodo.,
             La excepción contendrá información acerca del error.
+        """
+        raise NotImplementedError()
+
+    def has_return_value(self):
+        """
+        Comprueba que la expresión representada por el nodo tiene un valor.
+        
+        Este método es utilizado por las clases descendientes de C{LanguageNode}
+        que necesitan comprobar si la expresión representada por un nodo tiene
+        o no valor de retorno. Los descendientes de C{LanguageNode} deben 
+        implementar este método.
+        
+        El objetivo de este método es poder considerar de forma transparente los
+        casos especiales de expresiones que generalmente tienen un valor de
+        retorno, por lo que derivan de C{ValuedExpressionNode}, pero que en
+        ocasiones no retornan un valor. Estos casos son los siguientes:
+        
+            1. Una expresión C{let}, representada por C{LetNode} que no tenga 
+               expresiones entre C{in} y C{end}.
+            2. Una secuencia de expresiones vacía, representada por 
+               C{ExpressionSequenceNode}.
+            3. Llamada a un procedimiento, representado por C{FunctionCallNode}
+               al igual que un llamado a función que sí retorna valor. Los 
+               llamados a funciones y procedimientos están representados por
+               un mismo nodo del árbol de sintáxis abstracta ya que no es
+               posible establecer la diferencia durante el análisis sintáctico.
+               
+        La mayoría de los descendientes de C{LanguageNode} utilizarán la 
+        implementación de este método provista por C{ValuedExpressionNode} y
+        C{NonValuedExpressionNode}.
+               
+        @rtype: C{bool}
+        @return: Valor booleano indicando si la expresión representada por 
+            el nodo tiene valor de retorno.
         """
         raise NotImplementedError()

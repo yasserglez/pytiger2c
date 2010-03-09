@@ -20,7 +20,7 @@ class IntegerLiteralExpressionNode(ValuedExpressionNode):
         """
         Método para obtener el valor de la propiedad C{integer}.
         """
-        return self._integer
+        return self._integer    
     
     integer = property(_get_integer)
     

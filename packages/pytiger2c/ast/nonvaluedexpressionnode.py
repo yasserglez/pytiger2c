@@ -17,4 +17,9 @@ class NonValuedExpressionNode(LanguageNode):
         Inicializa la clase C{NonValuedExpressionNode}.
         """
         super(NonValuedExpressionNode, self).__init__()
-
+        
+    def has_return_value(self):
+        """
+        Ver documentación del método C{has_return_value} en C{LanguageNode}.      
+        """
+        return False

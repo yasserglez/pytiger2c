@@ -20,8 +20,8 @@ class StringLiteralExpressionNode(ValuedExpressionNode):
         """
         Método para obtener el valor de la propiedad C{string}.
         """
-        return self._string
-    
+        return self._string    
+   
     string = property(_get_string)    
     
     def __init__(self, string):
