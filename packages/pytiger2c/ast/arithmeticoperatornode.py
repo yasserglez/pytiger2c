@@ -4,17 +4,17 @@
 Clase C{ArithmeticOperatorNode} del árbol de sintáxis abstracta.
 """
 
-from pytiger2c.ast.operatornode import OperatorNode
+from pytiger2c.ast.binaryoperatornode import BinaryOperatorNode
 
 
-class ArithmeticOperatorNode(OperatorNode):
+class ArithmeticOperatorNode(BinaryOperatorNode):
     """
     Clase C{ArithmeticOperatorNode} del árbol de sintáxis abstracta.
     """
     
-    def __init__(self):
+    def __init__(self, left, right):
         """
         Inicializa la clase C{ArithmeticOperatorNode}.
         """
-        super(ArithmeticOperatorNode, self).__init__()
+        super(ArithmeticOperatorNode, self).__init__(left, right)
 

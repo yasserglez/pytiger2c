@@ -12,9 +12,9 @@ class TimesOperatorNode(ArithmeticOperatorNode):
     Clase C{TimesOperatorNode} del árbol de sintáxis abstracta.
     """
     
-    def __init__(self):
+    def __init__(self, left, right):
         """
         Inicializa la clase C{TimesOperatorNode}.
         """
-        super(TimesOperatorNode, self).__init__()
+        super(TimesOperatorNode, self).__init__(left, right)
 

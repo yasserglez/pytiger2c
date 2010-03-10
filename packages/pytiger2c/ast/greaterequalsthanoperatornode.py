@@ -12,8 +12,8 @@ class GreaterEqualsThanOperatorNode(LogicalOperatorNode):
     Clase C{GreaterEqualsThanOperatorNode} del árbol de sintáxis abstracta.
     """
     
-    def __init__(self):
+    def __init__(self, left, right):
         """
         Inicializa la clase C{GreaterEqualsThanOperatorNode}.
         """
-        super(GreaterEqualsThanOperatorNode, self).__init__()
+        super(GreaterEqualsThanOperatorNode, self).__init__(left, right)

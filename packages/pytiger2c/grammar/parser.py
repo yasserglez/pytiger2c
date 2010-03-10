@@ -110,6 +110,32 @@ def p_expr_bin_op(symbols):
          | expr AND expr
          | expr OR expr
     """
+    if symbols[2] == "+":
+        symbols[0] = PlusOperatorNode(symbols[1], symbols[3])
+    elif symbols[2] == "-":
+        symbols[0] = MinusOperatorNode(symbols[1], symbols[3])
+    elif symbols[2] == "*":
+        symbols[0] = TimesOperatorNode(symbols[1], symbols[3])
+    elif symbols[2] == "/":
+        symbols[0] = MinusOperatorNode(symbols[1], symbols[3])
+    elif symbols[2] == "=":
+        symbols[0] = EqualsOperatorNode(symbols[1], symbols[3])
+    elif symbols[2] == "<>":
+        symbols[0] = NotEqualsOperatorNode(symbols[1], symbols[3])
+    elif symbols[2] == "<":
+        symbols[0] = LessThanOperatorNode(symbols[1], symbols[3])
+    elif symbols[2] == "<=":
+        symbols[0] = LessEqualsThanOperatorNode(symbols[1], symbols[3])
+    elif symbols[2] == ">":
+        symbols[0] = GreaterThanOperatorNode(symbols[1], symbols[3])
+    elif symbols[2] == ">=":
+        symbols[0] = GreaterEqualsThanOperatorNode(symbols[1], symbols[3])
+    elif symbols[2] == "&":
+        symbols[0] = AndOperatorNode(symbols[1], symbols[3])
+    elif symbols[2] == "|":
+        symbols[0] = OrOperatorNode(symbols[1], symbols[3])
+    symbols[0].line_number = symbols.lineno(2)
+
 
 # A group of expressions enclosed by parenthesis separated by semicolons.
 def p_expr_expr_seq(symbols):
@@ -134,6 +160,8 @@ def p_expr_if_else(symbols):
 
 def p_expr_while(symbols):
     "expr : WHILE expr DO expr"
+    symbols[0] = WhileStatementNode(symbols[2], symbols[4])
+    symbols[0].line_number = symbols.lineno(1)
     
 def p_expr_for(symbols):
     "expr : FOR ID ASSIGN expr TO expr DO expr"

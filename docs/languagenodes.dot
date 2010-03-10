@@ -4,8 +4,8 @@ graph LanguageNodes {
     
     LanguageNode -- NonValuedExpressionNode;
     LanguageNode -- ValuedExpressionNode;
-    
-    
+
+   
     NonValuedExpressionNode -- DeclarationNode;
     NonValuedExpressionNode -- AssignmentNode;
     NonValuedExpressionNode -- IfThenStatementNode;
@@ -42,10 +42,14 @@ graph LanguageNodes {
     AccessNode -- RecordAccessNode;
     AccessNode -- ArrayAccessNode;
     
-    OperatorNode -- ArithmeticOperatorNode;
-    OperatorNode -- LogicalOperatorNode;
+    OperatorNode -- UnaryOperatorNode;
+    OperatorNode -- BinaryOperatorNode; 
     
-    ArithmeticOperatorNode -- UnaryMinusOperatorNode;
+    BinaryOperatorNode -- ArithmeticOperatorNode;
+    BinaryOperatorNode -- LogicalOperatorNode;
+    
+    UnaryOperatorNode -- UnaryMinusOperatorNode;
+    
     ArithmeticOperatorNode -- PlusOperatorNode;
     ArithmeticOperatorNode -- MinusOperatorNode;    
     ArithmeticOperatorNode -- TimesOperatorNode;

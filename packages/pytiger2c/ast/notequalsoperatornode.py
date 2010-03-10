@@ -12,9 +12,9 @@ class NotEqualsOperatorNode(LogicalOperatorNode):
     Clase C{NotEqualsOperatorNode} del árbol de sintáxis abstracta.
     """
     
-    def __init__(self):
+    def __init__(self, left, right):
         """
         Inicializa la clase C{NotEqualsOperatorNode}.
         """
-        super(NotEqualsOperatorNode, self).__init__()
+        super(NotEqualsOperatorNode, self).__init__(left, right)
 

@@ -12,9 +12,9 @@ class OrOperatorNode(LogicalOperatorNode):
     Clase C{OrOperatorNode} del árbol de sintáxis abstracta.
     """
     
-    def __init__(self):
+    def __init__(self, left, right):
         """
         Inicializa la clase C{OrOperatorNode}.
         """
-        super(OrOperatorNode, self).__init__()
+        super(OrOperatorNode, self).__init__(left, right)
 
