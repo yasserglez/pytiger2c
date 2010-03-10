@@ -126,6 +126,8 @@ def p_expr_func(symbols):
 # Flow control structures.
 def p_expr_if(symbols):
     "expr : IF expr THEN expr"
+    symbols[0] = IfThenStatementNode(symbols[2], symbols[4])
+    symbols[0].line_number = symbols.lineno(1)
 
 def p_expr_if_else(symbols):
     "expr : IF expr THEN expr ELSE expr"
