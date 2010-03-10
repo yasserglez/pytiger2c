@@ -4,10 +4,10 @@
 Clase C{ArithmeticOperatorNode} del árbol de sintáxis abstracta.
 """
 
-from pytiger2c.ast.operatornode import OperatorNode
+from pytiger2c.ast.binaryoperatornode import BinaryOperatorNode
 
 
-class ArithmeticOperatorNode(OperatorNode):
+class ArithmeticOperatorNode(BinaryOperatorNode):
     """
     Clase C{ArithmeticOperatorNode} del árbol de sintáxis abstracta.
     """

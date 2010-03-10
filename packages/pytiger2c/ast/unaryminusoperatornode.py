@@ -4,10 +4,10 @@
 Clase C{UnaryMinusOperatorNode} del árbol de sintáxis abstracta.
 """
 
-from pytiger2c.ast.arithmeticoperatornode import ArithmeticOperatorNode
+from pytiger2c.ast.unaryoperatornode import UnaryOperatorNode
 
 
-class UnaryMinusOperatorNode(ArithmeticOperatorNode):
+class UnaryMinusOperatorNode(UnaryOperatorNode):
     """
     Clase C{UnaryMinusOperatorNode} del árbol de sintáxis abstracta.
     """
