@@ -12,9 +12,9 @@ class ArithmeticOperatorNode(BinaryOperatorNode):
     Clase C{ArithmeticOperatorNode} del árbol de sintáxis abstracta.
     """
     
-    def __init__(self):
+    def __init__(self, left, right):
         """
         Inicializa la clase C{ArithmeticOperatorNode}.
         """
-        super(ArithmeticOperatorNode, self).__init__()
+        super(ArithmeticOperatorNode, self).__init__(left, right)
 

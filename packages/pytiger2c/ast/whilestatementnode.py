@@ -32,7 +32,6 @@ class WhileStatementNode(NonValuedExpressionNode):
         """
         self._condition = condition
         self._expression = expression
-        print condition
         super(WhileStatementNode, self).__init__()
         
     def check_semantics(self, errors):

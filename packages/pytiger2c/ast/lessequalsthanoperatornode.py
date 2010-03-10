@@ -12,9 +12,9 @@ class LessEqualsThanOperatorNode(LogicalOperatorNode):
     Clase C{LessEqualsThanOperatorNode} del árbol de sintáxis abstracta.
     """
     
-    def __init__(self):
+    def __init__(self, left, right):
         """
         Inicializa la clase C{LessEqualsThanOperatorNode}.
         """
-        super(LessEqualsThanOperatorNode, self).__init__()
+        super(LessEqualsThanOperatorNode, self).__init__(left, right)
 
