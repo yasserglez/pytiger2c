@@ -11,8 +11,9 @@ class BinaryOperatorNode(OperatorNode):
     """
     Clase C{BinaryOperatorNode} del árbol de sintáxis abstracta.
     
-    Representa los operadores que se realizan entre dos expresiones.
-    De esta clase heredan los operadores aritméticos y lógicos.
+    Representa la clase base para los operadores que se realizan 
+    entre dos expresiones. De esta clase heredan los operadores 
+    aritméticos y lógicos.
     """
     
     def __init__(self, left, right):

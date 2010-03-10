@@ -111,29 +111,29 @@ def p_expr_bin_op(symbols):
          | expr OR expr
     """
     if symbols[2] == "+":
-        symbols[0] == PlusOperatorNode(symbols[1], symbols[3])
+        symbols[0] = PlusOperatorNode(symbols[1], symbols[3])
     elif symbols[2] == "-":
-        symbols[0] == MinusOperatorNode(symbols[1], symbols[3])
+        symbols[0] = MinusOperatorNode(symbols[1], symbols[3])
     elif symbols[2] == "*":
-        symbols[0] == TimesOperatorNode(symbols[1], symbols[3])
+        symbols[0] = TimesOperatorNode(symbols[1], symbols[3])
     elif symbols[2] == "/":
-        symbols[0] == MinusOperatorNode(symbols[1], symbols[3])
+        symbols[0] = MinusOperatorNode(symbols[1], symbols[3])
     elif symbols[2] == "=":
-        symbols[0] == EqualsOperatorNode(symbols[1], symbols[3])
+        symbols[0] = EqualsOperatorNode(symbols[1], symbols[3])
     elif symbols[2] == "<>":
-        symbols[0] == NotEqualsOperatorNode(symbols[1], symbols[3])
+        symbols[0] = NotEqualsOperatorNode(symbols[1], symbols[3])
     elif symbols[2] == "<":
-        symbols[0] == LessThanOperatorNode(symbols[1], symbols[3])
+        symbols[0] = LessThanOperatorNode(symbols[1], symbols[3])
     elif symbols[2] == "<=":
-        symbols[0] == LessEqualsThanOperatorNode(symbols[1], symbols[3])
+        symbols[0] = LessEqualsThanOperatorNode(symbols[1], symbols[3])
     elif symbols[2] == ">":
-        symbols[0] == GreaterThanOperatorNode(symbols[1], symbols[3])
+        symbols[0] = GreaterThanOperatorNode(symbols[1], symbols[3])
     elif symbols[2] == ">=":
-        symbols[0] == GreaterEqualsThanOperatorNode(symbols[1], symbols[3])
+        symbols[0] = GreaterEqualsThanOperatorNode(symbols[1], symbols[3])
     elif symbols[2] == "&":
-        symbols[0] == AndOperatorNode(symbols[1], symbols[3])
+        symbols[0] = AndOperatorNode(symbols[1], symbols[3])
     elif symbols[2] == "|":
-        symbols[0] == OrOperatorNode(symbols[1], symbols[3])
+        symbols[0] = OrOperatorNode(symbols[1], symbols[3])
     symbols[0].line_number = symbols.lineno(2)
 
 
