@@ -51,5 +51,5 @@ class BreakStatementNode(NonValuedExpressionNode):
             message = 'break used out of a while or for statement at line {line}'
             errors.append(message.format(line=self.line_number))
         elif isinstance(current_node, CallableDeclarationNode):
-            message = 'invalid usage of the break statement at line {line}'
+            message = 'Invalid usage of the break statement at line {line}'
             errors.append(message.format(line=self.line_number))
