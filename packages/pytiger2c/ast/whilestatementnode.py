@@ -5,8 +5,6 @@ Clase C{WhileStatementNode} del árbol de sintáxis abstracta.
 """
 
 from pytiger2c.ast.nonvaluedexpressionnode import NonValuedExpressionNode
-from pytiger2c.ast import languagenode
-from pytiger2c.ast.valuedexpressionnode import ValuedExpressionNode
 from pytiger2c.types.integertype import IntegerType
 
 

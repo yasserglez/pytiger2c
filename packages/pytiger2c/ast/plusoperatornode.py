@@ -5,7 +5,6 @@ Clase C{PlusOperatorNode} del árbol de sintáxis abstracta.
 """
 
 from pytiger2c.ast.arithmeticoperatornode import ArithmeticOperatorNode
-from pytiger2c.ast.valuedexpressionnode import ValuedExpressionNode
 from pytiger2c.types.integertype import IntegerType
 
 
@@ -36,7 +35,7 @@ class PlusOperatorNode(ArithmeticOperatorNode):
         El operador suma realiza la suma entre los el valor de la expresión
         que se encuentra a la izquierda con el valor de la derecha.
         
-        En la comprobación semántica de este nodo del árbol de sintáxix abstracta
+        En la comprobación semántica de este nodo del árbol de sintáxis abstracta
         se comprueban semánticamente tanto la expresión de la izquierda como la 
         expresión de la derecha. Luego se comprueba que ambas retornen valor y 
         que el valor de retorno de ambas sea entero. 
