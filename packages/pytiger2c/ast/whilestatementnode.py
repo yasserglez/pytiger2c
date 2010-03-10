@@ -55,13 +55,13 @@ class WhileStatementNode(NonValuedExpressionNode):
         self._condition.check_semantics(errors)
         # The condition return type must be IntegerType
         if not self._condition.has_return_value():
-            message = 'While used with a non-return condition at line {line}'
+            message = 'while used with a non-return condition at line {line}'
             errors.append(message.format(line=self.line_number))
-        if not isinstance(self._condition.return_type, IntegerType):
-            message = 'Invalid type of condition of the break statement at line {line}'
+        elif not isinstance(self._condition.return_type, IntegerType):
+            message = 'Invalid type of condition of the while statement at line {line}'
             errors.append(message.format(line=self.line_number))
         self._expression.check_semantics(errors)
         # The expression must not return value
         if self._expression.has_return_value():
-            message = 'While used with a expression with return value at line {line}'
+            message = 'while used with a expression with return value at line {line}'
             errors.append(message.format(line=self.line_number))
