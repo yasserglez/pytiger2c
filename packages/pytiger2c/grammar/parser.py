@@ -132,6 +132,8 @@ def p_expr_if_else(symbols):
 
 def p_expr_while(symbols):
     "expr : WHILE expr DO expr"
+    symbols[0] = WhileStatementNode(symbols[2], symbols[4])
+    symbols[0].line_number = symbols.lineno(1)
     
 def p_expr_for(symbols):
     "expr : FOR ID ASSIGN expr TO expr DO expr"
