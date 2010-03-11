@@ -17,7 +17,7 @@ class IfThenElseStatementNode(ValuedExpressionNode):
     Primeramente se evalúa la expresión seguida de la instrucción C{if}, que debe 
     retornar un número entero; si su valor es diferente de cero entonces se 
     ejecutará la expresión seguida de la instrucción C{then} y este será el valor 
-    de retorno de la expresión,. en caso contrario se ejecutará la expresión 
+    de retorno de la expresión, en caso contrario se ejecutará la expresión 
     seguida de la instrucción C{else} y este será el valor de retorno de la 
     expresión. Por tanto, la expresión seguida de la instrucción C{then} y 
     la expresión seguida de la instrucción C{else} deben tener el mismo tipo 
