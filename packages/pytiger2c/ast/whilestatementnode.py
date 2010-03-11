@@ -17,20 +17,39 @@ class WhileStatementNode(NonValuedExpressionNode):
     es distinta de cero, entonces la expresión es ejecutada. 
     """
     
+    def _get_condition(self):
+        """
+        Método para obtener el valor de la propiedad C{condition}.
+        """
+        return self._condition
+        
+    condition = property(_get_condition)
+    
+    def _get_expression(self):
+        """
+        Método para obtener el valor de la propiedad C{expression}.
+        """
+        return self._expression
+        
+    expression = property(_get_expression)
+    
     def __init__(self, condition, expression):
         """
         Inicializa la clase C{WhileStatementNode}.
         
-        @type condition: LanguageNode
-        @param condition: LanguageNode correspondiente a la condición que es evaluada, 
-            de forma que si su valor es distinto de cero, la expresión es ejecutada.
-        @type expression: LanguageNode
-        @param expression: LanguageNode correspondiente a la expresión que es ejecutada,
-            una vez que se verifica que la condición anterior es distinta de cero
+        @type condition: C{LanguageNode}
+        @param condition: Nodo del árbol de sintáxis abstracta correspondiente a
+            la condición que es evaluada, de forma que si su valor es distinto de 
+            cero, la expresión es ejecutada.
+            
+        @type expression: C{LanguageNode}
+        @param expression: Nodo del árbol de sintáxis abstracta correspondiente a 
+            la expresión que es ejecutada, una vez que se verifica que la condición 
+            anterior es distinta de cero
         """
+        super(WhileStatementNode, self).__init__()
         self._condition = condition
         self._expression = expression
-        super(WhileStatementNode, self).__init__()
         
     def check_semantics(self, errors):
         """
@@ -50,16 +69,16 @@ class WhileStatementNode(NonValuedExpressionNode):
         de la condición o la expresión, si la condición no retorna valor, si este valor
         de retorno no es te tipo C{IntegerType} o si la expresión retorna algún valor.
         """
-        self._condition.check_semantics(errors)
+        self.condition.check_semantics(errors)
         # The condition return type must be IntegerType
-        if not self._condition.has_return_value():
+        if not self.condition.has_return_value():
             message = 'while used with a non-return condition at line {line}'
             errors.append(message.format(line=self.line_number))
-        elif not isinstance(self._condition.return_type, IntegerType):
+        elif self.condition.return_type != IntegerType():
             message = 'Invalid type of condition of the while statement at line {line}'
             errors.append(message.format(line=self.line_number))
-        self._expression.check_semantics(errors)
+        self.expression.check_semantics(errors)
         # The expression must not return value
-        if self._expression.has_return_value():
+        if self.expression.has_return_value():
             message = 'while used with a expression with return value at line {line}'
             errors.append(message.format(line=self.line_number))

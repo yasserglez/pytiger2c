@@ -16,18 +16,34 @@ class BinaryOperatorNode(OperatorNode):
     aritméticos y lógicos.
     """
     
+    def _get_left(self):
+        """
+        Método para obtener el valor de la propiedad C{left}.
+        """
+        return self._left
+    
+    left = property(_get_left)
+    
+    def _get_right(self):
+        """
+        Método para obtener el valor de la propiedad C{right}.
+        """
+        return self._right
+    
+    right = property(_get_right)    
+    
     def __init__(self, left, right):
         """
         Inicializa la clase C{BinaryOperatorNode}.
         
-        @type left: LanguageNode
-        @param left: LanguageNode correspondiente a la expresión a la 
-            izquierda del operador.
-        @type right: LanguageNode
-        @param right: LanguageNode correspondiente a la expresión a la
-            derecha del operador.
+        @type left: C{LanguageNode}
+        @param left: Nodo del árbol de sintáxis abstracta correspondiente 
+            a la expresión a la izquierda del operador.
+            
+        @type right: C{LanguageNode}
+        @param right: Nodo del árbol de sintáxis abstracta correspondiente 
+            a la expresión a la derecha del operador.
         """
+        super(BinaryOperatorNode, self).__init__()
         self._left = left
         self._right = right
-        super(BinaryOperatorNode, self).__init__()
-

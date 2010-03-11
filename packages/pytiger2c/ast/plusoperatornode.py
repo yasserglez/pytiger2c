@@ -12,8 +12,8 @@ class PlusOperatorNode(ArithmeticOperatorNode):
     """
     Clase C{PlusOperatorNode} del árbol de sintáxis abstracta.
     
-    Representa el operador de suma (C{+}) entre dos números enteros del lenguaje
-    Tiger
+    Representa el operador de suma C{+} entre dos números enteros 
+    del lenguaje Tiger.
     """
     
     def __init__(self, left, right):
@@ -40,19 +40,19 @@ class PlusOperatorNode(ArithmeticOperatorNode):
         expresión de la derecha. Luego se comprueba que ambas retornen valor y 
         que el valor de retorno de ambas sea entero. 
         """
-        self._right.check_semantics(errors)
-        if not self._right.has_return_value():
+        self.right.check_semantics(errors)
+        if not self.right.has_return_value():
             message = 'Invalid use of plus operator with a non-valued right expression at line {line}'
             errors.append(message.format(line=self.line_number)) 
-        elif not isinstance(self._right.return_type, IntegerType):
+        elif self.right.return_type != IntegerType():
             message = 'Invalid use of plus operator with a non-integer right value at line {line}'
             errors.append(message.format(line=self.line_number))
         
-        self._left.check_semantics(errors)
-        if not self._left.has_return_value():
+        self.left.check_semantics(errors)
+        if not self.left.has_return_value():
             message = 'Invalid use of plus operator with a non-valued left expression at line {line}'
             errors.append(message.format(line=self.line_number)) 
-        elif not isinstance(self._left.return_type, IntegerType):
+        elif self.left.return_type != IntegerType():
             message = 'Invalid use of plus operator with a non-integer left value at line {line}'
             errors.append(message.format(line=self.line_number))
             
