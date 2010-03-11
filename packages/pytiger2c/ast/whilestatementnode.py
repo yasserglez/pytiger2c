@@ -45,7 +45,7 @@ class WhileStatementNode(NonValuedExpressionNode):
         @type expression: C{LanguageNode}
         @param expression: Nodo del árbol de sintáxis abstracta correspondiente a 
             la expresión que es ejecutada, una vez que se verifica que la condición 
-            anterior es distinta de cero
+            anterior es distinta de cero.
         """
         super(WhileStatementNode, self).__init__()
         self._condition = condition

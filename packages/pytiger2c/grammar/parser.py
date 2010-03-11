@@ -93,6 +93,8 @@ def p_expr_record(symbols):
 # Unary minus. 
 def p_expr_unary_minus(symbols):
     "expr : MINUS expr %prec UMINUS"
+    symbols[0] = UnaryMinusOperatorNode(symbols[2])
+    symbols[0].line_number = symbols.lineno(1)
 
 # Binary operators.
 def p_expr_bin_op(symbols):

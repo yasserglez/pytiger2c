@@ -20,17 +20,16 @@ class MinusOperatorNode(ArithmeticOperatorNode):
         """
         Inicializa la clase C{MinusOperatorNode}.
         
-        Para obtener información acerca de los parámetros recibidos por
-        el método consulte la documentación del método C{__init__}
-        en la clase C{BinaryOperatorNode}.
+        Para obtener información acerca de los parámetros recibidos por este método 
+        consulte la documentación del método C{__init__} en la clase C{BinaryOperatorNode}.
         """
         super(MinusOperatorNode, self).__init__(left, right)
         
     def check_semantics(self, errors):
         """
-        Para obtener información acerca de los parámetros recibidos por
-        el método consulte la documentación del método C{check_semantics}
-        en la clase C{LanguageNode}.
+        Para obtener información acerca de los parámetros recibidos por este método 
+        consulte la documentación del método C{check_semantics} en la clase 
+        C{LanguageNode}.
         
         El operador resta realiza la diferencia entre los el valor de la expresión
         que se encuentra a la izquierda con el valor de la derecha.
