@@ -118,7 +118,8 @@ class IfThenElseStatementNode(ValuedExpressionNode):
                       'returns but the other does not'
             errors.append(message.format(line=self.line_number))            
         # Set the return type of the expression (if any).
-        self._return_type = self.then_expression.return_type if (then_returns and else_returns) else None
+        if then_returns and else_returns:
+            self._return_type = self.then_expression.return_type
 
     def has_return_value(self):
         """
@@ -130,4 +131,4 @@ class IfThenElseStatementNode(ValuedExpressionNode):
         cambiar la implementación provista por la clase C{ValuedExpressionNode} que
         siempre retorna verdadero.   
         """
-        return self._return_type != None
+        return self.then_expression.has_return_value()
