@@ -21,7 +21,7 @@ from pytiger2c.ast.arraydeclarationnode import ArrayDeclarationNode
 from pytiger2c.ast.nilexpressionnode import NilExpressionNode
 from pytiger2c.ast.integerliteralexpressionnode import IntegerLiteralExpressionNode
 from pytiger2c.ast.stringliteralexpressionnode import StringLiteralExpressionNode
-from pytiger2c.ast.ifthenelsenode import IfThenElseNode
+from pytiger2c.ast.ifthenelsestatementnode import IfThenElseStatementNode
 from pytiger2c.ast.functioncallnode import FunctionCallNode
 from pytiger2c.ast.letnode import LetNode
 from pytiger2c.ast.expressionsequencenode import ExpressionSequenceNode
@@ -62,7 +62,7 @@ __all__ = [
     'NilExpressionNode',
     'IntegerLiteralExpressionNode',
     'StringLiteralExpressionNode',
-    'IfThenElseNode',
+    'IfThenElseStatementNode',
     'FunctionCallNode',
     'LetNode',
     'ExpressionSequenceNode',

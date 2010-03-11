@@ -1,0 +1,2 @@
+Semantic Error: break used out of a while or for statement at line 1.
+Semantic Error: One of the expressions of the if-then-else statement at line 1 returns but the other does not.

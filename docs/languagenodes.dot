@@ -31,7 +31,7 @@ graph LanguageNodes {
 	ValuedExpressionNode -- NilExpressionNode;
     ValuedExpressionNode -- IntegerLiteralExpressionNode;
     ValuedExpressionNode -- StringLiteralExpressionNode;
-    ValuedExpressionNode -- IfThenElseNode;
+    ValuedExpressionNode -- IfThenElseStatementNode;
     ValuedExpressionNode -- FunctionCallNode;
     ValuedExpressionNode -- LetNode;
     ValuedExpressionNode -- ExpressionSequenceNode;

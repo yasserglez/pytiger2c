@@ -136,7 +136,6 @@ def p_expr_bin_op(symbols):
         symbols[0] = OrOperatorNode(symbols[1], symbols[3])
     symbols[0].line_number = symbols.lineno(2)
 
-
 # A group of expressions enclosed by parenthesis separated by semicolons.
 def p_expr_expr_seq(symbols):
     "expr : LPAREN expr_seq RPAREN"
@@ -157,6 +156,8 @@ def p_expr_if(symbols):
 
 def p_expr_if_else(symbols):
     "expr : IF expr THEN expr ELSE expr"
+    symbols[0] = IfThenElseStatementNode(symbols[2], symbols[4], symbols[6])
+    symbols[0].line_number = symbols.lineno(1)
 
 def p_expr_while(symbols):
     "expr : WHILE expr DO expr"
