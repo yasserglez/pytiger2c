@@ -1,0 +1,2 @@
+Semantic Error: The condition of the if-then-else statement at line 1 does not return an integer value.
+Semantic Error: The return type of the expressions of the if-then-else statement at line 1 is not the same.

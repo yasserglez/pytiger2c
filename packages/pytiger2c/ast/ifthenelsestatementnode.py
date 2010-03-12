@@ -129,6 +129,6 @@ class IfThenElseStatementNode(ValuedExpressionNode):
         seguidas de las instrucciones C{then} y C{else} no tiene valor de retorno.
         Debido a esto, este nodo debe redefinir el método C{has_return_value} para
         cambiar la implementación provista por la clase C{ValuedExpressionNode} que
-        siempre retorna verdadero.   
+        siempre retorna C{True}.   
         """
         return self.then_expression.has_return_value()

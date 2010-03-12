@@ -141,6 +141,8 @@ def p_expr_bin_op(symbols):
 # A group of expressions enclosed by parenthesis separated by semicolons.
 def p_expr_expr_seq(symbols):
     "expr : LPAREN expr_seq RPAREN"
+    symbols[0] = symbols[2]
+    symbols[0].line_number = symbols.lineno(1)
 
 # Assignment.
 def p_expr_assign(symbols):
@@ -176,7 +178,8 @@ def p_expr_break(symbols):
 
 # The let block.
 def p_expr_let(symbols):
-    "expr : LET dec_group IN expr_seq END"    
+    "expr : LET dec_group IN expr_seq END"
+    symbols[4].line_number = symbols.lineno(3)
     
 # What is a left value of an assignment expression?
 def p_lvalue_id(symbols):
@@ -194,12 +197,17 @@ def p_lvalue_array_lvalue(symbols):
 # A group of expressions separated by semicolons.
 def p_expr_seq_empty(symbols):
     "expr_seq : "
+    symbols[0] = ExpressionSequenceNode()
     
 def p_expr_seq_multiple(symbols):
     "expr_seq : expr_seq SEMICOLON expr"
+    symbols[0] = symbols[1]
+    symbols[0].expressions.append(symbols[3])
 
 def p_expr_seq_single(symbols):
     "expr_seq : expr"
+    symbols[0] = ExpressionSequenceNode()
+    symbols[0].expressions.append(symbols[1])
     
 # A group of declarations. No "special" characters between declarations!
 
