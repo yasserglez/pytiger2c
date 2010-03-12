@@ -18,7 +18,7 @@ graph LanguageNodes {
     DeclarationNode -- TypeDeclarationNode;
     
     CallableDeclarationNode -- FunctionDeclarationNode;
-    CallableDeclarationNode -- ProcedurDeclarationNode;
+    CallableDeclarationNode -- ProcedureDeclarationNode;
     
     VariableDeclarationNode -- InferredVariableDeclarationNode;
     VariableDeclarationNode -- StaticVariableDeclarationNode;
