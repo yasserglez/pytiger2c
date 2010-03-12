@@ -119,7 +119,7 @@ def p_expr_bin_op(symbols):
     elif symbols[2] == "*":
         symbols[0] = TimesOperatorNode(symbols[1], symbols[3])
     elif symbols[2] == "/":
-        symbols[0] = MinusOperatorNode(symbols[1], symbols[3])
+        symbols[0] = DivideOperatorNode(symbols[1], symbols[3])
     elif symbols[2] == "=":
         symbols[0] = EqualsOperatorNode(symbols[1], symbols[3])
     elif symbols[2] == "<>":
