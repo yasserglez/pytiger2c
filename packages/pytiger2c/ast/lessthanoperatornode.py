@@ -4,17 +4,17 @@
 Clase C{LessThanOperatorNode} del árbol de sintáxis abstracta.
 """
 
-from pytiger2c.ast.logicaloperatornode import LogicalOperatorNode
+from pytiger2c.ast.relationallogicaloperatornode import RelationalLogicalOperatorNode
 
 
-class LessThanOperatorNode(LogicalOperatorNode):
+class LessThanOperatorNode(RelationalLogicalOperatorNode):
     """
     Clase C{LessThanOperatorNode} del árbol de sintáxis abstracta.
     """
     
-    def __init__(self, left, right):
+    def __init__(self):
         """
         Inicializa la clase C{LessThanOperatorNode}.
         """
-        super(LessThanOperatorNode, self).__init__(left, right)
+        super(LessThanOperatorNode, self).__init__()
 
