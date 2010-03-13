@@ -17,4 +17,3 @@ class LogicalOperatorNode(BinaryOperatorNode):
         Inicializa la clase C{LogicalOperatorNode}.
         """
         super(LogicalOperatorNode, self).__init__(left, right)
-
