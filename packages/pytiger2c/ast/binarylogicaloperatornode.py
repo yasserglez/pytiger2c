@@ -13,9 +13,8 @@ class BinaryLogicalOperatorNode(LogicalOperatorNode):
     Clase C{BinaryLogicalOperatorNode} del árbol de sintáxis abstracta.
     
     Esta clase implementa el método C{check_semantics} para los operadores
-    binarios con argumentos enteros. Estos operadores son: el C{OR} binario
-    (representado con el operador C{|} en Tiger) y el C{AND} binario
-    (representado con el operador C{&} en Tiger).
+    binarios con argumentos enteros del lenguaje Tiger. Estos operadores 
+    son los siguientes: el C{OR} binario C{|} y el C{AND} binario C{&}.
     """
     
     def __init__(self, left, right):
@@ -45,18 +44,22 @@ class BinaryLogicalOperatorNode(LogicalOperatorNode):
         """
         self.right.check_semantics(errors)
         if not self.right.has_return_value():
-            message = 'Invalid use of binary logical operator with a non-valued right expression at line {line}'
+            message = 'Invalid use of binary logical operator with a ' \
+                      'non-valued right expression at line {line}'
             errors.append(message.format(line=self.line_number)) 
         elif self.right.return_type != IntegerType():
-            message = 'Invalid use of binary logical operator with a non-integer right value at line {line}'
+            message = 'Invalid use of binary logical operator with a ' \
+                      'non-integer right value at line {line}'
             errors.append(message.format(line=self.line_number))
         
         self.left.check_semantics(errors)
         if not self.left.has_return_value():
-            message = 'Invalid use of binary logical operator with a non-valued left expression at line {line}'
+            message = 'Invalid use of binary logical operator with a ' \
+                      'non-valued left expression at line {line}'
             errors.append(message.format(line=self.line_number)) 
         elif self.left.return_type != IntegerType():
-            message = 'Invalid use of binary logical operator with a non-integer left value at line {line}'
+            message = 'Invalid use of binary logical operator with a ' \
+                      'non-integer left value at line {line}'
             errors.append(message.format(line=self.line_number))
             
         self._return_type = IntegerType()
