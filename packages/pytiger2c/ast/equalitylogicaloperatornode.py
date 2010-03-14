@@ -6,6 +6,8 @@ Clase C{EqualityLogicalOperatorNode} del árbol de sintáxis abstracta.
 
 from pytiger2c.ast.logicaloperatornode import LogicalOperatorNode
 from pytiger2c.types.integertype import IntegerType
+from pytiger2c.types.recordtype import RecordType
+from pytiger2c.types.niltype import NilType
 
 
 class EqualityLogicalOperatorNode(LogicalOperatorNode):
@@ -56,8 +58,14 @@ class EqualityLogicalOperatorNode(LogicalOperatorNode):
             errors.append(message.format(line=self.line_number))
             
         if self.right.return_type != self.left.return_type:
-            message = 'Types of left and right operands of the equality or ' \
-                      'inequality logical operator at line {line} does not match'
-            errors.append(message.format(line=self.line_number))
+            # Check the special case of nil and records. nil can be assigned
+            # to any record type, then r <> nil and r = nil are legal.
+            valid_different_types = (RecordType, NilType)
+            record_and_nil = (isinstance(self.right.return_type, valid_different_types) and 
+                              isinstance(self.left.return_type, valid_different_types))
+            if not record_and_nil:
+                message = 'Types of left and right operands of the equality or ' \
+                          'inequality logical operator at line {line} does not match'
+                errors.append(message.format(line=self.line_number))
         
         self._return_type = IntegerType()
