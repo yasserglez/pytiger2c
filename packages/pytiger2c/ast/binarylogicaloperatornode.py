@@ -34,13 +34,13 @@ class BinaryLogicalOperatorNode(LogicalOperatorNode):
         C{LanguageNode}.
         
         Los operadores cuyas clases del árbol de sintáxis abstracta derivan de esta
-        deben recibir operadores enteros y siempre tienen tipo de retorno entero
+        deben recibir operandos enteros y siempre tendrán tipo de retorno entero
         (1 para el resultado verdadero, 0 para el falso).
         
         En la comprobación semántica de este nodo del árbol de sintáxis abstracta
         se comprueban semánticamente tanto la expresión de la izquierda como la 
         expresión de la derecha. Luego se comprueba que ambas retornen valor y 
-        que el valor de retorno de ambas sea entero.
+        que el tipo de retorno de ambas sea entero.
         """
         self.right.check_semantics(errors)
         if not self.right.has_return_value():

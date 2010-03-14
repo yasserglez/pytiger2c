@@ -1,0 +1,2 @@
+Semantic Error: Invalid use of equality or inequality logical operator with a non-valued right expression at line 1.
+Semantic Error: Types of left and right operands of the equality or inequality logical operator at line 1 does not match.

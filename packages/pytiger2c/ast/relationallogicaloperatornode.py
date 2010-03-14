@@ -36,14 +36,14 @@ class RelationalLogicalOperatorNode(LogicalOperatorNode):
         C{LanguageNode}.
         
         Los operadores cuyas clases del árbol de sintáxis abstracta derivan de esta
-        deben recibir ambos operandos números enteros o ambos cadenas de caracteres.
-        Siempre tienen tipo de retorno entero (1 para el resultado verdadero, 
-        0 para el falso).
+        deben recibir en ambos operandos números enteros o ambos cadenas de 
+        caracteres. Siempre tienen tipo de retorno entero (1 para el resultado 
+        verdadero, 0 para el falso).
         
         En la comprobación semántica de este nodo del árbol de sintáxis abstracta
         se comprueban semánticamente tanto la expresión de la izquierda como la 
         expresión de la derecha. Luego se comprueba que ambas retornen valor y 
-        que el valor de retorno de ambas sea enteros o cadenas de caracteres.
+        que el tipo de retorno de ambas sea enteros o cadenas de caracteres.
         """
         valid_types = (IntegerType(), StringType())
         
