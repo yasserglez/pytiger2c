@@ -18,7 +18,7 @@ class DivideOperatorNode(ArithmeticOperatorNode):
     
     def __init__(self, left, right):
         """
-         Inicializa la clase C{DivideOperatorNode}.
+        Inicializa la clase C{DivideOperatorNode}.
         
         Para obtener información acerca de los parámetros recibidos por este método 
         consulte la documentación del método C{__init__} en la clase C{BinaryOperatorNode}.
