@@ -10,7 +10,7 @@ from pytiger2c.types.integertype import IntegerType
 
 class DivideOperatorNode(ArithmeticOperatorNode):
     """
-    Clase C{MinusOperatorNode} del árbol de sintáxis abstracta.
+    Clase C{DivideOperatorNode} del árbol de sintáxis abstracta.
     
     Representa el operador de división C{/} entre dos números enteros 
     del lenguaje Tiger.

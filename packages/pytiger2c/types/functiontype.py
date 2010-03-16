@@ -5,7 +5,6 @@ Clase de la jerarquía de tipos de Tiger representando el tipo función.
 """
 
 from pytiger2c.types.tigertype import TigerType
-from gaphor.UML.uml2 import Parameter
 
 
 class FunctionType(TigerType):
