@@ -60,16 +60,26 @@ class Scope(object):
         
     def define_type(self, name, type):
         """
-        Añade una definición de tipos al ámbito actual. 
+        Añade una definición de tipos al ámbito actual.
+        
+        Un tipo puede definirse con el mismo nombre que alguno contenido en 
+        algún ámbito superior y este nuevo tipo oculta al existente en el 
+        ámbito superior. En caso de que el nuevo tipo tenga el mismo nombre 
+        que alguno definido en el mismo ámbito, ocurre un error.        
         
         @type name: C{str}
         @param name: C{str} correspondiente al nombre del tipo que se declara.
         
         @type type: C{TigerType}
         @param type: C{TigerType} correspondiente a la declaración de tipo.
-        """
         
-        self._types[name] = type
+        @raise C{ValueError}: Se lanza un C{ValueError} si el tipo que se intenta 
+            declarar fue definido en su mismo ámbito local. 
+        """
+        if name in self._types:
+            self._types[name] = type
+        else:
+            raise ValueError()
         
     def get_type_definition(self, name):
         """
@@ -94,6 +104,11 @@ class Scope(object):
         """
         Añade una definición de funciones al ámbito actual.
         
+        Una función puede definirse con el mismo nombre que alguna contenido en 
+        algún ámbito superior y esta nueva función oculta a la existente en el 
+        ámbito superior. En caso de que la nueva función tenga el mismo nombre
+        que alguna definida en el mismo ámbito, ocurre un error. 
+        
         @type name: C{str}
         @param name: C{str} correspondiente al nombre de la función
             que se declara.
@@ -101,8 +116,14 @@ class Scope(object):
         @type data: C{FunctionType}
         @param data: C{FunctionType} correspondiente a la definición de 
             función.
+            
+        @raise C{ValueError}: Se lanza un C{ValueError} si la función que se 
+            intenta declarar fue definido en su mismo ámbito local. 
         """
-        self._functions[name] = data
+        if name in self._functions:
+            self._functions[name] = data
+        else:
+            raise ValueError()
     
     def get_function_data(self, name):
         """
@@ -127,6 +148,11 @@ class Scope(object):
         """
         Añade una definición de variable al ámbito actual.
         
+        Una variable puede definirse con el mismo nombre que alguna contenida 
+        en algún ámbito superior y esta nueva variable oculta a la existente en
+        el ámbito superior. En caso de que la nueva variable tenga el mismo 
+        nombre que alguna definida en el mismo ámbito, ocurre un error.
+        
         @type name: C{str}
         @param name: C{str} correspondiente al nombre de la variable
             que se declara.
@@ -135,7 +161,10 @@ class Scope(object):
         @param data: C{type} correspondiente al nombre del tipo que tiene
             la variable.
         """
-        self._variables[name] = type
+        if name in self._variables:
+            self._variables[name] = type
+        else:
+            raise ValueError()
         
     def get_variable_type(self, name):
         """
