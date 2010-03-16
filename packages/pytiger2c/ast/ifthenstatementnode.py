@@ -53,7 +53,7 @@ class IfThenStatementNode(NonValuedExpressionNode):
         self._condition = condition
         self._then_expression = then_expression
 
-    def check_semantics(self, errors):
+    def check_semantics(self, scope, errors):
         """
         Para obtener información acerca de los parámetros recibidos por
         el método consulte la documentación del método C{check_semantics}
@@ -71,6 +71,8 @@ class IfThenStatementNode(NonValuedExpressionNode):
         instrucción C{then} esté correcta semánticamente y que no tenga valor 
         de retorno.
         """
+        self._scope = scope
+        
         # Check semantics of the condition expression.
         self.condition.check_semantics(errors)
         if not self.condition.has_return_value():
@@ -81,6 +83,7 @@ class IfThenStatementNode(NonValuedExpressionNode):
             message = 'The condition of the if-then statement at line {line} ' \
                       'does not return an integer value'
             errors.append(message.format(line=self.line_number))
+
         # Check semantics of the then expression.
         self.then_expression.check_semantics(errors)
         if self.then_expression.has_return_value():

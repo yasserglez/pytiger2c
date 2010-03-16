@@ -17,4 +17,3 @@ class AssignmentNode(NonValuedExpressionNode):
         Inicializa la clase C{AssignmentNode}.
         """
         super(AssignmentNode, self).__init__()
-

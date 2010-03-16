@@ -17,4 +17,3 @@ class VariableDeclarationNode(DeclarationNode):
         Inicializa la clase C{VariableDeclarationNode}.
         """
         super(VariableDeclarationNode, self).__init__()
-

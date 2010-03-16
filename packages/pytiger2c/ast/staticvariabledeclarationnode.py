@@ -17,4 +17,3 @@ class StaticVariableDeclarationNode(VariableDeclarationNode):
         Inicializa la clase C{StaticVariableDeclarationNode}.
         """
         super(StaticVariableDeclarationNode, self).__init__()
-

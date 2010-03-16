@@ -51,7 +51,7 @@ class WhileStatementNode(NonValuedExpressionNode):
         self._condition = condition
         self._expression = expression
         
-    def check_semantics(self, errors):
+    def check_semantics(self, scope, errors):
         """
         Para obtener información acerca de los parámetros recibidos por
         el método consulte la documentación del método C{check_semantics}
@@ -69,6 +69,8 @@ class WhileStatementNode(NonValuedExpressionNode):
         de la condición o la expresión, si la condición no retorna valor, si este valor
         de retorno no es te tipo C{IntegerType} o si la expresión retorna algún valor.
         """
+        self._scope = scope
+        
         self.condition.check_semantics(errors)
         # The condition return type must be IntegerType
         if not self.condition.has_return_value():
@@ -77,6 +79,7 @@ class WhileStatementNode(NonValuedExpressionNode):
         elif self.condition.return_type != IntegerType():
             message = 'Invalid type of condition of the while statement at line {line}'
             errors.append(message.format(line=self.line_number))
+
         self.expression.check_semantics(errors)
         # The expression must not return value
         if self.expression.has_return_value():

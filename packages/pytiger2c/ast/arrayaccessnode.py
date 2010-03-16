@@ -17,4 +17,3 @@ class ArrayAccessNode(AccessNode):
         Inicializa la clase C{ArrayAccessNode}.
         """
         super(ArrayAccessNode, self).__init__()
-

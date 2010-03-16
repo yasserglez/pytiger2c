@@ -26,7 +26,7 @@ class UnaryMinusOperatorNode(UnaryOperatorNode):
         """
         super(UnaryMinusOperatorNode, self).__init__(expression)
 
-    def check_semantics(self, errors):
+    def check_semantics(self, scope, errors):
         """
         Para obtener información acerca de los parámetros recibidos por este método 
         consulte la documentación del método C{check_semantics} en la clase 
@@ -41,6 +41,8 @@ class UnaryMinusOperatorNode(UnaryOperatorNode):
         El tipo del valor de retorno de la expresión representada por este nodo
         siempre será C{IntegerType}.
         """
+        self._scope = scope
+        
         self.expression.check_semantics(errors)
         if self.expression.has_return_value():
             if self.expression.return_type != IntegerType():

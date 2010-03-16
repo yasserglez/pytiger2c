@@ -17,4 +17,3 @@ class ArithmeticOperatorNode(BinaryOperatorNode):
         Inicializa la clase C{ArithmeticOperatorNode}.
         """
         super(ArithmeticOperatorNode, self).__init__(left, right)
-

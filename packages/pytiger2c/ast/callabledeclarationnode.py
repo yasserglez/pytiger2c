@@ -17,4 +17,3 @@ class CallableDeclarationNode(DeclarationNode):
         Inicializa la clase C{CallableDeclarationNode}.
         """
         super(CallableDeclarationNode, self).__init__()
-

@@ -17,4 +17,3 @@ class RecordDeclarationNode(TypeDeclarationNode):
         Inicializa la clase C{RecordDeclarationNode}.
         """
         super(RecordDeclarationNode, self).__init__()
-

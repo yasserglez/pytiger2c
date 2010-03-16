@@ -17,4 +17,3 @@ class TypeDeclarationNode(DeclarationNode):
         Inicializa la clase C{TypeDeclarationNode}.
         """
         super(TypeDeclarationNode, self).__init__()
-

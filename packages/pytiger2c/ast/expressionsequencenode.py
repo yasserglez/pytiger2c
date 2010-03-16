@@ -34,7 +34,7 @@ class ExpressionSequenceNode(ValuedExpressionNode):
         super(ExpressionSequenceNode, self).__init__()
         self._expressions = []
 
-    def check_semantics(self, errors):
+    def check_semantics(self, scope, errors):
         """
         Para obtener información acerca de los parámetros recibidos por
         el método consulte la documentación del método C{check_semantics}
@@ -46,6 +46,8 @@ class ExpressionSequenceNode(ValuedExpressionNode):
         el de la última expresión de la secuencia. Si el nodo representa una
         secuencia de expresiones vacía entonces no tendrá valor de retorno.         
         """
+        self._scope = scope
+        
         # Check semantics of the expressions in the sequence.
         for expression in self._expressions:
             expression.check_semantics(errors)

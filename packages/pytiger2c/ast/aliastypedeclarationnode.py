@@ -17,4 +17,3 @@ class AliasTypeDeclarationNode(TypeDeclarationNode):
         Inicializa la clase C{AliasTypeDeclarationNode}.
         """
         super(AliasTypeDeclarationNode, self).__init__()
-

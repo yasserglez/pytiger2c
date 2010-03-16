@@ -17,4 +17,3 @@ class InferredVariableDeclarationNode(VariableDeclarationNode):
         Inicializa la clase C{InferredVariableDeclarationNode}.
         """
         super(InferredVariableDeclarationNode, self).__init__()
-

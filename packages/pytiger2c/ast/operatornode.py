@@ -17,4 +17,3 @@ class OperatorNode(ValuedExpressionNode):
         Inicializa la clase C{OperatorNode}.
         """
         super(OperatorNode, self).__init__()
-

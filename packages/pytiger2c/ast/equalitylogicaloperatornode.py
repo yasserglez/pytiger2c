@@ -29,7 +29,7 @@ class EqualityLogicalOperatorNode(LogicalOperatorNode):
         """
         super(EqualityLogicalOperatorNode, self).__init__(left, right)
 
-    def check_semantics(self, errors):
+    def check_semantics(self, scope, errors):
         """
         Para obtener información acerca de los parámetros recibidos por este método
         consulte la documentación del método C{check_semantics} en la clase 
@@ -45,6 +45,8 @@ class EqualityLogicalOperatorNode(LogicalOperatorNode):
         expresión de la derecha. Luego se comprueba que ambas retornen valor y 
         que el tipo de retorno de ambas sea el mismo.
         """
+        self._scope = scope
+        
         self.right.check_semantics(errors)
         if not self.right.has_return_value():
             message = 'Invalid use of equality or inequality logical operator ' \

@@ -25,7 +25,7 @@ class DivideOperatorNode(ArithmeticOperatorNode):
         """
         super(DivideOperatorNode, self).__init__(left, right)
     
-    def check_semantics(self, errors):
+    def check_semantics(self, scope, errors):
         """
         Para obtener información acerca de los parámetros recibidos por este método 
         consulte la documentación del método C{check_semantics} en la clase 
@@ -39,6 +39,8 @@ class DivideOperatorNode(ArithmeticOperatorNode):
         expresión de la derecha. Luego se comprueba que ambas retornen valor y 
         que el valor de retorno de ambas sea entero. 
         """
+        self._scope = scope
+        
         self.right.check_semantics(errors)
         if not self.right.has_return_value():
             message = 'Invalid use of divide operator with a non-valued right expression at line {line}'
@@ -56,4 +58,3 @@ class DivideOperatorNode(ArithmeticOperatorNode):
             errors.append(message.format(line=self.line_number))
             
         self._return_type = IntegerType()
-

@@ -70,7 +70,7 @@ class IfThenElseStatementNode(ValuedExpressionNode):
         self._then_expression = then_expression
         self._else_expression = else_expression
 
-    def check_semantics(self, errors):
+    def check_semantics(self, scope, errors):
         """
         Para obtener información acerca de los parámetros recibidos por
         el método consulte la documentación del método C{check_semantics}
@@ -93,6 +93,8 @@ class IfThenElseStatementNode(ValuedExpressionNode):
         Para finalizar especifica el tipo de retorno que tendrá la expresión, 
         el cual coincidirá con el tipo de las expresiones.
         """
+        self._scope = scope
+        
         # Check semantics of the condition expression.
         self.condition.check_semantics(errors)
         if not self.condition.has_return_value():
@@ -103,6 +105,7 @@ class IfThenElseStatementNode(ValuedExpressionNode):
             message = 'The condition of the if-then-else statement at line {line} ' \
                       'does not return an integer value'
             errors.append(message.format(line=self.line_number))
+            
         # Check semantics of the then and else expressions.
         self.then_expression.check_semantics(errors)
         self.else_expression.check_semantics(errors)
@@ -116,7 +119,8 @@ class IfThenElseStatementNode(ValuedExpressionNode):
         elif then_returns or else_returns:
             message = 'One of the expressions of the if-then-else statement at line {line} ' \
                       'returns but the other does not'
-            errors.append(message.format(line=self.line_number))            
+            errors.append(message.format(line=self.line_number))
+                        
         # Set the return type of the expression (if any).
         if then_returns and else_returns:
             self._return_type = self.then_expression.return_type

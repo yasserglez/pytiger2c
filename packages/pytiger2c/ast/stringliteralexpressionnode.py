@@ -34,7 +34,7 @@ class StringLiteralExpressionNode(ValuedExpressionNode):
         super(StringLiteralExpressionNode, self).__init__()
         self._string = string
         
-    def check_semantics(self, errors):
+    def check_semantics(self, scope, errors):
         """
         Para obtener información acerca de los parámetros recibidos por
         el método consulte la documentación del método C{check_semantics}
@@ -44,5 +44,6 @@ class StringLiteralExpressionNode(ValuedExpressionNode):
         semántica, solamente se da valor al tipo de retorno del nodo que 
         siempre será C{StringType}.
         """
-        # Set the return type of the expression.
+        self._scope = scope
+
         self._return_type = StringType()

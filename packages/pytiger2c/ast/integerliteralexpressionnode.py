@@ -34,7 +34,7 @@ class IntegerLiteralExpressionNode(ValuedExpressionNode):
         super(IntegerLiteralExpressionNode, self).__init__()
         self._integer = integer
 
-    def check_semantics(self, errors):
+    def check_semantics(self, scope, errors):
         """
         Para obtener información acerca de los parámetros recibidos por
         el método consulte la documentación del método C{check_semantics}
@@ -44,5 +44,6 @@ class IntegerLiteralExpressionNode(ValuedExpressionNode):
         semántica, solamente se da valor al tipo de retorno del nodo que 
         siempre será C{IntegerType}.        
         """
-        # Set the return type of the expression.
+        self._scope = scope
+        
         self._return_type = IntegerType()

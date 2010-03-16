@@ -17,4 +17,3 @@ class VariableAccessNode(AccessNode):
         Inicializa la clase C{VariableAccessNode}.
         """
         super(VariableAccessNode, self).__init__()
-

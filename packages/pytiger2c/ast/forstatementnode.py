@@ -17,4 +17,3 @@ class ForStatementNode(NonValuedExpressionNode):
         Inicializa la clase C{ForStatementNode}.
         """
         super(ForStatementNode, self).__init__()
-

@@ -17,4 +17,3 @@ class DeclarationNode(NonValuedExpressionNode):
         Inicializa la clase C{DeclarationNode}.
         """
         super(DeclarationNode, self).__init__()
-

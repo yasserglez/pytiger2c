@@ -17,4 +17,3 @@ class RecordAccessNode(AccessNode):
         Inicializa la clase C{RecordAccessNode}.
         """
         super(RecordAccessNode, self).__init__()
-

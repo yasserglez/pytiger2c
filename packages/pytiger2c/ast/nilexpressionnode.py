@@ -22,7 +22,7 @@ class NilExpressionNode(ValuedExpressionNode):
         """
         super(NilExpressionNode, self).__init__()
         
-    def check_semantics(self, errors):
+    def check_semantics(self, scope, errors):
         """
         Para obtener información acerca de los parámetros recibidos por
         el método consulte la documentación del método C{check_semantics}
@@ -32,6 +32,6 @@ class NilExpressionNode(ValuedExpressionNode):
         semántica, solamente se da valor al tipo de retorno del nodo que 
         siempre será C{NilType}.        
         """
-        # Set the return type of the expression.
+        self._scope = scope
+        
         self._return_type = NilType()
-

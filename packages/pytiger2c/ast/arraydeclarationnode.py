@@ -17,4 +17,3 @@ class ArrayDeclarationNode(TypeDeclarationNode):
         Inicializa la clase C{ArrayDeclarationNode}.
         """
         super(ArrayDeclarationNode, self).__init__()
-

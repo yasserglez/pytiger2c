@@ -24,7 +24,7 @@ class BreakStatementNode(NonValuedExpressionNode):
         """
         super(BreakStatementNode, self).__init__()
 
-    def check_semantics(self, errors):
+    def check_semantics(self, scope, errors):
         """
         Para obtener información acerca de los parámetros recibidos por
         el método consulte la documentación del método C{check_semantics}
@@ -41,6 +41,8 @@ class BreakStatementNode(NonValuedExpressionNode):
         encuentra una instrucción C{while} o C{for} o si se encuentra una declaración
         de función o procedimiento antes de encontrar una instrucción C{while} o C{for}.
         """
+        self._scope = scope
+        
         stop_nodes = (WhileStatementNode, ForStatementNode, CallableDeclarationNode)
         current_node = self.parent_node
         while current_node != None and not isinstance(current_node, stop_nodes):
