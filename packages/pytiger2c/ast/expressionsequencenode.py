@@ -50,7 +50,7 @@ class ExpressionSequenceNode(ValuedExpressionNode):
         
         # Check semantics of the expressions in the sequence.
         for expression in self._expressions:
-            expression.check_semantics(errors)
+            expression.check_semantics(scope, errors)
         try:
             if self._expressions[-1].has_return_value():
                 self._return_type = self._expressions[-1].return_type

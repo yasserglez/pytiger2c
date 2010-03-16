@@ -43,7 +43,7 @@ class UnaryMinusOperatorNode(UnaryOperatorNode):
         """
         self._scope = scope
         
-        self.expression.check_semantics(errors)
+        self.expression.check_semantics(scope, errors)
         if self.expression.has_return_value():
             if self.expression.return_type != IntegerType():
                 message = 'The expression of the unary minus operator at line {line} ' \

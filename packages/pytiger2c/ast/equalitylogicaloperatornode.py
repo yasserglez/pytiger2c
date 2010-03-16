@@ -47,13 +47,13 @@ class EqualityLogicalOperatorNode(LogicalOperatorNode):
         """
         self._scope = scope
         
-        self.right.check_semantics(errors)
+        self.right.check_semantics(scope, errors)
         if not self.right.has_return_value():
             message = 'Invalid use of equality or inequality logical operator ' \
                       'with a non-valued right expression at line {line}'
             errors.append(message.format(line=self.line_number))
             
-        self.left.check_semantics(errors)
+        self.left.check_semantics(scope, errors)
         if not self.left.has_return_value():
             message = 'Invalid use of equality or inequality logical operator ' \
                       'with a non-valued left expression at line {line}'

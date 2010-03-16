@@ -49,7 +49,7 @@ class RelationalLogicalOperatorNode(LogicalOperatorNode):
         
         valid_types = (IntegerType(), StringType())
         
-        self.right.check_semantics(errors)
+        self.right.check_semantics(scope, errors)
         if self.right.has_return_value():
             if self.right.return_type not in valid_types: 
                 message = 'Invalid type of right operand in the binary ' \
@@ -60,7 +60,7 @@ class RelationalLogicalOperatorNode(LogicalOperatorNode):
                       'non-valued right expression at line {line}'
             errors.append(message.format(line=self.line_number))
             
-        self.left.check_semantics(errors)
+        self.left.check_semantics(scope, errors)
         if self.left.has_return_value():
             if self.left.return_type not in valid_types: 
                 message = 'Invalid type of left operand in the binary ' \

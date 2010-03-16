@@ -74,7 +74,7 @@ class IfThenStatementNode(NonValuedExpressionNode):
         self._scope = scope
         
         # Check semantics of the condition expression.
-        self.condition.check_semantics(errors)
+        self.condition.check_semantics(scope, errors)
         if not self.condition.has_return_value():
             message = 'The condition of the if-then statement at line {line} ' \
                        'does not return a value'
@@ -85,7 +85,7 @@ class IfThenStatementNode(NonValuedExpressionNode):
             errors.append(message.format(line=self.line_number))
 
         # Check semantics of the then expression.
-        self.then_expression.check_semantics(errors)
+        self.then_expression.check_semantics(scope, errors)
         if self.then_expression.has_return_value():
             message = 'The then expression of the if-then statement ' \
                       'at line {line} should not return a value'
