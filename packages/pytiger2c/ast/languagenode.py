@@ -56,6 +56,18 @@ class LanguageNode(object):
         
     parent_node = property(_get_parent_node, _set_parent_node)
     
+    def _get_scope(self):
+        """
+        Método para obtener el valor de la propiedad C{scope}.
+        
+        @rtype: C{Scope}
+        @return: Ámbito en el que se ejecuta el nodo. En el caso de que 
+            el nodo defina un ámbito, entonces esta función lo devuelve.
+        """
+        return self._scope
+    
+    scope = property(_get_scope)
+    
     def __init__(self):
         """
         Inicializa el nodo del árbol de sintáxis abstracta.
@@ -63,11 +75,18 @@ class LanguageNode(object):
         super(LanguageNode, self).__init__()
         self._line_number = None
         self._parent_node = None
+        self._scope = None
     
-    def check_semantics(self, errors):
+    def check_semantics(self, scope ,errors):
         """
         Comprueba que la estructura del lenguaje Tiger representada por el nodo 
         sea correcta semánticamente.
+        
+        @type scope: C{Scope}
+        @param scope: Ámbito en el que se ejecuta el nodo. Si un nodo define 
+            un ámbito nuevo entonces, creará una nueva instancia de C{Scope}
+            que tendrá como padre este ámbito. En ambos casos la propiedad 
+            C{scope} será asignada al ámbito del nodo. 
 
         @type errors: C{list}
         @param errors: Lista a la cual se deben añadir los mensajes de error de
