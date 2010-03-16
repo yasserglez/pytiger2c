@@ -69,10 +69,7 @@ class Scope(object):
         @param type: C{TigerType} correspondiente a la declaración de tipo.
         """
         
-        if not name in self._types:
-            self._types[name] = type
-        else:
-            pass
+        self._types[name] = type
         
     def get_type_definition(self, name):
         """
@@ -84,11 +81,14 @@ class Scope(object):
         @rtype: C{TigerType}
         @return: C{TigerType} correspondiente a la definición de tipo 
             buscada.
+            
+        @raise C{KeyError}: Se lanza un C{KeyError} si el tipo no está
+            definido en este scope o en alguno superior.
         """
         if name in self._types:
             return self._types[name]
         else:
-            pass
+            return self._parent.get_type_definition(name)
     
     
     def define_function(self, name, data):
@@ -103,10 +103,7 @@ class Scope(object):
         @param data: C{FunctionType} correspondiente a la definición de 
             función.
         """
-        if  not name in self._functions:
-            self._functions[name] = data
-        else:
-            pass
+        self._functions[name] = data
     
     def get_function_data(self, name):
         """
@@ -118,11 +115,14 @@ class Scope(object):
         @rtype: C{FunctionType}
         @return: C{FunctionType} correspondiente a la definición 
             de la función buscada.
+        
+        @raise C{KeyError}: Se lanza un C{KeyError} si la función no está
+            definida en este scope o en alguno superior.
         """
         if name in self._functions:
             return self._functions[name]
         else:
-            pass
+            return self.parent.get_function_data(name)
     
     def define_variable(self, name, type):
         """
@@ -136,10 +136,7 @@ class Scope(object):
         @param data: C{type} correspondiente al nombre del tipo que tiene
             la variable.
         """
-        if  not name in self._variables:
-            self._variables[name] = type
-        else:
-            pass
+        self._variables[name] = type
         
     def get_variable_type(self, name):
         """
@@ -149,9 +146,12 @@ class Scope(object):
         @param name: C{str} nombre de la variable buscada.
         
         @rtype: C{str}
-        @return: C{str} correspondiente al tipo de la variable buscada. 
+        @return: C{str} correspondiente al tipo de la variable buscada.
+        
+        @raise C{KeyError}: Se lanza un C{KeyError} si la variable no está
+            definida en este scope o en alguno superior. 
         """
         if name in self._variables:
             return self._variables[name]
         else:
-            pass
+            return self.parent.get_variable_type(name)
