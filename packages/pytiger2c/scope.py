@@ -90,7 +90,6 @@ class Scope(object):
         else:
             return self._parent.get_type_definition(name)
     
-    
     def define_function(self, name, data):
         """
         Añade una definición de funciones al ámbito actual.
@@ -155,3 +154,66 @@ class Scope(object):
             return self._variables[name]
         else:
             return self.parent.get_variable_type(name)
+        
+class RootScope(Scope):
+    """
+    Clase C{RootScope} que representa el ámbito raíz de un programa Tiger.
+    
+    Esta clase gestiona los tipos, variables y funciones disponibles
+    en un ámbito de ejecución detereminado en Tiger.
+    
+    En esta clase se encuentran las definiciones de las funciones de 
+    la librería estándar y tipos básicos de Tiger.
+    """
+
+    def get_type_definition(self, name):
+        """
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método C{get_type_definition}
+        en la clase C{Scope}.
+        """
+        return self._types[name]
+
+    def get_function_data(self, name):
+        """
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método C{get_function_data}
+        en la clase C{Scope}.
+        """
+        return self._functions[name]
+
+    def get_variable_type(self, name):
+        """
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método C{get_variable_type}
+        en la clase C{Scope}.
+        """
+        return self._variables[name]
+    
+    def _init_types(self):
+        """
+        """
+    
+    def _init_functions(self):
+        """
+        """
+    
+    def _init_variables(self):
+        """
+        """
+    
+    def __init__(self):
+        """
+        Inicializa el ámbito inicial de un programa de Tiger.
+        
+        Inicializa las declaraciones de las funciones de la librería estándar
+        y los tipos básicos.
+        """
+        super(RootScope, self).__init__(None)
+        self._init_types()
+        self._init_functions()
+        self._init_variables()
+        
+    
+        
+        
