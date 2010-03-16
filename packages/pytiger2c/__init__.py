@@ -15,8 +15,9 @@ que implemente dicho standard.
 import codecs
 
 from pytiger2c.grammar import parser
-from pytiger2c.errors import PyTiger2CError, SyntacticError, SemanticError, CodeGenerationError
 from pytiger2c.scope import RootScope
+from pytiger2c.errors import PyTiger2CError, SemanticError, CodeGenerationError
+
 
 __version__ = '0.1'
 

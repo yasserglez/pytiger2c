@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 
 """
-Clase C{Scope} que representa un ámbito de ejecución de Tiger.
+Clases C{Scope} y C{RootScope} que representan ámbitos de ejecución en Tiger.
 """
-
-from pytiger2c.types.functiontype import FunctionType
 
 
 class Scope(object):
@@ -12,7 +10,8 @@ class Scope(object):
     Clase C{Scope} que representa un ámbito de ejecución de Tiger.
     
     Esta clase gestiona los tipos, variables y funciones disponibles
-    en un ámbito de ejecución detereminado en Tiger.
+    en un ámbito de ejecución en Tiger. Además mantiene una referencia
+    a un ámbito padre donde se encuentra contenido este ámbito.
     """
     
     def _get_parent(self):
@@ -40,25 +39,26 @@ class Scope(object):
         Genera el código correspondiente a la definición de las variables, tipos, 
         así como las cabeceras de funciones que están definidos en este.
         """
+        raise NotImplementedError()
     
     def get_variable_code(self, name):
         """
-        Genera el código correspondiente a acceder a una variable en este ámbito o en
-        alguno superior.
+        Genera el código necesario para acceder a una variable definida en este 
+        ámbito o en alguno superior.
         
-        Una definida en un ámbito superior puede ser accedida desde algún ámbito inferior
-        por lo que la variable en cuestión puede estar definida en el ámbito actual, en su
-        padre o en algún ancestro suyo.
+        Una definida en un ámbito superior puede ser accedida desde algún ámbito 
+        inferior por lo que la variable en cuestión puede estar definida en el 
+        ámbito actual, en su padre o en algún ancestro suyo.
         
         @type name: C{str}
-        @param name: C{str} correspondiente al nombre de la variable.
+        @param name: Cadena de caracteres correspondiente al nombre de la variable.
         
         @rtype: C{str}
-        @return: C{str} correspondiente al código C{C} necesario para acceder a la 
-            variable.
+        @return: Cadena de caracteres correspondiente al código C necesario para 
+            acceder a la variable.
         """
         
-    def define_type(self, name, type):
+    def define_type(self, name, tiger_type):
         """
         Añade una definición de tipos al ámbito actual.
         
@@ -68,39 +68,46 @@ class Scope(object):
         que alguno definido en el mismo ámbito, ocurre un error.        
         
         @type name: C{str}
-        @param name: C{str} correspondiente al nombre del tipo que se declara.
+        @param name: Cadena de caracteres correspondiente al nombre del 
+            tipo que se declara.
         
         @type type: C{TigerType}
-        @param type: C{TigerType} correspondiente a la declaración de tipo.
+        @param type: Instancia de C{TigerType} correspondiente a la declaración 
+            de tipo.
         
-        @raise C{ValueError}: Se lanza un C{ValueError} si el tipo que se intenta 
-            declarar fue definido en su mismo ámbito local. 
+        @raise C{ValueError}: Se lanza una excepción C{ValueError} si el tipo 
+            que se intenta declarar fue definido anteriormente en este ámbito. 
         """
-        if name in self._types:
-            self._types[name] = type
+        if not (name in self._types):
+            self._types[name] = tiger_type
         else:
             raise ValueError()
         
     def get_type_definition(self, name):
         """
-        Retorna la definición de tipos correspondiente al nombre dado.
+        Retorna la definición de tipos correspondiente al nombre dado. Si
+        el tipo no se encuentra en el ámbito actual se buscará en los
+        ancestros hasta llegar al ámbito raíz que lanzará una excepción
+        si una definición de tipo para el nombre dado no es encontrado 
+        finalmente.
         
         @type name: C{str}
-        @param name: C{str} nombre del tipo que se quiere obtener.
+        @param name: Cadena de caracteres correspondiente al nombre del 
+            tipo que se quiere obtener.
         
         @rtype: C{TigerType}
-        @return: C{TigerType} correspondiente a la definición de tipo 
-            buscada.
+        @return: Instancia de C{TigerType} correspondiente a la definición 
+            de tipo buscada.
             
-        @raise C{KeyError}: Se lanza un C{KeyError} si el tipo no está
-            definido en este scope o en alguno superior.
+        @raise C{KeyError}: Se lanza una excepción C{KeyError} si el tipo no 
+            está definido en este ámbito o en alguno superior.
         """
         if name in self._types:
             return self._types[name]
         else:
             return self._parent.get_type_definition(name)
     
-    def define_function(self, name, data):
+    def define_function(self, name, function_type):
         """
         Añade una definición de funciones al ámbito actual.
         
@@ -110,30 +117,31 @@ class Scope(object):
         que alguna definida en el mismo ámbito, ocurre un error. 
         
         @type name: C{str}
-        @param name: C{str} correspondiente al nombre de la función
-            que se declara.
+        @param name: Cadena de caracteres correspondiente al nombre de la 
+            función que se declara.
             
-        @type data: C{FunctionType}
-        @param data: C{FunctionType} correspondiente a la definición de 
-            función.
+        @type function_type: C{FunctionType}
+        @param function_type: Instancia de C{FunctionType} correspondiente a la 
+            definición de función.
             
-        @raise C{ValueError}: Se lanza un C{ValueError} si la función que se 
-            intenta declarar fue definido en su mismo ámbito local. 
+        @raise C{ValueError}: Se lanza una excepción C{ValueError} si la función 
+            que se intenta definir se definió anteriormente en este ámbito. 
         """
-        if name in self._functions:
-            self._functions[name] = data
+        if not (name in self._functions):
+            self._functions[name] = function_type
         else:
             raise ValueError()
     
-    def get_function_data(self, name):
+    def get_function_definition(self, name):
         """
         Retorna la definición de función correspondiente al nombre dado.
         
         @type name: C{str}
-        @param name: C{str} nombre de la función buscada.
+        @param name: Cadena de caracteres correspondiente al nombre de la 
+            función buscada.
         
         @rtype: C{FunctionType}
-        @return: C{FunctionType} correspondiente a la definición 
+        @return: Instancia de C{FunctionType} correspondiente a la definición 
             de la función buscada.
         
         @raise C{KeyError}: Se lanza un C{KeyError} si la función no está
@@ -142,9 +150,9 @@ class Scope(object):
         if name in self._functions:
             return self._functions[name]
         else:
-            return self.parent.get_function_data(name)
+            return self.parent.get_function_definition(name)
     
-    def define_variable(self, name, type):
+    def define_variable(self, name, tiger_type):
         """
         Añade una definición de variable al ámbito actual.
         
@@ -154,36 +162,39 @@ class Scope(object):
         nombre que alguna definida en el mismo ámbito, ocurre un error.
         
         @type name: C{str}
-        @param name: C{str} correspondiente al nombre de la variable
-            que se declara.
+        @param name: Cadena de caracteres correspondiente al nombre de la 
+            variable que se declara.
             
-        @type data: C{type}
-        @param data: C{type} correspondiente al nombre del tipo que tiene
-            la variable.
+        @type tiger_type: C{TigerType}
+        @param tiger_type: Instancia de C{TigerType} correspondiente al 
+             tipo de la variable que se quiere definir.
         """
-        if name in self._variables:
+        if not (name in self._variables):
             self._variables[name] = type
         else:
             raise ValueError()
         
-    def get_variable_type(self, name):
+    def get_variable_definition(self, name):
         """
         Retorna el nombre del tipo de la variable buscada
         
         @type name: C{str}
-        @param name: C{str} nombre de la variable buscada.
+        @param name: Cadena de caracteres correspondiente al nombre de la 
+            variable buscada.
         
-        @rtype: C{str}
-        @return: C{str} correspondiente al tipo de la variable buscada.
+        @rtype: C{TigerType}
+        @return: Instancia de C{TigerType} correspondiente al tipo de la 
+            variable buscada.
         
-        @raise C{KeyError}: Se lanza un C{KeyError} si la variable no está
-            definida en este scope o en alguno superior. 
+        @raise C{KeyError}: Se lanza una excepción C{KeyError} si la variable 
+            no está definida en este ámbito o en alguno superior. 
         """
         if name in self._variables:
             return self._variables[name]
         else:
-            return self.parent.get_variable_type(name)
+            return self.parent.get_variable_definition(name)
         
+
 class RootScope(Scope):
     """
     Clase C{RootScope} que representa el ámbito raíz de un programa Tiger.
@@ -192,48 +203,15 @@ class RootScope(Scope):
     en un ámbito de ejecución detereminado en Tiger.
     
     En esta clase se encuentran las definiciones de las funciones de 
-    la librería estándar y tipos básicos de Tiger.
+    la librería estándar y tipos básicos de Tiger. Además, esta clase
+    es la encargada de detener la búsqueda de tipos, funciones y 
+    variables por los ámbitos padres lanzando una excepción C{KeyError}
+    si no se encuentra una definición en este ámbito.
     """
-
-    def get_type_definition(self, name):
-        """
-        Para obtener información acerca de los parámetros recibidos por
-        este método consulte la documentación del método C{get_type_definition}
-        en la clase C{Scope}.
-        """
-        return self._types[name]
-
-    def get_function_data(self, name):
-        """
-        Para obtener información acerca de los parámetros recibidos por
-        este método consulte la documentación del método C{get_function_data}
-        en la clase C{Scope}.
-        """
-        return self._functions[name]
-
-    def get_variable_type(self, name):
-        """
-        Para obtener información acerca de los parámetros recibidos por
-        este método consulte la documentación del método C{get_variable_type}
-        en la clase C{Scope}.
-        """
-        return self._variables[name]
-    
-    def _init_types(self):
-        """
-        """
-    
-    def _init_functions(self):
-        """
-        """
-    
-    def _init_variables(self):
-        """
-        """
     
     def __init__(self):
         """
-        Inicializa el ámbito inicial de un programa de Tiger.
+        Inicializa el ámbito raíz de un programa de Tiger.
         
         Inicializa las declaraciones de las funciones de la librería estándar
         y los tipos básicos.
@@ -243,6 +221,43 @@ class RootScope(Scope):
         self._init_functions()
         self._init_variables()
         
+    def _init_types(self):
+        """
+        Inicializa los tipos básicos del lenguaje Tiger definidos implícitamente 
+        en el ámbito raíz.
+        """
     
+    def _init_functions(self):
+        """
+        Inicializa las funciónes de la libraría standard del lenguaje Tiger
+        definidas implícitamente el ámbito raíz.
+        """
         
-        
+    def _init_variables(self):
+        """
+        Inicializa las variables definidas implícitamente por el lenguaje Tiger.
+        """                
+
+    def get_type_definition(self, name):
+        """
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método C{get_type_definition}
+        en la clase C{Scope}.
+        """
+        return self._types[name]
+
+    def get_function_definition(self, name):
+        """
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método C{get_function_definition}
+        en la clase C{Scope}.
+        """
+        return self._functions[name]
+
+    def get_variable_definition(self, name):
+        """
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método C{get_variable_definition}
+        en la clase C{Scope}.
+        """
+        return self._variables[name]
