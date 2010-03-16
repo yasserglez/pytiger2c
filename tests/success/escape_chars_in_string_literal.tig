@@ -1,8 +1,0 @@
-let
-    /* msg1 is: Can you read this? */
-    var msg1 := "\067\097\110\032\121\111\117\032\114\101\097\100\032\116\104\105\115\063"
-    var msg2 := "\n\"Quoted string\"\^J"
-in
-    print(msg1);
-    print(msg2)
-end

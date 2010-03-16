@@ -125,12 +125,14 @@ def main():
     """
     suite = unittest.TestSuite()
     runner = unittest.TextTestRunner(verbosity=2);
-    for tiger_file in [f for f in os.listdir(SUCCCESS_DIR) if f.endswith('.tig')]:
-        test_case = SuccessTigerTestCase(SUCCCESS_DIR, tiger_file)
-        suite.addTest(test_case)
-    for tiger_file in [f for f in os.listdir(FAIL_DIR) if f.endswith('.tig')]:
-        test_case = FailTigerTestCase(FAIL_DIR, tiger_file)
-        suite.addTest(test_case)        
+    if os.path.isdir(SUCCCESS_DIR):
+        for tiger_file in [f for f in os.listdir(SUCCCESS_DIR) if f.endswith('.tig')]:
+            test_case = SuccessTigerTestCase(SUCCCESS_DIR, tiger_file)
+            suite.addTest(test_case)
+    if os.path.isdir(FAIL_DIR):        
+        for tiger_file in [f for f in os.listdir(FAIL_DIR) if f.endswith('.tig')]:
+            test_case = FailTigerTestCase(FAIL_DIR, tiger_file)
+            suite.addTest(test_case)        
     runner.run(suite)
 
 

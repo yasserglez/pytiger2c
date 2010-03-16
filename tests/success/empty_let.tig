@@ -1,4 +1,0 @@
-let
-in
-    print("This Tiger program has an empty let.\n");
-end
