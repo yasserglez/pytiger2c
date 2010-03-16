@@ -16,7 +16,7 @@ import codecs
 
 from pytiger2c.grammar import parser
 from pytiger2c.errors import PyTiger2CError, SyntacticError, SemanticError, CodeGenerationError
-
+from pytiger2c.scope import RootScope
 
 __version__ = '0.1'
 
@@ -62,7 +62,8 @@ def check_semantics(ast):
         acerca del error.
     """
     errors = []
-    ast.check_semantics(errors)
+    scope = RootScope()
+    ast.check_semantics(scope, errors)
     if errors:
         raise SemanticError(errors)
 
