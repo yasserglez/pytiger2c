@@ -54,13 +54,19 @@ graph LanguageNodes {
     ArithmeticOperatorNode -- MinusOperatorNode;    
     ArithmeticOperatorNode -- TimesOperatorNode;
     ArithmeticOperatorNode -- DivideOperatorNode;
+ 
+    LogicalOperatorNode -- BinaryLogicalOperatorNode;
+    LogicalOperatorNode -- EqualityLogicalOperatorNode;
+    LogicalOperatorNode -- RelationalLogicalOperatorNode;
     
-    LogicalOperatorNode -- EqualsOperatorNode;
-    LogicalOperatorNode -- NotEqualsOperatorNode;
-    LogicalOperatorNode -- LessThanOperatorNode;
-    LogicalOperatorNode -- LessEqualsThanOperatorNode;
-    LogicalOperatorNode -- GreaterThanOperatorNode;
-    LogicalOperatorNode -- GreaterEqualsThanOperatorNode;
-    LogicalOperatorNode -- AndOperatorNode;
-    LogicalOperatorNode -- OrOperatorNode;
+    BinaryLogicalOperatorNode -- AndOperatorNode;
+    BinaryLogicalOperatorNode -- OrOperatorNode;    
+    
+    EqualityLogicalOperatorNode -- EqualsOperatorNode;
+    EqualityLogicalOperatorNode -- NotEqualsOperatorNode;
+    
+    RelationalLogicalOperatorNode -- LessThanOperatorNode;
+    RelationalLogicalOperatorNode -- LessEqualsThanOperatorNode;
+    RelationalLogicalOperatorNode -- GreaterThanOperatorNode;
+    RelationalLogicalOperatorNode -- GreaterEqualsThanOperatorNode;
 }
