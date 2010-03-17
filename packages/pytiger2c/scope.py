@@ -6,6 +6,8 @@ Clases C{Scope} y C{RootScope} que representan ámbitos de ejecución en Tiger.
 
 from pytiger2c.types.tigertype import TigerType
 from pytiger2c.types.functiontype import FunctionType
+from pytiger2c.types.integertype import IntegerType
+from pytiger2c.types.stringtype import StringType
 
 
 class Scope(object):
@@ -290,6 +292,8 @@ class RootScope(Scope):
         Inicializa los tipos básicos del lenguaje Tiger definidos implícitamente 
         en el ámbito raíz.
         """
+        self.define_type('int', IntegerType())
+        self.define_type('string', StringType())
     
     def _init_functions(self):
         """
