@@ -4,6 +4,9 @@
 Clases C{Scope} y C{RootScope} que representan ámbitos de ejecución en Tiger.
 """
 
+from pytiger2c.types.tigertype import TigerType
+from pytiger2c.types.functiontype import FunctionType
+
 
 class Scope(object):
     """
@@ -31,8 +34,7 @@ class Scope(object):
         """
         self._parent = parent
         self._types = {}
-        self._variables = {}
-        self._functions = {}
+        self._members = {}
 
     def generate_code(self):
         """
@@ -81,7 +83,7 @@ class Scope(object):
         if not (name in self._types):
             self._types[name] = tiger_type
         else:
-            raise ValueError()
+            raise ValueError('Type already defined in this scope')
         
     def get_type_definition(self, name):
         """
@@ -127,10 +129,10 @@ class Scope(object):
         @raise C{ValueError}: Se lanza una excepción C{ValueError} si la función 
             que se intenta definir se definió anteriormente en este ámbito. 
         """
-        if not (name in self._functions):
-            self._functions[name] = function_type
+        if not (name in self._members):
+            self._members[name] = function_type
         else:
-            raise ValueError()
+            raise ValueError('Function already defined in this scope')
     
     def get_function_definition(self, name):
         """
@@ -146,9 +148,16 @@ class Scope(object):
         
         @raise C{KeyError}: Se lanza un C{KeyError} si la función no está
             definida en este scope o en alguno superior.
+
+        @raise C{ValueError}: Se lanza una excepción C{ValueError} si el nombre
+            no corresponde al de una función.
         """
-        if name in self._functions:
-            return self._functions[name]
+        if name in self._members:
+            function_type = self._members[name]
+            if isinstance(function_type, FunctionType):
+                return function_type
+            else:
+                raise ValueError('The member of the scope is not a function')
         else:
             return self.parent.get_function_definition(name)
     
@@ -169,10 +178,10 @@ class Scope(object):
         @param tiger_type: Instancia de C{TigerType} correspondiente al 
              tipo de la variable que se quiere definir.
         """
-        if not (name in self._variables):
-            self._variables[name] = type
+        if not (name in self._members):
+            self._members[name] = type
         else:
-            raise ValueError()
+            raise ValueError('Variable already defined in this scope')
         
     def get_variable_definition(self, name):
         """
@@ -189,8 +198,12 @@ class Scope(object):
         @raise C{KeyError}: Se lanza una excepción C{KeyError} si la variable 
             no está definida en este ámbito o en alguno superior. 
         """
-        if name in self._variables:
-            return self._variables[name]
+        if name in self._members:
+            variable_type = self._members[name]
+            if isinstance(variable_type, TigerType) and not isinstance(variable_type, FunctionType):
+                return variable_type
+            else:
+                raise ValueError('The member of the scope is not a variable')
         else:
             return self.parent.get_variable_definition(name)
         
@@ -252,7 +265,7 @@ class RootScope(Scope):
         este método consulte la documentación del método C{get_function_definition}
         en la clase C{Scope}.
         """
-        return self._functions[name]
+        return self._members[name]
 
     def get_variable_definition(self, name):
         """
@@ -260,4 +273,4 @@ class RootScope(Scope):
         este método consulte la documentación del método C{get_variable_definition}
         en la clase C{Scope}.
         """
-        return self._variables[name]
+        return self._members[name]
