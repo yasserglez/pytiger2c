@@ -29,7 +29,7 @@ class Scope(object):
     
     def __init__(self, parent):
         """
-        Inicializa la clase C{Scope}
+        Inicializa la clase C{Scope}.
         
         @type parent: C{Scope}
         @param parent: Ámbito en el que se define este nuevo ámbito. 
@@ -50,24 +50,26 @@ class Scope(object):
         Genera el código necesario para acceder a una variable definida en este 
         ámbito o en alguno superior.
         
-        Una variable definida en un ámbito superior puede ser accedida desde cualquier 
-        ámbito inferior por lo que la variable en cuestión puede estar definida en el 
-        ámbito actual, en su padre o en algún ancestro.
+        Una variable definida en un ámbito superior puede ser accedida desde 
+        cualquier ámbito inferior por lo que la variable en cuestión puede 
+        estar definida en el ámbito actual, en su padre o en algún ancestro.
         
         @type name: C{str}
-        @param name: Cadena de caracteres correspondiente al nombre de la variable.
-        
+        @param name: Cadena de caracteres correspondiente al nombre de la 
+            variable. 
+            
         @rtype: C{str}
-        @return: Cadena de caracteres correspondiente al código C necesario para 
-            acceder a la variable.
+        @return: Cadena de caracteres correspondiente al código C necesario 
+            para acceder a la variable.
             
-        @raise C{KeyError}: Se lanza una excepción C{KeyError} si la variable 
+        @raise KeyError: Se lanza una excepción C{KeyError} si la variable 
             no está definida en este ámbito o en alguno superior.            
-            
-        @raise C{ValueError}: Se lanza una expceción C{ValueError} si existe
+
+        @raise ValueError: Se lanza una expceción C{ValueError} si existe
             un miembro en algún ámbito con el nombre dado pero no es una
             variable.
         """
+        raise NotImplementedError()
         
     def define_type(self, name, tiger_type):
         """
@@ -83,11 +85,12 @@ class Scope(object):
             tipo que se declara.
         
         @type type: C{TigerType}
-        @param type: Instancia de C{TigerType} correspondiente a la declaración 
-            de tipo.
+        @param type: Instancia de C{TigerType} correspondiente a la 
+            declaración de tipo.
         
-        @raise C{ValueError}: Se lanza una excepción C{ValueError} si el tipo 
-            que se intenta declarar fue definido anteriormente en este ámbito. 
+        @raise ValueError: Se lanza una excepción C{ValueError} si 
+            el tipo que se intenta declarar fue definido anteriormente 
+            en este ámbito. 
         """
         if not (name in self._types):
             self._types[name] = tiger_type
@@ -110,7 +113,7 @@ class Scope(object):
         @return: Instancia de C{TigerType} correspondiente a la definición 
             de tipo buscada.
             
-        @raise C{KeyError}: Se lanza una excepción C{KeyError} si el tipo no 
+        @raise KeyError: Se lanza una excepción C{KeyError} si el tipo no 
             está definido en este ámbito o en alguno superior.
         """
         if name in self._types:
@@ -135,7 +138,7 @@ class Scope(object):
         @param function_type: Instancia de C{FunctionType} correspondiente a la 
             definición de función.
             
-        @raise C{ValueError}: Se lanza una excepción C{ValueError} si la función 
+        @raise ValueError: Se lanza una excepción C{ValueError} si la función 
             que se intenta definir se definió anteriormente en este ámbito. 
         """
         if not (name in self._members):
@@ -155,10 +158,10 @@ class Scope(object):
         @return: Instancia de C{FunctionType} correspondiente a la definición 
             de la función.
         
-        @raise C{KeyError}: Se lanza un C{KeyError} si la función no está
+        @raise KeyError: Se lanza un C{KeyError} si la función no está
             definida en este scope o en alguno superior.
 
-        @raise C{ValueError}: Se lanza una expceción C{ValueError} si existe
+        @raise ValueError: Se lanza una expceción C{ValueError} si existe
             un miembro en algún ámbito con el nombre dado pero no es una
             función.
         """
@@ -193,7 +196,7 @@ class Scope(object):
             como una variable de sólo lectura. El valor por defecto de este
             argumento es C{False}.
             
-        @raise C{ValueError}: Se lanza una excepción C{ValueError} si la variable
+        @raise ValueError: Se lanza una excepción C{ValueError} si la variable
             que se intenta definir se definió anteriormente en este ámbito.        
         """
         if not (name in self._members):
@@ -214,10 +217,10 @@ class Scope(object):
         @return: Instancia de C{TigerType} correspondiente al tipo de la 
             variable.
         
-        @raise C{KeyError}: Se lanza una excepción C{KeyError} si la variable 
+        @raise KeyError: Se lanza una excepción C{KeyError} si la variable 
             no está definida en este ámbito o en alguno superior.
             
-        @raise C{ValueError}: Se lanza una expceción C{ValueError} si existe
+        @raise ValueError: Se lanza una expceción C{ValueError} si existe
             un miembro en algún ámbito con el nombre dado pero no es una
             variable.             
         """
@@ -244,10 +247,10 @@ class Scope(object):
             Se retornará C{True} si la variable es de sólo lectura, C{False} 
             en otro caso.
         
-        @raise C{KeyError}: Se lanza una excepción C{KeyError} si la variable 
+        @raise KeyError: Se lanza una excepción C{KeyError} si la variable 
             no está definida en este ámbito o en alguno superior.
             
-        @raise C{ValueError}: Se lanza una expceción C{ValueError} si existe
+        @raise ValueError: Se lanza una expceción C{ValueError} si existe
             un miembro en algún ámbito con el nombre dado pero no es una
             variable.
         """
