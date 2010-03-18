@@ -300,8 +300,8 @@ class RootScope(Scope):
         Inicializa las funciónes de la biblioteca standard del lenguaje Tiger
         definidas implícitamente el ámbito raíz.
         """
-        int_type = self.get_type_definition('int')
-        string_type = self.get_type_definition('string')
+        int_type = IntegerType()
+        string_type = StringType()
         
         print_type = FunctionType(None, [string_type])
         printi_type = FunctionType(None, [int_type])
