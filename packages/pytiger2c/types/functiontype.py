@@ -28,7 +28,6 @@ class FunctionType(TigerType):
     
     parameters_types = property(_get_parameters_types)
     
-    
     def __init__(self, return_type, parameters_types):
         """
         Inicializa la clase representando el tipo función.

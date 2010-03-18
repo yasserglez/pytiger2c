@@ -50,8 +50,8 @@ class InferredVariableDeclarationNode(VariableDeclarationNode):
         En el proceso de comprobación semántica la propiedad C{type} toma valor y la
         variable es definida en su ámbito local.
         """
-        self.scope = scope
-        self.value.check_semantics(self.scope, errors)
+        self._scope = scope
+        self.value.check_semantics(self._scope, errors)
         
         if not self.value.has_return_value():
             message = 'Non-value expression assign to a variable at line {line}'
@@ -63,7 +63,7 @@ class InferredVariableDeclarationNode(VariableDeclarationNode):
             self._type = self.value.return_type
         
         try:
-            self.scope.define_variable(self.name, self.type)
+            self._scope.define_variable(self.name, self.type)
         except ValueError:
             message = 'Invalid variable name at line {line}'
             errors.append(message.format(line=self.line_number))

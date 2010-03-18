@@ -56,11 +56,11 @@ class StaticVariableDeclarationNode(VariableDeclarationNode):
         En el proceso de comprobación semántica la propiedad C{type} toma valor y la
         variable es definida en su ámbito local.
         """
-        self.scope = scope
-        self.value.check_semantics(self.scope, errors)
+        self._scope = scope
+        self.value.check_semantics(self._scope, errors)
         
         try:
-            tiger_type = self.scope.get_type_definition(self._type_name)
+            tiger_type = self._scope.get_type_definition(self._type_name)
             self._type = tiger_type
         except KeyError:
             message = 'Undefined type of variable at line {line}'
@@ -74,7 +74,7 @@ class StaticVariableDeclarationNode(VariableDeclarationNode):
             errors.append(message.format(line=self.line_number))
         
         try:
-            self.scope.define_variable(self.name, self.type)
+            self._scope.define_variable(self.name, self.type)
         except ValueError:
             message = 'Invalid variable name at line {line}'
             errors.append(message.format(line=self.line_number))

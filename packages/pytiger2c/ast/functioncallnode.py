@@ -74,10 +74,11 @@ class FunctionCallNode(ValuedExpressionNode):
         tipo de retorno del nodo al tipo de retorno de la función o no tendrá 
         valor de retorno en el caso de llamados a procedimientos.        
         """
+        self._scope = scope
         for expression in self._parameters:
-            expression.check_semantics(scope, errors)
+            expression.check_semantics(self._scope, errors)
         try:
-            function_type = scope.get_function_definition(self._name)
+            function_type = self._scope.get_function_definition(self._name)
         except KeyError:
             message = 'Calling an undefined function {name} at line {line}'
             errors.append(message.format(name=self._name, line=self.line_number))

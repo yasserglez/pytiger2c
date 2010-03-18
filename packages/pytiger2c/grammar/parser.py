@@ -151,6 +151,8 @@ def p_expr_assign(symbols):
 # Function call.
 def p_expr_func(symbols):
     "expr : ID LPAREN expr_list RPAREN"
+    symbols[0] = FunctionCallNode(symbols[1], symbols[3])
+    symbols[0].line_number = symbols.lineno(1)
 
 # Flow control structures.
 def p_expr_if(symbols):
@@ -179,7 +181,6 @@ def p_expr_break(symbols):
 # The let block.
 def p_expr_let(symbols):
     "expr : LET dec_group IN expr_seq END"
-    symbols[4].line_number = symbols.lineno(3)
     
 # What is a left value of an assignment expression?
 def p_lvalue_id(symbols):
@@ -235,12 +236,17 @@ def p_field_assign(symbols):
 # A group of expressions separated by commas.
 def p_expr_list_empty(symbols):
     "expr_list : "
+    symbols[0] = []
     
 def p_expr_list_multiple(symbols):
-    "expr_list : expr_list COMMA expr"    
+    "expr_list : expr_list COMMA expr"
+    symbols[0] = symbols[1]
+    symbols[0].append(symbols[3])    
     
 def p_expr_list_single(symbols):
-    "expr_list : expr"    
+    "expr_list : expr"
+    symbols[0] = []
+    symbols[0].append(symbols[1])   
 
 # What is a declaration? A type declaration.
 def p_dec_type(symbols):
