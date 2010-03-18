@@ -295,10 +295,14 @@ def p_field_type(symbols):
 def p_var_dec_without_type(symbols):
     "var_dec : VAR ID ASSIGN expr"
     symbols[0] = InferredVariableDeclarationNode(symbols[2], symbols[4])
+    symbols[0].line_number = symbols.lineno(1)
+
 
 def p_var_dec_with_type(symbols):
     "var_dec : VAR ID COLON ID ASSIGN expr"
     symbols[0] = StaticVariableDeclarationNode(symbols[2], symbols[6], symbols[4])
+    symbols[0].line_number = symbols.lineno(1)
+
     
 # Function declaration.
 def p_func_dec_without_return(symbols):
