@@ -300,6 +300,32 @@ class RootScope(Scope):
         Inicializa las funciónes de la biblioteca standard del lenguaje Tiger
         definidas implícitamente el ámbito raíz.
         """
+        int_type = self.get_type_definition('int')
+        string_type = self.get_type_definition('string')
+        
+        print_type = FunctionType(None, [string_type])
+        printi_type = FunctionType(None, [int_type])
+        flush_type = FunctionType(None, [])
+        getchar_type = FunctionType(string_type, [])
+        ord_type = FunctionType(int_type, [string_type])
+        chr_type = FunctionType(string_type, [int_type])
+        size_type = FunctionType(int_type, [string_type])
+        substring_type = FunctionType(string_type, [string_type, int_type, int_type])
+        concat_type = FunctionType(string_type, [string_type, string_type])
+        not_type = FunctionType(int_type, [int_type])
+        exit_type = FunctionType(None, [int_type])
+        
+        self.define_function('print', print_type)
+        self.define_function('printi', printi_type)
+        self.define_function('flush', flush_type)
+        self.define_function('getchar', getchar_type)
+        self.define_function('ord', ord_type)
+        self.define_function('chr', chr_type)
+        self.define_function('size', size_type)
+        self.define_function('substring', substring_type)
+        self.define_function('concat', concat_type)
+        self.define_function('not', not_type)
+        self.define_function('exit', exit_type)
         
     def _init_variables(self):
         """
