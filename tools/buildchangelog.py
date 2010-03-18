@@ -31,6 +31,8 @@ def main():
         data = tmp_file.read()
         tmp_file.seek(0)
         data = data.replace(r'_', r'\_')
+        data = data.replace(r'<', r'$<$')
+        data = data.replace(r'>', r'$>$')
         tmp_file.write(data)
     # Compile the LaTeX file.
     os.chdir(DOCS_DIR)
