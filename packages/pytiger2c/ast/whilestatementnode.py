@@ -61,7 +61,7 @@ class WhileStatementNode(NonValuedExpressionNode):
         de forma que evalua la condición y si esta es distinta de cero, 
         entonces la expresión es ejecutada.
         
-        En la comprobación semántica de este nodo del árbol de sintáxix abstracta
+        En la comprobación semántica de este nodo del árbol de sintáxis abstracta
         se comprueban semánticamente tanto la condición como la expresión contenidas
         en este. Luego se comprueba que la condición retorne valor, que el mismo sea 
         de tipo C{IntegerType} y que la expresión no retorne valor. Se reportarán
