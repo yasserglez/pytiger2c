@@ -1,0 +1,6 @@
+let
+        type g = h
+        type h = non_defined
+in
+        2
+end
