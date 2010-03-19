@@ -312,6 +312,8 @@ def p_func_dec_without_return(symbols):
 
 def p_func_dec_with_return(symbols):
     "func_dec : FUNCTION ID LPAREN field_types RPAREN COLON ID EQ expr"
+    symbols[0] = FunctionDeclarationNode(symbols[2], symbols[4], symbols[9], symbols[7])
+    symbols[0].line_number = symbols.lineno(1)    
 
 
 _cachedir = os.path.abspath(os.path.join(os.path.dirname(__file__), 'cache'))

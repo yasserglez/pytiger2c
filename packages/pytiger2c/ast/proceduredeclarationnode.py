@@ -55,9 +55,9 @@ class ProcedureDeclarationNode(CallableDeclarationNode):
         else:
             self.body.check_semantics(self.scope, errors)
             if self.body.has_return_value():
-                message = 'The body of the procedure defined ' \
+                message = 'The body of the procedure {name} defined ' \
                           'at line {line} returns value'
-                errors.append(message.format(line=self.line_number))
+                errors.append(message.format(name=self.name, line=self.line_number))
             try:
                 function_type = FunctionType(None, self.parameters_types)
                 scope.define_function(self.name, function_type)
