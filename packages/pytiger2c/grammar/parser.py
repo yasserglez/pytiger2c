@@ -307,6 +307,8 @@ def p_var_dec_with_type(symbols):
 # Function declaration.
 def p_func_dec_without_return(symbols):
     "func_dec : FUNCTION ID LPAREN field_types RPAREN EQ expr"
+    symbols[0] = ProcedureDeclarationNode(symbols[2], symbols[4], symbols[7])
+    symbols[0].line_number = symbols.lineno(1)
 
 def p_func_dec_with_return(symbols):
     "func_dec : FUNCTION ID LPAREN field_types RPAREN COLON ID EQ expr"
