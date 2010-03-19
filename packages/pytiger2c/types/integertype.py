@@ -17,4 +17,5 @@ class IntegerType(TigerType):
         Inicializa la clase representando el tipo array.
         """
         super(IntegerType, self).__init__()
+        self._defined = True
         

@@ -17,3 +17,4 @@ class StringType(TigerType):
         Inicializa la clase representando el tipo cadena de caracteres.
         """
         super(StringType, self).__init__()
+        self._defined = True

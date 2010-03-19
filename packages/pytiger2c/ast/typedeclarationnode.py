@@ -22,7 +22,13 @@ class TypeDeclarationNode(DeclarationNode):
         """
         return self._name
     
-    name = property(_get_name)
+    def _set_name(self, name):
+        """
+        Método para cambiar el valor de la propiedad C{name}.
+        """
+        self._name = name
+    
+    name = property(_get_name, _set_name)
     
     def _get_type(self):
         """

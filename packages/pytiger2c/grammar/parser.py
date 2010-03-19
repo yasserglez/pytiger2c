@@ -180,7 +180,10 @@ def p_expr_break(symbols):
 
 # The let block.
 def p_expr_let(symbols):
-    "expr : LET dec_group IN expr_seq END"
+    "expr : LET dec_group IN expr_seq END"    
+    symbols[0] = LetNode(symbols[2][0], 
+                         symbols[2][1], symbols[4])
+    symbols[0].line_number = symbols.lineno(1)
     
 # What is a left value of an assignment expression?
 def p_lvalue_id(symbols):

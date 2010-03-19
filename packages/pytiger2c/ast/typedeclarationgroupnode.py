@@ -69,13 +69,17 @@ class TypeDeclarationGroupNode(NonValuedExpressionNode):
         que se depende se encuentren en su mismo grupo.
         """
         self._scope  = scope
+        local_used = []
         
         # Fill the types and alias dicts from the declarations lists
         for declaration_node in self._declarations:
             name = declaration_node.name
             if name in used_types:
-                message = 'Invalid type name {type_name} at line {line}, used before redefine it.'
+                message = 'Invalid type name {type_name} at line {line}, used before redefine it'
                 errors.append(message.format(type_name = name, line=declaration_node.line_number))
+            if name in self._alias or name in self._types:
+                    message = 'Type {type_name} already defined in the local scope'
+                    errors.append(message.format(type_name = name))    
             if isinstance(declaration_node, AliasTypeDeclarationNode):
                 self._alias[name] = declaration_node.alias_typename
             else:
@@ -87,10 +91,10 @@ class TypeDeclarationGroupNode(NonValuedExpressionNode):
                 try:
                     self._resolve_alias(alias_name, [])
                 except ValueError:
-                    message = 'Invalid alias declaration of {name}, mutually recursive.'
+                    message = 'Invalid alias declaration of {name}, mutually recursive'
                     errors.append(message.format(name = alias_name))
                 except KeyError:
-                    message = 'Undefined type needed to declare alias {name}.'
+                    message = 'Undefined type needed to declare alias {name}'
                     errors.append(message.format(name = alias_name))        
         
         for type_name, tiger_type in self._types.items():
@@ -110,14 +114,18 @@ class TypeDeclarationGroupNode(NonValuedExpressionNode):
                             errors.append(message.format(field_typename = field_typename, 
                                                          type_name = type_name))
                     fields_types.append(field)
+                    local_used.append(field_typename)
                 tiger_type.fields_types = fields_types
                 tiger_type.defined = True
             # Once we fully define the type, let's define it into the scope.
             try:
                 self.scope.define_type(type_name, tiger_type)
+                local_used.append(type_name)
             except ValueError:
-                message = 'Type {type_name} already defined in the local scope.'
+                message = 'Type {type_name} already defined in the local scope'
                 errors.append(message.format(type_name = type_name))
+        
+        used_types.extend(local_used)
 
 
     def _resolve_alias(self, alias_name, backward_reference_names):
@@ -151,7 +159,8 @@ class TypeDeclarationGroupNode(NonValuedExpressionNode):
             if alias_type_name in backward_reference_names:
                 raise ValueError('Infinite recursive alias definition of {name}'.format(name = alias_name))
             else:
-                tiger_type = self._resolve_alias(alias_type_name, backward_reference_names.append(alias_name))
+                backward_reference_names.append(alias_name)
+                tiger_type = self._resolve_alias(alias_type_name, backward_reference_names)
         elif alias_type_name in self._types.keys():
             tiger_type = self._types[alias_type_name]
         else:
