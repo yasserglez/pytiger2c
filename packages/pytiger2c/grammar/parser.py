@@ -289,6 +289,9 @@ def p_type_dec_group_multiple(symbols):
 # Type declarations.
 def p_type_dec(symbols):
     "type_dec : TYPE ID EQ type"
+    symbols[0] = symbols[4]
+    symbols[0].name = symbols[2]
+    symbols[0].line_number = symbols.lineno(1)
 
 # What is a valid type? An alias for a previously defined type.
 def p_type_alias(symbols):
