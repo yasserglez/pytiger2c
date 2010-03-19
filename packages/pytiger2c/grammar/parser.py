@@ -147,6 +147,8 @@ def p_expr_expr_seq(symbols):
 # Assignment.
 def p_expr_assign(symbols):
     "expr : lvalue ASSIGN expr"
+    symbols[0] = AssignmentNode(symbols[1], symbols[3])
+    symbols[0].line_number = symbols.lineno(2)
 
 # Function call.
 def p_expr_func(symbols):
