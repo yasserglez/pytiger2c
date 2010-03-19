@@ -215,9 +215,14 @@ def p_expr_seq_single(symbols):
 # A let expression with nothing between the in and end is valid.
 def p_dec_group_empty(symbols):
     "dec_group : "
+    symbols[0] = ([],[]) 
     
 def p_dec_group_multiple(symbols):
     "dec_group : dec_group dec"
+    symbols[0] = symbols[1]
+    symbols[0][0].extend(symbols[2][0])
+    symbols[0][1].extend(symbols[2][1])
+    
 
 # A list of field names, the equals character and an expression 
 # to assign values for each one of the fields of a record.
@@ -248,17 +253,38 @@ def p_expr_list_single(symbols):
     symbols[0] = []
     symbols[0].append(symbols[1])   
 
-# What is a declaration? A type declaration.
-def p_dec_type(symbols):
-    "dec : type_dec"
+# What is a declaration? A block of continous 
+# type declarations. Mutually recursive type
+# declarations must be defined without any 
+# variable or function declaration between
+# the definition of any of it.
+def p_dec_type_dec_group(symbols):
+    "dec : type_dec_group"
+    symbols[0] = ([symbols[1]], [])
 
 # What is a declaration? A variable declaration.
 def p_dec_var(symbols):
     "dec : var_dec"
+    symbols[0] = ([], [symbols[1]])
 
 # What is a declaration? A function declaration.
 def p_dec_func(symbols):
     "dec : func_dec"
+    symbols[0] = ([], [symbols[1]])
+
+# What is a group of type declarations? A type 
+# declaration.
+def p_type_dec_group_single(symbols):
+    "type_dec_group : type_dec"
+    symbols[0] = TypeDeclarationGroupNode()
+    symbols[0].declarations.append(symbols[1])
+
+# What is a group of type declarations? A group 
+# of type declarations follow by a type declaration.
+def p_type_dec_group_multiple(symbols):
+    "type_dec_group : type_dec_group type_dec"
+    symbols[0] = symbols[1]
+    symbols[0].declarations.append(symbols[2])
 
 # Type declarations.
 def p_type_dec(symbols):
