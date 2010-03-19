@@ -12,8 +12,8 @@ class RecordDeclarationNode(TypeDeclarationNode):
     Clase C{RecordDeclarationNode} del árbol de sintáxis abstracta.
     """
     
-    def __init__(self):
+    def __init__(self, name):
         """
         Inicializa la clase C{RecordDeclarationNode}.
         """
-        super(RecordDeclarationNode, self).__init__()
+        super(RecordDeclarationNode, self).__init__(name)

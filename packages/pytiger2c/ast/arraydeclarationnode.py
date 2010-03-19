@@ -12,8 +12,8 @@ class ArrayDeclarationNode(TypeDeclarationNode):
     Clase C{ArrayDeclarationNode} del árbol de sintáxis abstracta.
     """
     
-    def __init__(self):
+    def __init__(self, name):
         """
         Inicializa la clase C{ArrayDeclarationNode}.
         """
-        super(ArrayDeclarationNode, self).__init__()
+        super(ArrayDeclarationNode, self).__init__(name)
