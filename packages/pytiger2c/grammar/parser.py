@@ -296,29 +296,39 @@ def p_type_dec(symbols):
 # What is a valid type? An alias for a previously defined type.
 def p_type_alias(symbols):
     "type : ID"
+    symbols[0] = AliasTypeDeclarationNode("", symbols[1])
 
 # What is a valid type? The definition of the fields of a record.
 def p_type_record(symbols):
     "type : LBRACE field_types RBRACE"
+    symbols[0] = RecordDeclarationNode("", symbols[2][0], symbols[2][1])
+    
 
 # What is a valid type? An array definition.
 def p_type_array(symbols):
     "type : ARRAY OF ID"
+    symbols[0] = ArrayDeclarationNode("", symbols[3])
 
 # A list of field types declaration separated by commas.
 def p_field_types_empty(symbols):
     "field_types : "
+    symbols[0] = ([], [])
 
 def p_field_types_single(symbols):
     "field_types : field_type"
+    symbols[0] = ([symbols[1][0]],[symbols[1][1]])
 
 def p_field_types_multiple(symbols):
     "field_types : field_types COMMA field_type"
+    symbols[0] = symbols[1]
+    symbols[0][0].append(symbols[3][0])
+    symbols[0][1].append(symbols[3][1])
 
 # Declaration of the type of a field. An identifier for the
 # field followed by a colon and the type of the field.
 def p_field_type(symbols):
     "field_type : ID COLON ID"
+    symbols[0] = (symbols[1], symbols[3])
 
 # Variable declaration.
 def p_var_dec_without_type(symbols):

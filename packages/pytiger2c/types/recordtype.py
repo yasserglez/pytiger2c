@@ -34,17 +34,17 @@ class RecordType(TigerType):
     
     fields_types = property(_get_fields_types, _set_fields_types)
 
-    def __init__(self, field_names, fields_typenames):
+    def __init__(self, fields_names, fields_typenames):
         """
         Inicializa la clase representando el tipo record.
         
-        @type field_names: C{list}
-        @param field_names: Lista con los nombres de los campos del C{record}, por pocisión.
+        @type fields_names: C{list}
+        @param fields_names: Lista con los nombres de los campos del C{record}, por pocisión.
         
         @type fields_typenames: C{list}
         @param fields_typenames: Lista con los nombres de los tipos de los campos, por pocisión.
         """
         super(RecordType, self).__init__()
         self._fields_typenames = fields_typenames
-        self._field_names = field_names
+        self._fields_names = fields_names
         self._fields_types = None
