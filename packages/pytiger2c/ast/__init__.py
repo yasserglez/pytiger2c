@@ -11,6 +11,7 @@ from pytiger2c.ast.forstatementnode import ForStatementNode
 from pytiger2c.ast.breakstatementnode import BreakStatementNode
 from pytiger2c.ast.variabledeclarationnode import VariableDeclarationNode
 from pytiger2c.ast.typedeclarationnode import TypeDeclarationNode
+from pytiger2c.ast.typedeclarationgroupnode import TypeDeclarationGroupNode
 from pytiger2c.ast.functiondeclarationnode import FunctionDeclarationNode
 from pytiger2c.ast.proceduredeclarationnode import ProcedureDeclarationNode
 from pytiger2c.ast.inferredvariabledeclarationnode import InferredVariableDeclarationNode
@@ -52,6 +53,7 @@ __all__ = [
     'BreakStatementNode',
     'VariableDeclarationNode',
     'TypeDeclarationNode',
+    'TypeDeclarationGroupNode',
     'FunctionDeclarationNode',
     'ProcedureDeclarationNode',
     'InferredVariableDeclarationNode',

@@ -180,7 +180,10 @@ def p_expr_break(symbols):
 
 # The let block.
 def p_expr_let(symbols):
-    "expr : LET dec_group IN expr_seq END"
+    "expr : LET dec_group IN expr_seq END"    
+    symbols[0] = LetNode(symbols[2][0], 
+                         symbols[2][1], symbols[4])
+    symbols[0].line_number = symbols.lineno(1)
     
 # What is a left value of an assignment expression?
 def p_lvalue_id(symbols):
@@ -215,9 +218,14 @@ def p_expr_seq_single(symbols):
 # A let expression with nothing between the in and end is valid.
 def p_dec_group_empty(symbols):
     "dec_group : "
+    symbols[0] = ([],[]) 
     
 def p_dec_group_multiple(symbols):
     "dec_group : dec_group dec"
+    symbols[0] = symbols[1]
+    symbols[0][0].extend(symbols[2][0])
+    symbols[0][1].extend(symbols[2][1])
+    
 
 # A list of field names, the equals character and an expression 
 # to assign values for each one of the fields of a record.
@@ -248,48 +256,82 @@ def p_expr_list_single(symbols):
     symbols[0] = []
     symbols[0].append(symbols[1])   
 
-# What is a declaration? A type declaration.
-def p_dec_type(symbols):
-    "dec : type_dec"
+# What is a declaration? A block of continous 
+# type declarations. Mutually recursive type
+# declarations must be defined without any 
+# variable or function declaration between
+# the definition of any of it.
+def p_dec_type_dec_group(symbols):
+    "dec : type_dec_group"
+    symbols[0] = ([symbols[1]], [])
 
 # What is a declaration? A variable declaration.
 def p_dec_var(symbols):
     "dec : var_dec"
+    symbols[0] = ([], [symbols[1]])
 
 # What is a declaration? A function declaration.
 def p_dec_func(symbols):
     "dec : func_dec"
+    symbols[0] = ([], [symbols[1]])
+
+# What is a group of type declarations? A type 
+# declaration.
+def p_type_dec_group_single(symbols):
+    "type_dec_group : type_dec"
+    symbols[0] = TypeDeclarationGroupNode()
+    symbols[0].declarations.append(symbols[1])
+
+# What is a group of type declarations? A group 
+# of type declarations follow by a type declaration.
+def p_type_dec_group_multiple(symbols):
+    "type_dec_group : type_dec_group type_dec"
+    symbols[0] = symbols[1]
+    symbols[0].declarations.append(symbols[2])
 
 # Type declarations.
 def p_type_dec(symbols):
     "type_dec : TYPE ID EQ type"
+    symbols[0] = symbols[4]
+    symbols[0].name = symbols[2]
+    symbols[0].line_number = symbols.lineno(1)
 
 # What is a valid type? An alias for a previously defined type.
 def p_type_alias(symbols):
     "type : ID"
+    symbols[0] = AliasTypeDeclarationNode("", symbols[1])
 
 # What is a valid type? The definition of the fields of a record.
 def p_type_record(symbols):
     "type : LBRACE field_types RBRACE"
+    symbols[0] = RecordDeclarationNode("", symbols[2][0], symbols[2][1])
+    
 
 # What is a valid type? An array definition.
 def p_type_array(symbols):
     "type : ARRAY OF ID"
+    symbols[0] = ArrayDeclarationNode("", symbols[3])
 
 # A list of field types declaration separated by commas.
 def p_field_types_empty(symbols):
     "field_types : "
+    symbols[0] = ([], [])
 
 def p_field_types_single(symbols):
     "field_types : field_type"
+    symbols[0] = ([symbols[1][0]],[symbols[1][1]])
 
 def p_field_types_multiple(symbols):
     "field_types : field_types COMMA field_type"
+    symbols[0] = symbols[1]
+    symbols[0][0].append(symbols[3][0])
+    symbols[0][1].append(symbols[3][1])
 
 # Declaration of the type of a field. An identifier for the
 # field followed by a colon and the type of the field.
 def p_field_type(symbols):
     "field_type : ID COLON ID"
+    symbols[0] = (symbols[1], symbols[3])
 
 # Variable declaration.
 def p_var_dec_without_type(symbols):
