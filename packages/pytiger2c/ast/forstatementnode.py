@@ -102,7 +102,7 @@ class ForStatementNode(NonValuedExpressionNode):
         integer_type = IntegerType()
         
         self._scope = Scope(scope)
-        self.scope.define_type(self.index_name, integer_type)
+        self.scope.define_variable(self.index_name, integer_type, True)
         
         self.lower_expression.check_semantics(self.scope, errors)
         if not self.lower_expression.has_return_value(): 
@@ -124,4 +124,4 @@ class ForStatementNode(NonValuedExpressionNode):
                       'of the for loop at line {line} is not integer'
             errors.append(message.format(line=self.line_number))
         
-        self.expression.check_semantics(self.scope, errors)   
+        self.expression.check_semantics(self.scope, errors)
