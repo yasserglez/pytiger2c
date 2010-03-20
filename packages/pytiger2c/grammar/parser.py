@@ -172,6 +172,8 @@ def p_expr_while(symbols):
     
 def p_expr_for(symbols):
     "expr : FOR ID ASSIGN expr TO expr DO expr"
+    symbols[0] = ForStatementNode(symbols[2], symbols[4], symbols[6], symbols[8])
+    symbols[0].line_number = symbols.lineno(1)    
 
 def p_expr_break(symbols):
     "expr : BREAK"

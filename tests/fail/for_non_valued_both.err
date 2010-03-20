@@ -1,0 +1,2 @@
+Semantic Error: The expression for the lower bound of the for loop at line 1 does not return a value.
+Semantic Error: The expression for the upper bound of the for loop at line 1 does not return a value.
