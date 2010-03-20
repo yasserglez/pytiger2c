@@ -1,0 +1,2 @@
+Semantic Error: Invalid nil expression assigned to a inferred type variable at line 5.
+Semantic Error: Id a at line 7 is not a variable.
