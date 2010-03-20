@@ -81,6 +81,7 @@ def p_expr_str(symbols):
 # Left values of an assignment. Variables, record fields and elements of arrays.
 def p_expr_lvalue(symbols):
     "expr : lvalue"
+    symbols[0] = symbols[1]
     
 # Creating a new array.
 def p_expr_array(symbols):
@@ -190,6 +191,8 @@ def p_expr_let(symbols):
 # What is a left value of an assignment expression?
 def p_lvalue_id(symbols):
     "lvalue : ID %prec LVALUE_ID"
+    symbols[0] = VariableAccessNode(symbols[1])
+    symbols[0].line_number = symbols.lineno(1)
     
 def p_lvalue_record(symbols):
     "lvalue : lvalue PERIOD ID"
