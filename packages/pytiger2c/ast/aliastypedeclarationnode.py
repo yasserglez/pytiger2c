@@ -39,4 +39,15 @@ class AliasTypeDeclarationNode(TypeDeclarationNode):
         super(AliasTypeDeclarationNode, self).__init__(name)
         self._alias_typename = alias_typename
 
-
+    def check_semantics(self, scope, errors):
+        """
+        Para obtener información acerca de los parámetros recibidos por
+        el método consulte la documentación del método C{check_semantics}
+        en la clase C{LanguageNode}.
+        
+        La comprobación semántica correspondiente a este nodo se realiza
+        completamente a nivel del C{TypeDeclarationGroupNode} en que fue
+        declarado. Pues es el C{TypeDeclarationGroupNode} el que comprueba
+        que está definido el tipo al que se le realiz este C{alias}, que el 
+        nombre está disponible y además lo definie en su ámbito local.
+        """

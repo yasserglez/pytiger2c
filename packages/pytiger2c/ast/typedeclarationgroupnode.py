@@ -83,6 +83,7 @@ class TypeDeclarationGroupNode(NonValuedExpressionNode):
             if isinstance(declaration_node, AliasTypeDeclarationNode):
                 self._alias[name] = declaration_node.alias_typename
             else:
+                declaration_node._scope = self.scope
                 self._types[name] = declaration_node.type
         
         # Resolve the alias type. From now on, the alias is as any type.
