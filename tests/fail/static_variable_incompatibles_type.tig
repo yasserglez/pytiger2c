@@ -1,0 +1,8 @@
+let
+    var a : string := "20"
+    var b : int := 1
+in
+    b = a;
+    b := "a";
+    a := 1
+end

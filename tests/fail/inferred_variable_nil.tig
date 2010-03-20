@@ -1,0 +1,7 @@
+let
+    var a := "20"
+    var b := nil
+in
+    a := "a";
+    a
+end
