@@ -82,6 +82,6 @@ class AssignmentNode(NonValuedExpressionNode):
         elif not self.expression.has_return_value():
             message = 'Invalid use of assignment, non typed expression at line {line}'
             errors.append(message.format(line=self.line_number))
-        elif self.lvalue.return_type != self.expression.rereturn_type:
+        elif self.lvalue.return_type != self.expression.return_type:
             message = 'Incompatibles types of assigment at line {line}'
             errors.append(message.format(line=self.line_number))

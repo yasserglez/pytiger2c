@@ -110,7 +110,7 @@ class TypeDeclarationGroupNode(NonValuedExpressionNode):
                         try:
                             field = self.scope.get_type_definition(field_typename)
                         except KeyError:
-                            message = 'Undefined type {field_typename} in declaration of {type_name}.'
+                            message = 'Undefined type {field_typename} in declaration of {type_name}'
                             errors.append(message.format(field_typename = field_typename, 
                                                          type_name = type_name))
                     fields_types.append(field)

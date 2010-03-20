@@ -12,7 +12,7 @@ class AliasTypeDeclarationNode(TypeDeclarationNode):
     Clase C{AliasTypeDeclarationNode} del árbol de sintáxis abstracta.
     
     Representa la estructura C{alias} del lenguaje Tiger. La estructura
-    C{alias} de Tiger recive el nombre del nuevo tipo que se definirá y
+    C{alias} de Tiger recibe el nombre del nuevo tipo que se definirá y
     el nombre del tipo al que se le realiza un alias. De tal forma que
     instanciarlos a ambos resulta una operación equivalente.
     """
