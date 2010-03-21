@@ -202,10 +202,15 @@ def p_lvalue_record(symbols):
     "lvalue : lvalue PERIOD ID"
     
 def p_lvalue_array(symbols):
-    "lvalue : ID LBRACKET expr RBRACKET"    
+    "lvalue : ID LBRACKET expr RBRACKET"
+    var = VariableAccessNode(symbols[1])
+    symbols[0] = ArrayAccessNode(var, symbols[3])
+    symbols[0].line_number = symbols.lineno(2)
     
 def p_lvalue_array_lvalue(symbols):
     "lvalue : lvalue LBRACKET expr RBRACKET"
+    symbols[0] = ArrayAccessNode(symbols[1], symbols[3])
+    symbols[0].line_number = symbols.lineno(2)
     
 # A group of expressions separated by semicolons.
 def p_expr_seq_empty(symbols):
