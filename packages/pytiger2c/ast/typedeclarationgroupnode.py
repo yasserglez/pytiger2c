@@ -136,10 +136,10 @@ class TypeDeclarationGroupNode(NonValuedExpressionNode):
         si es necesario resolver otro C{alias} de modo recursivo, entonces este
         método añadirá al dicionario C{self._types} la definición de esta.
         
-        @tiger_type alias_name: C{str}
+        @type alias_name: C{str}
         @param alias_name: Nombre del C{alias} que se pretende resolver.
         
-        @tiger_type backward_reference_names: C{list}
+        @type backward_reference_names: C{list}
         @param backward_reference_names: Lista de los nombres de C{alias} que 
             dependen de el C{alias} que queremos resolver, de modo que no puede
             tener una referencia a ninguno de estos como definición.
