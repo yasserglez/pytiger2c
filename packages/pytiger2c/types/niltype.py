@@ -4,10 +4,10 @@
 Clase de la jerarquía de tipos de Tiger representando el tipo C{nil}.
 """
 
-from pytiger2c.types.tigertype import TigerType
+from pytiger2c.types.basictype import BasicType
 
 
-class NilType(TigerType):
+class NilType(BasicType):
     """
     Clase de la jerarquía de tipos de Tiger representando el tipo C{nil}.
     """

@@ -4,10 +4,10 @@
 Clase de la jerarquía de tipos de Tiger representando el tipo cadena de caracteres.
 """
 
-from pytiger2c.types.tigertype import TigerType
+from pytiger2c.types.basictype import BasicType
 
 
-class StringType(TigerType):
+class StringType(BasicType):
     """
     Clase de la jerarquía de tipos de Tiger representando el tipo cadena de caracteres.
     """
@@ -17,4 +17,3 @@ class StringType(TigerType):
         Inicializa la clase representando el tipo cadena de caracteres.
         """
         super(StringType, self).__init__()
-        self._defined = True
