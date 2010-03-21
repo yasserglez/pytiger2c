@@ -103,10 +103,10 @@ class ArrayLiteralExpressionNode(ValuedExpressionNode):
                 message = 'Non integer expression for the array lenght at line {line}'
                 errors.append(message.format(line=self.line_number))
             self.value.check_semantics(self.scope, errors)
-            if not self.count.has_return_value():
+            if not self.value.has_return_value():
                 message = 'Non value expression for the array value at line {line}'
                 errors.append(message.format(line=self.line_number))
-            elif self.count.return_type != array_type.fields_types[0]:
+            elif self.value.return_type != array_type.fields_types[0]:
                 message = 'Incompatible type for the array value at line {line}'
                 errors.append(message.format(line=self.line_number))
             self._return_type = array_type
