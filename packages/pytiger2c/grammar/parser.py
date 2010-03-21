@@ -86,6 +86,10 @@ def p_expr_lvalue(symbols):
 # Creating a new array.
 def p_expr_array(symbols):
     "expr : ID LBRACKET expr RBRACKET OF expr"
+    symbols[0] = ArrayLiteralExpressionNode(symbols[1], 
+                                            symbols[3], 
+                                            symbols[6])
+    symbols[0].line_number = symbols.lineno(1)
 
 # Creating a new record.
 def p_expr_record(symbols):
