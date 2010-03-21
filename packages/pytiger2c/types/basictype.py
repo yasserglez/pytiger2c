@@ -36,3 +36,16 @@ class BasicType(TigerType):
         @return: Retorna C{True} si los ambos son iguales.
         """
         return isinstance(other, self.__class__)
+    
+    def __ne__(self, other):
+        """
+        Esta comparación se define como la negación del resultado obtenido por C{__eq__}.
+        Ver documentación del método C{__eq__} para más información.
+        
+        @type other: C{TigerType}
+        @param other: Otro tipo de Tiger con el que efectuar la comparación.
+        
+        @rtype: C{bool}
+        @return: Retorna C{True} si los ambos no son iguales.        
+        """
+        return not self.__eq__(other)    

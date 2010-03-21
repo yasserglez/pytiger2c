@@ -32,18 +32,3 @@ class TigerType(object):
         """
         super(TigerType, self).__init__()
         self._defined = defined
-        
-    
-        
-    def __ne__(self, other):
-        """
-        Esta comparación se define como la negación del resultado obtenido por C{__eq__}.
-        Ver documentación del método C{__eq__} para más información.
-        
-        @type other: C{TigerType}
-        @param other: Otro tipo de Tiger con el que efectuar la comparación.
-        
-        @rtype: C{bool}
-        @return: Retorna C{True} si los ambos no son iguales.        
-        """
-        return not self.__eq__(other)    
