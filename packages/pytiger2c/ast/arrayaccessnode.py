@@ -13,12 +13,11 @@ class ArrayAccessNode(AccessNode):
     """
     Clase C{ArrayAccessNode} del árbol de sintáxis abstracta.
     
-    Representa la estructura de C{acceso} a array del lenguaje Tiger. La estructura 
+    Representa la estructura de acceso a C{array} del lenguaje Tiger. La estructura 
     de acceso a C{array} del lenguaje Tiger permite obtener el valor de un C{array}
     en una posición determinada o asignarle un nuevo valor a este C{array} en la
     misma posición. Esta estructura recibe la expresión que representa el acceso
-    a la instancia de C{array} y la expresión correspondiente a la posición que se
-    quiere acceder. 
+    al C{array} y la expresión correspondiente a la posición que se quiere acceder. 
     """
     
     def _get_array(self):
@@ -75,16 +74,16 @@ class ArrayAccessNode(AccessNode):
         """
         self._scope = scope
         self.array.check_semantics(self.scope, errors)
-        self._read_only = self.array.read_only
             
         if self.array.has_return_value():
             array_type = self.array.return_type
-            if not isinstance(array_type, ArrayType):
+            if isinstance(array_type, ArrayType):
+                self._return_type = array_type.fields_types[0]
+                self._read_only = self.array.read_only
+            else:
                 self._return_type = None
                 message = 'Invalid non array type for array access at line {line}'
                 errors.append(message.format(line=self.line_number))
-            else:
-                self._return_type = array_type.fields_types[0]
             self.position.check_semantics(self.scope, errors)
             if not self.position.has_return_value():
                 message = 'Invalid non value position for array access at line {line}'
