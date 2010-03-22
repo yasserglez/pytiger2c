@@ -33,6 +33,14 @@ class RecordType(TigerType):
         self._fields_types = fields_types
     
     fields_types = property(_get_fields_types, _set_fields_types)
+    
+    def _get_fields_names(self):
+        """
+        Método para obtener el valor de la propiedad C{fields_names}.
+        """
+        return self._fields_names
+    
+    fields_names = property(_get_fields_names)
 
     def __init__(self, fields_names, fields_typenames):
         """

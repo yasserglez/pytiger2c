@@ -94,6 +94,10 @@ def p_expr_array(symbols):
 # Creating a new record.
 def p_expr_record(symbols):
     "expr : ID LBRACE field_list RBRACE"
+    symbols[0] = RecordLiteralExpressionNode(symbols[1], 
+                                             symbols[3][0], 
+                                             symbols[3][1]) 
+    symbols[0].line_number = symbols.lineno(1)
     
 # Unary minus. 
 def p_expr_unary_minus(symbols):
@@ -245,15 +249,21 @@ def p_dec_group_multiple(symbols):
 # to assign values for each one of the fields of a record.
 def p_field_list_empty(symbols):
     "field_list : "
+    symbols[0] = ([],[])
 
 def p_field_list_single(symbols):
     "field_list : field_assign"
+    symbols[0] = ([symbols[1][0]], [symbols[1][1]])
 
 def p_field_list_multiple(symbols):
     "field_list : field_list COMMA field_assign"
+    symbols[0] = symbols[1]
+    symbols[0][0].append(symbols[3][0])
+    symbols[0][1].append(symbols[3][1])
     
 def p_field_assign(symbols):
     "field_assign : ID EQ expr"
+    symbols[0] = (symbols[1], symbols[3])
 
 # A group of expressions separated by commas.
 def p_expr_list_empty(symbols):
