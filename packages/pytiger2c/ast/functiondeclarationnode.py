@@ -26,7 +26,7 @@ class FunctionDeclarationNode(CallableDeclarationNode):
         
     return_type = property(_get_return_type)      
     
-    def __init__(self, name, parameters, body, return_type):
+    def __init__(self, name, parameters_names, parameters_typenames, body, return_type):
         """
         Inicializa la clase C{FunctionDeclarationNode}.
         
@@ -38,7 +38,8 @@ class FunctionDeclarationNode(CallableDeclarationNode):
         @param return_type: Cadena de caracteres correspondiente al nombre
             del tipo del valor de retorno de la función.
         """
-        super(FunctionDeclarationNode, self).__init__(name, parameters, body)
+        super(FunctionDeclarationNode, self).__init__(name, parameters_names, 
+                                                      parameters_typenames, body)
         self._return_type = return_type
 
     def check_semantics(self, scope, errors):
@@ -62,7 +63,7 @@ class FunctionDeclarationNode(CallableDeclarationNode):
         """
         self._scope = Scope(scope)
         parameters_errors = []
-        self._check_parameters_semantics(self.scope, parameters_errors)
+        self._check_parameters_semantics(parameters_errors)
         if parameters_errors:
             errors.extend(parameters_errors)
         else:

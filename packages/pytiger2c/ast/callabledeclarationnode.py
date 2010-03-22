@@ -41,6 +41,14 @@ class CallableDeclarationNode(DeclarationNode):
     
     parameters_types = property(_get_parameters_types)    
     
+    def _get_parameters_typenames(self):
+        """
+        Método para obtener el valor de la propiedad C{parameters_typenames}.
+        """
+        return self._parameters_typenames
+    
+    parameters_typenames = property(_get_parameters_typenames)    
+    
     def _get_body(self):
         """
         Método para obtener el valor de la propiedad C{body}.
@@ -49,7 +57,7 @@ class CallableDeclarationNode(DeclarationNode):
         
     body = property(_get_body)    
 
-    def __init__(self, name, parameters, body):
+    def __init__(self, name, parameters_names, parameters_typenames, body):
         """
         Inicializa la clase C{CallableDeclarationNode}.
         
@@ -57,9 +65,13 @@ class CallableDeclarationNode(DeclarationNode):
         @param name: Nombre del procedimiento o función cuya definición
             es representada por el nodo.
             
-        @type parameters: C{list}
-        @param parameters: Lista de tuplas conteniendo el nombre y el 
-            tipo de los parámetros del procedimiento o función.
+        @type fields_names: C{list}
+        @param fields_names: Lista con los nombres de los parámetros de la
+            función o procedimiento, por posición.
+        
+        @type fields_typenames: C{list}
+        @param fields_typenames: Lista con los nombres de los tipos de los 
+            parámetros de la función o procedimiento, por posición. 
             
         @type body: C{LanguageNode}
         @param body: Nodo del árbol de sintáxis abstracta correspondiente
@@ -67,7 +79,9 @@ class CallableDeclarationNode(DeclarationNode):
         """
         super(CallableDeclarationNode, self).__init__()
         self._name = name
-        self._parameters_names, self._parameters_types = zip(*parameters)
+        self._parameters_names = parameters_names
+        self._parameters_typenames = parameters_typenames
+        self._parameters_types = []
         self._body = body
 
     def _check_parameters_semantics(self, errors):
@@ -88,7 +102,7 @@ class CallableDeclarationNode(DeclarationNode):
         @param errors: Lista donde se deben añadir los mensajes de error que se
             detecten durante la comprobación semántica realizada por este método.
         """
-        for i, parameter_name in enumerate(self.parameters_types):
+        for i, parameter_name in enumerate(self._parameters_typenames):
             try:
                 tiger_type = self.scope.get_type_definition(parameter_name)
             except KeyError:
@@ -98,9 +112,9 @@ class CallableDeclarationNode(DeclarationNode):
                                          name=self.name, line=self.line_number)
                 errors.append(message)
             else:
-                self._parameters_types[i] = tiger_type
+                self._parameters_types.append(tiger_type)
         for parameter_name, parameter_type in zip(self.parameters_names, 
-                                                  self.parameters_types):
+                                                  self.parameters_typenames):
             try:
                 self.scope.define_variable(parameter_name, parameter_type)
             except ValueError:

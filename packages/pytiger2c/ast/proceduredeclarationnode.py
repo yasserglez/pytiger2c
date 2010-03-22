@@ -18,7 +18,7 @@ class ProcedureDeclarationNode(CallableDeclarationNode):
     y que sólo se llamará por sus efectos colaterales.
     """
     
-    def __init__(self, name, parameters, body):
+    def __init__(self, name, parameters_names, parameters_typenames, body):
         """
         Inicializa la clase C{ProcedureDeclarationNode}.
         
@@ -26,7 +26,8 @@ class ProcedureDeclarationNode(CallableDeclarationNode):
         método consulte la documentación del método C{__init__} en la clase 
         C{CallableDeclarationNode}.        
         """
-        super(ProcedureDeclarationNode, self).__init__(name, parameters, body)
+        super(ProcedureDeclarationNode, self).__init__(name, parameters_names, 
+                                                       parameters_typenames, body)
 
     def check_semantics(self, scope, errors):
         """
@@ -49,7 +50,7 @@ class ProcedureDeclarationNode(CallableDeclarationNode):
         """
         self._scope = Scope(scope)
         parameters_errors = []
-        self._check_parameters_semantics(self.scope, parameters_errors)
+        self._check_parameters_semantics(parameters_errors)
         if parameters_errors:
             errors.extend(parameters_errors)
         else:

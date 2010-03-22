@@ -347,7 +347,7 @@ def p_field_types_empty(symbols):
 
 def p_field_types_single(symbols):
     "field_types : field_type"
-    symbols[0] = ([symbols[1][0]],[symbols[1][1]])
+    symbols[0] = ([symbols[1][0]], [symbols[1][1]])
 
 def p_field_types_multiple(symbols):
     "field_types : field_types COMMA field_type"
@@ -377,12 +377,12 @@ def p_var_dec_with_type(symbols):
 # Function declaration.
 def p_func_dec_without_return(symbols):
     "func_dec : FUNCTION ID LPAREN field_types RPAREN EQ expr"
-    symbols[0] = ProcedureDeclarationNode(symbols[2], symbols[4], symbols[7])
+    symbols[0] = ProcedureDeclarationNode(symbols[2], symbols[4][0], symbols[4][1], symbols[7])
     symbols[0].line_number = symbols.lineno(1)
 
 def p_func_dec_with_return(symbols):
     "func_dec : FUNCTION ID LPAREN field_types RPAREN COLON ID EQ expr"
-    symbols[0] = FunctionDeclarationNode(symbols[2], symbols[4], symbols[9], symbols[7])
+    symbols[0] = FunctionDeclarationNode(symbols[2], symbols[4][0], symbols[4][1], symbols[9], symbols[7])
     symbols[0].line_number = symbols.lineno(1)    
 
 
