@@ -204,6 +204,8 @@ def p_lvalue_id(symbols):
     
 def p_lvalue_record(symbols):
     "lvalue : lvalue PERIOD ID"
+    symbols[0] = RecordAccessNode(symbols[1], symbols[3])
+    symbols[0].line_number = symbols.lineno(2) 
     
 def p_lvalue_array(symbols):
     "lvalue : ID LBRACKET expr RBRACKET"
