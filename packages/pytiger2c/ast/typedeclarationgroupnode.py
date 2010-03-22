@@ -83,6 +83,7 @@ class TypeDeclarationGroupNode(NonValuedExpressionNode):
             if isinstance(declaration_node, AliasTypeDeclarationNode):
                 self._alias[name] = declaration_node.alias_typename
             else:
+                declaration_node._scope = self.scope
                 self._types[name] = declaration_node.type
         
         # Resolve the alias type. From now on, the alias is as any type.
@@ -110,7 +111,7 @@ class TypeDeclarationGroupNode(NonValuedExpressionNode):
                         try:
                             field = self.scope.get_type_definition(field_typename)
                         except KeyError:
-                            message = 'Undefined type {field_typename} in declaration of {type_name}.'
+                            message = 'Undefined type {field_typename} in declaration of {type_name}'
                             errors.append(message.format(field_typename = field_typename, 
                                                          type_name = type_name))
                     fields_types.append(field)
@@ -135,10 +136,10 @@ class TypeDeclarationGroupNode(NonValuedExpressionNode):
         si es necesario resolver otro C{alias} de modo recursivo, entonces este
         método añadirá al dicionario C{self._types} la definición de esta.
         
-        @tiger_type alias_name: C{str}
+        @type alias_name: C{str}
         @param alias_name: Nombre del C{alias} que se pretende resolver.
         
-        @tiger_type backward_reference_names: C{list}
+        @type backward_reference_names: C{list}
         @param backward_reference_names: Lista de los nombres de C{alias} que 
             dependen de el C{alias} que queremos resolver, de modo que no puede
             tener una referencia a ninguno de estos como definición.

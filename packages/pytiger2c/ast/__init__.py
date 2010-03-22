@@ -9,8 +9,6 @@ from pytiger2c.ast.ifthenstatementnode import IfThenStatementNode
 from pytiger2c.ast.whilestatementnode import WhileStatementNode
 from pytiger2c.ast.forstatementnode import ForStatementNode
 from pytiger2c.ast.breakstatementnode import BreakStatementNode
-from pytiger2c.ast.variabledeclarationnode import VariableDeclarationNode
-from pytiger2c.ast.typedeclarationnode import TypeDeclarationNode
 from pytiger2c.ast.typedeclarationgroupnode import TypeDeclarationGroupNode
 from pytiger2c.ast.functiondeclarationnode import FunctionDeclarationNode
 from pytiger2c.ast.proceduredeclarationnode import ProcedureDeclarationNode
@@ -22,6 +20,8 @@ from pytiger2c.ast.arraydeclarationnode import ArrayDeclarationNode
 from pytiger2c.ast.nilexpressionnode import NilExpressionNode
 from pytiger2c.ast.integerliteralexpressionnode import IntegerLiteralExpressionNode
 from pytiger2c.ast.stringliteralexpressionnode import StringLiteralExpressionNode
+from pytiger2c.ast.arrayliteralexpressionnode import ArrayLiteralExpressionNode
+from pytiger2c.ast.recordliteralexpressionnode import RecordLiteralExpressionNode
 from pytiger2c.ast.ifthenelsestatementnode import IfThenElseStatementNode
 from pytiger2c.ast.functioncallnode import FunctionCallNode
 from pytiger2c.ast.letnode import LetNode
@@ -51,8 +51,6 @@ __all__ = [
     'WhileStatementNode',
     'ForStatementNode',
     'BreakStatementNode',
-    'VariableDeclarationNode',
-    'TypeDeclarationNode',
     'TypeDeclarationGroupNode',
     'FunctionDeclarationNode',
     'ProcedureDeclarationNode',
@@ -64,6 +62,8 @@ __all__ = [
     'NilExpressionNode',
     'IntegerLiteralExpressionNode',
     'StringLiteralExpressionNode',
+    'ArrayLiteralExpressionNode',
+    'RecordLiteralExpressionNode',
     'IfThenElseStatementNode',
     'FunctionCallNode',
     'LetNode',

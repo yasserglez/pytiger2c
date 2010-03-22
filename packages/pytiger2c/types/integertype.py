@@ -4,10 +4,10 @@
 Clase de la jerarquía de tipos de Tiger representando el tipo entero.
 """
 
-from pytiger2c.types.tigertype import TigerType
+from pytiger2c.types.basictype import BasicType
 
 
-class IntegerType(TigerType):
+class IntegerType(BasicType):
     """
     Clase de la jerarquía de tipos de Tiger representando el tipo entero
     """
@@ -17,5 +17,4 @@ class IntegerType(TigerType):
         Inicializa la clase representando el tipo array.
         """
         super(IntegerType, self).__init__()
-        self._defined = True
         

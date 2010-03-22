@@ -12,25 +12,67 @@ class LetNode(ValuedExpressionNode):
     """
     Clase C{LetNode} del árbol de sintáxis abstracta.
     
-    TODO
+    Representa la expresión C{let-in-end} del lenguaje Tiger. La expresión 
+    C{let-in-end} recibe una lista de declaraciones que se expresan detrás
+    del token C{let} de tal forma que esas declaraciones estarán disponibles
+    en el ámbito de ejecución de la secuencia de expresiones que se expresan
+    detrás del token C{in}.
+    
+    La expresión C{let-in-end} retorna valor si la secuencia de expresiones
+    retorna valor y su tipo de retorno es el mismo que la secuencia de 
+    expresiones.
     """
     
     def __init__(self, type_declaration_groups, members_declarations, expr_seq):
         """
         Inicializa la clase C{LetNode}.
         
-        TODO
+        @type type_declaration_groups: C{list}
+        @param type_declaration_groups: Lista de los grupos de las declaraciones
+            de tipos, que forman parte de la lista de declaraciones.
+        
+        @type members_declarations: C{list}
+        @param members_declarations: Lista de las declaraciones de variables y
+            funciones que forman parte de la lista de declaraciones.
+            
+        @type expr_seq: C{ExpressionSequenceNode}
+        @param expr_seq: Sequencia de expresiones que forman parte del cuerpo
+            de la expresión C{let-in-end}. 
         """
         super(LetNode, self).__init__()
         self._type_declaration_groups = type_declaration_groups
         self._members_declarations = members_declarations
         self._expr_seq = expr_seq
 
+    def has_return_value(self):
+        """
+        Ver documentación del método C{has_return_value} en C{LanguageNode}.      
+        """
+        return self._return_type != None 
+
+
     def check_semantics(self, scope, errors):
         """
-        TODO
+        Para obtener información acerca de los parámetros recibidos por
+        el método consulte la documentación del método C{check_semantics}
+        en la clase C{LanguageNode}.
         
-        TODO Mirar si tiene tipo de retorno y demás detalles. 
+        La expresión C{let-in-end} recibe una lista de declaraciones que se 
+        expresan detrás del token C{let} de tal forma que esas declaraciones estarán
+        disponibles en el ámbito de ejecución de la secuencia de expresiones que se 
+        expresan detrás del token C{in}.
+        
+        La expresión C{let-in-end} retorna valor si la secuencia de expresiones 
+        retorna valor y su tipo de retorno es el mismo que la secuencia de expresiones.
+        
+        En la comprobación semántica de esta estructura se comprueban semánticamente
+        primero los grupos de declaraciones de tipos, luego las declaraciones de 
+        funciones y variables y por último se comprueban semánticamente la secuencia
+        de expresiones. Se reporatarán errores si se encuetran errores en alguna de
+        estas comprobaciones semánticas. 
+        
+        En el proceso de comprobación semántica se determina si el nodo tiene valor
+        de retorno, en cuyo caso tomará valor la propiedad C{return_type}
         """
         self._scope = Scope(scope) 
         used_types = []
@@ -42,4 +84,9 @@ class LetNode(ValuedExpressionNode):
             member_declaration.check_semantics(self.scope, errors)
             
         self._expr_seq.check_semantics(self.scope, errors)
+        
+        if self._expr_seq.has_return_value():
+            self._return_type = self._expr_seq.return_type
+        else:
+            self._return_type = None      
     

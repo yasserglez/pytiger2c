@@ -81,14 +81,23 @@ def p_expr_str(symbols):
 # Left values of an assignment. Variables, record fields and elements of arrays.
 def p_expr_lvalue(symbols):
     "expr : lvalue"
+    symbols[0] = symbols[1]
     
 # Creating a new array.
 def p_expr_array(symbols):
     "expr : ID LBRACKET expr RBRACKET OF expr"
+    symbols[0] = ArrayLiteralExpressionNode(symbols[1], 
+                                            symbols[3], 
+                                            symbols[6])
+    symbols[0].line_number = symbols.lineno(1)
 
 # Creating a new record.
 def p_expr_record(symbols):
     "expr : ID LBRACE field_list RBRACE"
+    symbols[0] = RecordLiteralExpressionNode(symbols[1], 
+                                             symbols[3][0], 
+                                             symbols[3][1]) 
+    symbols[0].line_number = symbols.lineno(1)
     
 # Unary minus. 
 def p_expr_unary_minus(symbols):
@@ -147,6 +156,8 @@ def p_expr_expr_seq(symbols):
 # Assignment.
 def p_expr_assign(symbols):
     "expr : lvalue ASSIGN expr"
+    symbols[0] = AssignmentNode(symbols[1], symbols[3])
+    symbols[0].line_number = symbols.lineno(2)
 
 # Function call.
 def p_expr_func(symbols):
@@ -190,15 +201,24 @@ def p_expr_let(symbols):
 # What is a left value of an assignment expression?
 def p_lvalue_id(symbols):
     "lvalue : ID %prec LVALUE_ID"
+    symbols[0] = VariableAccessNode(symbols[1])
+    symbols[0].line_number = symbols.lineno(1)
     
 def p_lvalue_record(symbols):
     "lvalue : lvalue PERIOD ID"
+    symbols[0] = RecordAccessNode(symbols[1], symbols[3])
+    symbols[0].line_number = symbols.lineno(2) 
     
 def p_lvalue_array(symbols):
-    "lvalue : ID LBRACKET expr RBRACKET"    
+    "lvalue : ID LBRACKET expr RBRACKET"
+    var = VariableAccessNode(symbols[1])
+    symbols[0] = ArrayAccessNode(var, symbols[3])
+    symbols[0].line_number = symbols.lineno(2)
     
 def p_lvalue_array_lvalue(symbols):
     "lvalue : lvalue LBRACKET expr RBRACKET"
+    symbols[0] = ArrayAccessNode(symbols[1], symbols[3])
+    symbols[0].line_number = symbols.lineno(2)
     
 # A group of expressions separated by semicolons.
 def p_expr_seq_empty(symbols):
@@ -233,15 +253,21 @@ def p_dec_group_multiple(symbols):
 # to assign values for each one of the fields of a record.
 def p_field_list_empty(symbols):
     "field_list : "
+    symbols[0] = ([],[])
 
 def p_field_list_single(symbols):
     "field_list : field_assign"
+    symbols[0] = ([symbols[1][0]], [symbols[1][1]])
 
 def p_field_list_multiple(symbols):
     "field_list : field_list COMMA field_assign"
+    symbols[0] = symbols[1]
+    symbols[0][0].append(symbols[3][0])
+    symbols[0][1].append(symbols[3][1])
     
 def p_field_assign(symbols):
     "field_assign : ID EQ expr"
+    symbols[0] = (symbols[1], symbols[3])
 
 # A group of expressions separated by commas.
 def p_expr_list_empty(symbols):

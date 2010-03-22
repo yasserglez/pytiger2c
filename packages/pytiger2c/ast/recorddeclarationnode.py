@@ -29,3 +29,16 @@ class RecordDeclarationNode(TypeDeclarationNode):
         """
         super(RecordDeclarationNode, self).__init__(name)
         self._type = RecordType(fields_names, fields_typenames)
+        
+    def check_semantics(self, scope, errors):
+        """
+        Para obtener información acerca de los parámetros recibidos por
+        el método consulte la documentación del método C{check_semantics}
+        en la clase C{LanguageNode}.
+        
+        La comprobación semántica correspondiente a este nodo se realiza
+        completamente a nivel del C{TypeDeclarationGroupNode} en que fue
+        declarado. Pues es el C{TypeDeclarationGroupNode} el que comprueba
+        que están definidos los tipos de los campos de este C{record}, que el 
+        nombre está disponible y además lo definie en su ámbito local.
+        """

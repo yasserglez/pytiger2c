@@ -6,6 +6,7 @@ Clase C{StaticVariableDeclarationNode} del árbol de sintáxis abstracta.
 
 from pytiger2c.ast.variabledeclarationnode import VariableDeclarationNode
 from pytiger2c.types.niltype import NilType
+from pytiger2c.types.recordtype import RecordType
 
 
 class StaticVariableDeclarationNode(VariableDeclarationNode):
@@ -69,8 +70,11 @@ class StaticVariableDeclarationNode(VariableDeclarationNode):
         if not self.value.has_return_value():
             message = 'Non-value expression assign to a variable at line {line}'
             errors.append(message.format(line=self.line_number))
-        elif self.value.return_type != NilType() and self.value.return_type != self.type:
-            message = 'Invalid type of expression assign to a variable at line {line}'
+        elif self.value.return_type == NilType() and not isinstance(self.type, RecordType):
+            message = 'Invalid assignment of nil to a non record at line {line}'
+            errors.append(message.format(line=self.line_number))
+        elif self.value.return_type != self.type:
+            message = 'Invalid assignment type variable at line {line}'
             errors.append(message.format(line=self.line_number))
         
         try:

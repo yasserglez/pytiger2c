@@ -1,0 +1,2 @@
+Semantic Error: Invalid nil field at position 0 of record literal at line 6.
+Semantic Error: Invalid type for field at position 1 of record literal at line 6.
