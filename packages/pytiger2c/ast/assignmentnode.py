@@ -5,6 +5,8 @@ Clase C{AssignmentNode} del árbol de sintáxis abstracta.
 """
 
 from pytiger2c.ast.nonvaluedexpressionnode import NonValuedExpressionNode
+from pytiger2c.types.recordtype import RecordType
+from pytiger2c.types.niltype import NilType
 
 
 class AssignmentNode(NonValuedExpressionNode):
@@ -82,6 +84,10 @@ class AssignmentNode(NonValuedExpressionNode):
         elif not self.expression.has_return_value():
             message = 'Invalid use of assignment, non typed expression at line {line}'
             errors.append(message.format(line=self.line_number))
+        elif self.expression.return_type == NilType():
+            if not isinstance(self.lvalue.return_type, RecordType):
+                message = 'Invalid nil value of assigment at line {line}'
+                errors.append(message.format(line=self.line_number))
         elif self.lvalue.return_type != self.expression.return_type:
             message = 'Incompatibles types of assigment at line {line}'
             errors.append(message.format(line=self.line_number))

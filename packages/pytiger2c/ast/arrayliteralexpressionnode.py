@@ -7,6 +7,8 @@ Clase C{ArrayLiteralExpressionNode} del árbol de sintáxis abstracta.
 from pytiger2c.ast.valuedexpressionnode import ValuedExpressionNode
 from pytiger2c.types.arraytype import ArrayType
 from pytiger2c.types.integertype import IntegerType
+from pytiger2c.types.recordtype import RecordType
+from pytiger2c.types.niltype import NilType
 
 
 class ArrayLiteralExpressionNode(ValuedExpressionNode):
@@ -87,14 +89,13 @@ class ArrayLiteralExpressionNode(ValuedExpressionNode):
         declaración del tipo de C{array}.        
         """
         self._scope = scope
-        array_type = None 
         try:
-            array_type = self.scope.get_type_definition(self.type_name)
+            self._return_type = self.scope.get_type_definition(self.type_name)
         except KeyError:
             message = 'Undefined type {type_name} at line {line}'
             errors.append(message.format(type_name = self._type_name, 
                                          line=self.line_number))
-        if isinstance(array_type, ArrayType):
+        if isinstance(self.return_type, ArrayType):
             self.count.check_semantics(self.scope, errors)
             if not self.count.has_return_value():
                 message = 'Non value expression for the array lenght at line {line}'
@@ -106,10 +107,13 @@ class ArrayLiteralExpressionNode(ValuedExpressionNode):
             if not self.value.has_return_value():
                 message = 'Non value expression for the array value at line {line}'
                 errors.append(message.format(line=self.line_number))
-            elif self.value.return_type != array_type.fields_types[0]:
+            elif self.value.return_type == NilType():
+                if not isinstance(self.return_type.fields_types[0], RecordType):
+                    message = 'Invalid nil value for the array value at line {line}'
+                    errors.append(message.format(line=self.line_number))
+            elif self.value.return_type != self.return_type.fields_types[0]:
                 message = 'Incompatible type for the array value at line {line}'
                 errors.append(message.format(line=self.line_number))
-            self._return_type = array_type
         else:
             message = 'Invalid non array type {type_name} at line {line}'
             errors.append(message.format(type_name = self._type_name, 
