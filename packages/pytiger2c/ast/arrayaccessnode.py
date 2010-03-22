@@ -75,12 +75,16 @@ class ArrayAccessNode(AccessNode):
         """
         self._scope = scope
         self.array.check_semantics(self.scope, errors)
-        
+        self._read_only = self.array.read_only
+            
         if self.array.has_return_value():
             array_type = self.array.return_type
             if not isinstance(array_type, ArrayType):
+                self._return_type = None
                 message = 'Invalid non array type for array access at line {line}'
                 errors.append(message.format(line=self.line_number))
+            else:
+                self._return_type = array_type.fields_types[0]
             self.position.check_semantics(self.scope, errors)
             if not self.position.has_return_value():
                 message = 'Invalid non value position for array access at line {line}'
@@ -88,8 +92,7 @@ class ArrayAccessNode(AccessNode):
             elif self.position.return_type != IntegerType():
                 message = 'Invalid non integer position for array access at line {line}'
                 errors.append(message.format(line=self.line_number))
-            self._read_only = self.array.read_only
-            self._return_type = array_type.fields_types[0]
+            
         else:
             message = 'Invalid non value access for array access at line {line}'
             errors.append(message.format(line=self.line_number))
