@@ -7,7 +7,7 @@ graph LanguageNodes {
 
    
     NonValuedExpressionNode -- DeclarationNode;
-    NonValuedExpressionNode -- TypeDeclarationGroupNode;
+    NonValuedExpressionNode -- DeclarationGroupNode;
     NonValuedExpressionNode -- AssignmentNode;
     NonValuedExpressionNode -- IfThenStatementNode;
     NonValuedExpressionNode -- WhileStatementNode;
@@ -17,6 +17,9 @@ graph LanguageNodes {
     DeclarationNode -- CallableDeclarationNode;
     DeclarationNode -- VariableDeclarationNode;
     DeclarationNode -- TypeDeclarationNode;
+    
+    DeclarationGroupNode -- TypeDeclarationGroupNode;
+    DeclarationGroupNode -- FunctionDeclarationGroupNode;
     
     CallableDeclarationNode -- FunctionDeclarationNode;
     CallableDeclarationNode -- ProcedureDeclarationNode;

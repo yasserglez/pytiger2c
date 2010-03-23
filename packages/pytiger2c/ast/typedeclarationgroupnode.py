@@ -4,11 +4,11 @@
 Clase C{TypeDeclarationGroupNode} del árbol de sintáxis abstracta.
 """
 
-from pytiger2c.ast.nonvaluedexpressionnode import NonValuedExpressionNode
+from pytiger2c.ast.declarationgroupnode import DeclarationGroupNode
 from pytiger2c.ast.aliastypedeclarationnode import AliasTypeDeclarationNode
 
 
-class TypeDeclarationGroupNode(NonValuedExpressionNode):
+class TypeDeclarationGroupNode(DeclarationGroupNode):
     """
     Clase C{TypeDeclarationGroupNode} del árbol de sintáxis abstracta.
     
@@ -20,20 +20,13 @@ class TypeDeclarationGroupNode(NonValuedExpressionNode):
     declaraciones de tipos. De modo que no es valido declarar tipos mutuamente 
     recursivos con una declaración de variable o función entre estos. 
     """
-    def _get_declarations(self):
-        """
-        Método para obtener el valor de la propiedad C{declarations}.
-        """
-        return self._declarations
     
-    declarations = property(_get_declarations)
     
     def __init__(self):
         """
         Inicializa la clase C{TypeDeclarationGroupNode}.
         """
         super(TypeDeclarationGroupNode, self).__init__()
-        self._declarations = []
         
     def collect_definitions(self, scope, errors):
         """        
