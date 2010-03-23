@@ -44,10 +44,5 @@ class AliasTypeDeclarationNode(TypeDeclarationNode):
         Para obtener información acerca de los parámetros recibidos por
         el método consulte la documentación del método C{check_semantics}
         en la clase C{LanguageNode}.
-        
-        La comprobación semántica correspondiente a este nodo se realiza
-        completamente a nivel del C{TypeDeclarationGroupNode} en que fue
-        declarado. Es el C{TypeDeclarationGroupNode} el que comprueba
-        que está definido el tipo al que se le define este alias, que el 
-        nombre está disponible y además lo definie en su ámbito local.
-        """
+	"""
+

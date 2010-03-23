@@ -1,1 +1,1 @@
-Semantic Error: Function g defined at line 6 collapses with a previously defined member of the scope.
+Semantic Error: Function or variable with name g already defined in the local scope.

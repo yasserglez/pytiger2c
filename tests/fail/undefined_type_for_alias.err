@@ -1,2 +1,1 @@
-Semantic Error: Undefined type needed to declare alias h.
-Semantic Error: Undefined type needed to declare alias g.
+Semantic Error: Undefined type non_defined in declaration of alias h.

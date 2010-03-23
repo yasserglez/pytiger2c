@@ -55,7 +55,15 @@ class CallableDeclarationNode(DeclarationNode):
         """
         return self._body
         
-    body = property(_get_body)    
+    body = property(_get_body)
+    
+    def _get_type(self):
+        """
+        Método para obtener el valor de la propiedad C{type}.
+        """
+        return self._type
+    
+    type = property(_get_type)    
 
     def __init__(self, name, parameters_names, parameters_typenames, body):
         """
@@ -83,6 +91,7 @@ class CallableDeclarationNode(DeclarationNode):
         self._parameters_typenames = parameters_typenames
         self._parameters_types = []
         self._body = body
+        self._type = None
 
     def _check_parameters_semantics(self, errors):
         """
@@ -114,8 +123,9 @@ class CallableDeclarationNode(DeclarationNode):
             else:
                 self._parameters_types.append(tiger_type)
         for parameter_name, parameter_type in zip(self.parameters_names, 
-                                                  self.parameters_typenames):
+                                                  self.parameters_types):
             try:
+                self.scope.define_variable(parameter_name, parameter_type)
                 self.scope.define_variable(parameter_name, parameter_type)
             except ValueError:
                 message = 'At least two parameters of the callable {name} ' \
