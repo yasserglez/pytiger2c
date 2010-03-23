@@ -81,15 +81,12 @@ class RecordAccessNode(AccessNode):
                     index = record_type.fields_names.index(self.field_name)
                     self._return_type = record_type.fields_types[index]
                 else:
-                    message = 'Undefined field {field} for record access'\
-                              ' at line {line}'
+                    message = 'Undefined field {field} on record access at line {line}'
                     errors.append(message.format(field = self.field_name, 
                                                  line=self.line_number))
             else:
-                message = 'Invalid record type for record access'\
-                          ' at line {line}'
+                message = 'Invalid record type on record access at line {line}'
                 errors.append(message.format(line=self.line_number))
         else:
-            message = 'Invalid non value type for record access'\
-                      ' at line {line}'
+            message = 'Invalid non value type on record access at line {line}'
             errors.append(message.format(line=self.line_number))

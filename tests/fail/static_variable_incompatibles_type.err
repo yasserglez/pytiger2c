@@ -1,3 +1,3 @@
 Semantic Error: Types of left and right operands of the equality or inequality logical operator at line 5 does not match.
-Semantic Error: Incompatibles types of assigment at line 6.
-Semantic Error: Incompatibles types of assigment at line 7.
+Semantic Error: Incompatible types in assigment at line 6.
+Semantic Error: Incompatible types in assigment at line 7.

@@ -1,1 +1,1 @@
-Semantic Error: Invalid use of assignment, read only field at line 2.
+Semantic Error: Invalid use of assignment to a read only variable at line 2.

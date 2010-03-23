@@ -11,10 +11,10 @@ class AliasTypeDeclarationNode(TypeDeclarationNode):
     """
     Clase C{AliasTypeDeclarationNode} del árbol de sintáxis abstracta.
     
-    Representa la estructura C{alias} del lenguaje Tiger. La estructura
-    C{alias} de Tiger recibe el nombre del nuevo tipo que se definirá y
-    el nombre del tipo al que se le realiza un alias. De tal forma que
-    instanciarlos a ambos resulta una operación equivalente.
+    Representa la declaración de un alias de un tipo del lenguaje Tiger.
+    Un alias define un nuevo nombre en el ámbito local para definirse
+    a un tipo definido anteriorment en el mismo ámbito o en un ámbito
+    superior. 
     """
     
     def _get_alias_typename(self):
@@ -30,7 +30,7 @@ class AliasTypeDeclarationNode(TypeDeclarationNode):
         Inicializa la clase C{AliasTypeDeclarationNode}.
         
         @type alias_typename: C{str}
-        @param alias_typename: Nombre del tipo al que se le hace alias.
+        @param alias_typename: Nombre del tipo al que se le define el alias.
         
         Para obtener información acerca del resto de los parámetros recibidos 
         por el método consulte la documentación del método C{__init__}
@@ -47,7 +47,7 @@ class AliasTypeDeclarationNode(TypeDeclarationNode):
         
         La comprobación semántica correspondiente a este nodo se realiza
         completamente a nivel del C{TypeDeclarationGroupNode} en que fue
-        declarado. Pues es el C{TypeDeclarationGroupNode} el que comprueba
-        que está definido el tipo al que se le realiz este C{alias}, que el 
+        declarado. Es el C{TypeDeclarationGroupNode} el que comprueba
+        que está definido el tipo al que se le define este alias, que el 
         nombre está disponible y además lo definie en su ámbito local.
         """

@@ -68,7 +68,7 @@ class StaticVariableDeclarationNode(VariableDeclarationNode):
             errors.append(message.format(line=self.line_number))
                 
         if not self.value.has_return_value():
-            message = 'Non-value expression assign to a variable at line {line}'
+            message = 'Non valued expression assigned to a variable at line {line}'
             errors.append(message.format(line=self.line_number))
         elif self.value.return_type == NilType() and not isinstance(self.type, RecordType):
             message = 'Invalid assignment of nil to a non record at line {line}'

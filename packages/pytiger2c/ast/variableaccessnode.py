@@ -57,9 +57,8 @@ class VariableAccessNode(AccessNode):
             self._read_only = self.scope.get_variable_readonly(self.name)
             self._return_type = self.scope.get_variable_definition(self.name)
         except ValueError:
-            message = 'Id {name} at line {line} is not a variable'
+            message = 'The name {name} used at line {line} is not a variable'
             errors.append(message.format(name = self.name, line=self.line_number))
         except KeyError:
             message = 'Variable {name} at line {line} is not a defined'
             errors.append(message.format(name = self.name, line=self.line_number))
-

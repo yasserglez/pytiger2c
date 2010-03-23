@@ -1,1 +1,1 @@
-Semantic Error: Invalid non array type for array access at line 5.
+Semantic Error: Invalid array access on a non array type at line 5.

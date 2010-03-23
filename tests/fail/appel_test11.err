@@ -1,0 +1,2 @@
+Semantic Error: The return type of the expression for the upper bound of the for loop at line 3 is not integer.
+Semantic Error: Invalid use of assignment to a read only variable at line 4.

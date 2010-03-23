@@ -1,1 +1,1 @@
-Semantic Error: Invalid nil expression assigned to a inferred type variable at line 3.
+Semantic Error: Invalid nil assignment to a variable at line 3.

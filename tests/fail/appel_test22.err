@@ -1,2 +1,2 @@
-Semantic Error: Undefined field nam for record access at line 7.
-Semantic Error: Incompatibles types of assigment at line 7.
+Semantic Error: Undefined field nam on record access at line 7.
+Semantic Error: Incompatible types in assigment at line 7.

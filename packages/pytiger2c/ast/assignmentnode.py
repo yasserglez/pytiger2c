@@ -15,7 +15,7 @@ class AssignmentNode(NonValuedExpressionNode):
     
     Representa la estructura de asignación del lenguaje Tiger. La estructura 
     de asignación tiene una expresion (lvalue) de acceso a una variable, un 
-    elemento de un C{array} o un campo de un C{record} y un valor que se le 
+    elemento de un C{array} o un campo de un record y un valor que se le 
     asignará a este acceso.
     """
     
@@ -57,7 +57,7 @@ class AssignmentNode(NonValuedExpressionNode):
         en la clase C{LanguageNode}.
         
         La estructura de asignación tiene una expresion (lvalue) de acceso a una
-        variable, un elemento de un C{array} o un campo de un C{record} y un 
+        variable, un elemento de un C{array} o un campo de un record y un 
         valor que se le asignará a este acceso.
         
         En la comprobación semántica de este nodo del árbol se comprueban 
@@ -76,18 +76,18 @@ class AssignmentNode(NonValuedExpressionNode):
         self.expression.check_semantics(self.scope, errors)
         
         if self.lvalue.read_only:
-            message = 'Invalid use of assignment, read only field at line {line}'
+            message = 'Invalid use of assignment to a read only variable at line {line}'
             errors.append(message.format(line=self.line_number))
         elif not self.lvalue.has_return_value():
-            message = 'Invalid use of assignment, non typed field at line {line}'
+            message = 'Invalid use of assignment to a non valued variable at line {line}'
             errors.append(message.format(line=self.line_number))
         elif not self.expression.has_return_value():
-            message = 'Invalid use of assignment, non typed expression at line {line}'
+            message = 'Invalid assignment of a non valued expression at line {line}'
             errors.append(message.format(line=self.line_number))
         elif self.expression.return_type == NilType():
             if not isinstance(self.lvalue.return_type, RecordType):
                 message = 'Invalid nil value of assigment at line {line}'
                 errors.append(message.format(line=self.line_number))
         elif self.lvalue.return_type != self.expression.return_type:
-            message = 'Incompatibles types of assigment at line {line}'
+            message = 'Incompatible types in assigment at line {line}'
             errors.append(message.format(line=self.line_number))

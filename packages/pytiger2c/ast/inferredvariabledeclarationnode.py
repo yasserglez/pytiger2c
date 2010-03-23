@@ -54,10 +54,10 @@ class InferredVariableDeclarationNode(VariableDeclarationNode):
         self.value.check_semantics(self._scope, errors)
         
         if not self.value.has_return_value():
-            message = 'Non-value expression assign to a variable at line {line}'
+            message = 'Non-valued expression assigned to a variable at line {line}'
             errors.append(message.format(line=self.line_number))
         elif self.value.return_type == NilType():
-            message = 'Invalid nil expression assigned to a inferred type variable at line {line}'
+            message = 'Invalid nil assignment to a variable at line {line}'
             errors.append(message.format(line=self.line_number))
         else:
             self._type = self.value.return_type
@@ -65,5 +65,5 @@ class InferredVariableDeclarationNode(VariableDeclarationNode):
         try:
             self._scope.define_variable(self.name, self.type)
         except ValueError:
-            message = 'Invalid variable name at line {line}'
+            message = 'Could not hide a variable defined in the same scope at line {line}'
             errors.append(message.format(line=self.line_number))

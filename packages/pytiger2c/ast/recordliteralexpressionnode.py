@@ -119,26 +119,26 @@ class RecordLiteralExpressionNode(ValuedExpressionNode):
         """
         for index in xrange(len(self.fields_names)):
             if self.fields_names[index] != self.return_type.fields_names[index]:
-                message = 'Invalid field name {name} at position {pos} of'\
-                          ' record literal at line {line}'
-                errors.append(message.format(name = self.fields_names[index],
-                                             pos = str(index),
+                message = 'Invalid name {name} of the field #{index} of '\
+                          'the record literal at line {line}'
+                errors.append(message.format(name=self.fields_names[index],
+                                             index=index + 1,
                                              line=self.line_number))
             self.fields_values[index].check_semantics(self.scope, errors)
             if not self.fields_values[index].has_return_value():
-                message = 'Invalid non value field at position {pos} of'\
-                          ' record literal at line {line}'
-                errors.append(message.format(pos = str(index),
+                message = 'Invalid non valued expression for the field #{index} '\
+                          'of the record literal at line {line}'
+                errors.append(message.format(index=index + 1,
                                              line=self.line_number))
             elif self.fields_values[index].return_type == NilType():
                 if not isinstance(self.return_type.fields_types[index], RecordType):
-                    message = 'Invalid nil field at position {pos} of'\
-                              ' record literal at line {line}'
-                    errors.append(message.format(pos = str(index),
+                    message = 'Invalid nil assignment to the field #{index} '\
+                              'of the record literal at line {line}'
+                    errors.append(message.format(index=index + 1,
                                                  line=self.line_number))
             elif (self.fields_values[index].return_type 
                   != self.return_type.fields_types[index]):
-                message = 'Invalid type for field at position {pos} of'\
-                          ' record literal at line {line}'
-                errors.append(message.format(pos = str(index),
+                message = 'Invalid type for field #{index} of '\
+                          'the record literal at line {line}'
+                errors.append(message.format(index=index + 1,
                                              line=self.line_number))

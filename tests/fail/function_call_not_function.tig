@@ -1,1 +1,5 @@
-Syntactic Error: Unexpected end of the input file.
+let
+    var a := 1
+in
+    a(1)
+end
