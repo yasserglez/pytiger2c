@@ -1,6 +1,2 @@
-Semantic Error: Invalid alias declaration of a, mutually recursive.
-Semantic Error: Invalid alias declaration of c, mutually recursive.
-Semantic Error: Invalid alias declaration of b, mutually recursive.
-Semantic Error: Invalid alias declaration of d, mutually recursive.
-Semantic Error: Undefined type needed to declare alias h.
-Semantic Error: Undefined type needed to declare alias g.
+Semantic Error: Infinite recursive alias definition of d.
+Semantic Error: Undefined type non_defined in declaration of alias h.
