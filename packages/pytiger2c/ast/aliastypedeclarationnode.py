@@ -44,11 +44,4 @@ class AliasTypeDeclarationNode(TypeDeclarationNode):
         Para obtener información acerca de los parámetros recibidos por
         el método consulte la documentación del método C{check_semantics}
         en la clase C{LanguageNode}.
-        
-        En la comprobación semántica de este nodo del árbol de sintáxis 
-        abstracta se comprueba que se encuentren definidos en el ámbito local.
-        
-        Se reportarán errores semánticos si el tipo al que se le realiza el
-        C{alias} no está disponible. En cuyo caso fue definido en otro grupo
-        de declaraciones de tipos.
         """
