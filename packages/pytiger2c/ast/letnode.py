@@ -5,7 +5,7 @@ Clase C{LetNode} del árbol de sintáxis abstracta.
 """
 
 from pytiger2c.ast.valuedexpressionnode import ValuedExpressionNode
-from pytiger2c.scope import Scope
+from pytiger2c.scope import Scope, FakeScope
 
 
 class LetNode(ValuedExpressionNode):
@@ -75,10 +75,20 @@ class LetNode(ValuedExpressionNode):
         de retorno, en cuyo caso tomará valor la propiedad C{return_type}
         """
         self._scope = Scope(scope) 
-        used_types = []
+        all_types = set()
+        local_types = [] 
         
         for type_declaration_group in self._type_declaration_groups:
-            type_declaration_group.check_semantics(self.scope, errors, used_types)
+            group_types = type_declaration_group.collect_definitions(self._scope, 
+                                                                     errors)
+            local_types.append(group_types)
+            all_types = all_types.union(group_types)
+            
+        for index, type_declaration_group in enumerate(self._type_declaration_groups):
+            local_scope = FakeScope(self.scope, 
+                                    all_types.difference(local_types[index]), 
+                                    set())
+            type_declaration_group.check_semantics(local_scope, errors)
             
         for member_declaration in self._members_declarations:
             member_declaration.check_semantics(self.scope, errors)

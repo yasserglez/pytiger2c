@@ -34,8 +34,52 @@ class TypeDeclarationGroupNode(NonValuedExpressionNode):
         """
         super(TypeDeclarationGroupNode, self).__init__()
         self._declarations = []
-        self._types = {}
-        self._alias = {}
+        
+    def collect_definitions(self, scope, errors):
+        """        
+        Para obtener información acerca del resto de los parámetros recibidos 
+        por el método consulte la documentación del método C{check_semantics}
+        en la clase C{LanguageNode}.
+        
+        @rtype: C{set}
+        @return: Conjunto con los nombres de los tipos que se definen en este
+            grupo.
+        
+        Realiza la definición en el ámbito dado de los tipos definidos en este
+        grupo de declaraciones. En el caso de los alias, se resuelve y se define
+        el tipo concreto al que referencia.
+        
+        Se reportarán errores si se referencia a un tipo que no se encuentra 
+        definido en el ámbito actual o si se declaran alias mutuamente 
+        referenciadas, en cuyo caso se forma un ciclo de definiciones.        
+        """
+        result = set()
+        alias = {}
+        # Fill the types and alias dicts from the declarations lists
+        for declaration_node in self._declarations:
+            name = declaration_node.name
+            if isinstance(declaration_node, AliasTypeDeclarationNode):
+                if name in alias:
+                    message = 'Type {type_name} already defined in the '\
+                              'local scope'
+                    errors.append(message.format(type_name = name))
+                else:                  
+                    alias[name] = declaration_node.alias_typename
+            else:
+                try:
+                    scope.define_type(name, declaration_node.type)
+                except ValueError:
+                    message = 'Type {type_name} already defined in the local scope'
+                    errors.append(message.format(type_name = name))
+            result.add(name)
+        
+        # Resolve the alias type. From now on, the alias is as any type.
+        for alias_name in alias.keys():
+            if alias_name in alias:
+                self._resolve_alias(alias_name, scope, alias, [], errors)
+        
+        return result
+        
 
     def check_semantics(self, scope, errors, used_types = None):
         """
@@ -49,87 +93,24 @@ class TypeDeclarationGroupNode(NonValuedExpressionNode):
         
         Un grupo de declaraciones de tipos del lenguaje Tiger se forma por
         declaraciones de tipos que aparecen uno a continuación de otros.Tipos 
-        definidos mutuamente recursivos deben estar definidos en el mismo grupo de 
-        declaraciones de tipos. De modo que no es valido declarar tipos mutuamente 
-        recursivos con una declaración de variable o función entre estos.
+        definidos mutuamente recursivos deben estar definidos en el mismo grupo 
+        de declaraciones de tipos. De modo que no es valido declarar tipos 
+        mutuamente recursivos con una declaración de variable o función entre 
+        estos.
         
-        En la comprobación semántica de este nodo del árbol de sintáxis abstracta
-        se realiza una primera pasada por los tipos que son declarados en este grupo
-        recolectando sus nombres y los tipos a los que hace referencia. 
+        En la comprobación de este nodo del árbol de sintáxis abstracta se 
+        comprueban semánticamente todas la declaraciones contenidas en este.
         
-        Se comprueba luego durante una segunda pasada que todos los tipos referenciados
-        estén definidos en este ámbito y se terminan de definir las instancias de
-        C{TigerType} que van a representar a cada uno de estos tipos.
-        
-        Se reportarán errores si se referencia a un tipo que no se encuentra definido
-        en el ámbito actual o si se detecta que en la definición de algún tipo se 
-        oculta la definición de otro tipo con igual nombre y que es usado por algún
-        otro grupo de declaraciones en el mismo ámbito local, pues en ambos casos 
-        estaríamos ante una definición de tipos dependientes sin que los tipos de los
-        que se depende se encuentren en su mismo grupo.
+        Se reportarán errores si se producen errores en la comprobación 
+        semántica de alguna de las declaraciones contenidas en este grupo.
         """
         self._scope  = scope
-        local_used = []
-        
-        # Fill the types and alias dicts from the declarations lists
-        for declaration_node in self._declarations:
-            name = declaration_node.name
-            if name in used_types:
-                message = 'Invalid type name {type_name} at line {line}, used before redefine it'
-                errors.append(message.format(type_name = name, line=declaration_node.line_number))
-            if name in self._alias or name in self._types:
-                    message = 'Type {type_name} already defined in the local scope'
-                    errors.append(message.format(type_name = name))    
-            if isinstance(declaration_node, AliasTypeDeclarationNode):
-                self._alias[name] = declaration_node.alias_typename
-            else:
-                declaration_node._scope = self.scope
-                self._types[name] = declaration_node.type
-        
-        # Resolve the alias type. From now on, the alias is as any type.
-        for alias_name in self._alias.keys():
-            if alias_name in self._alias:
-                try:
-                    self._resolve_alias(alias_name, [])
-                except ValueError:
-                    message = 'Invalid alias declaration of {name}, mutually recursive'
-                    errors.append(message.format(name = alias_name))
-                except KeyError:
-                    message = 'Undefined type needed to declare alias {name}'
-                    errors.append(message.format(name = alias_name))        
-        
-        for type_name, tiger_type in self._types.items():
-            # If the tiger type is not defined, the we define it.
-            if not tiger_type.defined:
-                fields_typenames = tiger_type.fields_typenames
-                fields_types = []
-                for field_typename in fields_typenames:
-                    field = None
-                    if field_typename in self._types:
-                        field = self._types[field_typename]
-                    else:
-                        try:
-                            field = self.scope.get_type_definition(field_typename)
-                        except KeyError:
-                            message = 'Undefined type {field_typename} in declaration of {type_name}'
-                            errors.append(message.format(field_typename = field_typename, 
-                                                         type_name = type_name))
-                    fields_types.append(field)
-                    local_used.append(field_typename)
-                tiger_type.fields_types = fields_types
-                tiger_type.defined = True
-            # Once we fully define the type, let's define it into the scope.
-            try:
-                self.scope.define_type(type_name, tiger_type)
-                local_used.append(type_name)
-            except ValueError:
-                message = 'Type {type_name} already defined in the local scope'
-                errors.append(message.format(type_name = type_name))
-        
-        used_types.extend(local_used)
+        for declaration in self.declarations:
+            declaration.check_semantics(self.scope, errors)
 
 
-    def _resolve_alias(self, alias_name, backward_reference_names):
+    def _resolve_alias(self, alias_name, scope, alias_dict, 
+                       backward_reference_names, errors):
         """
         Método encargado de definir los problemas relativos a las definiciones
         mutuamente recursivas de C{alias}. Durante la ejecución de este método
@@ -139,34 +120,53 @@ class TypeDeclarationGroupNode(NonValuedExpressionNode):
         @type alias_name: C{str}
         @param alias_name: Nombre del C{alias} que se pretende resolver.
         
+        @type scope: C{Scope}
+        @param scope: Ámbito en el que se quiere definir este alias.
+        
+        @type alias_dict: C{dict}
+        @param alias_dict: Diccionario con los nombres de los alias y los tipos
+            referenciados.
+        
         @type backward_reference_names: C{list}
         @param backward_reference_names: Lista de los nombres de C{alias} que 
             dependen de el C{alias} que queremos resolver, de modo que no puede
             tener una referencia a ninguno de estos como definición.
             
+        @type errors: C{list}
+        @param errors: Lista para añadir los errores que ocurran durante la 
+            resolución del tipo del C{alias}
+            
         @rtype: C{TigerType]}
         @return: Tipo correspondiente al nombre del alias que se quiere resolver.
-        
-        @raise ValueError: Se lanza una excepción C{ValueError} si la definición 
-            del C{alias} está en un ciclo de declaraciones de C{alias}.
-            
-        @raise KeyError: Se lanza una excepción C{KeyError} si no se encuentra el
-            tipo al que hace referencia el C{alias}.
         """
-        alias_type_name = self._alias[alias_name]
+        alias_type_name = alias_dict[alias_name]
         tiger_type = None
-        if alias_type_name in self._alias.keys():
+        if alias_type_name in alias_dict.keys():
             # The alias name must not be an backward_referenced alias
             if alias_type_name in backward_reference_names:
-                raise ValueError('Infinite recursive alias definition of {name}'.format(name = alias_name))
+                message = 'Infinite recursive alias definition of {name}'
+                errors.append(message.format(name = alias_name)) 
             else:
                 backward_reference_names.append(alias_name)
-                tiger_type = self._resolve_alias(alias_type_name, backward_reference_names)
-        elif alias_type_name in self._types.keys():
-            tiger_type = self._types[alias_type_name]
+                tiger_type = self._resolve_alias(alias_type_name, scope, 
+                                                 alias_dict, 
+                                                 backward_reference_names,
+                                                 errors)
         else:
-            tiger_type = self.scope.get_type_definition(alias_type_name)
-        
-        del self._alias[alias_name]
-        self._types[alias_name] = tiger_type
+            try:
+                tiger_type = scope.get_type_definition(alias_type_name)
+            except KeyError:
+                message = 'Undefined type {type} in declaration of alias'\
+                          ' {name}'
+                errors.append(message.format(type = alias_type_name,
+                                             name = alias_name, 
+                                             line = self.line_number))
+                
+        del alias_dict[alias_name]
+        try:
+            scope.define_type(alias_name, tiger_type)
+        except ValueError:
+            message = 'Invalid type name {name} already used in this scope'
+            errors.append(message.format(name = alias_name, 
+                                         line = self._line_number))
         return tiger_type      

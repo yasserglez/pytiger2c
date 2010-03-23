@@ -39,10 +39,30 @@ class ArrayDeclarationNode(TypeDeclarationNode):
         el método consulte la documentación del método C{check_semantics}
         en la clase C{LanguageNode}.
         
-        La comprobación semántica correspondiente a este nodo se realiza
-        completamente a nivel del C{TypeDeclarationGroupNode} en que fue
-        declarado. Pues es el C{TypeDeclarationGroupNode} el que comprueba
-        que está definido el tipo de los valores de este C{array}, que el 
-        nombre está disponible y además lo definie en su ámbito local.
+        En la comprobación semántica de este nodo del árbol de sintáxis 
+        abstracta se comprueba que el tipo de los valores del C{array}
+        se encuentre definido en el ámbito local.
+        
+        Se reportarán errores semánticos si el tipo de los valores del C{array}
+        no se encuentra definido en el ámbito local, o en caso de que esté 
+        definido en el ámbito local, pero en otro grupo de declaraciones, en
+        cuyo caso se considera una declaración de tipos mutuamente recursivos
+        en distintos grupos de declaraciones de tipos.
+        
+        Durante la comprobación semántica se define totalmente el valor de la
+        propiedad C{type}.
         """
-
+        self._scope = scope
+        type = None
+        type_name = self.type.fields_typenames[0]
+        
+        try:
+            type = self.scope.get_type_definition(type_name)
+        except KeyError:
+            message = 'Undefined type {type} of fvalue for array'\
+                          ' {name} at line {line}'
+            errors.append(message.format(type = type_name, 
+                                             name = self.name, 
+                                             line = self.line_number))
+        self.type.fields_types = [type]
+        self.defined = True

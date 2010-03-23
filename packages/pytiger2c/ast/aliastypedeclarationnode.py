@@ -45,9 +45,10 @@ class AliasTypeDeclarationNode(TypeDeclarationNode):
         el método consulte la documentación del método C{check_semantics}
         en la clase C{LanguageNode}.
         
-        La comprobación semántica correspondiente a este nodo se realiza
-        completamente a nivel del C{TypeDeclarationGroupNode} en que fue
-        declarado. Pues es el C{TypeDeclarationGroupNode} el que comprueba
-        que está definido el tipo al que se le realiz este C{alias}, que el 
-        nombre está disponible y además lo definie en su ámbito local.
+        En la comprobación semántica de este nodo del árbol de sintáxis 
+        abstracta se comprueba que se encuentren definidos en el ámbito local.
+        
+        Se reportarán errores semánticos si el tipo al que se le realiza el
+        C{alias} no está disponible. En cuyo caso fue definido en otro grupo
+        de declaraciones de tipos.
         """
