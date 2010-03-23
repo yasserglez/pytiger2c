@@ -378,3 +378,84 @@ class RootScope(Scope):
             return readonly
         else:
             raise ValueError('The member of the scope is not a variable')
+
+
+class FakeScope(Scope):
+    """
+    Clase C{FakeScope} que representa un ámbito falso de un programa de Tiger.
+    
+    Esta clase gestiona los tipos, variables y funciones disponibles
+    en un ámbito de ejecución detereminado en Tiger.
+    
+    En esta clase se los tipos y funciones no disponibles definidos en el
+    propio ámbito local. Los tipos que son definidos fuera de un grupo de
+    declaraciones de tipos no están disponibles para las declaraciones 
+    del grupo, de igual manera las funciones definidas fuera de su grupo
+    de declaraciones no están disponibles para ellas.
+    """
+    
+    def __init__(self, parent, unavailables_types, unavailables_functions):
+        """
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método C{__init__}
+        en la clase C{Scope}.
+        
+        @type unavailables_types: C{set}
+        @param unavailables_types: Conjunto de los nombres de tipos no
+            disponibles para este ámbito.
+            
+        @type unavailables_functions: C{set}
+        @param unavailables_functions: Conjunto de los nombres de funciones
+            no disponibles para este ámbito.
+        """
+        super(FakeScope, self).__init__(parent)
+        self._unavailables_types = unavailables_types
+        self._unavailables_functions = unavailables_functions
+
+    def define_type(self, name, tiger_type):
+        """
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método C{get_function_definition}
+        en la clase C{Scope}.
+        """
+        self.parent.define_type(self, name, tiger_type)
+
+
+    def get_type_definition(self, name):
+        """
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método C{get_function_definition}
+        en la clase C{Scope}.
+        """
+        if name in self._unavailables_types:
+            raise KeyError()
+        else:
+            return self.parent.get_type_definition(name)
+
+    def define_function(self, name, function_type):
+        """
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método C{get_function_definition}
+        en la clase C{Scope}.
+        """
+        self.parent.define_function(name, function_type)
+
+    def get_function_definition(self, name):
+        """
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método C{get_function_definition}
+        en la clase C{Scope}.
+        """
+        if name in self._unavailables_functions:
+            raise KeyError()
+        else:
+            return self.parent.get_function_definition(name)
+
+
+    def define_variable(self, name, tiger_type, readonly=False):
+        """
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método C{get_function_definition}
+        en la clase C{Scope}.
+        """
+        self.parent.define_variable(name, tiger_type, readonly)
