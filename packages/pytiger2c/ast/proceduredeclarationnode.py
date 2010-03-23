@@ -28,6 +28,7 @@ class ProcedureDeclarationNode(CallableDeclarationNode):
         """
         super(ProcedureDeclarationNode, self).__init__(name, parameters_names, 
                                                        parameters_typenames, body)
+        self._type = FunctionType(None, [], parameters_names)
 
     def check_semantics(self, scope, errors):
         """
@@ -59,10 +60,9 @@ class ProcedureDeclarationNode(CallableDeclarationNode):
                 message = 'The body of the procedure {name} defined ' \
                           'at line {line} returns value'
                 errors.append(message.format(name=self.name, line=self.line_number))
-            try:
-                function_type = FunctionType(None, self.parameters_types)
-                scope.define_function(self.name, function_type)
-            except ValueError:
-                message = 'Procedure {name} defined at line {line} collapses ' \
-                          'with a previously defined member of the scope'
-                errors.append(message.format(name=self.name, line=self.line_number))
+            self.type.parameters_types = self.parameters_types
+            self.type.return_type = None
+            self.defined = True
+
+
+

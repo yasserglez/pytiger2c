@@ -18,7 +18,13 @@ class FunctionType(TigerType):
         """
         return self._return_type
     
-    return_type = property(_get_return_type)
+    def _set_return_type(self, type):
+        """
+        Método para cambiar el valor de la propiedad C{return_type}.
+        """
+        self._return_type = type
+    
+    return_type = property(_get_return_type, _set_return_type)
     
     def _get_parameters_types(self):
         """
@@ -26,9 +32,23 @@ class FunctionType(TigerType):
         """
         return self._parameters_type
     
-    parameters_types = property(_get_parameters_types)
+    def _set_parameters_types(self, types):
+        """
+        Método para cambiar el valor de la propiedad C{parameters_types}.
+        """
+        self._parameters_type = types        
     
-    def __init__(self, return_type, parameters_types):
+    parameters_types = property(_get_parameters_types, _set_parameters_types)
+    
+    def _get_parameters_typenames(self):
+        """
+        Método para obtener el valor de la propiedad C{parameters_types}.
+        """
+        return self._parameters_typename
+    
+    parameters_typenames = property(_get_parameters_typenames)
+    
+    def __init__(self, return_type, parameters_types, parameters_typename):
         """
         Inicializa la clase representando el tipo función.
         
@@ -38,12 +58,22 @@ class FunctionType(TigerType):
             retorno el valor de este argumento debe ser especificado como C{None}.
         
         @type parameters_types: C{list}
-        @param parameters_types: Lista de las instancias de C{TigerType} correspondientes
-            a los tipos de los parámetros recibidos por la función. Las posiciones
-            de los elementos de la lista deben corresponder con las posiciones de los
-            parámetros de la función. Si la función no recibe parámetros el valor
-            de este argumento debe ser especificado como una lista vacía.
+        @param parameters_types: Lista de las instancias de C{TigerType} 
+            correspondientes a los tipos de los parámetros recibidos por la 
+            función. Las posiciones de los elementos de la lista deben 
+            corresponder con las posiciones de los parámetros de la función.
+            Si la función no recibe parámetros el valor de este argumento 
+            debe ser especificado como una lista vacía.
+        
+        @type parameters_typenames: C{list}
+        @param parameters_typenames: Lista de los nombres de los tipos de los 
+            parámetros de la función. Las posiciones de los elementos de la 
+            lista deben corresponder con las posiciones de los parámetros de
+            la función. Si la función no recibe parámetros el valor de este 
+            argumento debe ser especificado como una lista vacía.
         """
         super(FunctionType, self).__init__()
         self._return_type = return_type
         self._parameters_type = parameters_types
+        self._parameters_typename = parameters_typename
+        self._defined = False

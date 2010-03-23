@@ -40,6 +40,7 @@ class FunctionDeclarationNode(CallableDeclarationNode):
         """
         super(FunctionDeclarationNode, self).__init__(name, parameters_names, 
                                                       parameters_typenames, body)
+        self._type = FunctionType(None, [], parameters_names)
         self._return_type = return_type
 
     def check_semantics(self, scope, errors):
@@ -88,11 +89,8 @@ class FunctionDeclarationNode(CallableDeclarationNode):
                     message = message.format(name=self.name,
                                              type=self.return_type,
                                              line=self.line_number)
-                    errors.append(message)                  
-            try:
-                function_type = FunctionType(self.return_type, self.parameters_types)
-                scope.define_function(self.name, function_type)
-            except ValueError:
-                message = 'Function {name} defined at line {line} collapses ' \
-                          'with a previously defined member of the scope'
-                errors.append(message.format(name=self.name, line=self.line_number))
+                    errors.append(message)   
+                         
+            self.type.parameters_types = self.parameters_types
+            self.type.return_type = self.return_type
+            self.defined = True

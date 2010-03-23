@@ -68,9 +68,11 @@ class TypeDeclarationGroupNode(DeclarationGroupNode):
         
         # Resolve the alias type. From now on, the alias is as any type.
         for alias_name in alias.keys():
+            alias_errors = []
             if alias_name in alias:
-                self._resolve_alias(alias_name, scope, alias, [], errors)
-        
+                self._resolve_alias(alias_name, scope, alias, [], alias_errors)
+            if alias_errors:
+                errors.extend(alias_errors)     
         return result
         
 

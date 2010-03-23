@@ -195,7 +195,8 @@ def p_expr_break(symbols):
 def p_expr_let(symbols):
     "expr : LET dec_group IN expr_seq END"    
     symbols[0] = LetNode(symbols[2][0], 
-                         symbols[2][1], symbols[4])
+                         symbols[2][1],
+                         symbols[2][2], symbols[4])
     symbols[0].line_number = symbols.lineno(1)
     
 # What is a left value of an assignment expression?
@@ -240,13 +241,14 @@ def p_expr_seq_single(symbols):
 # A let expression with nothing between the in and end is valid.
 def p_dec_group_empty(symbols):
     "dec_group : "
-    symbols[0] = ([],[]) 
+    symbols[0] = ([],[], []) 
     
 def p_dec_group_multiple(symbols):
     "dec_group : dec_group dec"
     symbols[0] = symbols[1]
     symbols[0][0].extend(symbols[2][0])
     symbols[0][1].extend(symbols[2][1])
+    symbols[0][2].extend(symbols[2][2])
     
 
 # A list of field names, the equals character and an expression 
@@ -291,17 +293,36 @@ def p_expr_list_single(symbols):
 # the definition of any of it.
 def p_dec_type_dec_group(symbols):
     "dec : type_dec_group"
-    symbols[0] = ([symbols[1]], [])
+    symbols[0] = ([symbols[1]], [], [])
 
 # What is a declaration? A variable declaration.
 def p_dec_var(symbols):
     "dec : var_dec"
-    symbols[0] = ([], [symbols[1]])
+    symbols[0] = ([], [], [symbols[1]])
 
-# What is a declaration? A function declaration.
-def p_dec_func(symbols):
-    "dec : func_dec"
-    symbols[0] = ([], [symbols[1]])
+# What is a declaration? A block of continous 
+# functions declarations. Mutually recursive 
+# functions declarations must be defined without 
+# any variable or type declaration between the 
+#definition of any of it.
+def p_dec_func_dec_group(symbols):
+    "dec : func_dec_group"
+    symbols[0] = ([], [symbols[1]], [])
+
+# What is a group of function declarations? 
+# A function declaration.
+def p_func_dec_group_single(symbols):
+    "func_dec_group : func_dec"
+    symbols[0] = FunctionDeclarationGroupNode()
+    symbols[0].declarations.append(symbols[1]) 
+    
+# What is a group of function declarations? 
+# A group of function declarations follow by
+# a function declaration.
+def p_func_dec_group_multiple(symbols):
+    "func_dec_group : func_dec_group func_dec"
+    symbols[0] = symbols[1]
+    symbols[0].declarations.append(symbols[2])
 
 # What is a group of type declarations? A type 
 # declaration.
