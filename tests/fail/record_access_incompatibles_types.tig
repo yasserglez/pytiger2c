@@ -1,0 +1,9 @@
+let
+    type human = { age: int, siblin: human}
+    type humanarray = array of human
+    var humanarray1 := humanarray[6] of nil
+    var human1 := human{age = 4, siblin = nil}
+in
+    humanarray1[1].age := human1;
+    human1.siblin = 1
+end
