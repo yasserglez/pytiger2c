@@ -75,8 +75,12 @@ class FunctionCallNode(ValuedExpressionNode):
         valor de retorno en el caso de llamados a procedimientos.        
         """
         self._scope = scope
+        
+        errors_before = len(errors)
+        
         for expression in self._parameters:
             expression.check_semantics(self._scope, errors)
+
         try:
             function_type = self._scope.get_function_definition(self._name)
         except KeyError:
@@ -87,25 +91,26 @@ class FunctionCallNode(ValuedExpressionNode):
             errors.append(message.format(name=self._name, line=self.line_number))
         else:
             if len(self._parameters) == len(function_type.parameters_types):
-                collection = zip(function_type.parameters_types, self._parameters)
-                for index, (param_type, param) in enumerate(collection):
-                    if not param.has_return_value():
-                        message = 'The expression used as argument #{index} ' \
-                                  'of the function {name} at line {line} ' \
-                                  'does not return a value'
-                        message = message.format(name=self._name,
-                                                 index=index + 1, 
-                                                 line=self.line_number)
-                        errors.append(message)
-                    elif (param_type != param.return_type and 
-                          not (isinstance(param_type, RecordType)
-                               and isinstance(param.return_type, NilType))):
-                        message = 'Invalid type of the argument #{index} ' \
-                                  'of the function {name} at line {line}'
-                        message = message.format(name=self._name,
-                                                 index=index + 1, 
-                                                 line=self.line_number)
-                        errors.append(message)
+                if errors_before == len(errors):
+                    collection = zip(function_type.parameters_types, self._parameters)
+                    for index, (param_type, param) in enumerate(collection):
+                        if not param.has_return_value():
+                            message = 'The expression used as argument #{index} ' \
+                                      'of the function {name} at line {line} ' \
+                                      'does not return a value'
+                            message = message.format(name=self._name,
+                                                     index=index + 1, 
+                                                     line=self.line_number)
+                            errors.append(message)
+                        elif (param_type != param.return_type and 
+                              not (isinstance(param_type, RecordType)
+                                   and isinstance(param.return_type, NilType))):
+                            message = 'Invalid type of the argument #{index} ' \
+                                      'of the function {name} at line {line}'
+                            message = message.format(name=self._name,
+                                                     index=index + 1, 
+                                                     line=self.line_number)
+                            errors.append(message)
             else:
                 message = 'Calling function {name} with a wrong ' \
                           'number of arguments at line {line}'

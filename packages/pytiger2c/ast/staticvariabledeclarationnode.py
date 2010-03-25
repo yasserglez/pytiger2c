@@ -58,27 +58,31 @@ class StaticVariableDeclarationNode(VariableDeclarationNode):
         variable es definida en su ámbito local.
         """
         self._scope = scope
+        
+        errors_before = len(errors)
+        
         self.value.check_semantics(self._scope, errors)
         
-        try:
-            tiger_type = self._scope.get_type_definition(self._type_name)
-            self._type = tiger_type
-        except KeyError:
-            message = 'Undefined type of variable at line {line}'
-            errors.append(message.format(line=self.line_number))
-                
-        if not self.value.has_return_value():
-            message = 'Non valued expression assigned to a variable at line {line}'
-            errors.append(message.format(line=self.line_number))
-        elif self.value.return_type == NilType() and not isinstance(self.type, RecordType):
-            message = 'Invalid assignment of nil to a non record at line {line}'
-            errors.append(message.format(line=self.line_number))
-        elif self.value.return_type != self.type:
-            message = 'Invalid assignment type variable at line {line}'
-            errors.append(message.format(line=self.line_number))
-        
-        try:
-            self._scope.define_variable(self.name, self.type)
-        except ValueError:
-            message = 'Invalid variable name at line {line}'
-            errors.append(message.format(line=self.line_number))
+        if errors_before == len(errors):
+            try:
+                tiger_type = self._scope.get_type_definition(self._type_name)
+                self._type = tiger_type
+            except KeyError:
+                message = 'Undefined type of variable at line {line}'
+                errors.append(message.format(line=self.line_number))
+                    
+            if not self.value.has_return_value():
+                message = 'Non valued expression assigned to a variable at line {line}'
+                errors.append(message.format(line=self.line_number))
+            elif self.value.return_type == NilType() and not isinstance(self.type, RecordType):
+                message = 'Invalid assignment of nil to a non record at line {line}'
+                errors.append(message.format(line=self.line_number))
+            elif self.value.return_type != self.type:
+                message = 'Invalid assignment type variable at line {line}'
+                errors.append(message.format(line=self.line_number))
+            
+            try:
+                self._scope.define_variable(self.name, self.type)
+            except ValueError:
+                message = 'Invalid variable name at line {line}'
+                errors.append(message.format(line=self.line_number))

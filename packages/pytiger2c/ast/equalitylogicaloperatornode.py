@@ -47,27 +47,34 @@ class EqualityLogicalOperatorNode(LogicalOperatorNode):
         """
         self._scope = scope
         
+        errors_before = len(errors)
+        
         self.right.check_semantics(scope, errors)
-        if not self.right.has_return_value():
-            message = 'Invalid use of equality or inequality logical operator ' \
-                      'with a non-valued right expression at line {line}'
-            errors.append(message.format(line=self.line_number))
+        
+        if errors_before == len(errors):
+            if not self.right.has_return_value():
+                message = 'Invalid use of equality or inequality logical operator ' \
+                          'with a non-valued right expression at line {line}'
+                errors.append(message.format(line=self.line_number))
             
         self.left.check_semantics(scope, errors)
-        if not self.left.has_return_value():
-            message = 'Invalid use of equality or inequality logical operator ' \
-                      'with a non-valued left expression at line {line}'
-            errors.append(message.format(line=self.line_number))
-            
-        if self.right.return_type != self.left.return_type:
-            # Check the special case of nil and records. nil can be assigned
-            # to any record type, then r <> nil and r = nil are legal.
-            valid_different_types = (RecordType, NilType)
-            record_and_nil = (isinstance(self.right.return_type, valid_different_types) and 
-                              isinstance(self.left.return_type, valid_different_types))
-            if not record_and_nil:
-                message = 'Types of left and right operands of the equality or ' \
-                          'inequality logical operator at line {line} does not match'
+        
+        if errors_before == len(errors):
+            if not self.left.has_return_value():
+                message = 'Invalid use of equality or inequality logical operator ' \
+                          'with a non-valued left expression at line {line}'
                 errors.append(message.format(line=self.line_number))
+        
+        if errors_before == len(errors):
+            if self.right.return_type != self.left.return_type:
+                # Check the special case of nil and records. nil can be assigned
+                # to any record type, then r <> nil and r = nil are legal.
+                valid_different_types = (RecordType, NilType)
+                record_and_nil = (isinstance(self.right.return_type, valid_different_types) and 
+                                  isinstance(self.left.return_type, valid_different_types))
+                if not record_and_nil:
+                    message = 'Types of left and right operands of the equality or ' \
+                              'inequality logical operator at line {line} does not match'
+                    errors.append(message.format(line=self.line_number))
         
         self._return_type = IntegerType()

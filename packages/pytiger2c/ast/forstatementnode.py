@@ -104,24 +104,32 @@ class ForStatementNode(NonValuedExpressionNode):
         self._scope = Scope(scope)
         self.scope.define_variable(self.index_name, integer_type, True)
         
+        errors_before = len(errors)
+        
         self.lower_expression.check_semantics(self.scope, errors)
-        if not self.lower_expression.has_return_value(): 
-            message = 'The expression for the lower bound of the for loop ' \
-                      'at line {line} does not return a value'
-            errors.append(message.format(line=self.line_number))
-        elif self.lower_expression.return_type != integer_type:
-            message = 'The return type of the expression for the lower bound ' \
-                      'of the for loop at line {line} is not integer'
-            errors.append(message.format(line=self.line_number))
+        
+        if errors_before == len(errors): 
+            if not self.lower_expression.has_return_value(): 
+                message = 'The expression for the lower bound of the for loop ' \
+                          'at line {line} does not return a value'
+                errors.append(message.format(line=self.line_number))
+            elif self.lower_expression.return_type != integer_type:
+                message = 'The return type of the expression for the lower bound ' \
+                          'of the for loop at line {line} is not integer'
+                errors.append(message.format(line=self.line_number))
+                
+        errors_before = len(errors)
             
         self.upper_expression.check_semantics(self.scope, errors)
-        if not self.upper_expression.has_return_value(): 
-            message = 'The expression for the upper bound of the for loop ' \
-                      'at line {line} does not return a value'
-            errors.append(message.format(line=self.line_number))
-        elif self.upper_expression.return_type != integer_type:
-            message = 'The return type of the expression for the upper bound ' \
-                      'of the for loop at line {line} is not integer'
-            errors.append(message.format(line=self.line_number))
         
+        if errors_before == len(errors):
+            if not self.upper_expression.has_return_value(): 
+                message = 'The expression for the upper bound of the for loop ' \
+                          'at line {line} does not return a value'
+                errors.append(message.format(line=self.line_number))
+            elif self.upper_expression.return_type != integer_type:
+                message = 'The return type of the expression for the upper bound ' \
+                          'of the for loop at line {line} is not integer'
+                errors.append(message.format(line=self.line_number))
+            
         self.expression.check_semantics(self.scope, errors)

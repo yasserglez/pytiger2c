@@ -89,7 +89,6 @@ def p_expr_array(symbols):
     "expr : ID LBRACKET expr RBRACKET OF expr"
     symbols[0] = ArrayLiteralExpressionNode(symbols[1], symbols[3], symbols[6])
     symbols[0].line_number = symbols.lineno(1)
-    symbols[1].parent_node = symbols[0]
     symbols[3].parent_node = symbols[0]
     symbols[6].parent_node = symbols[0] 
 
@@ -413,7 +412,7 @@ def p_var_dec_with_type(symbols):
     "var_dec : VAR ID COLON ID ASSIGN expr"
     symbols[0] = StaticVariableDeclarationNode(symbols[2], symbols[6], symbols[4])
     symbols[0].line_number = symbols.lineno(1)
-    symbols[4].parent_node = symbols[0]
+    symbols[6].parent_node = symbols[0]
 
 # Function declaration.
 def p_func_dec_without_return(symbols):

@@ -71,17 +71,25 @@ class WhileStatementNode(NonValuedExpressionNode):
         """
         self._scope = scope
         
+        errors_before = len(errors)
+        
         self.condition.check_semantics(scope, errors)
-        # The condition return type must be IntegerType
-        if not self.condition.has_return_value():
-            message = 'while used with a non-return condition at line {line}'
-            errors.append(message.format(line=self.line_number))
-        elif self.condition.return_type != IntegerType():
-            message = 'Invalid type of condition of the while statement at line {line}'
-            errors.append(message.format(line=self.line_number))
+        
+        if errors_before == len(errors):
+            # The condition return type must be IntegerType
+            if not self.condition.has_return_value():
+                message = 'while used with a non-return condition at line {line}'
+                errors.append(message.format(line=self.line_number))
+            elif self.condition.return_type != IntegerType():
+                message = 'Invalid type of condition of the while statement at line {line}'
+                errors.append(message.format(line=self.line_number))
 
+        errors_before = len(errors)
+        
         self.expression.check_semantics(scope, errors)
-        # The expression must not return value
-        if self.expression.has_return_value():
-            message = 'while used with a expression with return value at line {line}'
-            errors.append(message.format(line=self.line_number))
+        
+        if errors_before == len(errors):
+            # The expression must not return value
+            if self.expression.has_return_value():
+                message = 'while used with a expression with return value at line {line}'
+                errors.append(message.format(line=self.line_number))

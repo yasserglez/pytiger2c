@@ -41,20 +41,32 @@ class TimesOperatorNode(ArithmeticOperatorNode):
         """
         self._scope = scope
         
+        errors_before = len(errors)
+        
         self.right.check_semantics(scope, errors)
-        if not self.right.has_return_value():
-            message = 'Invalid use of times operator with a non-valued right expression at line {line}'
-            errors.append(message.format(line=self.line_number)) 
-        elif self.right.return_type != IntegerType():
-            message = 'Invalid use of times operator with a non-integer right value at line {line}'
-            errors.append(message.format(line=self.line_number))
+        
+        if errors_before == len(errors):
+            if not self.right.has_return_value():
+                message = 'Invalid use of times operator with a non-valued ' \
+                          'right expression at line {line}'
+                errors.append(message.format(line=self.line_number)) 
+            elif self.right.return_type != IntegerType():
+                message = 'Invalid use of times operator with a non-integer ' \
+                          'right value at line {line}'
+                errors.append(message.format(line=self.line_number))
+        
+        errors_before = len(errors)
         
         self.left.check_semantics(scope, errors)
-        if not self.left.has_return_value():
-            message = 'Invalid use of times operator with a non-valued left expression at line {line}'
-            errors.append(message.format(line=self.line_number)) 
-        elif self.left.return_type != IntegerType():
-            message = 'Invalid use of times operator with a non-integer left value at line {line}'
-            errors.append(message.format(line=self.line_number))
+        
+        if errors_before == len(errors):
+            if not self.left.has_return_value():
+                message = 'Invalid use of times operator with a non-valued ' \
+                          'left expression at line {line}'
+                errors.append(message.format(line=self.line_number)) 
+            elif self.left.return_type != IntegerType():
+                message = 'Invalid use of times operator with a non-integer ' \
+                          'left value at line {line}'
+                errors.append(message.format(line=self.line_number))
             
         self._return_type = IntegerType()

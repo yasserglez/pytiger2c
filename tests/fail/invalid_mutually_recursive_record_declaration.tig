@@ -1,0 +1,12 @@
+/* The woman test. */
+
+let
+    type Woman = {beauty : int}
+in
+    let
+    type Men = {wife : Woman}
+	var a:= 1
+    type Woman = {husband : Men}
+    in
+    end
+end

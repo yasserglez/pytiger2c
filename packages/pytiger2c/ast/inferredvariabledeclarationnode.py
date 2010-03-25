@@ -51,19 +51,23 @@ class InferredVariableDeclarationNode(VariableDeclarationNode):
         variable es definida en su ámbito local.
         """
         self._scope = scope
+        
+        errors_before = len(errors)
+        
         self.value.check_semantics(self.scope, errors)
         
-        if not self.value.has_return_value():
-            message = 'Non-valued expression assigned to a variable at line {line}'
-            errors.append(message.format(line=self.line_number))
-        elif self.value.return_type == NilType():
-            message = 'Invalid nil assignment to a variable at line {line}'
-            errors.append(message.format(line=self.line_number))
-        else:
-            self._type = self.value.return_type
-        
-        try:
-            self.scope.define_variable(self.name, self.type)
-        except ValueError:
-            message = 'Could not hide a variable defined in the same scope at line {line}'
-            errors.append(message.format(line=self.line_number))
+        if errors_before == len(errors):
+            if not self.value.has_return_value():
+                message = 'Non-valued expression assigned to a variable at line {line}'
+                errors.append(message.format(line=self.line_number))
+            elif self.value.return_type == NilType():
+                message = 'Invalid nil assignment to a variable at line {line}'
+                errors.append(message.format(line=self.line_number))
+            else:
+                self._type = self.value.return_type
+            
+            try:
+                self.scope.define_variable(self.name, self.type)
+            except ValueError:
+                message = 'Could not hide a variable defined in the same scope at line {line}'
+                errors.append(message.format(line=self.line_number))

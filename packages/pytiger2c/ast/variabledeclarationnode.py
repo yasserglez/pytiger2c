@@ -52,5 +52,3 @@ class VariableDeclarationNode(DeclarationNode):
         self._name = name
         self._value = value
         self._type = None        
-    
-    

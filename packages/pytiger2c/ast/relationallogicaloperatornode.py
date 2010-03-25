@@ -49,31 +49,39 @@ class RelationalLogicalOperatorNode(LogicalOperatorNode):
         
         valid_types = (IntegerType(), StringType())
         
+        errors_before = len(errors)
+        
         self.right.check_semantics(scope, errors)
-        if self.right.has_return_value():
-            if self.right.return_type not in valid_types: 
-                message = 'Invalid type of right operand in the binary ' \
-                          'relational operator at line {line}'
-                errors.append(message.format(line=self.line_number))            
-        else:
-            message = 'Invalid use of binary relational operator with a ' \
-                      'non-valued right expression at line {line}'
-            errors.append(message.format(line=self.line_number))
+        
+        if errors_before == len(errors):
+            if self.right.has_return_value():
+                if self.right.return_type not in valid_types: 
+                    message = 'Invalid type of right operand in the binary ' \
+                              'relational operator at line {line}'
+                    errors.append(message.format(line=self.line_number))            
+            else:
+                message = 'Invalid use of binary relational operator with a ' \
+                          'non-valued right expression at line {line}'
+                errors.append(message.format(line=self.line_number))
+        
+        errors_before = len(errors)
             
         self.left.check_semantics(scope, errors)
-        if self.left.has_return_value():
-            if self.left.return_type not in valid_types: 
-                message = 'Invalid type of left operand in the binary ' \
-                          'relational operator at line {line}'
-                errors.append(message.format(line=self.line_number))            
-        else:
-            message = 'Invalid use of binary relational operator with a ' \
-                      'non-valued left expression at line {line}'
-            errors.append(message.format(line=self.line_number))
-            
-        if self.right.return_type != self.left.return_type:
-            message = 'Types of left and right operands of the binary  ' \
-                      'relational operator at line {line} does not match'
-            errors.append(message.format(line=self.line_number))
+        
+        if errors_before == len(errors):
+            if self.left.has_return_value():
+                if self.left.return_type not in valid_types: 
+                    message = 'Invalid type of left operand in the binary ' \
+                              'relational operator at line {line}'
+                    errors.append(message.format(line=self.line_number))            
+            else:
+                message = 'Invalid use of binary relational operator with a ' \
+                          'non-valued left expression at line {line}'
+                errors.append(message.format(line=self.line_number))
+                
+            if self.right.return_type != self.left.return_type:
+                message = 'Types of left and right operands of the binary  ' \
+                          'relational operator at line {line} does not match'
+                errors.append(message.format(line=self.line_number))
         
         self._return_type = IntegerType()

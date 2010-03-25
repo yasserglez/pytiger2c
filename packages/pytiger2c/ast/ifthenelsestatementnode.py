@@ -107,23 +107,27 @@ class IfThenElseStatementNode(ValuedExpressionNode):
             errors.append(message.format(line=self.line_number))
             
         # Check semantics of the then and else expressions.
+        errors_before = len(errors)
+        
         self.then_expression.check_semantics(scope, errors)
         self.else_expression.check_semantics(scope, errors)
-        then_returns = self.then_expression.has_return_value()
-        else_returns = self.else_expression.has_return_value()
-        if then_returns and else_returns:
-            if self.then_expression.return_type != self.else_expression.return_type:
-                message = 'The return type of the expressions of the if-then-else statement ' \
-                          'at line {line} is not the same'
+        
+        if errors_before == len(errors):
+            then_returns = self.then_expression.has_return_value()
+            else_returns = self.else_expression.has_return_value()
+            if then_returns and else_returns:
+                if self.then_expression.return_type != self.else_expression.return_type:
+                    message = 'The return type of the expressions of the if-then-else ' \
+                              'statement at line {line} is not the same'
+                    errors.append(message.format(line=self.line_number))
+            elif then_returns or else_returns:
+                message = 'One of the expressions of the if-then-else statement at ' \
+                          'line {line} returns but the other does not'
                 errors.append(message.format(line=self.line_number))
-        elif then_returns or else_returns:
-            message = 'One of the expressions of the if-then-else statement at line {line} ' \
-                      'returns but the other does not'
-            errors.append(message.format(line=self.line_number))
                         
-        # Set the return type of the expression (if any).
-        if then_returns and else_returns:
-            self._return_type = self.then_expression.return_type
+            # Set the return type of the expression (if any).
+            if then_returns and else_returns:
+                self._return_type = self.then_expression.return_type
 
     def has_return_value(self):
         """

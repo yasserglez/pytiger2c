@@ -1,1 +1,1 @@
-Semantic Error: Invalid fields count, 1 needed but 2 given at line 6.
+Semantic Error: Invalid number of fields in record literal at line 6.

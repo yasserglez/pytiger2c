@@ -50,18 +50,17 @@ class RecordDeclarationNode(TypeDeclarationNode):
         propiedad C{type}.
         """
         self._scope = scope
-        types = []
-        for index,type_name in enumerate(self.type.fields_typenames):
-            type = None
+        
+        fields_types = []
+        for index, field_typename in enumerate(self.type.fields_typenames):
             try:
-                type = self.scope.get_type_definition(type_name)
+                field_type = self.scope.get_type_definition(field_typename)
             except KeyError:
-                message = 'Unavailable type {type} of field {position} of '\
-                          'record {name} at line {line}'
-                errors.append(message.format(type = type_name, 
-                                             position = index + 1, 
-                                             name = self.name, 
-                                             line = self.line_number))
-            types.append(type)
-        self.type.fields_types = types
-        self.defined = True
+                message = 'Undefined type {type} of the field #{index} ' \
+                          'of the record {name} at line {line}'
+                errors.append(message.format(type=field_typename, index=index + 1, 
+                                             name=self.name, line=self.line_number))
+            else:
+                fields_types.append(field_type)
+        self.type.fields_types = fields_types
+        self.type.defined = True

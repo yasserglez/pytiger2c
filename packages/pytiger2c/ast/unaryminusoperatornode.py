@@ -43,14 +43,19 @@ class UnaryMinusOperatorNode(UnaryOperatorNode):
         """
         self._scope = scope
         
+        errors_before = len(errors)
+        
         self.expression.check_semantics(scope, errors)
-        if self.expression.has_return_value():
-            if self.expression.return_type != IntegerType():
+        
+        if errors_before == len(errors):
+            if self.expression.has_return_value():
+                if self.expression.return_type != IntegerType():
+                    message = 'The expression of the unary minus operator at line {line} ' \
+                              'does not return an integer value'
+                    errors.append(message.format(line=self.line_number))
+            else:
                 message = 'The expression of the unary minus operator at line {line} ' \
-                          'does not return an integer value'
+                          'does not return a value'
                 errors.append(message.format(line=self.line_number))
-        else:
-            message = 'The expression of the unary minus operator at line {line} ' \
-                      'does not return a value'
-            errors.append(message.format(line=self.line_number))            
+
         self._return_type = IntegerType()

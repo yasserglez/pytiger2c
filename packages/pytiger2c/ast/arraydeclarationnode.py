@@ -65,4 +65,4 @@ class ArrayDeclarationNode(TypeDeclarationNode):
                                          line=self.line_number))
 
         self.type.fields_types = [type]
-        self.defined = True
+        self.type.defined = True

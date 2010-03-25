@@ -65,9 +65,7 @@ class ArrayLiteralExpressionNode(ValuedExpressionNode):
         super(ArrayLiteralExpressionNode, self).__init__()
         self._type_name = type_name
         self._count = count
-        self._count.parent_node = self
         self._value = value
-        self._value.parent_node = self
 
     def check_semantics(self, scope, errors):
         """

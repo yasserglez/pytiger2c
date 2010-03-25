@@ -1,2 +1,2 @@
-Semantic Error: Unavailable type treelist of field 2 of record tree at line 4.
-Semantic Error: Unavailable type tree of field 1 of record treelist at line 6.
+Semantic Error: Undefined type treelist of the field #2 of the record tree at line 4.
+Semantic Error: Undefined type tree of the field #1 of the record treelist at line 6.

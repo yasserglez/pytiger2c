@@ -113,7 +113,7 @@ class TypeDeclarationGroupNode(DeclarationGroupNode):
         for declaration in self.declarations:
             declaration.check_semantics(self.scope, errors)
             if errors_before != len(errors):
-                return            
+                return 
 
     def _resolve_alias(self, alias_name, scope, alias_dict, referenced_aliases, errors):
         """
@@ -153,7 +153,8 @@ class TypeDeclarationGroupNode(DeclarationGroupNode):
             # The alias name must not be an backward_referenced alias.
             if alias_typename in referenced_aliases:
                 message = 'Infinite recursive alias definition of {name} at line {line}'
-                errors.append(message.format(name=alias_name, line=declaration_node.line_number))
+                errors.append(message.format(name=alias_name, 
+                                             line=declaration_node.line_number))
                 return tiger_type 
             else:
                 referenced_aliases.add(alias_name)
@@ -175,5 +176,6 @@ class TypeDeclarationGroupNode(DeclarationGroupNode):
         except ValueError:
             message = 'Trying to redefine the type {name} already ' \
                       'defined in this scope at line {line}'
-            errors.append(message.format(name=alias_name, line=declaration_node.line_number))
+            errors.append(message.format(name=alias_name, 
+                                         line=declaration_node.line_number))
         return tiger_type

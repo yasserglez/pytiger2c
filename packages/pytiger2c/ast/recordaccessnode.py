@@ -71,21 +71,25 @@ class RecordAccessNode(AccessNode):
         C{return_type} y C{read_only} 
         """
         self._scope = scope
+        
+        errors_before = len(errors)
+        
         self.record.check_semantics(self.scope, errors)
         
-        if self.record.has_return_value():
-            record_type = self.record.return_type
-            if isinstance(record_type, RecordType):
-                if self.field_name in record_type.fields_names:
-                    index = record_type.fields_names.index(self.field_name)
-                    self._return_type = record_type.fields_types[index]
+        if errors_before == len(errors):
+            if self.record.has_return_value():
+                record_type = self.record.return_type
+                if isinstance(record_type, RecordType):
+                    if self.field_name in record_type.fields_names:
+                        index = record_type.fields_names.index(self.field_name)
+                        self._return_type = record_type.fields_types[index]
+                    else:
+                        message = 'Undefined field {field} on record access at line {line}'
+                        errors.append(message.format(field = self.field_name, 
+                                                     line=self.line_number))
                 else:
-                    message = 'Undefined field {field} on record access at line {line}'
-                    errors.append(message.format(field = self.field_name, 
-                                                 line=self.line_number))
+                    message = 'Invalid record type on record access at line {line}'
+                    errors.append(message.format(line=self.line_number))
             else:
-                message = 'Invalid record type on record access at line {line}'
+                message = 'Invalid non value type on record access at line {line}'
                 errors.append(message.format(line=self.line_number))
-        else:
-            message = 'Invalid non value type on record access at line {line}'
-            errors.append(message.format(line=self.line_number))

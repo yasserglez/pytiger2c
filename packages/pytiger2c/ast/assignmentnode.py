@@ -47,9 +47,7 @@ class AssignmentNode(NonValuedExpressionNode):
         """
         super(AssignmentNode, self).__init__()
         self._lvalue = lvalue
-        self._lvalue.parent_node = self
         self._expression = expression
-        self._expression.parent_node = self
 
     def check_semantics(self, scope, errors):
         """

@@ -48,15 +48,20 @@ class ExpressionSequenceNode(ValuedExpressionNode):
         """
         self._scope = scope
         
+        errors_before_last = None
+        
         # Check semantics of the expressions in the sequence.
         for expression in self._expressions:
+            errors_before_last = len(errors)
             expression.check_semantics(scope, errors)
-        try:
-            if self._expressions[-1].has_return_value():
-                self._return_type = self._expressions[-1].return_type
-        except IndexError:
-            # Ignore this exception, the node does not have a return value.
-            pass
+
+        if errors_before_last == len(errors):
+            try:
+                if self._expressions[-1].has_return_value():
+                    self._return_type = self._expressions[-1].return_type
+            except IndexError:
+                # Ignore this exception, the node does not have a return value.
+                pass
         
     def has_return_value(self):
         """

@@ -84,27 +84,28 @@ class RecordLiteralExpressionNode(ValuedExpressionNode):
         también el tipo C{nil}.          
         """
         self._scope = scope
+        
+        errors_before = len(errors)
+
         try:
             self._return_type = self.scope.get_type_definition(self.type_name)
         except KeyError:
-            message = 'Undefined type {type_name} at line {line}'
-            errors.append(message.format(type_name = self._type_name, 
-                                         line=self.line_number))
-        if isinstance(self.return_type, RecordType):
-            fields_names_given = len(self._fields_names)
-            fields_names_original = len(self.return_type.fields_names)
-            if fields_names_given == fields_names_original:
-                self._check_parameters(errors)
+            message = 'Undefined type {name} at line {line}'
+            errors.append(message.format(name=self._type_name, line=self.line_number))
+            
+        if errors_before == len(errors):
+            if isinstance(self.return_type, RecordType):
+                fields_names_given = len(self._fields_names)
+                fields_names_original = len(self.return_type.fields_names)
+                if fields_names_given == fields_names_original:
+                    self._check_parameters(errors)
+                else:
+                    message = 'Invalid number of fields in record literal at line {line}'
+                    errors.append(message.format(line=self.line_number))
             else:
-                message = 'Invalid fields count, {needed} needed but {given} '\
-                          'given at line {line}'
-                errors.append(message.format(given = fields_names_given,
-                                             needed = fields_names_original,
+                message = 'Invalid non record type {type_name} at line {line}'
+                errors.append(message.format(type_name = self._type_name, 
                                              line=self.line_number))
-        else:
-            message = 'Invalid non record type {type_name} at line {line}'
-            errors.append(message.format(type_name = self._type_name, 
-                                         line=self.line_number))
     
     def _check_parameters(self, errors):
         """
@@ -119,26 +120,27 @@ class RecordLiteralExpressionNode(ValuedExpressionNode):
         """
         for index in xrange(len(self.fields_names)):
             if self.fields_names[index] != self.return_type.fields_names[index]:
-                message = 'Invalid name {name} of the field #{index} of '\
+                message = 'Invalid name {name} of the field #{index} of ' \
                           'the record literal at line {line}'
-                errors.append(message.format(name=self.fields_names[index],
-                                             index=index + 1,
+                errors.append(message.format(name=self.fields_names[index], index=index + 1,
                                              line=self.line_number))
+
+            errors_before = len(errors)
+            
             self.fields_values[index].check_semantics(self.scope, errors)
-            if not self.fields_values[index].has_return_value():
-                message = 'Invalid non valued expression for the field #{index} '\
-                          'of the record literal at line {line}'
-                errors.append(message.format(index=index + 1,
-                                             line=self.line_number))
-            elif self.fields_values[index].return_type == NilType():
-                if not isinstance(self.return_type.fields_types[index], RecordType):
-                    message = 'Invalid nil assignment to the field #{index} '\
+            
+            if errors_before == len(errors): 
+                if not self.fields_values[index].has_return_value():
+                    message = 'Invalid non valued expression for the field #{index} ' \
                               'of the record literal at line {line}'
-                    errors.append(message.format(index=index + 1,
-                                                 line=self.line_number))
-            elif (self.fields_values[index].return_type 
-                  != self.return_type.fields_types[index]):
-                message = 'Invalid type for field #{index} of '\
-                          'the record literal at line {line}'
-                errors.append(message.format(index=index + 1,
-                                             line=self.line_number))
+                    errors.append(message.format(index=index + 1, line=self.line_number))
+                elif self.fields_values[index].return_type == NilType():
+                    if not isinstance(self.return_type.fields_types[index], RecordType):
+                        message = 'Invalid nil assignment to the field #{index} ' \
+                                  'of the record literal at line {line}'
+                        errors.append(message.format(index=index + 1, line=self.line_number))
+                elif (self.fields_values[index].return_type != 
+                      self.return_type.fields_types[index]):
+                    message = 'Invalid type for field #{index} of ' \
+                              'the record literal at line {line}'
+                    errors.append(message.format(index=index + 1, line=self.line_number))
