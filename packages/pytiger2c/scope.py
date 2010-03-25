@@ -174,7 +174,7 @@ class Scope(object):
         else:
             return self.parent.get_function_definition(name)
     
-    def define_variable(self, name, tiger_type, readonly=False):
+    def define_variable(self, name, tiger_type, read_only=False):
         """
         Añade una definición de variable al ámbito actual.
         
@@ -191,8 +191,8 @@ class Scope(object):
         @param tiger_type: Instancia de C{TigerType} correspondiente al 
              tipo de la variable que se quiere definir.
              
-        @type readonly: C{bool}
-        @param readonly: Indica si la variable que se define debe ser tratada
+        @type read_only: C{bool}
+        @param read_only: Indica si la variable que se define debe ser tratada
             como una variable de sólo lectura. El valor por defecto de este
             argumento es C{False}.
             
@@ -200,7 +200,7 @@ class Scope(object):
             que se intenta definir se definió anteriormente en este ámbito.        
         """
         if not (name in self._members):
-            self._members[name] = (tiger_type, readonly)
+            self._members[name] = (tiger_type, read_only)
         else:
             raise ValueError('Variable already defined in this scope')
         
@@ -233,7 +233,7 @@ class Scope(object):
         else:
             return self.parent.get_variable_definition(name)
         
-    def get_variable_readonly(self, name):
+    def get_variable_read_only(self, name):
         """
         Brinda información que indica si la variable fue definida como de sólo
         lectura en este ámbito o en alguno superior. 
@@ -255,13 +255,13 @@ class Scope(object):
             variable.
         """
         if name in self._members:
-            (variable_type, readonly) = self._members[name]
+            (variable_type, read_only) = self._members[name]
             if isinstance(variable_type, TigerType) and not isinstance(variable_type, FunctionType):
-                return readonly
+                return read_only
             else:
                 raise ValueError('The member of the scope is not a variable')
         else:
-            return self.parent.get_variable_definition(name)        
+            return self.parent.get_variable_read_only(name)        
         
 
 class RootScope(Scope):
@@ -367,15 +367,15 @@ class RootScope(Scope):
         else:
             raise ValueError('The member of the scope is not a variable')
 
-    def get_variable_readonly(self, name):
+    def get_variable_read_only(self, name):
         """
         Para obtener información acerca de los parámetros recibidos por
-        este método consulte la documentación del método C{get_variable_readonly}
+        este método consulte la documentación del método C{get_variable_read_only}
         en la clase C{Scope}.
         """        
-        (variable_type, readonly) = self._members[name]
+        (variable_type, read_only) = self._members[name]
         if isinstance(variable_type, TigerType) and not isinstance(variable_type, FunctionType):
-            return readonly
+            return read_only
         else:
             raise ValueError('The member of the scope is not a variable')
 
@@ -387,11 +387,12 @@ class FakeScope(Scope):
     Esta clase gestiona los tipos, variables y funciones disponibles
     en un ámbito de ejecución detereminado en Tiger.
     
-    En esta clase se los tipos y funciones no disponibles definidos en el
-    propio ámbito local. Los tipos que son definidos fuera de un grupo de
-    declaraciones de tipos no están disponibles para las declaraciones 
-    del grupo, de igual manera las funciones definidas fuera de su grupo
-    de declaraciones no están disponibles para ellas.
+    A través de este ámbito falso se garantiza que no se utilicen tipos y 
+    funciones no disponibles definidos en el propio ámbito local. Los tipos 
+    que son definidos fuera de un grupo de declaraciones de tipos no están 
+    disponibles para las declaraciones de otro grupo, de igual manera las 
+    funciones definidas fuera de su grupo de declaraciones no están 
+    disponibles para las de otro grupo.
     """
     
     def __init__(self, parent, unavailables_types, unavailables_functions):
@@ -415,7 +416,7 @@ class FakeScope(Scope):
     def define_type(self, name, tiger_type):
         """
         Para obtener información acerca de los parámetros recibidos por
-        este método consulte la documentación del método C{get_function_definition}
+        este método consulte la documentación del método con el mismo nombre
         en la clase C{Scope}.
         """
         self.parent.define_type(self, name, tiger_type)
@@ -423,18 +424,18 @@ class FakeScope(Scope):
     def get_type_definition(self, name):
         """
         Para obtener información acerca de los parámetros recibidos por
-        este método consulte la documentación del método C{get_function_definition}
+        este método consulte la documentación del método con el mismo nombre
         en la clase C{Scope}.
         """
         if name in self._unavailables_types:
-            raise KeyError()
+            raise KeyError('This type definition is not available here')
         else:
             return self.parent.get_type_definition(name)
 
     def define_function(self, name, function_type):
         """
         Para obtener información acerca de los parámetros recibidos por
-        este método consulte la documentación del método C{get_function_definition}
+        este método consulte la documentación del método con el mismo nombre
         en la clase C{Scope}.
         """
         self.parent.define_function(name, function_type)
@@ -442,18 +443,50 @@ class FakeScope(Scope):
     def get_function_definition(self, name):
         """
         Para obtener información acerca de los parámetros recibidos por
-        este método consulte la documentación del método C{get_function_definition}
+        este método consulte la documentación del método con el mismo nombre
         en la clase C{Scope}.
         """
         if name in self._unavailables_functions:
-            raise KeyError()
+            raise KeyError('This function definition is not available here')
         else:
             return self.parent.get_function_definition(name)
 
-    def define_variable(self, name, tiger_type, readonly=False):
+    def define_variable(self, name, tiger_type, read_only=False):
         """
         Para obtener información acerca de los parámetros recibidos por
-        este método consulte la documentación del método C{get_function_definition}
+        este método consulte la documentación del método con el mismo nombre
         en la clase C{Scope}.
         """
-        self.parent.define_variable(name, tiger_type, readonly)
+        self.parent.define_variable(name, tiger_type, read_only)
+
+    def get_variable_definition(self, name):
+        """
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método con el mismo nombre
+        en la clase C{Scope}.
+        """
+        return self.parent.get_variable_definition(name)
+
+    def get_variable_read_only(self, name):
+        """
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método con el mismo nombre
+        en la clase C{Scope}.
+        """
+        return self.parent.get_variable_read_only(name)
+
+    def generate_code(self):
+        """
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método con el mismo nombre
+        en la clase C{Scope}.
+        """
+        self.parent.generate_code()
+
+    def get_variable_code(self, name):
+        """
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método con el mismo nombre
+        en la clase C{Scope}.
+        """
+        return self.parent.get_variable_code(name)
