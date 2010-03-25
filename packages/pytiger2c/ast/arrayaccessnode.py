@@ -50,9 +50,7 @@ class ArrayAccessNode(AccessNode):
         """
         super(ArrayAccessNode, self).__init__()
         self._array = array
-        self._array.parent_node = self
         self._position = position
-        self._position.parent_node = self
 
     def check_semantics(self, scope, errors):
         """

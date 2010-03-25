@@ -5,6 +5,7 @@ Análisis sintáctico utilizando PLY.
 """
 
 import os
+import itertools
 
 from pytiger2c.contrib.ply import yacc
 from pytiger2c.grammar.common import compute_column
@@ -88,6 +89,9 @@ def p_expr_array(symbols):
     "expr : ID LBRACKET expr RBRACKET OF expr"
     symbols[0] = ArrayLiteralExpressionNode(symbols[1], symbols[3], symbols[6])
     symbols[0].line_number = symbols.lineno(1)
+    symbols[1].parent_node = symbols[0]
+    symbols[3].parent_node = symbols[0]
+    symbols[6].parent_node = symbols[0] 
 
 # Creating a new record.
 def p_expr_record(symbols):
@@ -100,6 +104,7 @@ def p_expr_unary_minus(symbols):
     "expr : MINUS expr %prec UMINUS"
     symbols[0] = UnaryMinusOperatorNode(symbols[2])
     symbols[0].line_number = symbols.lineno(1)
+    symbols[2].parent_node = symbols[0]
 
 # Binary operators.
 def p_expr_bin_op(symbols):
@@ -142,6 +147,8 @@ def p_expr_bin_op(symbols):
     elif symbols[2] == "|":
         symbols[0] = OrOperatorNode(symbols[1], symbols[3])
     symbols[0].line_number = symbols.lineno(2)
+    symbols[1].parent_node = symbols[0]
+    symbols[3].parent_node = symbols[0]
 
 # A group of expressions enclosed by parenthesis separated by semicolons.
 def p_expr_expr_seq(symbols):
@@ -154,33 +161,47 @@ def p_expr_assign(symbols):
     "expr : lvalue ASSIGN expr"
     symbols[0] = AssignmentNode(symbols[1], symbols[3])
     symbols[0].line_number = symbols.lineno(2)
+    symbols[1].parent_node = symbols[0]
+    symbols[3].parent_node = symbols[0]    
 
 # Function call.
 def p_expr_func(symbols):
     "expr : ID LPAREN expr_list RPAREN"
     symbols[0] = FunctionCallNode(symbols[1], symbols[3])
     symbols[0].line_number = symbols.lineno(1)
+    for node in symbols[3]: 
+        node.parent_node = symbols[0]    
 
 # Flow control structures.
 def p_expr_if(symbols):
     "expr : IF expr THEN expr"
     symbols[0] = IfThenStatementNode(symbols[2], symbols[4])
     symbols[0].line_number = symbols.lineno(1)
+    symbols[2].parent_node = symbols[0]
+    symbols[4].parent_node = symbols[0]       
 
 def p_expr_if_else(symbols):
     "expr : IF expr THEN expr ELSE expr"
     symbols[0] = IfThenElseStatementNode(symbols[2], symbols[4], symbols[6])
     symbols[0].line_number = symbols.lineno(1)
+    symbols[2].parent_node = symbols[0]
+    symbols[4].parent_node = symbols[0]
+    symbols[6].parent_node = symbols[0]        
 
 def p_expr_while(symbols):
     "expr : WHILE expr DO expr"
     symbols[0] = WhileStatementNode(symbols[2], symbols[4])
     symbols[0].line_number = symbols.lineno(1)
+    symbols[2].parent_node = symbols[0]
+    symbols[4].parent_node = symbols[0]    
     
 def p_expr_for(symbols):
     "expr : FOR ID ASSIGN expr TO expr DO expr"
     symbols[0] = ForStatementNode(symbols[2], symbols[4], symbols[6], symbols[8])
-    symbols[0].line_number = symbols.lineno(1)    
+    symbols[0].line_number = symbols.lineno(1)
+    symbols[4].parent_node = symbols[0]
+    symbols[6].parent_node = symbols[0]
+    symbols[8].parent_node = symbols[0]
 
 def p_expr_break(symbols):
     "expr : BREAK"
@@ -192,6 +213,9 @@ def p_expr_let(symbols):
     "expr : LET dec_group IN expr_seq END"    
     symbols[0] = LetNode(symbols[2][0], symbols[2][1], symbols[2][2], symbols[4])
     symbols[0].line_number = symbols.lineno(1)
+    for node in itertools.chain(symbols[2][0], symbols[2][1], symbols[2][2]):
+        node.parent_node = symbols[0]
+    symbols[4].parent_node = symbols[0]
     
 # What is a left value of an assignment expression?
 def p_lvalue_id(symbols):
@@ -202,18 +226,23 @@ def p_lvalue_id(symbols):
 def p_lvalue_record(symbols):
     "lvalue : lvalue PERIOD ID"
     symbols[0] = RecordAccessNode(symbols[1], symbols[3])
-    symbols[0].line_number = symbols.lineno(2) 
+    symbols[0].line_number = symbols.lineno(2)
+    symbols[1].parent_node = symbols[0] 
     
 def p_lvalue_array(symbols):
     "lvalue : ID LBRACKET expr RBRACKET"
-    var = VariableAccessNode(symbols[1])
-    symbols[0] = ArrayAccessNode(var, symbols[3])
+    variable = VariableAccessNode(symbols[1])
+    symbols[0] = ArrayAccessNode(variable, symbols[3])
     symbols[0].line_number = symbols.lineno(2)
+    variable.parent_node = symbols[0]
+    symbols[3].parent_node = symbols[0]
     
 def p_lvalue_array_lvalue(symbols):
     "lvalue : lvalue LBRACKET expr RBRACKET"
     symbols[0] = ArrayAccessNode(symbols[1], symbols[3])
     symbols[0].line_number = symbols.lineno(2)
+    symbols[1].parent_node = symbols[0]
+    symbols[3].parent_node = symbols[0]
     
 # A group of expressions separated by semicolons.
 def p_expr_seq_empty(symbols):
@@ -224,18 +253,20 @@ def p_expr_seq_multiple(symbols):
     "expr_seq : expr_seq SEMICOLON expr"
     symbols[0] = symbols[1]
     symbols[0].expressions.append(symbols[3])
+    symbols[3].parent_node = symbols[0] 
 
 def p_expr_seq_single(symbols):
     "expr_seq : expr"
     symbols[0] = ExpressionSequenceNode()
     symbols[0].expressions.append(symbols[1])
+    symbols[1].parent_node = symbols[0]
     
 # A group of declarations. No "special" characters between declarations!
 
 # A let expression with nothing between the in and end is valid.
 def p_dec_group_empty(symbols):
     "dec_group : "
-    symbols[0] = ([],[], []) 
+    symbols[0] = ([], [], []) 
     
 def p_dec_group_multiple(symbols):
     "dec_group : dec_group dec"
@@ -248,7 +279,7 @@ def p_dec_group_multiple(symbols):
 # to assign values for each one of the fields of a record.
 def p_field_list_empty(symbols):
     "field_list : "
-    symbols[0] = ([],[])
+    symbols[0] = ([], [])
 
 def p_field_list_single(symbols):
     "field_list : field_assign"
@@ -272,7 +303,7 @@ def p_expr_list_empty(symbols):
 def p_expr_list_multiple(symbols):
     "expr_list : expr_list COMMA expr"
     symbols[0] = symbols[1]
-    symbols[0].append(symbols[3])    
+    symbols[0].append(symbols[3])
     
 def p_expr_list_single(symbols):
     "expr_list : expr"
@@ -302,7 +333,8 @@ def p_dec_func_dec_group(symbols):
 def p_func_dec_group_single(symbols):
     "func_dec_group : func_dec"
     symbols[0] = FunctionDeclarationGroupNode()
-    symbols[0].declarations.append(symbols[1]) 
+    symbols[0].declarations.append(symbols[1])
+    symbols[1].parent_node = symbols[0]  
     
 # What is a group of function declarations? A group of function 
 # declarations followed by a function declaration.
@@ -310,12 +342,14 @@ def p_func_dec_group_multiple(symbols):
     "func_dec_group : func_dec_group func_dec"
     symbols[0] = symbols[1]
     symbols[0].declarations.append(symbols[2])
+    symbols[2].parent_node = symbols[0]
 
 # What is a group of type declarations? A type declaration.
 def p_type_dec_group_single(symbols):
     "type_dec_group : type_dec"
     symbols[0] = TypeDeclarationGroupNode()
     symbols[0].declarations.append(symbols[1])
+    symbols[1].parent_node = symbols[0]
 
 # What is a group of type declarations? A group 
 # of type declarations followed by a type declaration.
@@ -323,6 +357,7 @@ def p_type_dec_group_multiple(symbols):
     "type_dec_group : type_dec_group type_dec"
     symbols[0] = symbols[1]
     symbols[0].declarations.append(symbols[2])
+    symbols[2].parent_node = symbols[0]
 
 # Type declarations.
 def p_type_dec(symbols):
@@ -372,22 +407,26 @@ def p_var_dec_without_type(symbols):
     "var_dec : VAR ID ASSIGN expr"
     symbols[0] = InferredVariableDeclarationNode(symbols[2], symbols[4])
     symbols[0].line_number = symbols.lineno(1)
+    symbols[4].parent_node = symbols[0]
 
 def p_var_dec_with_type(symbols):
     "var_dec : VAR ID COLON ID ASSIGN expr"
     symbols[0] = StaticVariableDeclarationNode(symbols[2], symbols[6], symbols[4])
     symbols[0].line_number = symbols.lineno(1)
+    symbols[4].parent_node = symbols[0]
 
 # Function declaration.
 def p_func_dec_without_return(symbols):
     "func_dec : FUNCTION ID LPAREN field_types RPAREN EQ expr"
     symbols[0] = ProcedureDeclarationNode(symbols[2], symbols[4][0], symbols[4][1], symbols[7])
     symbols[0].line_number = symbols.lineno(1)
+    symbols[7].parent_node = symbols[0]
 
 def p_func_dec_with_return(symbols):
     "func_dec : FUNCTION ID LPAREN field_types RPAREN COLON ID EQ expr"
     symbols[0] = FunctionDeclarationNode(symbols[2], symbols[4][0], symbols[4][1], symbols[9], symbols[7])
-    symbols[0].line_number = symbols.lineno(1)    
+    symbols[0].line_number = symbols.lineno(1)
+    symbols[9].parent_node = symbols[0]
 
 
 _cachedir = os.path.abspath(os.path.join(os.path.dirname(__file__), 'cache'))
