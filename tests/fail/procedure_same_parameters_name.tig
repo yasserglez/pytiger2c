@@ -1,0 +1,4 @@
+let
+    function f(a: int, a: string, b: int, b: string) = ()
+in
+end
