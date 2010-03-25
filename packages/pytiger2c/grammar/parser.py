@@ -395,8 +395,8 @@ _cachedir = os.path.abspath(os.path.join(os.path.dirname(__file__), 'cache'))
 #                    debugfile=os.path.join(_cachedir, 'parser.txt'))
 # Comment the previous line and uncomment the following when
 # the grammar is OK to enable running PLY in optimization mode.
-parser = yacc.yacc(debug=False, optimize=True, outputdir=_cachedir, tabmodule='parser',
-                   debugfile=os.path.join(_cachedir, 'parser.txt'))
+parser = yacc.yacc(debug=False, write_tables=False, optimize=True, outputdir=_cachedir, 
+                   tabmodule='parser', debugfile=os.path.join(_cachedir, 'parser.txt'))
 
 
 # The following is used to debug the parser. It will parse input read from 
