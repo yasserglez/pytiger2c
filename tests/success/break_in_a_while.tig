@@ -1,0 +1,10 @@
+let 
+    var i := 0
+in
+    while i < 10 do 
+    (
+        if i >= 5 then break;
+        print("This should be printed 5 times.\n");
+        i := i + 1
+    )
+end

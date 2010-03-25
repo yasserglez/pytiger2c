@@ -1,0 +1,26 @@
+/* This is a Tiger program that uses /* nested */ comments. */
+
+let
+    /* /* Double opened
+    ...and
+    */ ...double closed. */
+    var i := 0
+in
+    /* Opened here,
+       and re-opened here: /*
+    
+    print(i);
+    
+    first closed */
+    
+    i := i + 1;
+    
+    second closed. */
+    
+    i := i + 41 /* Nested /* /* */ /* /* here */ */ */ */;
+    print(i); print("\n")
+    
+    /* This /* */ causes any /**/ trouble? */
+end
+
+/* /* /* */ /* */ */ /* */ */
