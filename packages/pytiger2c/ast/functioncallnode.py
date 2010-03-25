@@ -99,7 +99,7 @@ class FunctionCallNode(ValuedExpressionNode):
                         errors.append(message)
                     elif (param_type != param.return_type and 
                           not (isinstance(param_type, RecordType)
-                               and isinstance(param, NilType))):
+                               and isinstance(param.return_type, NilType))):
                         message = 'Invalid type of the argument #{index} ' \
                                   'of the function {name} at line {line}'
                         message = message.format(name=self._name,

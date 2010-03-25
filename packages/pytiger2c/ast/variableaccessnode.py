@@ -13,7 +13,7 @@ class VariableAccessNode(AccessNode):
     
     Representa la estructura de acceso a variable del lenguaje Tiger. La 
     estructura de acceso a variable del leguaje Tiger permite obtener el valor
-    de una variable y asignare un nuevo valor a esta. Esta estructura recive
+    de una variable y asignare un nuevo valor a esta. Esta estructura recibe
     el nombre de la variable que representa.
     """
     
@@ -54,7 +54,7 @@ class VariableAccessNode(AccessNode):
         """
         self._scope = scope
         try:
-            self._read_only = self.scope.get_variable_readonly(self.name)
+            self._read_only = self.scope.get_variable_read_only(self.name)
             self._return_type = self.scope.get_variable_definition(self.name)
         except ValueError:
             message = 'The name {name} used at line {line} is not a variable'

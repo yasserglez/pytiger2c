@@ -12,11 +12,11 @@ class RecordAccessNode(AccessNode):
     """
     Clase C{RecordAccessNode} del árbol de sintáxis abstracta.
     
-    Representa la estructura de acceso a un campo de un C{record} del lenguaje
-    Tiger. La estructura de acceso a un campo de un C{record} del lenguaje 
-    Tiger permite obtener el valor de un campo de un tipo C{record} determinado 
-    o asignarle un nuevo valor a este C{record} en este campo. Esta estructura 
-    recibe la expresión que representa el acceso al C{record} y el nombre 
+    Representa la estructura de acceso a un campo de un record del lenguaje
+    Tiger. La estructura de acceso a un campo de un record del lenguaje 
+    Tiger permite obtener el valor de un campo de un tipo record determinado 
+    o asignarle un nuevo valor a este record en este campo. Esta estructura 
+    recibe la expresión que representa el acceso al record y el nombre 
     correspondiente al campo que se quiere acceder. 
     """
     
@@ -30,25 +30,24 @@ class RecordAccessNode(AccessNode):
     
     def _get_record(self):
         """
-        Método para obtener el valor de la propiedad C{record}.
+        Método para obtener el valor de la propiedad record.
         """
         return self._record
     
     record = property(_get_record)
     
-    def __init__(self, record_expression, field_name):
+    def __init__(self, record, field_name):
         """
         Inicializa la clase C{RecordAccessNode}.
         
-        @type record_expression: C{LanguageNode}
-        @param record_expression: Expresión correspondiente al C{record} 
-            que se quiere acceder.
+        @type record: C{LanguageNode}
+        @param record: Expresión correspondiente al record que se quiere acceder.
             
         @type field_name: C{str}
-        @param field_name: Nombre del campo al que se quiere acceder.
+        @param field_name: Nombre del campo del record al que se quiere acceder.
         """
         super(RecordAccessNode, self).__init__()
-        self._record = record_expression
+        self._record = record
         self._field_name = field_name
         
     def check_semantics(self, scope, errors):
@@ -57,16 +56,16 @@ class RecordAccessNode(AccessNode):
         el método consulte la documentación del método C{check_semantics}
         en la clase C{LanguageNode}.
         
-        La estructura de acceso a un campo de un C{record} del lenguaje Tiger
-        permite obtener el valor de un campo de un tipo C{record} determinado 
-        o asignarle un nuevo valor a este C{record} en este campo. Esta 
-        estructura recibe la expresión que representa el acceso al C{record} 
+        La estructura de acceso a un campo de un record del lenguaje Tiger
+        permite obtener el valor de un campo de un tipo record determinado 
+        o asignarle un nuevo valor a este record en este campo. Esta 
+        estructura recibe la expresión que representa el acceso al record 
         y el nombre correspondiente al campo que se quiere acceder.
         
         En la comprobación semántica de este nodo del árbol de sintáxis abstracta
-        se verifica que la expresión que se correspondiente al C{record} retorne
-        valor y que este sea del tipo C{record}, luego se comprueba que el tipo 
-        C{record} tenga un campo con ese nombre. 
+        se verifica que la expresión que se correspondiente al record retorne
+        valor y que este sea del tipo record, luego se comprueba que el tipo 
+        record tenga un campo con ese nombre. 
         
         En el proceso de comprobación semántica toma valor las propiedades
         C{return_type} y C{read_only} 

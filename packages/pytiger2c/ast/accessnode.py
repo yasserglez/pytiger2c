@@ -10,6 +10,11 @@ from pytiger2c.ast.valuedexpressionnode import ValuedExpressionNode
 class AccessNode(ValuedExpressionNode):
     """
     Clase C{AccessNode} del árbol de sintáxis abstracta.
+    
+    Esta clase es la clase base para los nodos del árbol de sintáxis abstracta
+    representando el acceso a una variable, un record o un array en el 
+    lenguaje Tiger. Para más información consulte la documentación de las clases
+    C{VariableAccessNode}, C{RecordAccessNode} y C{ArrayAccessNode}.
     """
     
     def _get_read_only(self):

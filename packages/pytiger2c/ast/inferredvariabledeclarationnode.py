@@ -51,7 +51,7 @@ class InferredVariableDeclarationNode(VariableDeclarationNode):
         variable es definida en su ámbito local.
         """
         self._scope = scope
-        self.value.check_semantics(self._scope, errors)
+        self.value.check_semantics(self.scope, errors)
         
         if not self.value.has_return_value():
             message = 'Non-valued expression assigned to a variable at line {line}'
@@ -63,7 +63,7 @@ class InferredVariableDeclarationNode(VariableDeclarationNode):
             self._type = self.value.return_type
         
         try:
-            self._scope.define_variable(self.name, self.type)
+            self.scope.define_variable(self.name, self.type)
         except ValueError:
             message = 'Could not hide a variable defined in the same scope at line {line}'
             errors.append(message.format(line=self.line_number))

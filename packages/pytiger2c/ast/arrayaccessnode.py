@@ -25,7 +25,7 @@ class ArrayAccessNode(AccessNode):
         """
         Método para obtener el valor de la propiedad array.
         """
-        return self._array_expression
+        return self._array
     
     array = property(_get_array)
     
@@ -37,20 +37,19 @@ class ArrayAccessNode(AccessNode):
     
     position = property(_get_position)
     
-    def __init__(self, array_expression, position):
+    def __init__(self, array, position):
         """
         Inicializa la clase C{ArrayAccessNode}.
         
-        @type array_expression: C{LanguageNode}
-        @param array_expression: Expresión correspondiente al array que se 
-            quiere acceder.
+        @type array: C{LanguageNode}
+        @param array: Expresión correspondiente al array que se quiere acceder.
             
         @type position: C{LanguageNode}
         @param position: Expresión correspondiente a la posición del array
             que se quiere acceder.
         """
         super(ArrayAccessNode, self).__init__()
-        self._array_expression = array_expression
+        self._array = array
         self._position = position
 
     def check_semantics(self, scope, errors):
@@ -71,7 +70,7 @@ class ArrayAccessNode(AccessNode):
         expresión de la posición retorne valor y que este sea de tipo entero. 
         
         En el proceso de comprobación semántica toman valor las propiedades
-        C{return_type} y C{read_only} 
+        C{return_type} y C{read_only}
         """
         self._scope = scope
         self.array.check_semantics(self.scope, errors)
@@ -80,7 +79,6 @@ class ArrayAccessNode(AccessNode):
             array_type = self.array.return_type
             if isinstance(array_type, ArrayType):
                 self._return_type = array_type.fields_types[0]
-                self._read_only = self.array.read_only
             else:
                 self._return_type = None
                 message = 'Invalid array access on a non array type at line {line}'
@@ -93,7 +91,6 @@ class ArrayAccessNode(AccessNode):
             elif self.position.return_type != IntegerType():
                 message = 'Invalid non integer position for array access at line {line}'
                 errors.append(message.format(line=self.line_number))
-            
         else:
             message = 'Invalid array access on a non valued expression at line {line}'
             errors.append(message.format(line=self.line_number))
