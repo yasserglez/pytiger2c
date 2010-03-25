@@ -59,6 +59,8 @@ class ProcedureDeclarationNode(CallableDeclarationNode):
         Luego, se comprueba semánticamente el cuerpo del procedimiento, el cual no 
         debe tener valor de retorno.
         """
+        errors_before = len(errors)
+        
         # Create and populate the scope with the parameters.
         self._scope = Scope(scope)
         for parameter_name, parameter_type in zip(self.parameters_names, 
@@ -67,6 +69,10 @@ class ProcedureDeclarationNode(CallableDeclarationNode):
             
         # Check semantics of the body.        
         self.body.check_semantics(self.scope, errors)
+        
+        if errors_before != len(errors):
+            return
+        
         if self.body.has_return_value():
             message = 'The body of the procedure {name} defined ' \
                       'at line {line} returns value'

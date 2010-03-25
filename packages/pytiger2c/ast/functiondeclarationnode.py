@@ -80,6 +80,8 @@ class FunctionDeclarationNode(CallableDeclarationNode):
         Luego, se comprueba semánticamente el cuerpo de la función, el cual 
         debe tener valor de retorno.
         """
+        errors_before = len(errors)
+        
         # Create and populate the scope with the parameters.
         self._scope = Scope(scope)
         for parameter_name, parameter_type in zip(self.parameters_names, 
@@ -88,6 +90,10 @@ class FunctionDeclarationNode(CallableDeclarationNode):
         
         # Check semantics of the body.        
         self.body.check_semantics(self.scope, errors)
+        
+        if errors_before != len(errors):
+            return
+        
         if not self.body.has_return_value():
             message = 'The body of the function {name} defined at ' \
                       'line {line} does not return a value'
