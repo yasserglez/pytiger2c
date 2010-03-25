@@ -18,10 +18,10 @@ class RecordDeclarationNode(TypeDeclarationNode):
         Inicializa la clase C{RecordDeclarationNode}.
         
         @type fields_names: C{list}
-        @param fields_names: Lista con los nombres de los campos del C{record}, por pocisión.
+        @param fields_names: Lista con los nombres de los campos del record, por posición.
         
         @type fields_typenames: C{list}
-        @param fields_typenames: Lista con los nombres de los tipos de los campos, por pocisión.
+        @param fields_typenames: Lista con los nombres de los tipos de los campos, por posición.
         
         Para obtener información acerca del resto de los parámetros recibidos 
         por el método consulte la documentación del método C{__init__}
@@ -37,7 +37,7 @@ class RecordDeclarationNode(TypeDeclarationNode):
         en la clase C{LanguageNode}.
         
         En la comprobación semántica de este nodo del árbol de sintáxis 
-        abstracta se comprueba que los tipos de los campos del C{record}
+        abstracta se comprueba que los tipos de los campos del record
         se encuentren definidos en el ámbito local.
         
         Se reportarán errores semánticos si alguno de los tipos de los campos

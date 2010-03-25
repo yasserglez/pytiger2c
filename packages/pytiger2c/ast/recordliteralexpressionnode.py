@@ -13,11 +13,11 @@ class RecordLiteralExpressionNode(ValuedExpressionNode):
     """
     Clase C{RecordLiteralExpressionNode} del árbol de sintáxis abstracta.
     
-    Representa la creación de una instancia de un tipo C{record} definido con 
-    anterioridad. La creación de una instancia de un tipo C{record} recibe el 
-    nombre del tipo de C{record} que se quiere crear, una lista con los nombres
-    de los campos del C{record} y otra lista con las expresiones correspondientes
-    a los valores que se le quieren dar a cada campo del C{record}.
+    Representa la creación de una instancia de un tipo record definido con 
+    anterioridad. La creación de una instancia de un tipo record recibe el 
+    nombre del tipo de record que se quiere crear, una lista con los nombres
+    de los campos del record y otra lista con las expresiones correspondientes
+    a los valores que se le quieren dar a cada campo del record.
     """
     
     def _get_type_name(self):
@@ -49,7 +49,7 @@ class RecordLiteralExpressionNode(ValuedExpressionNode):
         Inicializa la clase C{RecordLiteralExpressionNode}.
         
         @type type_name: C{str}
-        @param type_name: Nombre del tipo C{record} que se quiere crear.
+        @param type_name: Nombre del tipo record que se quiere crear.
         
         @type fields_names: C{list}
         @param fields_names: Lista con los nombres de los campos del record, en
@@ -70,17 +70,17 @@ class RecordLiteralExpressionNode(ValuedExpressionNode):
         por el método consulte la documentación del método C{check_semantics}
         en la clase C{LanguageNode}.
         
-        La creación de una instancia de un tipo C{record} recibe el nombre del 
-        tipo de C{record} que se quiere crear, una lista con los nombres de los
-        campos del C{record} y otra lista con las expresiones correspondientes
-        a los valores que se le quieren dar a cada campo del C{record}.
+        La creación de una instancia de un tipo record recibe el nombre del 
+        tipo de record que se quiere crear, una lista con los nombres de los
+        campos del record y otra lista con las expresiones correspondientes
+        a los valores que se le quieren dar a cada campo del record.
         
         En la comprobación semántica de este nodo del árbol de sintáxis abstracta
-        se comprueba que el tipo C{record} que se quiere crear ha sido definido
+        se comprueba que el tipo record que se quiere crear ha sido definido
         en el ámbito correspondiente, luego se comprueban que los campos.Cada 
         campo debe tener exactamente el mismo nombre que el campo correspondiente 
         en la declaración del tipo, en cuanto al tipo deben corresponder de igual 
-        manera, con la excepción de un tipo C{record} en cuyo caso, es permitido 
+        manera, con la excepción de un tipo record en cuyo caso, es permitido 
         también el tipo C{nil}.          
         """
         self._scope = scope
@@ -111,7 +111,7 @@ class RecordLiteralExpressionNode(ValuedExpressionNode):
         Comprueba semánticamente los campos dados. Cada campo debe tener exactamente 
         el mismo nombre que el campo correspondiente en la declaración del tipo, en
         cuanto al tipo deben corresponder de igual manera, con la excepción de un 
-        tipo C{record} en cuyo caso, es permitido también el tipo C{nil}
+        tipo record en cuyo caso, es permitido también el tipo C{nil}
         
         @type errors: C{list}
         @param errors: Lista a la cual se deben añadir los mensajes de error de

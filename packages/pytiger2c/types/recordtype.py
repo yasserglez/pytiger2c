@@ -47,10 +47,10 @@ class RecordType(TigerType):
         Inicializa la clase representando el tipo record.
         
         @type fields_names: C{list}
-        @param fields_names: Lista con los nombres de los campos del C{record}, por pocisión.
+        @param fields_names: Lista con los nombres de los campos del record, por posición.
         
         @type fields_typenames: C{list}
-        @param fields_typenames: Lista con los nombres de los tipos de los campos, por pocisión.
+        @param fields_typenames: Lista con los nombres de los tipos de los campos, por posición.
         """
         super(RecordType, self).__init__()
         self._fields_typenames = fields_typenames
