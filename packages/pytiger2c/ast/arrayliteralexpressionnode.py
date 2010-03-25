@@ -65,7 +65,9 @@ class ArrayLiteralExpressionNode(ValuedExpressionNode):
         super(ArrayLiteralExpressionNode, self).__init__()
         self._type_name = type_name
         self._count = count
+        self._count.parent_node = self
         self._value = value
+        self._value.parent_node = self
 
     def check_semantics(self, scope, errors):
         """
@@ -89,21 +91,34 @@ class ArrayLiteralExpressionNode(ValuedExpressionNode):
         declaración del tipo de array.        
         """
         self._scope = scope
+        
+        errors_before = len(errors)
+        
         try:
             self._return_type = self.scope.get_type_definition(self.type_name)
         except KeyError:
-            message = 'Undefined type {type_name} at line {line}'
-            errors.append(message.format(type_name = self._type_name, 
-                                         line=self.line_number))
+            message = 'Undefined type {type} at line {line}'
+            errors.append(message.format(type=self._type_name, line=self.line_number))
+            return
+            
         if isinstance(self.return_type, ArrayType):
             self.count.check_semantics(self.scope, errors)
+            if errors_before != len(errors):
+                return            
+            
             if not self.count.has_return_value():
                 message = 'Non value expression for the array length at line {line}'
                 errors.append(message.format(line=self.line_number))
+                return
             elif self.count.return_type != IntegerType():
                 message = 'Non integer expression for the array length at line {line}'
                 errors.append(message.format(line=self.line_number))
+                return
+                
             self.value.check_semantics(self.scope, errors)
+            if errors_before != len(errors):
+                return
+                        
             if not self.value.has_return_value():
                 message = 'Non valued expression for the array value at line {line}'
                 errors.append(message.format(line=self.line_number))

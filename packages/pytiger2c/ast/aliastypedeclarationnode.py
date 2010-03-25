@@ -29,12 +29,12 @@ class AliasTypeDeclarationNode(TypeDeclarationNode):
         """
         Inicializa la clase C{AliasTypeDeclarationNode}.
         
-        @type alias_typename: C{str}
-        @param alias_typename: Nombre del tipo al que se le define el alias.
-        
         Para obtener información acerca del resto de los parámetros recibidos 
         por el método consulte la documentación del método C{__init__}
-        en la clase C{TypeDeclarationNode}. 
+        en la clase C{TypeDeclarationNode}.         
+        
+        @type alias_typename: C{str}
+        @param alias_typename: Nombre del tipo al que se le define el alias.
         """
         super(AliasTypeDeclarationNode, self).__init__(name)
         self._alias_typename = alias_typename
@@ -44,5 +44,4 @@ class AliasTypeDeclarationNode(TypeDeclarationNode):
         Para obtener información acerca de los parámetros recibidos por
         el método consulte la documentación del método C{check_semantics}
         en la clase C{LanguageNode}.
-	"""
-
+	    """

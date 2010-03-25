@@ -15,7 +15,7 @@ class AssignmentNode(NonValuedExpressionNode):
     
     Representa la estructura de asignación del lenguaje Tiger. La estructura 
     de asignación tiene una expresion (lvalue) de acceso a una variable, un 
-    elemento de un C{array} o un campo de un record y un valor que se le 
+    elemento de un array o un campo de un record y un valor que se le 
     asignará a este acceso.
     """
     
@@ -34,7 +34,6 @@ class AssignmentNode(NonValuedExpressionNode):
         return self._expression
     
     expression = property(_get_expression)
-        
     
     def __init__(self, lvalue, expression):
         """
@@ -48,7 +47,9 @@ class AssignmentNode(NonValuedExpressionNode):
         """
         super(AssignmentNode, self).__init__()
         self._lvalue = lvalue
+        self._lvalue.parent_node = self
         self._expression = expression
+        self._expression.parent_node = self
 
     def check_semantics(self, scope, errors):
         """
@@ -57,7 +58,7 @@ class AssignmentNode(NonValuedExpressionNode):
         en la clase C{LanguageNode}.
         
         La estructura de asignación tiene una expresion (lvalue) de acceso a una
-        variable, un elemento de un C{array} o un campo de un record y un 
+        variable, un elemento de un array o un campo de un record y un 
         valor que se le asignará a este acceso.
         
         En la comprobación semántica de este nodo del árbol se comprueban 
@@ -71,9 +72,17 @@ class AssignmentNode(NonValuedExpressionNode):
         """
         self._scope = scope
         
+        errors_before = len(errors)        
+        
         self.lvalue.check_semantics(self.scope, errors)
         
+        if errors_before != len(errors):
+            return           
+        
         self.expression.check_semantics(self.scope, errors)
+        
+        if errors_before != len(errors):
+            return        
         
         if self.lvalue.read_only:
             message = 'Invalid use of assignment to a read only variable at line {line}'

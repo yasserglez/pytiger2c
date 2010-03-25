@@ -50,7 +50,9 @@ class ArrayAccessNode(AccessNode):
         """
         super(ArrayAccessNode, self).__init__()
         self._array = array
+        self._array.parent_node = self
         self._position = position
+        self._position.parent_node = self
 
     def check_semantics(self, scope, errors):
         """
@@ -83,6 +85,7 @@ class ArrayAccessNode(AccessNode):
                 self._return_type = None
                 message = 'Invalid array access on a non array type at line {line}'
                 errors.append(message.format(line=self.line_number))
+
             self.position.check_semantics(self.scope, errors)
             if not self.position.has_return_value():
                 message = 'The expression for the position in the array does ' \
