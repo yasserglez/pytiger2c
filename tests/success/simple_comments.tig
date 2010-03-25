@@ -16,9 +16,9 @@ in
      * This is a comment block inside the code part.  *
      **************************************************/
     
-    print("What's the value of i here? "); /* A comment between prints. */ print(i);
+    print("What's the value of i here? "); /* A comment between prints. */ printi(i);
     /* Do not print this: print(i); */ /* print(j); */
-    print /* Ignore this */ ( /* this */ i /* this */ ) /* and, of course, this. */ ;
+    printi /* Ignore this */ ( /* this */ i /* this */ ) /* and, of course, this. */ ;
     print("\n")
 end
 

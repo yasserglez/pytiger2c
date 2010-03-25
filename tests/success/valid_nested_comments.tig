@@ -9,7 +9,7 @@ in
     /* Opened here,
        and re-opened here: /*
     
-    print(i);
+    printi(i);
     
     first closed */
     
@@ -18,7 +18,7 @@ in
     second closed. */
     
     i := i + 41 /* Nested /* /* */ /* /* here */ */ */ */;
-    print(i); print("\n")
+    printi(i); print("\n")
     
     /* This /* */ causes any /**/ trouble? */
 end
