@@ -86,17 +86,13 @@ def p_expr_lvalue(symbols):
 # Creating a new array.
 def p_expr_array(symbols):
     "expr : ID LBRACKET expr RBRACKET OF expr"
-    symbols[0] = ArrayLiteralExpressionNode(symbols[1], 
-                                            symbols[3], 
-                                            symbols[6])
+    symbols[0] = ArrayLiteralExpressionNode(symbols[1], symbols[3], symbols[6])
     symbols[0].line_number = symbols.lineno(1)
 
 # Creating a new record.
 def p_expr_record(symbols):
     "expr : ID LBRACE field_list RBRACE"
-    symbols[0] = RecordLiteralExpressionNode(symbols[1], 
-                                             symbols[3][0], 
-                                             symbols[3][1]) 
+    symbols[0] = RecordLiteralExpressionNode(symbols[1], symbols[3][0], symbols[3][1]) 
     symbols[0].line_number = symbols.lineno(1)
     
 # Unary minus. 
@@ -194,9 +190,7 @@ def p_expr_break(symbols):
 # The let block.
 def p_expr_let(symbols):
     "expr : LET dec_group IN expr_seq END"    
-    symbols[0] = LetNode(symbols[2][0], 
-                         symbols[2][1],
-                         symbols[2][2], symbols[4])
+    symbols[0] = LetNode(symbols[2][0], symbols[2][1], symbols[2][2], symbols[4])
     symbols[0].line_number = symbols.lineno(1)
     
 # What is a left value of an assignment expression?
@@ -250,7 +244,6 @@ def p_dec_group_multiple(symbols):
     symbols[0][1].extend(symbols[2][1])
     symbols[0][2].extend(symbols[2][2])
     
-
 # A list of field names, the equals character and an expression 
 # to assign values for each one of the fields of a record.
 def p_field_list_empty(symbols):
@@ -286,11 +279,9 @@ def p_expr_list_single(symbols):
     symbols[0] = []
     symbols[0].append(symbols[1])   
 
-# What is a declaration? A block of continous 
-# type declarations. Mutually recursive type
-# declarations must be defined without any 
-# variable or function declaration between
-# the definition of any of it.
+# What is a declaration? A block of continuous type declarations. 
+# Mutually recursive type declarations must be defined without any 
+# variable or function declaration in between.
 def p_dec_type_dec_group(symbols):
     "dec : type_dec_group"
     symbols[0] = ([symbols[1]], [], [])
@@ -300,39 +291,34 @@ def p_dec_var(symbols):
     "dec : var_dec"
     symbols[0] = ([], [], [symbols[1]])
 
-# What is a declaration? A block of continous 
-# functions declarations. Mutually recursive 
-# functions declarations must be defined without 
-# any variable or type declaration between the 
-#definition of any of it.
+# What is a declaration? A block of continuous functions declarations. 
+# Mutually recursive function declarations must be defined without any 
+# variable or type declaration in between. 
 def p_dec_func_dec_group(symbols):
     "dec : func_dec_group"
     symbols[0] = ([], [symbols[1]], [])
 
-# What is a group of function declarations? 
-# A function declaration.
+# What is a group of function declarations? A function declaration.
 def p_func_dec_group_single(symbols):
     "func_dec_group : func_dec"
     symbols[0] = FunctionDeclarationGroupNode()
     symbols[0].declarations.append(symbols[1]) 
     
-# What is a group of function declarations? 
-# A group of function declarations follow by
-# a function declaration.
+# What is a group of function declarations? A group of function 
+# declarations followed by a function declaration.
 def p_func_dec_group_multiple(symbols):
     "func_dec_group : func_dec_group func_dec"
     symbols[0] = symbols[1]
     symbols[0].declarations.append(symbols[2])
 
-# What is a group of type declarations? A type 
-# declaration.
+# What is a group of type declarations? A type declaration.
 def p_type_dec_group_single(symbols):
     "type_dec_group : type_dec"
     symbols[0] = TypeDeclarationGroupNode()
     symbols[0].declarations.append(symbols[1])
 
 # What is a group of type declarations? A group 
-# of type declarations follow by a type declaration.
+# of type declarations followed by a type declaration.
 def p_type_dec_group_multiple(symbols):
     "type_dec_group : type_dec_group type_dec"
     symbols[0] = symbols[1]
@@ -348,18 +334,17 @@ def p_type_dec(symbols):
 # What is a valid type? An alias for a previously defined type.
 def p_type_alias(symbols):
     "type : ID"
-    symbols[0] = AliasTypeDeclarationNode("", symbols[1])
+    symbols[0] = AliasTypeDeclarationNode(None, symbols[1])
 
 # What is a valid type? The definition of the fields of a record.
 def p_type_record(symbols):
     "type : LBRACE field_types RBRACE"
-    symbols[0] = RecordDeclarationNode("", symbols[2][0], symbols[2][1])
+    symbols[0] = RecordDeclarationNode(None, symbols[2][0], symbols[2][1])
     
-
 # What is a valid type? An array definition.
 def p_type_array(symbols):
     "type : ARRAY OF ID"
-    symbols[0] = ArrayDeclarationNode("", symbols[3])
+    symbols[0] = ArrayDeclarationNode(None, symbols[3])
 
 # A list of field types declaration separated by commas.
 def p_field_types_empty(symbols):
@@ -388,13 +373,11 @@ def p_var_dec_without_type(symbols):
     symbols[0] = InferredVariableDeclarationNode(symbols[2], symbols[4])
     symbols[0].line_number = symbols.lineno(1)
 
-
 def p_var_dec_with_type(symbols):
     "var_dec : VAR ID COLON ID ASSIGN expr"
     symbols[0] = StaticVariableDeclarationNode(symbols[2], symbols[6], symbols[4])
     symbols[0].line_number = symbols.lineno(1)
 
-    
 # Function declaration.
 def p_func_dec_without_return(symbols):
     "func_dec : FUNCTION ID LPAREN field_types RPAREN EQ expr"

@@ -20,38 +20,36 @@ class FunctionDeclarationGroupNode(DeclarationGroupNode):
     
     def collect_definitions(self, scope, errors):
         """        
-        Para obtener información acerca del resto de los parámetros recibidos 
-        por el método consulte la documentación del método C{check_semantics}
+        Para obtener información acerca de los parámetros recibidos por 
+        el método consulte la documentación del método C{check_semantics} 
         en la clase C{LanguageNode}.
         
+        Realiza la comprobación semántica de las cabeceras de las funciones
+        definidas en el grupo y además define en el ámbito dado las funciones
+        del grupo.
+        
+        Se reportarán errores si se produce alguno durante la comprobación 
+        semántica de las cabeceras de las funciones o si no puede ser
+        definida una función.
+        
         @rtype: C{set}
-        @return: Conjunto con los nombres de las funciones que se definen en 
-            este grupo.
-        
-        Realiza la definición en el ámbito dado de las funciones definidos en 
-        este grupo de declaraciones. 
-        
-        Se reportarán errores si no puede ser definida una función.        
+        @return: Conjunto con los nombres de las funciones definidas en este grupo.
         """
-        result = set()
+        definitions = set()
         for declaration_node in self._declarations:
-            name = declaration_node.name
             try:
-                scope.define_function(name, declaration_node.type)
+                declaration_node.check_header_semantics(scope, errors)
+                scope.define_function(declaration_node.name, declaration_node.type)
             except ValueError:
-                message = 'Function or variable with name {type_name}'\
-                          ' already defined in the local scope'
-                errors.append(message.format(type_name = name))
-            result.add(name)
-        
-        return result
+                message = 'The name of the function {name} at line {line} ' \
+                          'is already defined in this scope'
+                errors.append(message.format(name=declaration_node.name,
+                                             line=declaration_node.line_number))
+            definitions.add(declaration_node.name)
+        return definitions
 
     def check_semantics(self, scope, errors, used_types = None):
         """
-        @type used_types: C{list}
-        @param used_types: Lista de los nombres de los tipos usados en
-            el ámbito local.
-        
         Para obtener información acerca del resto de los parámetros recibidos 
         por el método consulte la documentación del método C{check_semantics}
         en la clase C{LanguageNode}.
@@ -68,6 +66,10 @@ class FunctionDeclarationGroupNode(DeclarationGroupNode):
         
         Se reportarán errores si se producen errores en la comprobación 
         semántica de alguna de las declaraciones contenidas en este grupo.
+        
+        @type used_types: C{list}
+        @param used_types: Lista de los nombres de los tipos usados en
+            el ámbito local.        
         """
         self._scope  = scope
         for declaration in self.declarations:

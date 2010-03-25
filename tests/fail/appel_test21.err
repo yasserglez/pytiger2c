@@ -1,3 +1,2 @@
-Semantic Error: Calling function nfactor with a wrong number of arguments at line 8.
 Semantic Error: Invalid use of times operator with a non-valued right expression at line 8.
 Semantic Error: The body of the procedure nfactor defined at line 5 returns value.

@@ -420,7 +420,6 @@ class FakeScope(Scope):
         """
         self.parent.define_type(self, name, tiger_type)
 
-
     def get_type_definition(self, name):
         """
         Para obtener información acerca de los parámetros recibidos por
@@ -450,7 +449,6 @@ class FakeScope(Scope):
             raise KeyError()
         else:
             return self.parent.get_function_definition(name)
-
 
     def define_variable(self, name, tiger_type, readonly=False):
         """

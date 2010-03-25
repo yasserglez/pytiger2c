@@ -10,7 +10,16 @@ from pytiger2c.ast.nonvaluedexpressionnode import NonValuedExpressionNode
 class DeclarationGroupNode(NonValuedExpressionNode):
     """
     Clase C{DeclarationGroupNode} del árbol de sintáxis abstracta.
+    
+    Este nodo del árbol de sintáxis abstracta es la clase base de los
+    nodos C{TypeDeclarationGroupNode} y C{FunctionDeclarationGroupNode},
+    los cuales representan un grupo de declaraciones consecutivas de tipos 
+    o funciones respectivamente. En nodos tienen el objetivo de garantizar
+    durante la comprobación semántica que no se hagan declaraciones de 
+    variables entre declaraciones de tipos o funciones mutuamente recursivas
+    ya que si esto sucede se producen situaciones ambiguas.
     """
+    
     def _get_declarations(self):
         """
         Método para obtener el valor de la propiedad C{declarations}.
@@ -28,12 +37,20 @@ class DeclarationGroupNode(NonValuedExpressionNode):
         
     def collect_definitions(self, scope, errors):
         """        
-        Para obtener información acerca del resto de los parámetros recibidos 
-        por el método consulte la documentación del método C{check_semantics}
+        Para obtener información acerca de los parámetros recibidos por 
+        el método consulte la documentación del método C{check_semantics} 
         en la clase C{LanguageNode}.
         
+        Este método define, recoge y devuelve las declaraciones de tipos o 
+        funciones (según sea el caso) hechas en el grupo de declaraciones 
+        representado por este nodo de sintáxis abstracta. Estos conjuntos de 
+        declaraciones se utilizan en la comprobación semántica de la estructura
+        C{let-in-end}, donde está contenido el grupo de declaraciones, para 
+        garantizar que no se hagan definiciones de tipos o funciones mutuamente 
+        recursivos iterrumpidos por declaraciones de variables.
+        
         @rtype: C{set}
-        @return: Conjunto con los nombres de los tipos o funciones que se 
-            definen en este  grupo.
+        @return: Conjunto con los nombres de los tipos o funciones 
+            definidos en este grupo.
         """
         raise NotImplementedError()

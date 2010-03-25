@@ -5,6 +5,7 @@ Clase C{CallableDeclarationNode} del árbol de sintáxis abstracta.
 """
 
 from pytiger2c.ast.declarationnode import DeclarationNode
+from pytiger2c.types.functiontype import FunctionType
 
 
 class CallableDeclarationNode(DeclarationNode):
@@ -15,6 +16,12 @@ class CallableDeclarationNode(DeclarationNode):
     del árbol de sintáxis abstracta. Esta clase tiene como objetivo factorizar los 
     métodos y propiedades comunes de las clases representando declaraciones de 
     procedimientos y funciones.
+    
+    La comprobación semántica de los nodos del árbol de sintáxis abstracta 
+    descendientes de este nodo está dividida en dos partes: la comprobación
+    semántica de la cabecera a través del método C{check_header_semantics} y
+    la comprobación semántica del cuerpo a través del método C{check_semantics}.
+    Para más información consulte la documentación de estos métodos.
     """
     
     def _get_name(self):
@@ -31,15 +38,7 @@ class CallableDeclarationNode(DeclarationNode):
         """
         return self._parameters_names
     
-    parameters_names = property(_get_parameters_names)
-    
-    def _get_parameters_types(self):
-        """
-        Método para obtener el valor de la propiedad C{parameters_types}.
-        """
-        return self._parameters_types
-    
-    parameters_types = property(_get_parameters_types)    
+    parameters_names = property(_get_parameters_names) 
     
     def _get_parameters_typenames(self):
         """
@@ -63,7 +62,7 @@ class CallableDeclarationNode(DeclarationNode):
         """
         return self._type
     
-    type = property(_get_type)    
+    type = property(_get_type)
 
     def __init__(self, name, parameters_names, parameters_typenames, body):
         """
@@ -89,31 +88,26 @@ class CallableDeclarationNode(DeclarationNode):
         self._name = name
         self._parameters_names = parameters_names
         self._parameters_typenames = parameters_typenames
-        self._parameters_types = []
         self._body = body
-        self._type = None
-
-    def _check_parameters_semantics(self, errors):
-        """
-        Método auxiliar utilizado por los métodos C{check_semantics} de las clases
-        C{ProcedureDeclarationNode} y C{FunctionDeclarationNode} para comprobar
-        semánticamente los parámetros de la función o procedimiento definido.
+        self._type = FunctionType(None, [], parameters_names)
         
-        Se comprueba que los tipos declarados para los parámetros de la función
-        o procedimiento esten definidos en el ámbito donde se está definiendo 
-        la función o en algún ambiente superior y que los parámetros tengan 
-        nombres diferentes. Los nombres de los tipos de los parámetros se
-        sustituyen por las instancias de C{TigerType} correspondientes. Luego, 
-        se añaden al ámbito las definiciones de las variables correspondientes 
-        a los parámetros recibidos por el procedimiento.  
-        
-        @type errors: C{list}
-        @param errors: Lista donde se deben añadir los mensajes de error que se
-            detecten durante la comprobación semántica realizada por este método.
+    def check_header_semantics(self, scope, errors):
         """
+        Este método realiza la comprobación semántica de la cabecera de la
+        comunes a las funciones y procedimientos. Como resultado de esta 
+        comprobación se reportará cualquier error relacionados con el nombre 
+        de la función o procedimiento, los parámetros, los tipos de los 
+        parámetros y además tomará valor la propiedad C{type} que contendrá 
+        el tipo de la función o procedimiento que define este nodo.
+        
+        Para obtener información acerca de los parámetros recibidos por 
+        el método consulte la documentación del método C{check_semantics} 
+        en la clase C{LanguageNode}.        
+        """
+        parameters_types = []
         for i, parameter_name in enumerate(self._parameters_typenames):
             try:
-                tiger_type = self.scope.get_type_definition(parameter_name)
+                tiger_type = scope.get_type_definition(parameter_name)
             except KeyError:
                 message = 'The type {type} of the parameter #{index} of the ' \
                           'callable {name} defined at line {line} is not defined'
@@ -121,14 +115,11 @@ class CallableDeclarationNode(DeclarationNode):
                                          name=self.name, line=self.line_number)
                 errors.append(message)
             else:
-                self._parameters_types.append(tiger_type)
-        for parameter_name, parameter_type in zip(self.parameters_names, 
-                                                  self.parameters_types):
-            try:
-                self.scope.define_variable(parameter_name, parameter_type)
-                self.scope.define_variable(parameter_name, parameter_type)
-            except ValueError:
-                message = 'At least two parameters of the callable {name} ' \
-                          'defined at line {line} have the same name'
-                message = message.format(type=parameter_name, name=self.name, 
-                                         line=self.line_number)
+                parameters_types.append(tiger_type)
+        if len(self._parameters_names) != len(set(self._parameters_names)):
+            message = 'At least two parameters of the callable {name} ' \
+                      'defined at line {line} have the same name'
+            message = message.format(type=parameter_name, name=self.name, 
+                                     line=self.line_number)            
+        self.type.parameters_types = parameters_types
+    
