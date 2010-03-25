@@ -55,6 +55,7 @@ class TypeDeclarationGroupNode(DeclarationGroupNode):
                               'defined in this scope at line {line}'
                     errors.append(message.format(name=declaration_node.name,
                                                  line=declaration_node.line_number))
+                    return definitions
                 else:                  
                     alias_dict[declaration_node.name] = declaration_node
             else:
@@ -65,6 +66,7 @@ class TypeDeclarationGroupNode(DeclarationGroupNode):
                               'defined in this scope at line {line}'
                     errors.append(message.format(name=declaration_node.name,
                                                  line=declaration_node.line_number))
+                    return definitions
             definitions.add(declaration_node.name)
         
         # Resolve the alias types. From now on, aliases will be direct
@@ -74,7 +76,8 @@ class TypeDeclarationGroupNode(DeclarationGroupNode):
             if alias_name in alias_dict:
                 self._resolve_alias(alias_name, scope, alias_dict, set(), alias_errors)
             if alias_errors:
-                errors.extend(alias_errors)     
+                errors.extend(alias_errors)
+                return definitions
         return definitions
 
     def check_semantics(self, scope, errors, local_types=None):
@@ -106,8 +109,11 @@ class TypeDeclarationGroupNode(DeclarationGroupNode):
             nombre en el ámbito local y en un ámbito superior.
         """
         self._scope  = scope
+        errors_before = len(errors)
         for declaration in self.declarations:
             declaration.check_semantics(self.scope, errors)
+            if errors_before != len(errors):
+                return            
 
     def _resolve_alias(self, alias_name, scope, alias_dict, referenced_aliases, errors):
         """
@@ -147,7 +153,8 @@ class TypeDeclarationGroupNode(DeclarationGroupNode):
             # The alias name must not be an backward_referenced alias.
             if alias_typename in referenced_aliases:
                 message = 'Infinite recursive alias definition of {name} at line {line}'
-                errors.append(message.format(name=alias_name, line=declaration_node.line_number)) 
+                errors.append(message.format(name=alias_name, line=declaration_node.line_number))
+                return tiger_type 
             else:
                 referenced_aliases.add(alias_name)
                 tiger_type = self._resolve_alias(alias_typename, scope, alias_dict, 
@@ -160,6 +167,7 @@ class TypeDeclarationGroupNode(DeclarationGroupNode):
                           'of alias {name} at line {line}'
                 errors.append(message.format(type=alias_typename, name=alias_name,
                                              line=declaration_node.line_number))
+                return tiger_type
                 
         del alias_dict[alias_name]
         try:

@@ -110,16 +110,24 @@ class LetNode(ValuedExpressionNode):
         all_functions = set()
         groups_functions = []
         
+        erros_before = len(errors)
+        
         # First pass through the nodes of the type declarations.
         for type_declaration_group in self._type_declaration_groups:
             group_types = type_declaration_group.collect_definitions(self.scope, errors)
             groups_types.append(group_types)
             all_types.update(group_types)
             
+        if erros_before != len(errors):
+            return
+            
         # Second pass through the nodes of the type declarations.
         for index, type_declaration_group in enumerate(self._type_declaration_groups):
             group_scope = FakeScope(self.scope, all_types - groups_types[index], set())
             type_declaration_group.check_semantics(group_scope, errors)
+            
+        if erros_before != len(errors):
+            return            
             
         # First pass through the nodes of the function declarations.
         for func_declaration_group in self._function_declaration_groups:
@@ -127,14 +135,23 @@ class LetNode(ValuedExpressionNode):
             groups_functions.append(group_functions)
             all_functions.update(group_functions)
             
+        if erros_before != len(errors):
+            return            
+            
         # The only pass through the nodes of the variable declarations.
         for variable_declaration in self._variable_declarations:
             variable_declaration.check_semantics(self.scope, errors)
+            
+        if erros_before != len(errors):
+            return             
             
         # Second pass through the nodes of the function declarations.
         for index, func_declaration_group in enumerate(self._function_declaration_groups):
             group_scope = FakeScope(self.scope, set(), all_functions - groups_functions[index])
             func_declaration_group.check_semantics(group_scope, errors)
+            
+        if erros_before != len(errors):
+            return            
         
         # The only pass through the expressions.
         self._expressions.check_semantics(self.scope, errors)

@@ -45,7 +45,9 @@ class FunctionDeclarationGroupNode(DeclarationGroupNode):
                           'is already defined in this scope'
                 errors.append(message.format(name=declaration_node.name,
                                              line=declaration_node.line_number))
-            definitions.add(declaration_node.name)
+                return definitions
+            else:
+                definitions.add(declaration_node.name)
         return definitions
 
     def check_semantics(self, scope, errors, used_types = None):
@@ -72,5 +74,8 @@ class FunctionDeclarationGroupNode(DeclarationGroupNode):
             el ámbito local.        
         """
         self._scope  = scope
+        errors_before = len(errors)
         for declaration in self.declarations:
             declaration.check_semantics(self.scope, errors)
+            if errors_before != len(errors):
+                return

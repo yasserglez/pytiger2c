@@ -120,6 +120,7 @@ class CallableDeclarationNode(DeclarationNode):
             message = 'At least two parameters of the callable {name} ' \
                       'defined at line {line} have the same name'
             message = message.format(type=parameter_name, name=self.name, 
-                                     line=self.line_number)            
+                                     line=self.line_number)
+            errors.append(message)            
         self.type.parameters_types = parameters_types
     
