@@ -55,7 +55,6 @@ class FunctionDeclarationNode(CallableDeclarationNode):
         super(FunctionDeclarationNode, self).check_header_semantics(scope, errors)
         try:
             self.type.return_type = scope.get_type_definition(self._return_typename)
-            self.type.defined = True
         except KeyError:
             message = 'Undefined return type {type} of the ' \
                       'function {name} defined at line {line}'

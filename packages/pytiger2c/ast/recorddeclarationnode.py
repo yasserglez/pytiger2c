@@ -63,4 +63,3 @@ class RecordDeclarationNode(TypeDeclarationNode):
             else:
                 fields_types.append(field_type)
         self.type.fields_types = fields_types
-        self.type.defined = True

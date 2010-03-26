@@ -76,4 +76,3 @@ class FunctionType(TigerType):
         self._return_type = return_type
         self._parameters_type = parameters_types
         self._parameters_typename = parameters_typename
-        self._defined = False

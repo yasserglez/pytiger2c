@@ -40,7 +40,6 @@ class ProcedureDeclarationNode(CallableDeclarationNode):
         en la clase C{LanguageNode}.        
         """
         super(ProcedureDeclarationNode, self).check_header_semantics(scope, errors)
-        self.type.defined = True
         
     def check_semantics(self, scope, errors):
         """
