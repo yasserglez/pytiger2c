@@ -21,7 +21,7 @@ class BasicType(TigerType):
         """
         Inicializa la clase representando los tipos básicos del Lenguaje Tiger.
         """
-        super(BasicType, self).__init__(True)
+        super(BasicType, self).__init__()
     
     def __eq__(self, other):
         """
