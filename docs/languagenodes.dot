@@ -1,4 +1,6 @@
 graph LanguageNodes {
+    rankdir = "LR";
+    bgcolor = "transparent"; 
     node [fontname="monospace",fontsize="10",shape="box"];
     edge [fontname="monospace",fontsize="10"];
     
