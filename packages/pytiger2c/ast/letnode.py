@@ -122,9 +122,11 @@ class LetNode(ValuedExpressionNode):
             return
             
         # Second pass through the nodes of the type declarations.
+        types_fake_scope = FakeScope(self.scope)
         for index, type_declaration_group in enumerate(self._type_declaration_groups):
-            group_scope = FakeScope(self.scope, all_types - groups_types[index], set())
-            type_declaration_group.check_semantics(group_scope, errors)
+            types_fake_scope.current_siblings = all_types - groups_types[index]
+            type_declaration_group.check_semantics(types_fake_scope, errors)
+        types_fake_scope.current_siblings = None
             
         if erros_before != len(errors):
             return            
@@ -146,9 +148,11 @@ class LetNode(ValuedExpressionNode):
             return             
             
         # Second pass through the nodes of the function declarations.
+        functions_fake_scope = FakeScope(self.scope)
         for index, func_declaration_group in enumerate(self._function_declaration_groups):
-            group_scope = FakeScope(self.scope, set(), all_functions - groups_functions[index])
-            func_declaration_group.check_semantics(group_scope, errors)
+            functions_fake_scope.current_siblings = all_functions - groups_functions[index]
+            func_declaration_group.check_semantics(functions_fake_scope, errors)
+        functions_fake_scope.current_siblings = None
             
         if erros_before != len(errors):
             return            
@@ -160,4 +164,4 @@ class LetNode(ValuedExpressionNode):
         if self._expressions.has_return_value():
             self._return_type = self._expressions.return_type
         else:
-            self._return_type = None      
+            self._return_type = None

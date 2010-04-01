@@ -76,6 +76,9 @@ class FunctionDeclarationGroupNode(DeclarationGroupNode):
         self._scope  = scope
         errors_before = len(errors)
         for declaration in self.declarations:
+            self.scope.current_member = declaration.name
             declaration.check_semantics(self.scope, errors)
             if errors_before != len(errors):
                 return
+        self.scope.current_member = None
+

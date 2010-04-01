@@ -306,18 +306,18 @@ class RootScope(Scope):
         int_type = IntegerType()
         string_type = StringType()
         
-        print_type = FunctionType(None, [string_type], [""])
-        printi_type = FunctionType(None, [int_type], [""])
+        print_type = FunctionType(None, [string_type], [''])
+        printi_type = FunctionType(None, [int_type], [''])
         flush_type = FunctionType(None, [], [])
         getchar_type = FunctionType(string_type, [], [])
-        ord_type = FunctionType(int_type, [string_type], [""])
-        chr_type = FunctionType(string_type, [int_type], [""])
-        size_type = FunctionType(int_type, [string_type], [""])
-        substring_type = FunctionType(string_type, [string_type, int_type, int_type], ["","",""])
-        concat_type = FunctionType(string_type, [string_type, string_type], ["", ""])
-        not_type = FunctionType(int_type, [int_type], [""])
-        exit_type = FunctionType(None, [int_type], [""])
-        
+        ord_type = FunctionType(int_type, [string_type], [''])
+        chr_type = FunctionType(string_type, [int_type], [''])
+        size_type = FunctionType(int_type, [string_type], [''])
+        substring_type = FunctionType(string_type, [string_type, int_type, int_type], ['', '', ''])
+        concat_type = FunctionType(string_type, [string_type, string_type], ['', ''])
+        not_type = FunctionType(int_type, [int_type], [''])
+        exit_type = FunctionType(None, [int_type], [''])
+
         self.define_function('print', print_type)
         self.define_function('printi', printi_type)
         self.define_function('flush', flush_type)
@@ -383,35 +383,63 @@ class RootScope(Scope):
 class FakeScope(Scope):
     """
     Clase C{FakeScope} que representa un ámbito falso de un programa de Tiger.
-    
-    Esta clase gestiona los tipos, variables y funciones disponibles
-    en un ámbito de ejecución detereminado en Tiger.
-    
-    A través de este ámbito falso se garantiza que no se utilicen tipos y 
-    funciones no disponibles definidos en el propio ámbito local. Los tipos 
-    que son definidos fuera de un grupo de declaraciones de tipos no están 
-    disponibles para las declaraciones de otro grupo, de igual manera las 
-    funciones definidas fuera de su grupo de declaraciones no están 
-    disponibles para las de otro grupo.
+       
+    Este ámbito recibe el calificativo de falso porque no guardará 
+    definiciones de tipos, ni variables, ni funciones; cualquier consulta
+    con el objetivo de definir u obtener un miembro del ámbito la redigirá 
+    al ámbito padre. El objetivo de este ámbito es detectar la declaración 
+    de funciones o tipos mutuamente recursivos en grupos de declaraciones 
+    diferentes. Si la situación anterior se detecta se lanzará una excepción 
+    indicando que el tipo no está definido en lugar de continuar la búsqueda 
+    a través del ámbito padre.
     """
     
-    def __init__(self, parent, unavailables_types, unavailables_functions):
+    def _get_current_member(self):
+        """
+        Método para obtener el valor de la propiedad C{current_member}.        
+        """
+        return self._current_member
+    
+    def _set_current_member(self, member):
+        """
+        Método para cambiar el valor de la propiedad C{current_member}.
+        """
+        self._current_member = member
+        
+    current_member = property(_get_current_member, _set_current_member)
+    
+    def _get_current_siblings(self):
+        """
+        Método para obtener el valor de la propiedad C{current_siblings}.        
+        """
+        return self._current_siblings
+    
+    def _set_current_siblings(self, siblings):
+        """
+        Método para cambiar el valor de la propiedad C{current_siblings}.
+        """
+        self._current_siblings = siblings
+        
+    current_siblings = property(_get_current_siblings, _set_current_siblings)
+    
+    def _get_relationships(self):
+        """
+        Método para obtener el valor de la propiedad C{current_siblings}.        
+        """
+        return self._relationships
+    
+    relationships = property(_get_relationships)
+    
+    def __init__(self, parent):
         """
         Para obtener información acerca de los parámetros recibidos por
         este método consulte la documentación del método C{__init__}
         en la clase C{Scope}.
-        
-        @type unavailables_types: C{set}
-        @param unavailables_types: Conjunto de los nombres de tipos no
-            disponibles para este ámbito.
-            
-        @type unavailables_functions: C{set}
-        @param unavailables_functions: Conjunto de los nombres de funciones
-            no disponibles para este ámbito.
         """
         super(FakeScope, self).__init__(parent)
-        self._unavailables_types = unavailables_types
-        self._unavailables_functions = unavailables_functions
+        self._current_member = None
+        self._current_siblings = None
+        self._relationships = {}
 
     def define_type(self, name, tiger_type):
         """
@@ -421,17 +449,6 @@ class FakeScope(Scope):
         """
         self.parent.define_type(self, name, tiger_type)
 
-    def get_type_definition(self, name):
-        """
-        Para obtener información acerca de los parámetros recibidos por
-        este método consulte la documentación del método con el mismo nombre
-        en la clase C{Scope}.
-        """
-        if name in self._unavailables_types:
-            raise KeyError('This type definition is not available here')
-        else:
-            return self.parent.get_type_definition(name)
-
     def define_function(self, name, function_type):
         """
         Para obtener información acerca de los parámetros recibidos por
@@ -440,17 +457,6 @@ class FakeScope(Scope):
         """
         self.parent.define_function(name, function_type)
 
-    def get_function_definition(self, name):
-        """
-        Para obtener información acerca de los parámetros recibidos por
-        este método consulte la documentación del método con el mismo nombre
-        en la clase C{Scope}.
-        """
-        if name in self._unavailables_functions:
-            raise KeyError('This function definition is not available here')
-        else:
-            return self.parent.get_function_definition(name)
-
     def define_variable(self, name, tiger_type, read_only=False):
         """
         Para obtener información acerca de los parámetros recibidos por
@@ -458,23 +464,7 @@ class FakeScope(Scope):
         en la clase C{Scope}.
         """
         self.parent.define_variable(name, tiger_type, read_only)
-
-    def get_variable_definition(self, name):
-        """
-        Para obtener información acerca de los parámetros recibidos por
-        este método consulte la documentación del método con el mismo nombre
-        en la clase C{Scope}.
-        """
-        return self.parent.get_variable_definition(name)
-
-    def get_variable_read_only(self, name):
-        """
-        Para obtener información acerca de los parámetros recibidos por
-        este método consulte la documentación del método con el mismo nombre
-        en la clase C{Scope}.
-        """
-        return self.parent.get_variable_read_only(name)
-
+        
     def generate_code(self):
         """
         Para obtener información acerca de los parámetros recibidos por
@@ -490,3 +480,80 @@ class FakeScope(Scope):
         en la clase C{Scope}.
         """
         return self.parent.get_variable_code(name)
+    
+    def get_variable_read_only(self, name):
+        """
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método con el mismo nombre
+        en la clase C{Scope}.
+        """
+        return self.parent.get_variable_read_only(name)
+    
+    def get_variable_definition(self, name):
+        """
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método con el mismo nombre
+        en la clase C{Scope}.
+        """
+        return self.parent.get_variable_definition(name)   
+        
+    def get_type_definition(self, name):
+        """
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método con el mismo nombre
+        en la clase C{Scope}.
+        
+        En este método se implementa la comprobación de la definición de 
+        tipos mutuamente recursivos, consulte la documentación del método
+        C{_check_mutual_recursion} para más información.
+        """
+        self._check_mutual_recursion(name)
+        return self.parent.get_type_definition(name)
+
+    def get_function_definition(self, name):
+        """
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método con el mismo nombre
+        en la clase C{Scope}.
+        
+        En este método se implementa la comprobación de la definición de 
+        funciones o procedimientos mutuamente recursivos, consulte la documentación 
+        del método C{_check_mutual_recursion} para más información.        
+        """
+        self._check_mutual_recursion(name)
+        return self.parent.get_function_definition(name)
+        
+    def _check_mutual_recursion(self, name):
+        """
+        Este método es utilizado por los métodos C{get_function_definition} y
+        C{get_type_definition} para comprobar que el tipo, función o procedimiento
+        identificado por el nombre dado C{name} no tenga una definición mutualmente
+        recursiva en función de un tipo, función o procedimiento de otro grupo
+        de definiciones.
+        
+        Si el miembro C{name} se encuentra definido en un grupo de definiciones
+        hermano del grupo actual se comprobará que no exista una definición
+        mutuamente recursiva. En caso de que todavía no se tenga suficiente
+        información para afirmar o negar que exista una definición mutuamente
+        recursiva se actualizará el diccionario de relaciones para que la 
+        definición mutuamente recursiva, si existe, sea detectada cuando
+        se compruebe la definición del otro tipo, función o procedimiento.
+        
+        @type name: C{str}
+        @param name: Nombre del tipo, función o procedimiento para el cual
+            se debe realizar la comprobación.
+            
+        @raise KeyError: Se lanza una excepción C{KeyError} si el miembro del 
+            scope identificado por el nombre C{name} tiene una definición
+            mutuamente recursiva con otro miembro de un grupo de definiciones
+            diferente.
+        """
+        if self.current_member != None and self.current_siblings != None:
+            if name in self.current_siblings:
+                name_relationships = self._relationships.get(name, set())
+                if self.current_member in name_relationships:
+                    raise KeyError('Mutually recursive type or function definition')
+                else:
+                    current_relationships = self.relationships.get(self.current_member, set())
+                    current_relationships.add(name)
+                    self.relationships[self.current_member] = current_relationships

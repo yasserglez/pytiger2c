@@ -1,15 +1,15 @@
 let
-    function a (c :int):int = c*2
+    function a (c : int) : int = c*2
 in
     let
-        function b (c :int):int =
+        function b (c : int) : int =
             let
-                function d(e:int):int = 2*a(3)
+                function d(e:int) : int = 2 * a(3)
             in
                 d(1)
             end
         var j := 1
-        function a (c :int):int = c+2
+        function a (c : int) : int = b(c)
     in
     end
 end

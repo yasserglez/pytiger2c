@@ -1,2 +1,1 @@
-Semantic Error: Undefined type Woman of the field #1 of the record Men at line 7.
 Semantic Error: Undefined type Men of the field #1 of the record Woman at line 9.

@@ -111,9 +111,11 @@ class TypeDeclarationGroupNode(DeclarationGroupNode):
         self._scope  = scope
         errors_before = len(errors)
         for declaration in self.declarations:
+            self.scope.current_member = declaration.name
             declaration.check_semantics(self.scope, errors)
             if errors_before != len(errors):
-                return 
+                return
+        self.scope.current_member = None
 
     def _resolve_alias(self, alias_name, scope, alias_dict, referenced_aliases, errors):
         """
