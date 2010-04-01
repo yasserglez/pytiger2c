@@ -286,11 +286,10 @@ class RootScope(Scope):
         y los tipos básicos.
         """
         super(RootScope, self).__init__(None)
-        self._init_types()
-        self._init_functions()
-        self._init_variables()
+        self.init_types()
+        self.init_functions()
         
-    def _init_types(self):
+    def init_types(self):
         """
         Inicializa los tipos básicos del lenguaje Tiger definidos implícitamente 
         en el ámbito raíz.
@@ -298,7 +297,7 @@ class RootScope(Scope):
         self.define_type('int', IntegerType())
         self.define_type('string', StringType())
     
-    def _init_functions(self):
+    def init_functions(self):
         """
         Inicializa las funciónes de la biblioteca standard del lenguaje Tiger
         definidas implícitamente el ámbito raíz.
@@ -330,11 +329,6 @@ class RootScope(Scope):
         self.define_function('not', not_type)
         self.define_function('exit', exit_type)
         
-    def _init_variables(self):
-        """
-        Inicializa las variables definidas implícitamente por el lenguaje Tiger.
-        """                
-
     def get_type_definition(self, name):
         """
         Para obtener información acerca de los parámetros recibidos por
@@ -424,7 +418,7 @@ class FakeScope(Scope):
     
     def _get_relationships(self):
         """
-        Método para obtener el valor de la propiedad C{current_siblings}.        
+        Método para obtener el valor de la propiedad C{relationships}.        
         """
         return self._relationships
     
@@ -505,9 +499,9 @@ class FakeScope(Scope):
         
         En este método se implementa la comprobación de la definición de 
         tipos mutuamente recursivos, consulte la documentación del método
-        C{_check_mutual_recursion} para más información.
+        C{check_mutual_recursion} para más información.
         """
-        self._check_mutual_recursion(name)
+        self.check_mutual_recursion(name)
         return self.parent.get_type_definition(name)
 
     def get_function_definition(self, name):
@@ -518,12 +512,12 @@ class FakeScope(Scope):
         
         En este método se implementa la comprobación de la definición de 
         funciones o procedimientos mutuamente recursivos, consulte la documentación 
-        del método C{_check_mutual_recursion} para más información.        
+        del método C{check_mutual_recursion} para más información.        
         """
-        self._check_mutual_recursion(name)
+        self.check_mutual_recursion(name)
         return self.parent.get_function_definition(name)
         
-    def _check_mutual_recursion(self, name):
+    def check_mutual_recursion(self, name):
         """
         Este método es utilizado por los métodos C{get_function_definition} y
         C{get_type_definition} para comprobar que el tipo, función o procedimiento

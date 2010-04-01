@@ -74,7 +74,7 @@ class TypeDeclarationGroupNode(DeclarationGroupNode):
         for alias_name in alias_dict.keys():
             alias_errors = []
             if alias_name in alias_dict:
-                self._resolve_alias(alias_name, scope, alias_dict, set(), alias_errors)
+                self.resolve_alias(alias_name, scope, alias_dict, set(), alias_errors)
             if alias_errors:
                 errors.extend(alias_errors)
                 return definitions
@@ -117,7 +117,7 @@ class TypeDeclarationGroupNode(DeclarationGroupNode):
                 return
         self.scope.current_member = None
 
-    def _resolve_alias(self, alias_name, scope, alias_dict, referenced_aliases, errors):
+    def resolve_alias(self, alias_name, scope, alias_dict, referenced_aliases, errors):
         """
         Método encargado de definir los problemas relativos a las definiciones
         mutuamente recursivas de alias. Durante la ejecución de este método
@@ -160,7 +160,7 @@ class TypeDeclarationGroupNode(DeclarationGroupNode):
                 return tiger_type 
             else:
                 referenced_aliases.add(alias_name)
-                tiger_type = self._resolve_alias(alias_typename, scope, alias_dict, 
+                tiger_type = self.resolve_alias(alias_typename, scope, alias_dict, 
                                                  referenced_aliases, errors)
         else:
             try:

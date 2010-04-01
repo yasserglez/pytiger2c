@@ -98,7 +98,7 @@ class RecordLiteralExpressionNode(ValuedExpressionNode):
                 fields_names_given = len(self._fields_names)
                 fields_names_original = len(self.return_type.fields_names)
                 if fields_names_given == fields_names_original:
-                    self._check_parameters(errors)
+                    self.check_parameters(errors)
                 else:
                     message = 'Invalid number of fields in record literal at line {line}'
                     errors.append(message.format(line=self.line_number))
@@ -107,7 +107,7 @@ class RecordLiteralExpressionNode(ValuedExpressionNode):
                 errors.append(message.format(type_name = self._type_name, 
                                              line=self.line_number))
     
-    def _check_parameters(self, errors):
+    def check_parameters(self, errors):
         """
         Comprueba semánticamente los campos dados. Cada campo debe tener exactamente 
         el mismo nombre que el campo correspondiente en la declaración del tipo, en
