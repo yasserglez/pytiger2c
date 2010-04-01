@@ -6,6 +6,8 @@ Clase C{IfThenElseStatementNode} del árbol de sintáxis abstracta.
 
 from pytiger2c.ast.valuedexpressionnode import ValuedExpressionNode
 from pytiger2c.types.integertype import IntegerType
+from pytiger2c.types.recordtype import RecordType
+from pytiger2c.types.niltype import NilType
 
 
 class IfThenElseStatementNode(ValuedExpressionNode):
@@ -117,9 +119,14 @@ class IfThenElseStatementNode(ValuedExpressionNode):
             else_returns = self.else_expression.has_return_value()
             if then_returns and else_returns:
                 if self.then_expression.return_type != self.else_expression.return_type:
-                    message = 'The return type of the expressions of the if-then-else ' \
-                              'statement at line {line} is not the same'
-                    errors.append(message.format(line=self.line_number))
+                    # Check the special case of nil and records. 
+                    valid_different_types = (RecordType, NilType)
+                    record_and_nil = (isinstance(self.then_expression.return_type, valid_different_types) and 
+                                      isinstance(self.else_expression.return_type, valid_different_types))
+                    if not record_and_nil:                    
+                        message = 'The return type of the expressions of the if-then-else ' \
+                                  'statement at line {line} is not the same'
+                        errors.append(message.format(line=self.line_number))
             elif then_returns or else_returns:
                 message = 'One of the expressions of the if-then-else statement at ' \
                           'line {line} returns but the other does not'
