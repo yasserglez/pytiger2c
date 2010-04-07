@@ -49,35 +49,18 @@ class TypeDeclarationGroupNode(DeclarationGroupNode):
         alias_dict = {}
         # Fill the types and alias dictionaries from the declaration lists.
         for declaration_node in self._declarations:
-            if isinstance(declaration_node, AliasTypeDeclarationNode):
-                if declaration_node.name in alias_dict:
-                    message = 'Trying to redefine the type {name} already ' \
-                              'defined in this scope at line {line}'
-                    errors.append(message.format(name=declaration_node.name,
-                                                 line=declaration_node.line_number))
-                    return definitions
-                else:                  
-                    alias_dict[declaration_node.name] = declaration_node
-            else:
-                try:
-                    scope.define_type(declaration_node.name, declaration_node.type)
-                except ValueError:
-                    message = 'Trying to redefine the type {name} already ' \
-                              'defined in this scope at line {line}'
-                    errors.append(message.format(name=declaration_node.name,
-                                                 line=declaration_node.line_number))
-                    return definitions
-            definitions.add(declaration_node.name)
-        
-        # Resolve the alias types. From now on, aliases will be direct
-        # references to the real types.
-        for alias_name in alias_dict.keys():
-            alias_errors = []
-            if alias_name in alias_dict:
-                self.resolve_alias(alias_name, scope, alias_dict, set(), alias_errors)
-            if alias_errors:
-                errors.extend(alias_errors)
+            try:
+                scope.define_type(declaration_node.name, declaration_node.type)
+            except ValueError:
+                message = 'Trying to redefine the type {name} already ' \
+                          'defined in this scope at line {line}'
+                errors.append(message.format(name=declaration_node.name,
+                                             line=declaration_node.line_number))
                 return definitions
+            definitions.add(declaration_node.name)
+        # The resolution of the aliases takes place in the check semantics of
+        # the alias declaration node.
+        
         return definitions
 
     def check_semantics(self, scope, errors, local_types=None):
@@ -116,68 +99,3 @@ class TypeDeclarationGroupNode(DeclarationGroupNode):
             if errors_before != len(errors):
                 return
         self.scope.current_member = None
-
-    def resolve_alias(self, alias_name, scope, alias_dict, referenced_aliases, errors):
-        """
-        Método encargado de definir los problemas relativos a las definiciones
-        mutuamente recursivas de alias. Durante la ejecución de este método
-        si es necesario resolver otro alias de modo recursivo, entonces este
-        método añadirá al dicionario C{self._types} la definición de esta.
-        
-        @type alias_name: C{str}
-        @param alias_name: Nombre del C{alias} que se pretende resolver.
-        
-        @type scope: C{Scope}
-        @param scope: Ámbito en el que se quiere definir este alias.
-        
-        @type alias_dict: C{dict}
-        @param alias_dict: Diccionario con los nodos del árbol de sintáxis 
-            abstracta correspondientes a cada declaración de alias.
-        
-        @type referenced_aliases: C{set}
-        @param referenced_aliases: Conjunto de los nombres de los alias que 
-            dependen del alias que se pretende resolver, de modo que no
-            se puede encontrar una referencia a ninguno de estos como
-            parte de la definición del alias porque se crearía un ciclo. 
-            
-        @type errors: C{list}
-        @param errors: Lista para añadir los errores que ocurran durante
-            la resolución de los alias.
-            
-        @rtype: C{TigerType}
-        @return: Tipo correspondiente al nombre del alias que se 
-            pretende resolver.
-        """
-        declaration_node = alias_dict[alias_name]
-        alias_typename = declaration_node.alias_typename
-        tiger_type = None
-        if alias_typename in alias_dict.keys():
-            # The alias name must not be an backward_referenced alias.
-            if alias_typename in referenced_aliases:
-                message = 'Infinite recursive alias definition of {name} at line {line}'
-                errors.append(message.format(name=alias_name, 
-                                             line=declaration_node.line_number))
-                return tiger_type 
-            else:
-                referenced_aliases.add(alias_name)
-                tiger_type = self.resolve_alias(alias_typename, scope, alias_dict, 
-                                                 referenced_aliases, errors)
-        else:
-            try:
-                tiger_type = scope.get_type_definition(alias_typename)
-            except KeyError:
-                message = 'Undefined type {type} in declaration ' \
-                          'of alias {name} at line {line}'
-                errors.append(message.format(type=alias_typename, name=alias_name,
-                                             line=declaration_node.line_number))
-                return tiger_type
-                
-        del alias_dict[alias_name]
-        try:
-            scope.define_type(alias_name, tiger_type)
-        except ValueError:
-            message = 'Trying to redefine the type {name} already ' \
-                      'defined in this scope at line {line}'
-            errors.append(message.format(name=alias_name, 
-                                         line=declaration_node.line_number))
-        return tiger_type
