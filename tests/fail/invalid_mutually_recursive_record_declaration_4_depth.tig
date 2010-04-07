@@ -1,0 +1,15 @@
+let
+    type A = {field : int}
+in
+    let
+        type B = {field : A}
+        var a:= 1
+        type A = {field : C}
+        function b(field : int) : int = 1
+        type C = G
+        type G = {field : H}
+        var c:= 2
+        type H = B
+    in
+    end
+end

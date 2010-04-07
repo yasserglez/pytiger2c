@@ -1,0 +1,11 @@
+let
+    function f(b : B) : int = g(b.field)
+    type B = {field : int}
+    function g(i : int) : int = h(B{field = i+2})
+    type C = B
+    var a:= 1
+    function h(c : C) : int = i(b.field + c.field)
+    var b:= C{field = 1}
+    function i(i : int) : int = f(i)
+in
+end
