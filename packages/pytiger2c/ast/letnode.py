@@ -125,9 +125,14 @@ class LetNode(ValuedExpressionNode):
         types_fake_scope = FakeScope(self.scope)
         for index, type_declaration_group in enumerate(self._type_declaration_groups):
             types_fake_scope.current_siblings = all_types - groups_types[index]
+            type_declaration_group.check_aliases_semantics(types_fake_scope, errors)
+        types_fake_scope.current_siblings = None
+        
+        for index, type_declaration_group in enumerate(self._type_declaration_groups):
+            types_fake_scope.current_siblings = all_types - groups_types[index]
             type_declaration_group.check_semantics(types_fake_scope, errors)
         types_fake_scope.current_siblings = None
-            
+        
         if erros_before != len(errors):
             return            
             

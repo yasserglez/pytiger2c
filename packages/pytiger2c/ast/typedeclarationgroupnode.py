@@ -59,11 +59,35 @@ class TypeDeclarationGroupNode(DeclarationGroupNode):
                 return definitions
             definitions.add(declaration_node.name)
         # The resolution of the aliases takes place in the check semantics of
-        # the alias declaration node.
+        # the alias declaration node. In the check aliases semantics
         
         return definitions
+    
+    def check_aliases_semantics(self, scope, errors):
+        """
+        Para obtener información acerca del resto de los parámetros recibidos 
+        por el método consulte la documentación del método C{check_semantics}
+        en la clase C{LanguageNode}.
+        
+        Realiza la comprobación semántica de los C{alias} definodos en este
+        grupo.          
+        
+        Se reportarán errores si se producen errores en la comprobación 
+        semántica de alguna de las declaraciones de C{alias} contenidas en 
+        este grupo.
+        """
+        self._scope  = scope
+        errors_before = len(errors)
+        for declaration in self.declarations:
+            if isinstance(declaration, AliasTypeDeclarationNode):
+                self.scope.current_member = declaration.name
+                declaration.check_semantics(self.scope, errors)
+            if errors_before != len(errors):
+                return
+        self.scope.current_member = None
 
-    def check_semantics(self, scope, errors, local_types=None):
+
+    def check_semantics(self, scope, errors):
         """
         Para obtener información acerca del resto de los parámetros recibidos 
         por el método consulte la documentación del método C{check_semantics}
@@ -81,21 +105,13 @@ class TypeDeclarationGroupNode(DeclarationGroupNode):
         
         Se reportarán errores si se producen errores en la comprobación 
         semántica de alguna de las declaraciones contenidas en este grupo.
-        
-        @type local_types: C{set}
-        @param local_types: Conjunto con los nombres de los tipos usados en
-            el ámbito local creado por la estructura C{let} del lenguaje.
-            Es necesario conocer los tipos declarados en otro grupos de 
-            declaraciones de tipos dentro del mismo bloque de declaraciones
-            del C{let} para poder reportar como un error semántico la definición
-            de un tipo en función de otro tipo que está declarado con igual
-            nombre en el ámbito local y en un ámbito superior.
         """
         self._scope  = scope
         errors_before = len(errors)
         for declaration in self.declarations:
-            self.scope.current_member = declaration.name
-            declaration.check_semantics(self.scope, errors)
+            if not isinstance(declaration, AliasTypeDeclarationNode):
+                self.scope.current_member = declaration.name
+                declaration.check_semantics(self.scope, errors)
             if errors_before != len(errors):
                 return
         self.scope.current_member = None

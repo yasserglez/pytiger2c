@@ -84,5 +84,6 @@ class AliasTypeDeclarationNode(TypeDeclarationNode):
         if erros_before != len(errors):
             return
         
+        # Ugly hack!
         for alias_name in aliases_names:
-            self.scope._types[alias_name] = type
+            self.scope.parent._types[alias_name] = type

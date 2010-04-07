@@ -424,6 +424,20 @@ class FakeScope(Scope):
     
     relationships = property(_get_relationships)
     
+    def _get_max_depth(self):
+        """
+        Método para obtener el valor de la propiedad C{max_depth}.
+        """
+        return self._max_depth
+    
+    def _set_max_depth(self, value):
+        """
+        Método para cambiar el valor de la propiedad C{max_depth}.
+        """
+        self._max_depth = value
+    
+    max_depth = property(_get_max_depth, _set_max_depth)
+    
     def __init__(self, parent):
         """
         Para obtener información acerca de los parámetros recibidos por
@@ -434,6 +448,7 @@ class FakeScope(Scope):
         self._current_member = None
         self._current_siblings = None
         self._relationships = {}
+        self._max_depth = 5
 
     def define_type(self, name, tiger_type):
         """
@@ -544,10 +559,16 @@ class FakeScope(Scope):
         """
         if self.current_member != None and self.current_siblings != None:
             if name in self.current_siblings:
-                name_relationships = self._relationships.get(name, set())
-                if self.current_member in name_relationships:
-                    raise KeyError('Mutually recursive type or function definition')
-                else:
-                    current_relationships = self.relationships.get(self.current_member, set())
-                    current_relationships.add(name)
-                    self.relationships[self.current_member] = current_relationships
+                name_relationships = list(self._relationships.get(name, set()))
+                current = 0
+                while len(name_relationships) > 0 and current < self.max_depth:
+                    if self.current_member in name_relationships:
+                        raise KeyError('Mutually recursive type or function ' \
+                                       'definition')
+                    next = name_relationships[0]
+                    name_relationships.remove(next)
+                    name_relationships.extend(self._relationships.get(next, set()))
+                    current += 1
+            current_relationships = self.relationships.get(self.current_member, set())
+            current_relationships.add(name)
+            self.relationships[self.current_member] = current_relationships
