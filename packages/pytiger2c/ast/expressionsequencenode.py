@@ -33,6 +33,7 @@ class ExpressionSequenceNode(ValuedExpressionNode):
         """
         super(ExpressionSequenceNode, self).__init__()
         self._expressions = []
+        self._has_return_value = False
 
     def check_semantics(self, scope, errors):
         """
@@ -51,7 +52,14 @@ class ExpressionSequenceNode(ValuedExpressionNode):
         errors_before_last = None
         
         # Check semantics of the expressions in the sequence.
-        for expression in self._expressions:
+        self._has_return_value = False
+
+        if len(self._expressions) > 0:
+            errors_before_last = len(errors)
+            self._expressions[-1].check_semantics(scope, errors)
+            self._has_return_value = self._expressions[-1].has_return_value()
+
+        for expression in self._expressions[0:-1]:
             errors_before_last = len(errors)
             expression.check_semantics(scope, errors)
 
@@ -73,7 +81,4 @@ class ExpressionSequenceNode(ValuedExpressionNode):
         método C{has_return_value} para cambiar la implementación provista 
         por la clase C{ValuedExpressionNode} que siempre retorna C{True}.   
         """
-        try:
-            return self._expressions[-1].has_return_value()
-        except IndexError:
-            return False        
+        return self._has_return_value     

@@ -45,12 +45,17 @@ class BreakStatementNode(NonValuedExpressionNode):
         
         stop_nodes = (WhileStatementNode, ForStatementNode, CallableDeclarationNode)
         current_node = self.parent_node
-        while current_node != None and not isinstance(current_node, stop_nodes):
+        while (current_node != None and not isinstance(current_node, stop_nodes) and 
+               not current_node.has_return_value()):
             # Find the first WhileStatementNode, ForStatementNode or CallableDeclarationNode
-            # from the parent of the break node until the root of the AST is found.
+            # or the valued node from the parent of the break node until the root of the 
+            # AST is found.
             current_node = current_node.parent_node
         if current_node == None:
             message = 'break used out of a while or for statement at line {line}'
+            errors.append(message.format(line=self.line_number))
+        elif current_node.has_return_value():
+            message = 'Invalid usage of the break statement at line {line}'
             errors.append(message.format(line=self.line_number))
         elif isinstance(current_node, CallableDeclarationNode):
             message = 'Invalid usage of the break statement at line {line}'

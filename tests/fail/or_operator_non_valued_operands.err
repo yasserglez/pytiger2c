@@ -1,5 +1,5 @@
-Semantic Error: Invalid use of binary logical operator with a non-valued right expression at line 2.
-Semantic Error: Invalid use of binary logical operator with a non-valued left expression at line 3.
 Semantic Error: Invalid use of binary logical operator with a non-valued right expression at line 4.
 Semantic Error: Invalid use of binary logical operator with a non-valued left expression at line 4.
 Semantic Error: The condition of the if-then statement at line 4 does not return an integer value.
+Semantic Error: Invalid use of binary logical operator with a non-valued right expression at line 2.
+Semantic Error: Invalid use of binary logical operator with a non-valued left expression at line 3.
