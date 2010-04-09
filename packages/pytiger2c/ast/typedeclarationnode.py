@@ -12,8 +12,8 @@ class TypeDeclarationNode(DeclarationNode):
     Clase C{TypeDeclarationNode} del árbol de sintáxis abstracta.
     
     Representa las distintas declaraciones de tipos presentes en el lenguaje de
-    Tige. De esta clase heredan las declaraciones de records, C{arrays} y 
-    C{alias} como tipos válidos de Tige.
+    Tige. De esta clase heredan las declaraciones de records, arrays y alias 
+    como tipos válidos de Tiger.
     """
     
     def _get_name(self):

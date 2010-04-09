@@ -121,12 +121,17 @@ class LetNode(ValuedExpressionNode):
         if erros_before != len(errors):
             return
             
-        # Second pass through the nodes of the type declarations.
+        # Second pass through the nodes of the type declarations. The second pass
+        # is divided in two parts: the first through the alias declaration and
+        # the second through the rest of the declarations.
         types_fake_scope = FakeScope(self.scope)
         for index, type_declaration_group in enumerate(self._type_declaration_groups):
             types_fake_scope.current_siblings = all_types - groups_types[index]
             type_declaration_group.check_aliases_semantics(types_fake_scope, errors)
         types_fake_scope.current_siblings = None
+        
+        if erros_before != len(errors):
+            return        
         
         for index, type_declaration_group in enumerate(self._type_declaration_groups):
             types_fake_scope.current_siblings = all_types - groups_types[index]
@@ -134,7 +139,7 @@ class LetNode(ValuedExpressionNode):
         types_fake_scope.current_siblings = None
         
         if erros_before != len(errors):
-            return            
+            return
             
         # First pass through the nodes of the function declarations.
         for func_declaration_group in self._function_declaration_groups:

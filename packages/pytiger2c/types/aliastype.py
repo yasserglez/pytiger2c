@@ -10,9 +10,9 @@ from pytiger2c.types.tigertype import TigerType
 class AliasType(TigerType):
     """
     Clase de la jerarquía de tipos de Tiger representando el tipo alias, 
-    un alias es representado por este tipo durante la resolución del tipo
-    concreto al que hace referencia durante chequeo semántico del nodo 
-    donde fue definido.
+    un alias es representado por una instancia de esta clase durante la 
+    resolución del tipo concreto al que hace referencia en chequeo 
+    semántico del nodo donde fue definido.
     """
     
     def _get_alias_typename(self):
@@ -28,8 +28,8 @@ class AliasType(TigerType):
         Inicializa la clase representando el tipo alias.
         
         @type alias_typename: C{str}
-        @param alias_typename: Nombre del tipo al que hace referencia este
-            alias.
+        @param alias_typename: Nombre del tipo al que hace referencia 
+            este alias.
         """
         super(AliasType, self).__init__()
         self._alias_typename =  alias_typename

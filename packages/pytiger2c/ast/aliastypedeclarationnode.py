@@ -47,43 +47,43 @@ class AliasTypeDeclarationNode(TypeDeclarationNode):
         en la clase C{LanguageNode}.
 	    """
         self._scope = scope
-        type = None
+        alias_type = None
         
         erros_before = len(errors)
         try:
-            type = self._scope.get_type_definition(self._alias_typename)
+            alias_type = self._scope.get_type_definition(self._alias_typename)
         except KeyError:
-            message = 'Undefined type {type} in the alias {name} ' \
-                      'declaration at line {line}'
-            errors.append(message.format(type=self._alias_typename,
+            message = 'Undefined alias type {alias_type} in the ' \
+                      'alias {name} declared at line {line}'
+            errors.append(message.format(alias_type=self._alias_typename,
                                          name=self._name, 
                                          line=self.line_number))
         aliases_names = set()
         aliases_names.add(self._name)
         
-        # Let's resolve the tiger type to reference.
-        while isinstance(type, AliasType):
-            name = type.alias_typename
+        # Let's resolve the tiger alias until a real type is found.
+        while isinstance(alias_type, AliasType):
+            name = alias_type.alias_typename
             if name in aliases_names:
-                message = 'Infinite recursive alias definition of {name} ' \
-                          'at line {line}'
+                message = 'Infinite recursive alias definition ' \
+                          'of {name} at line {line}'
                 errors.append(message.format(name=self._name,
                                              line=self._line_number))
                 break
             else:
                 try:
-                    type = self._scope.get_type_definition(name)
+                    alias_type = self._scope.get_type_definition(name)
                 except KeyError:
-                    message = 'Undefined type {type} in the alias {name} ' \
-                              'declaration at line {line}'
-                    errors.append(message.format(type=name, name=self._name, 
-                                         line=self.line_number))
+                    message = 'Undefined alias_type {alias_type} in ' \
+                              'the alias {name} declaration at line {line}'
+                    errors.append(message.format(alias_type=name, name=self._name, 
+                                                 line=self.line_number))
                     break
                 aliases_names.add(name)
         
         if erros_before != len(errors):
             return
         
-        # Ugly hack!
+        # Ugly hack! Modifying dictionary of the parent scope of the fake scope.
         for alias_name in aliases_names:
-            self.scope.parent._types[alias_name] = type
+            self.scope.parent._types[alias_name] = alias_type

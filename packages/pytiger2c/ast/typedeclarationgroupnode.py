@@ -69,11 +69,10 @@ class TypeDeclarationGroupNode(DeclarationGroupNode):
         por el método consulte la documentación del método C{check_semantics}
         en la clase C{LanguageNode}.
         
-        Realiza la comprobación semántica de los C{alias} definodos en este
-        grupo.          
+        Realiza la comprobación semántica de los alias definidos en este grupo.          
         
         Se reportarán errores si se producen errores en la comprobación 
-        semántica de alguna de las declaraciones de C{alias} contenidas en 
+        semántica de alguna de las declaraciones de alias contenidas en 
         este grupo.
         """
         self._scope  = scope

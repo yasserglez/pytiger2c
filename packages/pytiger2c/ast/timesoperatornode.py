@@ -20,19 +20,20 @@ class TimesOperatorNode(ArithmeticOperatorNode):
         """
          Inicializa la clase C{TimesOperatorNode}.
         
-        Para obtener información acerca de los parámetros recibidos por este método 
-        consulte la documentación del método C{__init__} en la clase C{BinaryOperatorNode}.
+        Para obtener información acerca de los parámetros recibidos por este 
+        método consulte la documentación del método C{__init__} en la clase 
+        C{BinaryOperatorNode}.
         """
         super(TimesOperatorNode, self).__init__(left, right)
     
     def check_semantics(self, scope, errors):
         """
-        Para obtener información acerca de los parámetros recibidos por este método 
-        consulte la documentación del método C{check_semantics} en la clase 
-        C{LanguageNode}.
+        Para obtener información acerca de los parámetros recibidos por este 
+        método consulte la documentación del método C{check_semantics} en la 
+        clase C{LanguageNode}.
         
-        El operador por realiza la multiplicación entre los el valor de la expresión
-        que se encuentra a la izquierda por el valor de la derecha.
+        El operador por realiza la multiplicación entre los el valor de la 
+        expresión que se encuentra a la izquierda por el valor de la derecha.
         
         En la comprobación semántica de este nodo del árbol de sintáxis abstracta
         se comprueban semánticamente tanto la expresión de la izquierda como la 
