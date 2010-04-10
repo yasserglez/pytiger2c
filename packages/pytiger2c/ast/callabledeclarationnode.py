@@ -123,4 +123,3 @@ class CallableDeclarationNode(DeclarationNode):
                                      line=self.line_number)
             errors.append(message)            
         self.type.parameters_types = parameters_types
-    

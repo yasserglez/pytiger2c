@@ -144,3 +144,22 @@ class RecordLiteralExpressionNode(ValuedExpressionNode):
                     message = 'Invalid type for field #{index} of ' \
                               'the record literal at line {line}'
                     errors.append(message.format(index=index + 1, line=self.line_number))
+
+    def generate_dot(self, generator):
+        """
+        Genera un grafo en formato Graphviz DOT correspondiente al árbol de 
+        sintáxis abstracta del programa Tiger del cual este nodo es raíz.
+        
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método C{generate_dot}
+        de la clase C{LanguageNode}.
+        """
+        me = generator.add_node(str(self.__class__.__name__))
+        type_name = generator.add_node(self.type_name)
+        generator.add_edge(me, type_name)
+        for field_name, field_value in zip(self.fields_names, self.fields_values):
+            field_name = generator.add_node(field_name)
+            generator.add_edge(me, field_name)
+            field_value = field_value.generate_dot(generator)
+            generator.add_edge(field_name, field_value)
+        return me

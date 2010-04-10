@@ -16,6 +16,7 @@ import codecs
 
 from pytiger2c.grammar import parser
 from pytiger2c.scope import RootScope
+from pytiger2c.dot import DotGenerator
 from pytiger2c.errors import PyTiger2CError, SemanticError, CodeGenerationError
 
 
@@ -88,7 +89,7 @@ def generate_code(ast, output_fd):
     raise CodeGenerationError()
 
 
-def write_ast(ast, output_fd):
+def generate_dot(ast, output_fd):
     """
     Escribe un árbol de sintáxis abstracta correspondiente a un programa Tiger
     en un archivo con formato DOT de Graphviz.
@@ -100,7 +101,9 @@ def write_ast(ast, output_fd):
     @param output_fd: Descriptor de fichero del archivo donde se debe escribir el
         árbol de sintáxis abstracta en formato DOT de Graphviz.
     """
-    raise NotImplementedError()
+    generator = DotGenerator()
+    ast.generate_dot(generator)
+    generator.write(output_fd)
 
 
 def tiger2dot(tiger_filename, dot_filename):
@@ -111,7 +114,8 @@ def tiger2dot(tiger_filename, dot_filename):
     Se utiliza la función auxiliar C{syntactic_analysis} para realizar el
     análisis léxico-gráfico y sintáctico durante el cual se reportará cualquier
     error en el programa Tiger. Luego, se utiliza la función auxiliar
-    C{write_ast} para escribir el árbol de sintáxis abstracta en el archivo DOT.
+    C{generate_dot} para escribir el árbol de sintáxis abstracta en el 
+    archivo DOT.
     
     @type tiger_filename: C{str}
     @param tiger_filename: Ruta absoluta al archivo que contiene el código
@@ -135,7 +139,7 @@ def tiger2dot(tiger_filename, dot_filename):
         raise PyTiger2CError(message='Could not open the Tiger input file')
     try:
         with codecs.open(dot_filename, encoding='utf-8', mode='wb') as output_fd:
-            write_ast(ast, output_fd)
+            generate_dot(ast, output_fd)
     except IOError:
         raise PyTiger2CError(error_msg='Could not open the output file')
     

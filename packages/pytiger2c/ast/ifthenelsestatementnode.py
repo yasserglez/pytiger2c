@@ -147,3 +147,21 @@ class IfThenElseStatementNode(ValuedExpressionNode):
         siempre retorna C{True}.   
         """
         return self.then_expression.has_return_value()
+
+    def generate_dot(self, generator):
+        """
+        Genera un grafo en formato Graphviz DOT correspondiente al árbol de 
+        sintáxis abstracta del programa Tiger del cual este nodo es raíz.
+        
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método C{generate_dot}
+        de la clase C{LanguageNode}.
+        """
+        me = generator.add_node(str(self.__class__.__name__))
+        condition = self.condition.generate_dot(generator)
+        then_expression = self.then_expression.generate_dot(generator)
+        else_expression = self.else_expression.generate_dot(generator)
+        generator.add_edge(me, condition)
+        generator.add_edge(me, then_expression)
+        generator.add_edge(me, else_expression)
+        return me

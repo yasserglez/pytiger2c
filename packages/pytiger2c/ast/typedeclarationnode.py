@@ -38,7 +38,6 @@ class TypeDeclarationNode(DeclarationNode):
     
     type = property(_get_type)
     
-    
     def __init__(self, name):
         """
         Inicializa la clase C{TypeDeclarationNode}.

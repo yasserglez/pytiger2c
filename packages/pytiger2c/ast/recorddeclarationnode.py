@@ -13,21 +13,41 @@ class RecordDeclarationNode(TypeDeclarationNode):
     Clase C{RecordDeclarationNode} del árbol de sintáxis abstracta.
     """
     
+    def _get_fields_names(self):
+        """
+        Método para obtener el valor de la propiedad C{fields_names}.
+        """
+        return self._fields_names
+    
+    fields_names = property(_get_fields_names) 
+    
+    def _get_fields_typenames(self):
+        """
+        Método para obtener el valor de la propiedad C{fields_typenames}.
+        """
+        return self._fields_typenames
+    
+    fields_typenames = property(_get_fields_typenames)                 
+    
     def __init__(self, name, fields_names, fields_typenames):
         """
         Inicializa la clase C{RecordDeclarationNode}.
         
         @type fields_names: C{list}
-        @param fields_names: Lista con los nombres de los campos del record, por posición.
+        @param fields_names: Lista con los nombres de los campos del record, 
+            por posición.
         
         @type fields_typenames: C{list}
-        @param fields_typenames: Lista con los nombres de los tipos de los campos, por posición.
+        @param fields_typenames: Lista con los nombres de los tipos de los 
+            campos, por posición.
         
         Para obtener información acerca del resto de los parámetros recibidos 
         por el método consulte la documentación del método C{__init__}
         en la clase C{TypeDeclarationNode}.
         """
         super(RecordDeclarationNode, self).__init__(name)
+        self._fields_names = fields_names
+        self._fields_typenames = fields_typenames
         self._type = RecordType(fields_names, fields_typenames)
         
     def check_semantics(self, scope, errors):
@@ -63,3 +83,22 @@ class RecordDeclarationNode(TypeDeclarationNode):
             else:
                 fields_types.append(field_type)
         self.type.fields_types = fields_types
+
+    def generate_dot(self, generator):
+        """
+        Genera un grafo en formato Graphviz DOT correspondiente al árbol de 
+        sintáxis abstracta del programa Tiger del cual este nodo es raíz.
+        
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método C{generate_dot}
+        de la clase C{LanguageNode}.
+        """
+        me = generator.add_node(str(self.__class__.__name__))
+        name = generator.add_node(self.name)
+        generator.add_edge(me, name)
+        for field_name, field_typename in zip(self.fields_names, self.fields_typenames):
+            field_name = generator.add_node(field_name)
+            generator.add_edge(me, field_name)
+            field_typename = generator.add_node(field_typename)
+            generator.add_edge(field_name, field_typename)
+        return me

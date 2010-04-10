@@ -87,3 +87,19 @@ class AliasTypeDeclarationNode(TypeDeclarationNode):
         # Ugly hack! Modifying dictionary of the parent scope of the fake scope.
         for alias_name in aliases_names:
             self.scope.parent._types[alias_name] = alias_type
+    
+    def generate_dot(self, generator):
+        """
+        Genera un grafo en formato Graphviz DOT correspondiente al árbol de 
+        sintáxis abstracta del programa Tiger del cual este nodo es raíz.
+        
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método C{generate_dot}
+        de la clase C{LanguageNode}.
+        """
+        me = generator.add_node(str(self.__class__.__name__))
+        name = generator.add_node(self.name)
+        alias_typename = generator.add_node(self.alias_typename)
+        generator.add_edge(me, name)
+        generator.add_edge(me, alias_typename)
+        return me

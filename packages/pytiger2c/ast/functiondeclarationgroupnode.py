@@ -81,4 +81,3 @@ class FunctionDeclarationGroupNode(DeclarationGroupNode):
             if errors_before != len(errors):
                 return
         self.scope.current_member = None
-

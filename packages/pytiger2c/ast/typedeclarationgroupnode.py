@@ -46,7 +46,6 @@ class TypeDeclarationGroupNode(DeclarationGroupNode):
         @return: Conjunto con los nombres de los tipos definidos en este grupo.                
         """
         definitions = set()
-        alias_dict = {}
         # Fill the types and alias dictionaries from the declaration lists.
         for declaration_node in self._declarations:
             try:
@@ -58,8 +57,8 @@ class TypeDeclarationGroupNode(DeclarationGroupNode):
                                              line=declaration_node.line_number))
                 return definitions
             definitions.add(declaration_node.name)
-        # The resolution of the aliases takes place in the check semantics of
-        # the alias declaration node. In the check aliases semantics
+        # The resolution of the aliases takes place in the semantic 
+        # check of the alias declaration node. 
         
         return definitions
     
@@ -84,7 +83,6 @@ class TypeDeclarationGroupNode(DeclarationGroupNode):
             if errors_before != len(errors):
                 return
         self.scope.current_member = None
-
 
     def check_semantics(self, scope, errors):
         """

@@ -133,3 +133,23 @@ class ForStatementNode(NonValuedExpressionNode):
                 errors.append(message.format(line=self.line_number))
             
         self.expression.check_semantics(self.scope, errors)
+
+    def generate_dot(self, generator):
+        """
+        Genera un grafo en formato Graphviz DOT correspondiente al árbol de 
+        sintáxis abstracta del programa Tiger del cual este nodo es raíz.
+        
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método C{generate_dot}
+        de la clase C{LanguageNode}.
+        """
+        me = generator.add_node(str(self.__class__.__name__))
+        index_name = generator.add_node(self.index_name)
+        lower_expression = self.lower_expression.generate_dot(generator)
+        upper_expression = self.upper_expression.generate_dot(generator)
+        expression = self.expression.generate_dot(generator)
+        generator.add_edge(me, index_name)
+        generator.add_edge(me, lower_expression)
+        generator.add_edge(me, upper_expression)
+        generator.add_edge(me, expression)
+        return me

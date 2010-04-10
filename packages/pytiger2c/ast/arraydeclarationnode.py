@@ -18,6 +18,14 @@ class ArrayDeclarationNode(TypeDeclarationNode):
     tener los valores.    
     """
     
+    def _get_values_typename(self):
+        """
+        Método para obtener el valor de la propiedad C{values_typename}.
+        """
+        return self._values_typename
+    
+    values_typename = property(_get_values_typename)    
+    
     def __init__(self, name, values_typename):
         """
         Inicializa la clase C{ArrayDeclarationNode}.
@@ -27,11 +35,11 @@ class ArrayDeclarationNode(TypeDeclarationNode):
         en la clase C{TypeDeclarationNode}.
         
         @type values_typename: C{str}
-        @param values_typename: Nombre del tipo que tendrán los valores del 
-            array.        
+        @param values_typename: Nombre del tipo que tendrán los valores del array.        
         """
         super(ArrayDeclarationNode, self).__init__(name)
-        self._type = ArrayType(values_typename) 
+        self._values_typename = values_typename
+        self._type = ArrayType(self._values_typename) 
 
     def check_semantics(self, scope, errors):
         """
@@ -65,3 +73,19 @@ class ArrayDeclarationNode(TypeDeclarationNode):
                                          line=self.line_number))
 
         self.type.fields_types = [type]
+
+    def generate_dot(self, generator):
+        """
+        Genera un grafo en formato Graphviz DOT correspondiente al árbol de 
+        sintáxis abstracta del programa Tiger del cual este nodo es raíz.
+        
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método C{generate_dot}
+        de la clase C{LanguageNode}.
+        """
+        me = generator.add_node(str(self.__class__.__name__))
+        name = generator.add_node(self.name)
+        values_typename = generator.add_node(self.values_typename)
+        generator.add_edge(me, name)
+        generator.add_edge(me, values_typename)
+        return me

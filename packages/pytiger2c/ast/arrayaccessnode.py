@@ -95,3 +95,19 @@ class ArrayAccessNode(AccessNode):
         else:
             message = 'Invalid array access on a non valued expression at line {line}'
             errors.append(message.format(line=self.line_number))
+
+    def generate_dot(self, generator):
+        """
+        Genera un grafo en formato Graphviz DOT correspondiente al árbol de 
+        sintáxis abstracta del programa Tiger del cual este nodo es raíz.
+        
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método C{generate_dot}
+        de la clase C{LanguageNode}.
+        """
+        me = generator.add_node(str(self.__class__.__name__))
+        array = self.array.generate_dot(generator)
+        position = self.position.generate_dot(generator)
+        generator.add_edge(me, array)
+        generator.add_edge(me, position)
+        return me

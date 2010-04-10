@@ -90,3 +90,19 @@ class IfThenStatementNode(NonValuedExpressionNode):
             message = 'The then expression of the if-then statement ' \
                       'at line {line} should not return a value'
             errors.append(message.format(line=self.line_number))
+
+    def generate_dot(self, generator):
+        """
+        Genera un grafo en formato Graphviz DOT correspondiente al árbol de 
+        sintáxis abstracta del programa Tiger del cual este nodo es raíz.
+        
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método C{generate_dot}
+        de la clase C{LanguageNode}.
+        """
+        me = generator.add_node(str(self.__class__.__name__))
+        condition = self.condition.generate_dot(generator)
+        then_expression = self.then_expression.generate_dot(generator)
+        generator.add_edge(me, condition)
+        generator.add_edge(me, then_expression)
+        return me

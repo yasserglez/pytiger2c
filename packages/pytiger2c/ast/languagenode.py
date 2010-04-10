@@ -95,17 +95,6 @@ class LanguageNode(object):
             sintáxis abstracta.
         """
         raise NotImplementedError()
-    
-    def generate_code(self):
-        """
-        Genera el código correspondiente a la estructura del lenguaje Tiger
-        representada por el nodo.
-        
-        @raise CodeGenerationError: Esta excepción se lanzará cuando se produzca
-            algún error durante la generación del código correspondiente al nodo.,
-            La excepción contendrá información acerca del error.
-        """
-        raise NotImplementedError()
 
     def has_return_value(self):
         """
@@ -138,5 +127,33 @@ class LanguageNode(object):
         @rtype: C{bool}
         @return: Valor booleano indicando si la expresión representada por 
             el nodo tiene valor de retorno.
+        """
+        raise NotImplementedError()
+    
+    def generate_dot(self, generator):
+        """
+        Genera un grafo en formato Graphviz DOT correspondiente al árbol de 
+        sintáxis abstracta del programa Tiger del cual este nodo es raíz.
+        
+        @type generator: C{DotGenerator}
+        @param generator: Clase auxiliar utilizada en la generación del 
+            código Graphviz DOT.
+        
+        @rtype: C{str}
+        @return: Identificador del nodo del grafo generado correspondiente
+            a este todo del árbol de sintáxis abstracta. Este identificador
+            podrá ser utilizado por otros nodos para añadir aristas al grafo
+            que tengan este nodo como uno de sus extremos. 
+        """
+        return generator.add_node(str(self.__class__.__name__))
+
+    def generate_code(self):
+        """
+        Genera el código correspondiente a la estructura del lenguaje Tiger
+        representada por el nodo.
+        
+        @raise CodeGenerationError: Esta excepción se lanzará cuando se produzca
+            algún error durante la generación del código correspondiente al nodo.,
+            La excepción contendrá información acerca del error.
         """
         raise NotImplementedError()

@@ -24,6 +24,38 @@ class LetNode(ValuedExpressionNode):
     expresiones.
     """
     
+    def _get_type_declaration_groups(self):
+        """
+        Método para obtener el valor de la propiedad C{type_declaration_groups}.
+        """
+        return self._type_declaration_groups
+    
+    type_declaration_groups = property(_get_type_declaration_groups)  
+    
+    def _get_function_declaration_groups(self):
+        """
+        Método para obtener el valor de la propiedad C{function_declaration_groups}.
+        """
+        return self._function_declaration_groups
+    
+    function_declaration_groups = property(_get_function_declaration_groups)  
+    
+    def _get_variable_declarations(self):
+        """
+        Método para obtener el valor de la propiedad C{variable_declarations}.
+        """
+        return self._variable_declarations
+    
+    variable_declarations = property(_get_variable_declarations)  
+    
+    def _get_expressions(self):
+        """
+        Método para obtener el valor de la propiedad C{expressions}.
+        """
+        return self._expressions
+    
+    expressions = property(_get_expressions)
+    
     def __init__(self, type_declaration_groups, function_declaration_groups, 
                  variable_declarations, expressions):
         """
@@ -175,3 +207,26 @@ class LetNode(ValuedExpressionNode):
             self._return_type = self._expressions.return_type
         else:
             self._return_type = None
+
+    def generate_dot(self, generator):
+        """
+        Genera un grafo en formato Graphviz DOT correspondiente al árbol de 
+        sintáxis abstracta del programa Tiger del cual este nodo es raíz.
+        
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método C{generate_dot}
+        de la clase C{LanguageNode}.
+        """
+        me = generator.add_node(str(self.__class__.__name__))
+        for type_declaration_group in self.type_declaration_groups:
+            type_declaration_group = type_declaration_group.generate_dot(generator)
+            generator.add_edge(me, type_declaration_group)
+        for function_declaration_group in self.function_declaration_groups:
+            function_declaration_group = function_declaration_group.generate_dot(generator)
+            generator.add_edge(me, function_declaration_group)
+        for variable_declaration in self.variable_declarations:
+            variable_declaration = variable_declaration.generate_dot(generator)
+            generator.add_edge(me, variable_declaration)
+        expressions = self.expressions.generate_dot(generator)
+        generator.add_edge(me, expressions)
+        return me

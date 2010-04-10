@@ -47,3 +47,19 @@ class BinaryOperatorNode(OperatorNode):
         super(BinaryOperatorNode, self).__init__()
         self._left = left
         self._right = right
+
+    def generate_dot(self, generator):
+        """
+        Genera un grafo en formato Graphviz DOT correspondiente al árbol de 
+        sintáxis abstracta del programa Tiger del cual este nodo es raíz.
+        
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método C{generate_dot}
+        de la clase C{LanguageNode}.
+        """
+        me = generator.add_node(str(self.__class__.__name__))
+        left = self.left.generate_dot(generator)
+        right = self.right.generate_dot(generator)
+        generator.add_edge(me, left)
+        generator.add_edge(me, right)
+        return me

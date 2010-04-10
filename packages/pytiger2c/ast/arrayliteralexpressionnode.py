@@ -131,3 +131,21 @@ class ArrayLiteralExpressionNode(ValuedExpressionNode):
             message = 'Invalid non array type {type_name} at line {line}'
             errors.append(message.format(type_name = self._type_name, 
                                          line=self.line_number))
+
+    def generate_dot(self, generator):
+        """
+        Genera un grafo en formato Graphviz DOT correspondiente al árbol de 
+        sintáxis abstracta del programa Tiger del cual este nodo es raíz.
+        
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método C{generate_dot}
+        de la clase C{LanguageNode}.
+        """
+        me = generator.add_node(str(self.__class__.__name__))
+        type_name = generator.add_node(self.type_name)
+        generator.add_edge(me, type_name)
+        count = self.count.generate_dot(generator)
+        generator.add_edge(me, count)
+        value = self.value.generate_dot(generator)
+        generator.add_edge(me, value)        
+        return me

@@ -105,3 +105,27 @@ class FunctionDeclarationNode(CallableDeclarationNode):
                                          type=self.return_typename,
                                          line=self.line_number)
                 errors.append(message)
+
+    def generate_dot(self, generator):
+        """
+        Genera un grafo en formato Graphviz DOT correspondiente al árbol de 
+        sintáxis abstracta del programa Tiger del cual este nodo es raíz.
+        
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método C{generate_dot}
+        de la clase C{LanguageNode}.
+        """
+        me = generator.add_node(str(self.__class__.__name__))
+        name = generator.add_node(self.name)
+        generator.add_edge(me, name)
+        return_typename = generator.add_node(self.return_typename)
+        generator.add_edge(me, return_typename)
+        for param_name, param_typename in zip(self.parameters_names, 
+                                              self.parameters_typenames):
+            param_name = generator.add_node(param_name)
+            generator.add_edge(me, param_name)
+            param_typename = generator.add_node(param_typename)
+            generator.add_edge(param_name, param_typename)
+        body = self.body.generate_dot(generator)
+        generator.add_edge(me, body)
+        return me
