@@ -45,6 +45,21 @@ class AliasTypeDeclarationNode(TypeDeclarationNode):
         Para obtener información acerca de los parámetros recibidos por
         el método consulte la documentación del método C{check_semantics}
         en la clase C{LanguageNode}.
+        
+        Este método realiza la comprobación semántica de la definición de
+        un alias. Primeramente, el método obtendrá del ámbito la instancia
+        correspondiente al tipo que referencia el alias. Si este tipo
+        no es un alias, actualizará la definición del alias en el ámbito
+        padre del ámbito falso recibido como argumento para referenciar 
+        a la instancia del tipo real. Si este alias se define en función de
+        otro se resolverá este en función de un tipo real y se procederá
+        como se describió anteriormente.
+        
+        Durante este proceso de comprobación semántica se detectará
+        si se forma un ciclo durante la definición de una secuencia de
+        alias, reportándose este hecho como un error semántico. Igualmente
+        se reportará un error si un alias se define en función de un
+        tipo que no se encuentra definido anteriormente.
 	    """
         self._scope = scope
         alias_type = None
@@ -61,7 +76,7 @@ class AliasTypeDeclarationNode(TypeDeclarationNode):
         aliases_names = set()
         aliases_names.add(self._name)
         
-        # Let's resolve the tiger alias until a real type is found.
+        # Let's resolve the aliases until a real type is found.
         while isinstance(alias_type, AliasType):
             name = alias_type.alias_typename
             if name in aliases_names:
