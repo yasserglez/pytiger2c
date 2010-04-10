@@ -1,7 +1,7 @@
 /* Tiger standard library types. */
 
-struct string 
+struct tiger_string
 {
     char *data;
     size_t length;
-}
+};
