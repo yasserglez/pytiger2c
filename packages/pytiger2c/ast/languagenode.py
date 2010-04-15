@@ -147,10 +147,14 @@ class LanguageNode(object):
         """
         return generator.add_node(str(self.__class__.__name__))
 
-    def generate_code(self):
+    def generate_code(self, generator):
         """
         Genera el código correspondiente a la estructura del lenguaje Tiger
         representada por el nodo.
+
+        @type generator: C{CodeGenerator}
+        @param generator: Clase auxiliar utilizada en la generación del 
+            código C correspondiente a un programa Tiger.        
         
         @raise CodeGenerationError: Esta excepción se lanzará cuando se produzca
             algún error durante la generación del código correspondiente al nodo.,

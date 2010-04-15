@@ -17,6 +17,7 @@ import codecs
 from pytiger2c.grammar import parser
 from pytiger2c.scope import RootScope
 from pytiger2c.dot import DotGenerator
+from pytiger2c.code import CodeGenerator
 from pytiger2c.errors import PyTiger2CError, SemanticError, CodeGenerationError
 
 
@@ -86,7 +87,10 @@ def generate_code(ast, output_fd):
         durante la generación de código. La excepción contendrá información acerca
         del error.
     """
-    raise CodeGenerationError()
+    generator = CodeGenerator()
+    ast.generate_code(generator)
+    generator.close()
+    generator.write(output_fd)
 
 
 def generate_dot(ast, output_fd):
