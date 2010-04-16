@@ -1,3 +1,4 @@
+
 /* Tiger standard library functions. */
 
 void tiger_print(struct tiger_string *s);
@@ -27,3 +28,6 @@ int64_t tiger_exit(int64_t i);
 void pytiger2c_error(char *msg);
 
 void *pytiger2c_malloc(size_t size);
+
+/* Functions defined in the program. */
+

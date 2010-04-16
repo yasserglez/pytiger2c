@@ -156,6 +156,10 @@ void *pytiger2c_malloc(size_t size)
 	{
 		pytiger2c_error("Could not allocate memory.");
 	}
+	memset(mem, 0, size);
 
 	return mem;
 }
+
+/* Functions defined in the program. */
+

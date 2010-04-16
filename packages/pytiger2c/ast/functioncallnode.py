@@ -57,7 +57,7 @@ class FunctionCallNode(ValuedExpressionNode):
         """
         Ver documentación del método C{has_return_value} en C{LanguageNode}.      
         """
-        return (self._return_type != None)
+        return self._return_type != None
 
     def check_semantics(self, scope, errors):
         """
@@ -133,3 +133,16 @@ class FunctionCallNode(ValuedExpressionNode):
             parameter = parameter.generate_dot(generator)
             generator.add_edge(me, parameter)
         return me
+
+    def generate_code(self, generator):
+        """
+        Genera el código correspondiente a la estructura del lenguaje Tiger
+        representada por el nodo.
+
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método C{generate_code}
+        de la clase C{LanguageNode}.
+        """
+        self.scope.generate_code(generator)
+        for parameter in self.parameters:
+            parameter.generate_code(generator)

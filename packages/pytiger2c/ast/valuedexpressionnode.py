@@ -21,11 +21,20 @@ class ValuedExpressionNode(LanguageNode):
     """
     
     def _get_return_type(self):
-        """Método para obtener el valor de la propiedad C{return_type}.
+        """
+        Método para obtener el valor de la propiedad C{return_type}.
         """
         return self._return_type    
     
     return_type = property(_get_return_type)
+    
+    def _get_return_code(self):
+        """
+        Método para obtener el valor de la propiedad C{return_code}.
+        """
+        return self._return_code    
+    
+    return_code = property(_get_return_code)
     
     def __init__(self):
         """
@@ -33,6 +42,7 @@ class ValuedExpressionNode(LanguageNode):
         """
         super(ValuedExpressionNode, self).__init__()
         self._return_type = None
+        self._return_code = None
         
     def has_return_value(self):
         """

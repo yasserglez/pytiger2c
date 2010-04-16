@@ -27,6 +27,14 @@ class Scope(object):
     
     parent = property(_get_parent)
     
+    def _get_code_name(self):
+        """
+        Método para obtener el valor de la propiedad C{code_name}.
+        """
+        return self._code_name
+    
+    code_name = property(_get_code_name)
+    
     def __init__(self, parent):
         """
         Inicializa la clase C{Scope}.
@@ -37,13 +45,24 @@ class Scope(object):
         self._parent = parent
         self._types = {}
         self._members = {}
+        self._code_name = None
+        self._members_code_names = None
 
-    def generate_code(self):
+    def generate_code(self, generator):
         """
-        Genera el código correspondiente a la definición de las variables, tipos, 
-        así como las cabeceras de funciones que están definidos en este.
+        Genera una estructura del lenguaje C que contiene las definiciones
+        de las variables incluídas en este ámbito de ejecución.
+        
+        @type generator: C{CodeGenerator}
+        @param generator: Clase auxiliar utilizada en la generación del 
+            código C correspondiente a un programa Tiger.        
         """
-        raise NotImplementedError()
+        if self._code_name is None:
+            names = [n for n, v in self._members.items() if type(v[0]) != FunctionType]
+            code_field_types = [self._members[n][0].code_name for n in names]
+            code_name, field_code_names = generator.define_scope(names, code_field_types)
+            self._code_name = code_name
+            self._members_code_names = dict(zip(names, field_code_names))
     
     def get_variable_code(self, name):
         """
@@ -261,7 +280,7 @@ class Scope(object):
             else:
                 raise ValueError('The member of the scope is not a variable')
         else:
-            return self.parent.get_variable_read_only(name)        
+            return self.parent.get_variable_read_only(name)
         
 
 class RootScope(Scope):

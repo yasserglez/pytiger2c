@@ -149,7 +149,7 @@ class LanguageNode(object):
 
     def generate_code(self, generator):
         """
-        Genera el código correspondiente a la estructura del lenguaje Tiger
+        Genera el código C correspondiente a la estructura del lenguaje Tiger
         representada por el nodo.
 
         @type generator: C{CodeGenerator}

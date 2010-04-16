@@ -45,5 +45,22 @@ class StringLiteralExpressionNode(ValuedExpressionNode):
         siempre será C{StringType}.
         """
         self._scope = scope
-
         self._return_type = StringType()
+
+    def generate_code(self, generator):
+        """
+        Genera el código correspondiente a la estructura del lenguaje Tiger
+        representada por el nodo.
+
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método C{generate_code}
+        de la clase C{LanguageNode}.
+        """
+        self.scope.generate_code(generator)
+        string_name = generator.define_string()
+        local_var = generator.define_local(string_name)
+        generator.add_statement('{0} = pytiger2c_malloc(sizeof({1}));'.format(local_var, string_name))
+        generator.add_statement('{0}->data = "{1}";'.format(local_var, self.string))
+        generator.add_statement('{0}->length = {1};'.format(local_var, len(self.string)))
+        generator.add_statement('free({0});'.format(local_var), True)
+        self._return_code = local_var

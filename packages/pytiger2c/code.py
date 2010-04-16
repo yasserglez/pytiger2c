@@ -29,37 +29,77 @@ class CodeGenerator(object):
             stdlib_dir = os.path.join(package_dir, os.pardir, os.pardir, 'stdlib')
         self._stdlib_dir = os.path.abspath(stdlib_dir)
         
-        # Prefixes of the functions and variables defined during the code generation.
+        # Prefixes for functions and local variables defined in the program.
         self._functions_prefix = 'function_'
         self._locals_prefix = 'local_var'
         
         # Initialize a set with the reserved keywords of the C language.
         self._init_keywords()
         
-        # Global counter of local variables in the program.
+        # Used to disambiguate names of the local variables and scopes structs.
         self._locals_count = 0
+        self._scopes_count = 0
         
-        # Structures holding the information of the functions of the C program.
-        self._function_stack = []
-        self._function_headers = {}
-        self._function_locals = {}
-        self._function_bodies = {}
+        # Structures with the information of the parts of the code.
+        self._type_defs = {}
+        self._func_stack = []
+        self._func_header = {}
+        self._func_locals = {}
+        self._func_stmts = {}
+        self._func_cleanups = {}
+        self._func_return = {}
+        
+        # Define the main function of the program.
+        self._define_main()
         
     def _init_keywords(self):
         """
         Inicializa un conjunto con las palabras reservadas del lenguaje C. Ningún
         nombre de variable o función puede conincidir con una de estas palabras.
         """
-        self._keywords = frozenset([
+        keywords = [
             'auto', 'break', 'case', 'char', 'const', 'continue', 'default',
             'do', 'double', 'else', 'enum', 'extern', 'float', 'for', 'goto',
             'if', 'inline', 'int', 'long', 'register', 'restrict', 'return',
             'short', 'signed', 'sizeof', 'static', 'struct', 'switch', 
             'typedef', 'union', 'unsigned', 'void', 'volatile', 'while',
-            '_Complex', '_Bool', '_Imaginary', '__asm__', '__extension__',
-            '__inline__', '__typeof__',
-        ])
-
+            
+            '_Complex', '_Bool', '_Imaginary', 
+            
+            '__asm__', '__extension__', '__inline__', '__typeof__',
+        ]
+        self._keywords = frozenset(keywords)
+        
+    def _define_main(self):
+        """
+        Define la función principal del programa C.
+        """
+        func = 'main'
+        self._func_header[func] = 'int main()'
+        self._func_locals[func] = ['struct scope1* scope;']
+        self._func_stmts[func] = ['scope = pytiger2c_malloc(sizeof(struct scope1));']
+        self._func_cleanups[func] = ['free(scope);']
+        self._func_stack.insert(0, func)
+        
+    def _disambiguate(self, name, container):
+        """
+        Comprueba si un nombre coincide con alguno que se encuentra en un grupo 
+        de nombres dado, si esto sucede, modifica el nombre para que sea un 
+        nombre válido.
+        
+        @type name: C{str}
+        @param name: Nombre al que se le debe realizar la comprobación.
+        
+        @type container: C{object}
+        @param container: Contenedor con un grupo de nombres. 
+        
+        @rtype: C{str}
+        @return: Nombre que no coincide con ninguna palabra reservada.
+        """
+        while name in container:
+            name += '_'
+        return name
+    
     def define_integer(self):
         """
         Devuelve el identificador de código C que se debe utilizar para referirse
@@ -80,9 +120,66 @@ class CodeGenerator(object):
         """
         return 'struct tiger_string*'
     
-    def define_struct(self):
+    def define_struct(self, name, field_names, field_code_types):
         """
+        Define un nuevo tipo correspondiente a una estructura del lenguaje C.
+        Se tratará de definir el nuevo tipo con el nombre especificado por el
+        parámetro C{name} si este no coincide con una palabra reservada del 
+        lenguaje C o un tipo definido anteriormente. De manera semejante sucede
+        con cada uno de los nombres dados para los campos de la estructura
+        mediante el parámetro C{field_names}. 
+        
+        Esta función se utiliza para generar el código de los ámbitos de 
+        ejecución y de los C{records} del lenguaje Tiger que se definan en el
+        programa.
+        
+        @type name: C{str}
+        @param name: Nombre que se propone para el tipo de la nueva estructura.
+        
+        @type field_names: C{list}
+        @param field_names: Nombres que se proponen para cada uno de los campos
+            de la estructura.
+        
+        @type field_code_types: C{list}
+        @param field_code_types: Identificadores de código devueltos anteriormente
+            por métodos de esta clase correspondientes a los tipos de cada uno
+            de los campos de la estructura.
+        
+        @rtype: C{tuple}
+        @return: Este método retorna una tupla con dos elementos. El primer elemento
+            es el identificador de código que se debe utilizar para referirse al 
+            tipo de la nueva estructura definida. El segundo elemento es una lista
+            con los identificadores de código que se pueden utilizar para acceder
+            a cada uno de los campos de la estructura. 
         """
+        code_name = self._disambiguate(name, self._keywords)
+        code_name = self._disambiguate(code_name, self._type_defs)
+        definition = 'struct {0}\n'.format(name)
+        definition += '{\n'
+        field_code_names = []
+        for field_name, field_code_type in zip(field_names, field_code_types):
+            field_name_code = self._disambiguate(field_name, self._keywords)
+            field_code_names.append(field_name_code)
+            definition += '{0} {1};\n'.format(field_code_type, field_name_code)
+        definition += '};'
+        self._type_defs[name] = definition
+        return (code_name, field_code_names)
+    
+    def define_scope(self, field_names, field_code_types):
+        """
+        Utilizado para generar las estructuras de código C que representan los 
+        ámbitos de ejecución de un programa Tiger. Este método llama a 
+        C{define_struct} con nombres que garantiza que son únicos utilizando un
+        contador unido al nombre en lugar de los guiones bajos añadidos por 
+        el método C{_disambiguate}.
+        
+        Para obtener información acerca de los parámetros y el valor de retorno
+        de este método consulte la documentación del método C{define_struct} 
+        definido en esta misma clase.
+        """
+        self._scopes_count += 1
+        name = 'scope{0}'.format(self._scopes_count)
+        return self.define_struct(name, field_names, field_code_types) 
         
     def define_array(self):
         """
@@ -92,14 +189,20 @@ class CodeGenerator(object):
         """
         """
         
-    def end_function(self):
+    def end_function(self, return_var=None):
         """
-        Termina la definición de la función actual. Luego de que este método
-        se ejecute no será posible añadir código a la definición de dicha
-        función. 
+        Termina la definición de la función actual. Luego de que este método se 
+        ejecute no será posible añadir código a la definición de dicha función.
+        
+        @type return_var: C{str}
+        @param return_var: Nombre de la variable local cuyo valor será el valor 
+            de retorno de la función. Si la función no tiene valor de retorno
+            se debe especificar C{None}. 
         """
-        self.add_statement('}')
-        del self._function_stack[0]
+        if return_var is not None:
+            func = self._func_stack[0]
+            self._func_return[func] = 'return {0};'.format(return_var)
+        del self._func_stack[0]
         
     def define_local(self, code_type):
         """
@@ -113,25 +216,35 @@ class CodeGenerator(object):
             nombre no coincida con el de otra variable local de la función.
         """
         self._locals_count += 1
-        local_name = '{prefix}{number}'.format(prefix=self._locals_prefix,
-                                               number=self._locals_count)
-        declaration = '{type} {name};'.format(type=code_type, name=local_name) 
-        func = self._function_stack[0]
-        self._function_locals[func].append(declaration)
+        local_name = '{0}{1}'.format(self._locals_prefix, self._locals_count)
+        declaration = '{0} {1};'.format(code_type, local_name) 
+        func = self._func_stack[0]
+        self._func_locals[func].append(declaration)
+        return local_name
         
-    def add_statement(self, statement):
+    def add_statement(self, statement, free=False):
         """
-        Añade una instrucción al cuerpo de la función actual. Este método no realiza
-        ninguna comprobación acerca de la correctitud de la instrucción, simplemente
-        la añade como una nueva línea con la indentación data al cuerpo de la función.
+        Añade una instrucción al cuerpo de la función actual. Si la instrucción es 
+        una llamada para liberar la memoria utilizada por alguna variable se debe 
+        especificar el parámetro C{free} como C{True} para que sea ejecutada luego 
+        de todas las funciones en el cuerpo de la función y antes de que termine 
+        la función. 
         
         @type statement: C{str}
         @param statement: Instrucción que se debe añadir al cuerpo de la función
             actual del generador de código.
+            
+        @type free: C{bool}
+        @param free: Indica que la instrucción que se añade libera la memoria 
+            utilizada por alguna variable y debe ser ejecutada luego de las 
+            instrucciones del cuerpo de la función.
         """
-        func = self._function_stack[0]
-        self._function_bodies[func].append(statement)
-    
+        func = self._func_stack[0]
+        if free:
+            self._func_cleanups[func].append(statement)
+        else:
+            self._func_stmts[func].append(statement)
+        
     def close(self):
         """
         Termina la clase auxiliar utilizada en la generación de código. Luego de
@@ -143,8 +256,8 @@ class CodeGenerator(object):
             el generador y existen funciones abiertas distintas de la función
             principal.
         """
-        self.end_function()
-        if len(self._function_stack) != 0:
+        self.end_function('EXIT_SUCCESS')
+        if self._func_stack:
             message = 'Trying to close the generator with opened functions'
             raise CodeGenerationError(message)
         
@@ -153,10 +266,57 @@ class CodeGenerator(object):
         Escribe el código C generado hacia un descriptor de fichero.
         
         @type output_fd: C{file}
-        @param output_fd: Descriptor de fichero donde se debe escribir el
-            código C resultante de la traducción del programa Tiger.
+        @param output_fd: Descriptor de fichero donde se debe escribir el código 
+            C resultante de la traducción del programa Tiger.
         """
-        functions_c = os.path.join(self._stdlib_dir, 'functions.c')
         includes_c = os.path.join(self._stdlib_dir, 'includes.c')
-        prototypes_= os.path.join(self._stdlib_dir, 'c prototypes.c')
+        with open(includes_c) as fd:
+            output_fd.write(fd.read())
+            
         types_c = os.path.join(self._stdlib_dir, 'types.c')
+        with open(types_c) as fd:
+            output_fd.write(fd.read())
+            
+        # Types defined in the program.
+        for definition in self._type_defs.itervalues():
+            output_fd.write('\n')
+            output_fd.write(definition)
+            output_fd.write('\n')
+        
+        prototypes_c = os.path.join(self._stdlib_dir, 'prototypes.c')
+        with open(prototypes_c) as fd:
+            output_fd.write(fd.read())
+            
+        # Prototypes of the functions defined in the program.
+        for header in self._func_header.itervalues():
+            output_fd.write(header)
+            output_fd.write(';\n\n')
+        
+        functions_c = os.path.join(self._stdlib_dir, 'functions.c')
+        with open(functions_c) as fd:
+            output_fd.write(fd.read())
+
+        # Functions defined in the program.
+        for func in self._func_header.iterkeys():
+            output_fd.write(self._func_header[func])
+            output_fd.write('\n{\n')
+            
+            for definition in self._func_locals[func]:
+                output_fd.write(definition)
+                output_fd.write('\n')
+            
+            output_fd.write('\n')
+            for statement in self._func_stmts[func]:
+                output_fd.write(statement)
+                output_fd.write('\n')
+            
+            output_fd.write('\n')
+            for cleanup in self._func_cleanups[func]:
+                output_fd.write(cleanup)
+                output_fd.write('\n')
+            
+            if func in self._func_return:
+                output_fd.write('\n')
+                output_fd.write(self._func_return[func])
+                output_fd.write('\n')
+            output_fd.write('}\n\n')
