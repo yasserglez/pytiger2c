@@ -19,14 +19,8 @@ class VariableType(TigerType):
         Método para obtener el valor de la propiedad C{read_only}.
         """
         return self._read_only
-    
-    def _set_read_only(self, value):
-        """
-        Método para cambiar el valor de la propiedad C{read_only}.
-        """
-        self._read_only = value
-        
-    read_only = property(_get_read_only, _set_read_only)
+
+    read_only = property(_get_read_only)
     
     def _get_type(self):
         """
@@ -42,6 +36,20 @@ class VariableType(TigerType):
         
     type = property(_get_type, _set_type)
     
+    def _get_code_name(self):
+        """
+        Método para obtener el valor de la propiedad C{code_name}.
+        """
+        return self._code_name
+    
+    def _set_code_name(self, value):
+        """
+        Método para cambiar el valor de la propiedad C{code_name}.
+        """
+        self._code_name = value
+    
+    code_name = property(_get_code_name, _set_code_name)
+    
     def __init__(self, tiger_type, read_only = False):
         """
         Inicializa la clase representando la definición de una variable.
@@ -55,5 +63,7 @@ class VariableType(TigerType):
             como una variable de sólo lectura. El valor por defecto de este
             argumento es C{False}.
         """
+        super(VariableType, self).__init__()
         self._type = tiger_type
         self._read_only = read_only
+        self._code_name = None

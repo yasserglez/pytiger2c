@@ -7,6 +7,7 @@ Clases utilizadas en la generación código C a partir de un programa Tiger.
 import os
 
 from pytiger2c.errors import CodeGenerationError
+from pytiger2c.types.functiontype import FunctionType
 
 
 class CodeGenerator(object):
@@ -74,12 +75,12 @@ class CodeGenerator(object):
         """
         Define la función principal del programa C.
         """
-        func = 'main'
-        self._func_header[func] = 'int main()'
-        self._func_locals[func] = ['struct scope1* scope;']
-        self._func_stmts[func] = ['scope = pytiger2c_malloc(sizeof(struct scope1));']
-        self._func_cleanups[func] = ['free(scope);']
-        self._func_stack.insert(0, func)
+        func_code_name = 'main'
+        self._func_header[func_code_name] = 'int main()'
+        self._func_locals[func_code_name] = []
+        self._func_stmts[func_code_name] = []
+        self._func_cleanups[func_code_name] = []
+        self._func_stack.insert(0, func_code_name)
         
     def _disambiguate(self, name, container):
         """
@@ -144,7 +145,7 @@ class CodeGenerator(object):
         self._type_defs[name] = definition
         return (code_name, field_code_names)
     
-    def define_scope(self, field_names, field_code_types):
+    def define_scope(self, member_names, member_types, parent_code_name=None):
         """
         Utilizado para generar las estructuras de código C que representan los 
         ámbitos de ejecución de un programa Tiger. Este método llama a 
@@ -152,21 +153,73 @@ class CodeGenerator(object):
         contador unido al nombre en lugar de los guiones bajos añadidos por 
         el método C{_disambiguate}.
         
-        Para obtener información acerca de los parámetros y el valor de retorno
-        de este método consulte la documentación del método C{define_struct} 
-        definido en esta misma clase.
+        Para obtener información acerca del resto de parámetros y el valor de 
+        retorno de este método consulte la documentación del método
+        C{define_struct} definido en esta misma clase.
+        
+        @type parent_code_name: C{str}
+        @param parent_code_name: Identificador en el código generado 
+            correspondiente a la estructura representando el ámbito de ejecución 
+            padre del ámbito que se quiere definir. Si el ámbito es raíz, 
+            especificar C{None}.
         """
         self._scopes_count += 1
-        name = 'scope{0}'.format(self._scopes_count)
-        return self.define_struct(name, field_names, field_code_types) 
+        code_name = 'scope{0}'.format(self._scopes_count)
+        code_type = 'struct {0}* {0};'.format(code_name)
+        func = self._func_stack[0]
+        self._func_locals[func].append(code_type)
+        self._func_stmts[func].append('{0} = pytiger2c_malloc(sizeof(struct {0}));'.format(code_name))
+        self._func_cleanups[func].append('free({0});'.format(code_name))
+        field_names, field_types = [], []
+        variable_types = []
+        for member_name, member_type in zip(member_names, member_types):
+            if isinstance(member_type, FunctionType):
+                self.define_function(member_name, member_type)
+            else:
+                field_names.append(member_name)
+                field_types.append(member_type.type.code_type)
+                variable_types.append(member_type)
+        if parent_code_name:
+            field_names.insert(0, 'parent')
+            field_types.insert(0, 'struct {0}*'.format(parent_code_name))
+        code_name, field_code_names = self.define_struct(code_name, field_names, field_types)
+        for variable_type, variable_code_name in zip(variable_types, field_code_names):
+            variable_type.code_name = variable_code_name
+        return code_name, code_type
         
     def define_array(self):
         """
         """
+        
+    def define_function(self, function_name, function_type):
+        """
+        """
+        # anadir el prefijo a function_name y desambiguar el nombre de la 
+        # funcion con las funciones en func_headers.
+        # crear el string de la cabecera y anadirla a func_headers.
+        # asignare al function type cual fue el code name que le toco
 
-    def begin_function(self):
+    def begin_function(self, func_code_name):
         """
+        Cambia la función actual utilizada por el generador. Anteriormente
+        se debe haber definido la cabecera de esta función utilizando el
+        método C{define_function}.
+        
+        @type func_code_name: C{str}
+        @param func_code_name: Identificador de código de la función.
+        
+        @raise CodeGenerationError: Esta excepción se lanzará si se intenta cambiar
+            la función actual del generador por una cuya cabecera no ha sido
+            definida anteriormente.
         """
+        if func_code_name in self._func_header:
+            self._func_locals[func_code_name] = []
+            self._func_stmts[func_code_name] = []
+            self._func_cleanups[func_code_name] = []
+            self._func_stack.insert(0, func_code_name)
+        else:
+            message = 'Trying to change to an undefined function'
+            raise CodeGenerationError(message)            
         
     def end_function(self, return_var=None):
         """

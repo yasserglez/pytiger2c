@@ -45,7 +45,7 @@ class NilExpressionNode(ValuedExpressionNode):
         de la clase C{LanguageNode}.
         """
         self.scope.generate_code(generator)
-        nil_code_name = NilType().code_name
-        local_var = generator.define_local(nil_code_name)
+        nil_code_type = NilType().code_type
+        local_var = generator.define_local(nil_code_type)
         generator.add_statement('{0} = NULL;'.format(local_var))
-        self._return_code = local_var
+        self._code_name = local_var

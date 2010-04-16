@@ -35,6 +35,14 @@ class Scope(object):
     
     code_name = property(_get_code_name)
     
+    def _get_code_type(self):
+        """
+        Método para obtener el valor de la propiedad C{code_type}.
+        """
+        return self._code_type    
+    
+    code_type = property(_get_code_type)    
+    
     def __init__(self, parent):
         """
         Inicializa la clase C{Scope}.
@@ -46,7 +54,7 @@ class Scope(object):
         self._types = {}
         self._members = {}
         self._code_name = None
-        self._members_code_names = None
+        self._code_type = None
 
     def generate_code(self, generator):
         """
@@ -58,11 +66,12 @@ class Scope(object):
             código C correspondiente a un programa Tiger.        
         """
         if self._code_name is None:
-            names = [n for n, v in self._members.items() if type(v[0]) != FunctionType]
-            code_field_types = [self._members[n][0].code_name for n in names]
-            code_name, field_code_names = generator.define_scope(names, code_field_types)
+            names = self._members.keys()
+            members = self._members.values()
+            parent = self.parent.code_name if (self.parent is not None) else None
+            code_name, code_type = generator.define_scope(names, members, parent)
             self._code_name = code_name
-            self._members_code_names = dict(zip(names, field_code_names))
+            self._code_type = code_type
     
     def get_variable_code(self, name):
         """
@@ -270,10 +279,10 @@ class RootScope(Scope):
         y los tipos básicos.
         """
         super(RootScope, self).__init__(None)
-        self.init_types()
-        self.init_functions()
+        self._init_types()
+        self._init_functions()
         
-    def init_types(self):
+    def _init_types(self):
         """
         Inicializa los tipos básicos del lenguaje Tiger definidos implícitamente 
         en el ámbito raíz.
@@ -281,7 +290,7 @@ class RootScope(Scope):
         self.define_type('int', IntegerType())
         self.define_type('string', StringType())
     
-    def init_functions(self):
+    def _init_functions(self):
         """
         Inicializa las funciónes de la biblioteca standard del lenguaje Tiger
         definidas implícitamente el ámbito raíz.
@@ -462,14 +471,6 @@ class FakeScope(Scope):
         """
         return self.parent.get_variable_code(name)
     
-    def get_variable_read_only(self, name):
-        """
-        Para obtener información acerca de los parámetros recibidos por
-        este método consulte la documentación del método con el mismo nombre
-        en la clase C{Scope}.
-        """
-        return self.parent.get_variable_read_only(name)
-    
     def get_variable_definition(self, name):
         """
         Para obtener información acerca de los parámetros recibidos por
@@ -535,8 +536,7 @@ class FakeScope(Scope):
                 current = 0
                 while len(name_relationships) > 0 and current < self.max_depth:
                     if self.current_member in name_relationships:
-                        raise KeyError('Mutually recursive type or function ' \
-                                       'definition')
+                        raise KeyError('Mutually recursive type or function definition')
                     next = name_relationships[0]
                     name_relationships.remove(next)
                     name_relationships.extend(self._relationships.get(next, set()))

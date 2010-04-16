@@ -146,3 +146,4 @@ class FunctionCallNode(ValuedExpressionNode):
         self.scope.generate_code(generator)
         for parameter in self.parameters:
             parameter.generate_code(generator)
+        scope, f, fg, g, h, h

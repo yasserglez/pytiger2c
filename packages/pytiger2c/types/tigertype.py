@@ -12,17 +12,17 @@ class TigerType(object):
     heredar de la clase base C{TigerType}. 
     """
     
-    def _get_code_name(self):
+    def _get_code_type(self):
         """
-        Método para obtener el valor de la propiedad C{code_name}.
+        Método para obtener el valor de la propiedad C{code_type}.
         """
-        return self._code_name
+        return self._code_type
     
-    code_name = property(_get_code_name)    
+    code_type = property(_get_code_type)
 
     def __init__(self):
         """
         Inicializa la clase base de la jerarquía.
         """
         super(TigerType, self).__init__()
-        self._code_name = None
+        self._code_type = None

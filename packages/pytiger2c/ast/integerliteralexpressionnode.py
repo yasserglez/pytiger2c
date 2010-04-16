@@ -57,7 +57,7 @@ class IntegerLiteralExpressionNode(ValuedExpressionNode):
         de la clase C{LanguageNode}.
         """
         self.scope.generate_code(generator)
-        int_code_name = IntegerType().code_name
-        local_var = generator.define_local(int_code_name)
+        int_code_type = IntegerType().code_type
+        local_var = generator.define_local(int_code_type)
         generator.add_statement('{0} = {1};'.format(local_var, self.integer))
-        self._return_code = local_var
+        self._code_name = local_var
