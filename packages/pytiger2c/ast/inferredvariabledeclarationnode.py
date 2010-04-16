@@ -6,6 +6,7 @@ Clase C{InferredVariableDeclarationNode} del árbol de sintáxis abstracta.
 
 from pytiger2c.ast.variabledeclarationnode import VariableDeclarationNode
 from pytiger2c.types.niltype import NilType
+from pytiger2c.types.variabletype import VariableType
 
 
 class InferredVariableDeclarationNode(VariableDeclarationNode):
@@ -17,7 +18,7 @@ class InferredVariableDeclarationNode(VariableDeclarationNode):
     recibe una expresión cuyo valor se le asignará a la variable y el 
     tipo de la variable se infiere del tipo de esta expresión.
     """
-    
+
     def __init__(self, name, value):
         """
         Inicializa la clase C{InferredVariableDeclarationNode}.
@@ -64,10 +65,10 @@ class InferredVariableDeclarationNode(VariableDeclarationNode):
                 message = 'Invalid nil assignment to a variable at line {line}'
                 errors.append(message.format(line=self.line_number))
             else:
-                self._type = self.value.return_type
+                self._type = VariableType(self.value.return_type)
             
             try:
-                self.scope.define_variable(self.name, self.type)
+                self.scope.define_variable(self.name, self._type)
             except ValueError:
                 message = 'Could not hide a variable defined in the same scope at line {line}'
                 errors.append(message.format(line=self.line_number))

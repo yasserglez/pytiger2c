@@ -54,8 +54,8 @@ class VariableAccessNode(AccessNode):
         """
         self._scope = scope
         try:
-            self._read_only = self.scope.get_variable_read_only(self.name)
-            self._return_type = self.scope.get_variable_definition(self.name)
+            definition = self.scope.get_variable_definition(self.name)
+            self._return_type, self._read_only = definition.type, definition.read_only 
         except ValueError:
             message = 'The name {name} used at line {line} is not a variable'
             errors.append(message.format(name = self.name, line=self.line_number))

@@ -7,6 +7,7 @@ Clase C{StaticVariableDeclarationNode} del árbol de sintáxis abstracta.
 from pytiger2c.ast.variabledeclarationnode import VariableDeclarationNode
 from pytiger2c.types.niltype import NilType
 from pytiger2c.types.recordtype import RecordType
+from pytiger2c.types.variabletype import VariableType
 
 
 class StaticVariableDeclarationNode(VariableDeclarationNode):
@@ -74,7 +75,7 @@ class StaticVariableDeclarationNode(VariableDeclarationNode):
         if errors_before == len(errors):
             try:
                 tiger_type = self._scope.get_type_definition(self._type_name)
-                self._type = tiger_type
+                self._type = VariableType(tiger_type)
             except KeyError:
                 message = 'Undefined type of variable at line {line}'
                 errors.append(message.format(line=self.line_number))
@@ -91,7 +92,7 @@ class StaticVariableDeclarationNode(VariableDeclarationNode):
                 errors.append(message.format(line=self.line_number))
             
             try:
-                self._scope.define_variable(self.name, self.type)
+                self._scope.define_variable(self.name, self._type)
             except ValueError:
                 message = 'Invalid variable name at line {line}'
                 errors.append(message.format(line=self.line_number))

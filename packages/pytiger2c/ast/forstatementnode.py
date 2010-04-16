@@ -6,6 +6,7 @@ Clase C{ForStatementNode} del árbol de sintáxis abstracta.
 
 from pytiger2c.ast.nonvaluedexpressionnode import NonValuedExpressionNode
 from pytiger2c.types.integertype import IntegerType
+from pytiger2c.types.variabletype import VariableType
 from pytiger2c.scope import Scope
 
 
@@ -102,7 +103,7 @@ class ForStatementNode(NonValuedExpressionNode):
         integer_type = IntegerType()
         
         self._scope = Scope(scope)
-        self.scope.define_variable(self.index_name, integer_type, True)
+        self.scope.define_variable(self.index_name, VariableType(integer_type, True))
         
         errors_before = len(errors)
         
