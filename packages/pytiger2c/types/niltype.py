@@ -17,3 +17,4 @@ class NilType(BasicType):
         Inicializa la clase representando el tipo C{nil}.
         """
         super(NilType, self).__init__()
+        self._code_name = 'void*'

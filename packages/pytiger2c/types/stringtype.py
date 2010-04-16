@@ -17,3 +17,4 @@ class StringType(BasicType):
         Inicializa la clase representando el tipo cadena de caracteres.
         """
         super(StringType, self).__init__()
+        self._code_name = 'struct tiger_string*'

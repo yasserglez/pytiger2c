@@ -33,5 +33,19 @@ class NilExpressionNode(ValuedExpressionNode):
         siempre será C{NilType}.        
         """
         self._scope = scope
-        
         self._return_type = NilType()
+
+    def generate_code(self, generator):
+        """
+        Genera el código correspondiente a la estructura del lenguaje Tiger
+        representada por el nodo.
+
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método C{generate_code}
+        de la clase C{LanguageNode}.
+        """
+        self.scope.generate_code(generator)
+        nil_code_name = NilType().code_name
+        local_var = generator.define_local(nil_code_name)
+        generator.add_statement('{0} = NULL;'.format(local_var))
+        self._return_code = local_var

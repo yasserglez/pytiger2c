@@ -100,26 +100,6 @@ class CodeGenerator(object):
             name += '_'
         return name
     
-    def define_integer(self):
-        """
-        Devuelve el identificador de código C que se debe utilizar para referirse
-        al tipo C{int} de Tiger en el código C generado.
-        
-        @rtype: C{str}
-        @return: Identificador de código C para este tipo.
-        """
-        return 'int64_t'
-    
-    def define_string(self):
-        """
-        Devuelve el identificador de código C que se debe utilizar para referirse
-        al tipo C{string} de Tiger en el código C generado.
-        
-        @rtype: C{str}
-        @return: Identificador de código C para este tipo.        
-        """
-        return 'struct tiger_string*'
-    
     def define_struct(self, name, field_names, field_code_types):
         """
         Define un nuevo tipo correspondiente a una estructura del lenguaje C.
@@ -129,9 +109,8 @@ class CodeGenerator(object):
         con cada uno de los nombres dados para los campos de la estructura
         mediante el parámetro C{field_names}. 
         
-        Esta función se utiliza para generar el código de los ámbitos de 
-        ejecución y de los C{records} del lenguaje Tiger que se definan en el
-        programa.
+        Esta función se utiliza para generar el código de los ámbitos de ejecución 
+        y de los C{records} del lenguaje Tiger que se definan en el programa.
         
         @type name: C{str}
         @param name: Nombre que se propone para el tipo de la nueva estructura.
