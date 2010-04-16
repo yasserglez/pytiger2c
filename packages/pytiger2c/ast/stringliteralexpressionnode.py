@@ -61,6 +61,6 @@ class StringLiteralExpressionNode(ValuedExpressionNode):
         local_var = generator.define_local(string_code_type)
         generator.add_statement('{0} = pytiger2c_malloc(sizeof({1}));'.format(local_var, string_code_type))
         generator.add_statement('{0}->data = "{1}";'.format(local_var, self.string))
-        generator.add_statement('{0}->length = {1};'.format(local_var, len(self.string)))
+        generator.add_statement('{0}->length = strlen("{1}");'.format(local_var, self.string))
         generator.add_statement('free({0});'.format(local_var), True)
         self._code_name = local_var
