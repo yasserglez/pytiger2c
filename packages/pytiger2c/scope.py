@@ -161,7 +161,7 @@ class Scope(object):
             que se intenta definir se definió anteriormente en este ámbito. 
         """
         if not (name in self._members):
-            self._members[name] = (function_type, None)
+            self._members[name] = function_type
         else:
             raise ValueError('Function already defined in this scope')
     
@@ -185,7 +185,7 @@ class Scope(object):
             función.
         """
         if name in self._members:
-            (function_type, _) = self._members[name]
+            function_type = self._members[name]
             if isinstance(function_type, FunctionType):
                 return function_type
             else:
@@ -193,7 +193,7 @@ class Scope(object):
         else:
             return self.parent.get_function_definition(name)
     
-    def define_variable(self, name, tiger_type, read_only=False):
+    def define_variable(self, name, tiger_type):
         """
         Añade una definición de variable al ámbito actual.
         
@@ -206,20 +206,15 @@ class Scope(object):
         @param name: Cadena de caracteres correspondiente al nombre de la 
             variable que se declara.
             
-        @type tiger_type: C{TigerType}
-        @param tiger_type: Instancia de C{TigerType} correspondiente al 
-             tipo de la variable que se quiere definir.
+        @type tiger_type: C{VariableType}
+        @param tiger_type: Instancia de C{VariableType} correspondiente a la 
+            definición de la variable que se quiere definir.
              
-        @type read_only: C{bool}
-        @param read_only: Indica si la variable que se define debe ser tratada
-            como una variable de sólo lectura. El valor por defecto de este
-            argumento es C{False}.
-            
         @raise ValueError: Se lanza una excepción C{ValueError} si la variable
             que se intenta definir se definió anteriormente en este ámbito.        
         """
         if not (name in self._members):
-            self._members[name] = (tiger_type, read_only)
+            self._members[name] = tiger_type
         else:
             raise ValueError('Variable already defined in this scope')
         
@@ -232,10 +227,10 @@ class Scope(object):
         @param name: Cadena de caracteres correspondiente al nombre de la 
             variable.
         
-        @rtype: C{TigerType}
-        @return: Instancia de C{TigerType} correspondiente al tipo de la 
-            variable.
-        
+        @rtype: C{VariableType}
+        @return: Instancia de C{VariableType} correspondiente a la declaración
+            de la variable.
+            
         @raise KeyError: Se lanza una excepción C{KeyError} si la variable 
             no está definida en este ámbito o en alguno superior.
             
@@ -244,43 +239,13 @@ class Scope(object):
             variable.             
         """
         if name in self._members:
-            (variable_type, _) = self._members[name]
+            variable_type = self._members[name]
             if isinstance(variable_type, TigerType) and not isinstance(variable_type, FunctionType):
                 return variable_type
             else:
                 raise ValueError('The member of the scope is not a variable')
         else:
             return self.parent.get_variable_definition(name)
-        
-    def get_variable_read_only(self, name):
-        """
-        Brinda información que indica si la variable fue definida como de sólo
-        lectura en este ámbito o en alguno superior. 
-        
-        @type name: C{str}
-        @param name: Cadena de caracteres correspondiente al nombre de la 
-            variable.
-        
-        @rtype: C{bool}
-        @return: Valor booleano que indica si la variable es de sólo lectura.
-            Se retornará C{True} si la variable es de sólo lectura, C{False} 
-            en otro caso.
-        
-        @raise KeyError: Se lanza una excepción C{KeyError} si la variable 
-            no está definida en este ámbito o en alguno superior.
-            
-        @raise ValueError: Se lanza una expceción C{ValueError} si existe
-            un miembro en algún ámbito con el nombre dado pero no es una
-            variable.
-        """
-        if name in self._members:
-            (variable_type, read_only) = self._members[name]
-            if isinstance(variable_type, TigerType) and not isinstance(variable_type, FunctionType):
-                return read_only
-            else:
-                raise ValueError('The member of the scope is not a variable')
-        else:
-            return self.parent.get_variable_read_only(name)
         
 
 class RootScope(Scope):
@@ -362,7 +327,7 @@ class RootScope(Scope):
         este método consulte la documentación del método C{get_function_definition}
         en la clase C{Scope}.
         """
-        (function_type, _) = self._members[name]
+        function_type = self._members[name]
         if isinstance(function_type, FunctionType):
             return function_type
         else:
@@ -374,21 +339,9 @@ class RootScope(Scope):
         este método consulte la documentación del método C{get_variable_definition}
         en la clase C{Scope}.
         """
-        (variable_type, _) = self._members[name]
+        variable_type = self._members[name]
         if isinstance(variable_type, TigerType) and not isinstance(variable_type, FunctionType):
             return variable_type
-        else:
-            raise ValueError('The member of the scope is not a variable')
-
-    def get_variable_read_only(self, name):
-        """
-        Para obtener información acerca de los parámetros recibidos por
-        este método consulte la documentación del método C{get_variable_read_only}
-        en la clase C{Scope}.
-        """        
-        (variable_type, read_only) = self._members[name]
-        if isinstance(variable_type, TigerType) and not isinstance(variable_type, FunctionType):
-            return read_only
         else:
             raise ValueError('The member of the scope is not a variable')
 
@@ -485,13 +438,13 @@ class FakeScope(Scope):
         """
         self.parent.define_function(name, function_type)
 
-    def define_variable(self, name, tiger_type, read_only=False):
+    def define_variable(self, name, tiger_type):
         """
         Para obtener información acerca de los parámetros recibidos por
         este método consulte la documentación del método con el mismo nombre
         en la clase C{Scope}.
         """
-        self.parent.define_variable(name, tiger_type, read_only)
+        self.parent.define_variable(name, tiger_type)
         
     def generate_code(self):
         """

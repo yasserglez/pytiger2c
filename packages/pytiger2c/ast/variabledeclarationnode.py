@@ -33,7 +33,7 @@ class VariableDeclarationNode(DeclarationNode):
         """
         Método para obtener el valor de la propiedad C{type}
         """
-        return self._type
+        return self._type.type
     
     type = property(_get_type)
     

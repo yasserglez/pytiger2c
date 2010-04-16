@@ -5,6 +5,7 @@ Clase C{FunctionDeclarationNode} del árbol de sintáxis abstracta.
 """
 
 from pytiger2c.ast.callabledeclarationnode import CallableDeclarationNode
+from pytiger2c.types.variabletype import VariableType
 from pytiger2c.scope import Scope
 
 
@@ -85,7 +86,7 @@ class FunctionDeclarationNode(CallableDeclarationNode):
         self._scope = Scope(scope)
         for parameter_name, parameter_type in zip(self.parameters_names, 
                                                   self.type.parameters_types):
-            self.scope.define_variable(parameter_name, parameter_type)
+            self.scope.define_variable(parameter_name, VariableType(parameter_type))
         
         # Check semantics of the body.        
         self.body.check_semantics(self.scope, errors)
