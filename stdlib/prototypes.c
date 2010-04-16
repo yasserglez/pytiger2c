@@ -1,27 +1,27 @@
 
 /* Tiger standard library functions. */
 
-void tiger_print(struct tiger_string *s);
+void tiger_print(void *scope, struct tiger_string *s);
 
-void tiger_printi(int64_t n);
+void tiger_printi(void *scope, int64_t n);
 
-void tiger_flush();
+void tiger_flush(void *scope);
 
-struct tiger_string *tiger_getchar();
+struct tiger_string *tiger_getchar(void *scope);
 
-int64_t tiger_ord(struct tiger_string *s);
+int64_t tiger_ord(void *scope, struct tiger_string *s);
 
-struct tiger_string *tiger_chr(int64_t i);
+struct tiger_string *tiger_chr(void *scope, int64_t i);
 
-int64_t tiger_size(struct tiger_string *s);
+int64_t tiger_size(void *scope, struct tiger_string *s);
 
-struct tiger_string *tiger_substring(struct tiger_string *s, int64_t f, int64_t n);
+struct tiger_string *tiger_substring(void *scope, struct tiger_string *s, int64_t f, int64_t n);
 
-struct tiger_string *tiger_concat(struct tiger_string *s1, struct tiger_string *s2);
+struct tiger_string *tiger_concat(void *scope, struct tiger_string *s1, struct tiger_string *s2);
 
-int64_t tiger_not(int64_t i);
+int64_t tiger_not(void *scope, int64_t i);
 
-int64_t tiger_exit(int64_t i);
+int64_t tiger_exit(void *scope, int64_t i);
 
 /* Internal functions used by PyTiger2C. */
 

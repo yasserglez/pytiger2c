@@ -48,6 +48,20 @@ class FunctionType(TigerType):
     
     parameters_typenames = property(_get_parameters_typenames)
     
+    def _get_code_name(self):
+        """
+        Método para obtener el valor de la propiedad C{code_name}.
+        """
+        return self._code_name
+    
+    def _set_code_name(self, value):
+        """
+        Método para cambiar el valor de la propiedad C{code_name}.
+        """
+        self._code_name = value
+    
+    code_name = property(_get_code_name, _set_code_name)    
+    
     def __init__(self, return_type, parameters_types, parameters_typename):
         """
         Inicializa la clase representando el tipo función.
@@ -76,3 +90,5 @@ class FunctionType(TigerType):
         self._return_type = return_type
         self._parameters_type = parameters_types
         self._parameters_typename = parameters_typename
+        self._code_name = None
+

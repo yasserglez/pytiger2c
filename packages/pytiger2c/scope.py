@@ -65,7 +65,7 @@ class Scope(object):
         @param generator: Clase auxiliar utilizada en la generación del 
             código C correspondiente a un programa Tiger.        
         """
-        if self._code_name is None:
+        if self._code_type is None:
             names = self._members.keys()
             members = self._members.values()
             parent = self.parent.code_name if (self.parent is not None) else None
@@ -299,16 +299,27 @@ class RootScope(Scope):
         string_type = StringType()
         
         print_type = FunctionType(None, [string_type], [''])
+        print_type.code_name = 'tiger_print'
         printi_type = FunctionType(None, [int_type], [''])
+        printi_type.code_name = 'tiger_printi'
         flush_type = FunctionType(None, [], [])
+        flush_type.code_name = 'tiger_flush'
         getchar_type = FunctionType(string_type, [], [])
+        getchar_type.code_name = 'tiger_getchar'
         ord_type = FunctionType(int_type, [string_type], [''])
+        ord_type.code_name = 'tiger_ord'
         chr_type = FunctionType(string_type, [int_type], [''])
+        chr_type.code_name = 'tiger_chr'
         size_type = FunctionType(int_type, [string_type], [''])
+        size_type.code_name = 'tiger_size'
         substring_type = FunctionType(string_type, [string_type, int_type, int_type], ['', '', ''])
+        substring_type.code_name = 'tiger_substring'
         concat_type = FunctionType(string_type, [string_type, string_type], ['', ''])
+        concat_type.code_name = 'tiger_concat'
         not_type = FunctionType(int_type, [int_type], [''])
+        not_type.code_name = 'tiger_not'
         exit_type = FunctionType(None, [int_type], [''])
+        exit_type.code_name = 'tiger_exit'
 
         self.define_function('print', print_type)
         self.define_function('printi', printi_type)

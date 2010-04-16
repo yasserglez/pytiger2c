@@ -146,4 +146,14 @@ class FunctionCallNode(ValuedExpressionNode):
         self.scope.generate_code(generator)
         for parameter in self.parameters:
             parameter.generate_code(generator)
-        scope, f, fg, g, h, h
+        function_type = self.scope.get_function_definition(self._name)
+        call = '{function}({scope}'.format(function=function_type.code_name, 
+                                           scope=self.scope.code_name)
+        for parameter in self.parameters:
+            call += ', {0}'.format(parameter.code_name)
+        call += ');'
+        if self.has_return_value():
+            local_var = generator.define_local(function_type.return_type.code_type)
+            call = '{variable} = {call}'.format(variable=local_var, call=call)
+            self._code_name = local_var
+        generator.add_statement(call)
