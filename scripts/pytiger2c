@@ -44,11 +44,9 @@ def _parse_args(argv):
                                    version=version + authors, 
                                    description=desc, 
                                    prog=os.path.basename(argv[0]))
-    parser.remove_option('--help')
-    parser.add_option('--help', action='help', help='show this help message and exit')
-    parser.add_option('--output', action='store', dest='output', metavar='FILE', 
+    parser.add_option('-o', '--output', action='store', dest='output', metavar='FILE', 
                       help='write the output to FILE')
-    parser.add_option('--output-type', action='store', dest='output_type', metavar='TYPE',
+    parser.add_option('-t', '--output-type', action='store', dest='output_type', metavar='TYPE',
                       type='choice', choices=('ast', 'c', 'binary'),
                       help="output type: 'ast', 'c' or 'binary' (default '%default')")
     parser.set_default('output_type', 'binary')
