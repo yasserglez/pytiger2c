@@ -109,3 +109,30 @@ class WhileStatementNode(NonValuedExpressionNode):
         generator.add_edge(me, condition)
         generator.add_edge(me, expression)
         return me
+    
+    def generate_code(self, generator):
+        """
+        Genera el código correspondiente a la estructura del lenguaje Tiger
+        representada por el nodo.
+
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método C{generate_code}
+        de la clase C{LanguageNode}.
+        """
+        self.scope.generate_code(generator)
+        
+        self.condition.generate_code(generator)
+        condition_code_type = self.condition.return_type.code_type
+        local_var = generator.define_local(condition_code_type)
+        statement = '{var} = {cond};'.format(var = local_var, 
+                                             cond = self.condition.code_name)
+        generator.add_statement(statement)
+        generator.add_statement('while({0})'.format(local_var))
+        generator.add_statement('{{')
+        self.expression.generate_code(generator)
+        generator.add_statement('/* Condition code*/')
+        self.condition.generate_code(generator)
+        statement = '{var} = {cond};'.format(var = local_var,
+                                             cond = self.condition.code_name)
+        generator.add_statement(statement)
+        generator.add_statement('}}')
