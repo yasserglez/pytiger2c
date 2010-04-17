@@ -63,7 +63,7 @@ class Scope(object):
         
         @type generator: C{CodeGenerator}
         @param generator: Clase auxiliar utilizada en la generación del 
-            código C correspondiente a un programa Tiger.        
+            código C correspondiente a un programa Tiger.
         """
         if self._code_type is None:
             names = self._members.keys()
@@ -75,8 +75,8 @@ class Scope(object):
     
     def get_variable_code(self, name):
         """
-        Genera el código necesario para acceder a una variable definida en este 
-        ámbito o en alguno superior.
+        Genera el código necesario para acceder a una variable definida en 
+        este ámbito o en alguno superior.
         
         Una variable definida en un ámbito superior puede ser accedida desde 
         cualquier ámbito inferior por lo que la variable en cuestión puede 
@@ -88,14 +88,7 @@ class Scope(object):
             
         @rtype: C{str}
         @return: Cadena de caracteres correspondiente al código C necesario 
-            para acceder a la variable.
-            
-        @raise KeyError: Se lanza una excepción C{KeyError} si la variable 
-            no está definida en este ámbito o en alguno superior.            
-
-        @raise ValueError: Se lanza una expceción C{ValueError} si existe
-            un miembro en algún ámbito con el nombre dado pero no es una
-            variable.
+            para acceder a la variable.            
         """
         raise NotImplementedError()
         
@@ -249,10 +242,10 @@ class Scope(object):
         """
         if name in self._members:
             variable_type = self._members[name]
-            if isinstance(variable_type, TigerType) and not isinstance(variable_type, FunctionType):
-                return variable_type
-            else:
+            if isinstance(variable_type, FunctionType):
                 raise ValueError('The member of the scope is not a variable')
+            else:
+                return variable_type
         else:
             return self.parent.get_variable_definition(name)
         
@@ -360,10 +353,10 @@ class RootScope(Scope):
         en la clase C{Scope}.
         """
         variable_type = self._members[name]
-        if isinstance(variable_type, TigerType) and not isinstance(variable_type, FunctionType):
-            return variable_type
-        else:
+        if isinstance(variable_type, FunctionType):
             raise ValueError('The member of the scope is not a variable')
+        else:
+            return variable_type
 
 
 class FakeScope(Scope):
@@ -466,7 +459,7 @@ class FakeScope(Scope):
         """
         self.parent.define_variable(name, tiger_type)
         
-    def generate_code(self):
+    def generate_code(self, generator):
         """
         Para obtener información acerca de los parámetros recibidos por
         este método consulte la documentación del método con el mismo nombre
@@ -510,8 +503,9 @@ class FakeScope(Scope):
         en la clase C{Scope}.
         
         En este método se implementa la comprobación de la definición de 
-        funciones o procedimientos mutuamente recursivos, consulte la documentación 
-        del método C{check_mutual_recursion} para más información.        
+        funciones o procedimientos mutuamente recursivos, consulte la 
+        documentación del método C{check_mutual_recursion} para más 
+        información.        
         """
         self.check_mutual_recursion(name)
         return self.parent.get_function_definition(name)

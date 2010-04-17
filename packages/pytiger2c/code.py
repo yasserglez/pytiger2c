@@ -111,7 +111,7 @@ class CodeGenerator(object):
         mediante el parámetro C{field_names}. 
         
         Esta función se utiliza para generar el código de los ámbitos de ejecución 
-        y de los C{records} del lenguaje Tiger que se definan en el programa.
+        y de los records del lenguaje Tiger que se definan en el programa.
         
         @type name: C{str}
         @param name: Nombre que se propone para el tipo de la nueva estructura.
@@ -149,26 +149,40 @@ class CodeGenerator(object):
         """
         Utilizado para generar las estructuras de código C que representan los 
         ámbitos de ejecución de un programa Tiger. Este método llama a 
-        C{define_struct} con nombres que garantiza que son únicos utilizando un
-        contador unido al nombre en lugar de los guiones bajos añadidos por 
-        el método C{_disambiguate}.
+        C{define_struct} con nombres para las estructuras garantizando que son 
+        únicos utilizando un contador unido al nombre en lugar de los guiones 
+        bajos añadidos por el método C{_disambiguate}.
         
-        Para obtener información acerca del resto de parámetros y el valor de 
-        retorno de este método consulte la documentación del método
-        C{define_struct} definido en esta misma clase.
+        @type member_names: C{list}
+        @param member_names: Lista con los nombres de las variables y 
+            funciones que se definen en el ámbito de ejecución.
+            
+        @type member_types: C{list}
+        @param member_types: Lista con las instancias de herederos de 
+            C{TigerType} correspondiente a cada uno de los nombres en 
+            la lista C{member_names}. Este método da valor a las propiedades
+            C{code_name} o C{code_type} de estas instancias, según
+            corresponda.
         
         @type parent_code_name: C{str}
-        @param parent_code_name: Identificador en el código generado 
+        @param parent_code_name: Identificador en el código generado
             correspondiente a la estructura representando el ámbito de ejecución 
             padre del ámbito que se quiere definir. Si el ámbito es raíz, 
             especificar C{None}.
+            
+        @rtype: C{tuple}
+        @return: Este método retorna una tupla con dos elementos. El primer 
+            es el nombre de una variable local del tipo de la nueva estructura 
+            definida. El segundo elemento es el identificador de código que se 
+            debe utilizar para referirse al tipo de la nueva estructura definida.
         """
         self._scopes_count += 1
         code_name = 'scope{0}'.format(self._scopes_count)
         code_type = 'struct {0}* {0};'.format(code_name)
         func = self._func_stack[0]
         self._func_locals[func].append(code_type)
-        self._func_stmts[func].append('{0} = pytiger2c_malloc(sizeof(struct {0}));'.format(code_name))
+        stmt = '{0} = pytiger2c_malloc(sizeof(struct {0}));'.format(code_name)
+        self._func_stmts[func].append(stmt)
         self._func_cleanups[func].append('free({0});'.format(code_name))
         field_names, field_types = [], []
         variable_types = []
@@ -182,16 +196,17 @@ class CodeGenerator(object):
         if parent_code_name:
             field_names.insert(0, 'parent')
             field_types.insert(0, 'struct {0}*'.format(parent_code_name))
-        code_name, field_code_names = self.define_struct(code_name, field_names, field_types)
+        code_name, field_code_names = \
+            self.define_struct(code_name, field_names, field_types)
         for variable_type, variable_code_name in zip(variable_types, field_code_names):
             variable_type.code_name = variable_code_name
-        return code_name, code_type
+        return (code_name, code_type)
         
     def define_array(self):
         """
         """
         
-    def define_function(self, function_name, function_type):
+    def define_function(self, func_name, func_type):
         """
         """
         # anadir el prefijo a function_name y desambiguar el nombre de la 
@@ -208,9 +223,9 @@ class CodeGenerator(object):
         @type func_code_name: C{str}
         @param func_code_name: Identificador de código de la función.
         
-        @raise CodeGenerationError: Esta excepción se lanzará si se intenta cambiar
-            la función actual del generador por una cuya cabecera no ha sido
-            definida anteriormente.
+        @raise CodeGenerationError: Esta excepción se lanzará si se intenta 
+            cambiar la función actual del generador por una cuya cabecera no 
+            ha sido definida anteriormente.
         """
         if func_code_name in self._func_header:
             self._func_locals[func_code_name] = []
