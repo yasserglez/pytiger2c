@@ -76,3 +76,18 @@ class VariableAccessNode(AccessNode):
         name = generator.add_node(self.name)
         generator.add_edge(me, name)
         return me
+    
+    def generate_code(self, generator):
+        """
+        Genera el código correspondiente a la estructura del lenguaje Tiger
+        representada por el nodo.
+        
+        En particular el nodo de acceso a una variable, no genera ninguna
+        instrucción de código C{C} sino que toma valor la propiedad C{code_name}.
+
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método C{generate_code}
+        de la clase C{LanguageNode}.
+        """
+        self.scope.generate_code(generator)
+        self._code_name = self.scope.get_variable_code(self.name)

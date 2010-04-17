@@ -183,6 +183,8 @@ class CodeGenerator(object):
             field_names.insert(0, 'parent')
             field_types.insert(0, 'struct {0}*'.format(parent_code_name))
         code_name, field_code_names = self.define_struct(code_name, field_names, field_types)
+        if parent_code_name:
+            field_code_names = field_code_names[1:]
         for variable_type, variable_code_name in zip(variable_types, field_code_names):
             variable_type.code_name = variable_code_name
         return code_name, code_type

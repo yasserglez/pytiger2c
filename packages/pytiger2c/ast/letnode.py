@@ -230,3 +230,36 @@ class LetNode(ValuedExpressionNode):
         expressions = self.expressions.generate_dot(generator)
         generator.add_edge(me, expressions)
         return me
+    
+    def generate_code(self, generator):
+        """
+        Genera el código correspondiente a la estructura del lenguaje Tiger
+        representada por el nodo.
+
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método C{generate_code}
+        de la clase C{LanguageNode}.
+        """
+        self.scope.generate_code(generator)
+        if self.scope.parent:
+            statement = '{scope}->parent = {parent};'
+            statement = statement.format(scope=self.scope.code_name, 
+                                         parent=self.scope.parent.code_name)
+            generator.add_statement(statement)
+        
+        for type_declaration_group in self.type_declaration_groups:
+            type_declaration_group.generate_code(generator)
+        
+        for variable_declaration in self.variable_declarations:
+            variable_declaration.generate_code(generator)
+        
+        for function_declaration_group in self.function_declaration_groups:
+            function_declaration_group.generate_code(generator)
+        
+        self.expressions.generate_code(generator)
+        
+        if self.has_return_value():
+            self._code_name = self.expressions.code_name
+            
+            
+            

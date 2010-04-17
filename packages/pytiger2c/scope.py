@@ -68,7 +68,10 @@ class Scope(object):
         if self._code_type is None:
             names = self._members.keys()
             members = self._members.values()
-            parent = self.parent.code_name if (self.parent is not None) else None
+            parent = None
+            if self.parent:
+                self.parent.generate_code(generator)
+                parent = self.parent.code_name
             code_name, code_type = generator.define_scope(names, members, parent)
             self._code_name = code_name
             self._code_type = code_type
@@ -97,7 +100,17 @@ class Scope(object):
             un miembro en algún ámbito con el nombre dado pero no es una
             variable.
         """
-        raise NotImplementedError()
+        parent_path_code = ''
+        current = self
+        while not name in current._members:
+            parent_path_code += 'parent->'
+            current = current.parent
+        var_code_name = current._members[name].code_name
+        variable_code = '{scope_code_name}->{parent_path_code}{var_code_name}'
+        variable_code = variable_code.format(scope_code_name=self._code_name, 
+                                             parent_path_code=parent_path_code,
+                                             var_code_name=var_code_name)
+        return  variable_code
         
     def define_type(self, name, tiger_type):
         """
