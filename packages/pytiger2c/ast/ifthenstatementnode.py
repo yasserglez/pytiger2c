@@ -106,3 +106,20 @@ class IfThenStatementNode(NonValuedExpressionNode):
         generator.add_edge(me, condition)
         generator.add_edge(me, then_expression)
         return me
+
+    def generate_code(self, generator):
+        """
+        Genera el código correspondiente a la estructura del lenguaje Tiger
+        representada por el nodo.
+
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método C{generate_code}
+        de la clase C{LanguageNode}.
+        """
+        self.scope.generate_code(generator)
+        
+        self.condition.generate_code(generator)
+        generator.add_statement('if({0})'.format(self.condition.code_name))
+        generator.add_statement('{')
+        self.then_expression.generate_code(generator)
+        generator.add_statement('}')

@@ -1,0 +1,2 @@
+if 1 then (print("output\n"); 25)
+     else (print("wrong output\n"); 15)

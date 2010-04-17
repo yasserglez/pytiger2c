@@ -1,0 +1,2 @@
+if 1 then print("output\n")
+     else print("wrong output\n")
