@@ -5,6 +5,8 @@ Clase C{LessThanOperatorNode} del árbol de sintáxis abstracta.
 """
 
 from pytiger2c.ast.relationallogicaloperatornode import RelationalLogicalOperatorNode
+from pytiger2c.types.integertype import IntegerType
+from pytiger2c.types.stringtype import StringType
 
 
 class LessThanOperatorNode(RelationalLogicalOperatorNode):
@@ -24,3 +26,4 @@ class LessThanOperatorNode(RelationalLogicalOperatorNode):
         en la clase C{BinaryOperatorNode}.           
         """
         super(LessThanOperatorNode, self).__init__(left, right)
+        self._operator = '<'

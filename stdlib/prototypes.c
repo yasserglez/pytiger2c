@@ -29,5 +29,7 @@ void pytiger2c_error(char *msg);
 
 void *pytiger2c_malloc(size_t size);
 
+int64_t pytiger2c_strcmp(struct tiger_string *a, struct tiger_string *b);
+
 /* Functions defined in the program. */
 

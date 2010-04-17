@@ -157,7 +157,7 @@ class LanguageNode(object):
             código C correspondiente a un programa Tiger.        
         
         @raise CodeGenerationError: Esta excepción se lanzará cuando se produzca
-            algún error durante la generación del código correspondiente al nodo.,
+            algún error durante la generación del código correspondiente al nodo.
             La excepción contendrá información acerca del error.
         """
         raise NotImplementedError()

@@ -28,6 +28,7 @@ class RelationalLogicalOperatorNode(LogicalOperatorNode):
         en la clase C{BinaryOperatorNode}.        
         """
         super(RelationalLogicalOperatorNode, self).__init__(left, right)
+        self._operator = None
 
     def check_semantics(self, scope, errors):
         """
@@ -85,3 +86,31 @@ class RelationalLogicalOperatorNode(LogicalOperatorNode):
                 errors.append(message.format(line=self.line_number))
         
         self._return_type = IntegerType()
+
+    def generate_code(self, generator):
+        """
+        Genera el código C correspondiente a la estructura del lenguaje Tiger
+        representada por el nodo.
+
+        @type generator: C{CodeGenerator}
+        @param generator: Clase auxiliar utilizada en la generación del 
+            código C correspondiente a un programa Tiger.        
+        
+        @raise CodeGenerationError: Esta excepción se lanzará cuando se produzca
+            algún error durante la generación del código correspondiente al nodo.
+            La excepción contendrá información acerca del error.
+        """
+        self.scope.generate_code(generator)
+        self.left.generate_code(generator)
+        self.right.generate_code(generator)
+        result_var = generator.define_local(IntegerType().code_type)
+        if isinstance(self.left.return_type, StringType):
+            stmt = '{result} = (pytiger2c_strcmp({left}, {right}) {op} 0);'
+        elif isinstance(self.left.return_type, IntegerType):
+            stmt = '{result} = ({left} {op} {right});'
+        stmt = stmt.format(result=result_var, 
+                           op=self._operator,
+                           left=self.left.code_name, 
+                           right=self.right.code_name)
+        generator.add_statement(stmt)
+        self._code_name = result_var

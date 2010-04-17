@@ -161,5 +161,21 @@ void *pytiger2c_malloc(size_t size)
 	return mem;
 }
 
+/* Auxiliar function used to compare two Tiger strings. */
+int64_t pytiger2c_strcmp(struct tiger_string *a, struct tiger_string *b)
+{
+    size_t a_length = a->length;
+    size_t b_length = b->length;
+    int64_t result;
+
+    result = memcmp (a->data, b->data, (a_length < b_length) ? a_length : b_length);
+    if (result == 0)
+    {
+        result = a_length - b_length;
+    }
+
+    return result;
+}
+
 /* Functions defined in the program. */
 

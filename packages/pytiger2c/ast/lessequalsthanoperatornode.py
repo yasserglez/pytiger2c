@@ -24,3 +24,4 @@ class LessEqualsThanOperatorNode(RelationalLogicalOperatorNode):
         en la clase C{BinaryOperatorNode}.           
         """
         super(LessEqualsThanOperatorNode, self).__init__(left, right)
+        self._operator = '<='
