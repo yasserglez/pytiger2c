@@ -25,6 +25,7 @@ class PlusOperatorNode(ArithmeticOperatorNode):
         en la clase C{BinaryOperatorNode}.
         """
         super(PlusOperatorNode, self).__init__(left, right)
+        self._operator = '+'
         
     def check_semantics(self, scope, errors):
         """
