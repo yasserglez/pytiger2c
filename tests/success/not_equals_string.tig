@@ -1,0 +1,1 @@
+(printi("abc" <> "abc"); printi("abc" <> "abcd"); printi("abcd" <> "abc"); print("\n"))

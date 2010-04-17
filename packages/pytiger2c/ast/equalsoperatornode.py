@@ -23,3 +23,4 @@ class EqualsOperatorNode(EqualityLogicalOperatorNode):
         en la clase C{BinaryOperatorNode}.            
         """
         super(EqualsOperatorNode, self).__init__(left, right)
+        self._code_operator = '=='

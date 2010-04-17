@@ -23,3 +23,4 @@ class NotEqualsOperatorNode(EqualityLogicalOperatorNode):
         en la clase C{BinaryOperatorNode}.            
         """
         super(NotEqualsOperatorNode, self).__init__(left, right)
+        self._code_operator = '!='

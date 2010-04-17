@@ -6,6 +6,7 @@ Clase C{EqualityLogicalOperatorNode} del árbol de sintáxis abstracta.
 
 from pytiger2c.ast.logicaloperatornode import LogicalOperatorNode
 from pytiger2c.types.integertype import IntegerType
+from pytiger2c.types.stringtype import StringType
 from pytiger2c.types.recordtype import RecordType
 from pytiger2c.types.niltype import NilType
 
@@ -28,6 +29,7 @@ class EqualityLogicalOperatorNode(LogicalOperatorNode):
         en la clase C{BinaryOperatorNode}.          
         """
         super(EqualityLogicalOperatorNode, self).__init__(left, right)
+        self._code_operator = None
 
     def check_semantics(self, scope, errors):
         """
@@ -78,3 +80,37 @@ class EqualityLogicalOperatorNode(LogicalOperatorNode):
                     errors.append(message.format(line=self.line_number))
         
         self._return_type = IntegerType()
+
+    def generate_code(self, generator):
+        """
+        Genera el código C correspondiente a la estructura del lenguaje Tiger
+        representada por el nodo.
+
+        @type generator: C{CodeGenerator}
+        @param generator: Clase auxiliar utilizada en la generación del 
+            código C correspondiente a un programa Tiger.        
+        
+        @raise CodeGenerationError: Esta excepción se lanzará cuando se produzca
+            algún error durante la generación del código correspondiente al nodo.
+            La excepción contendrá información acerca del error.
+        """
+        self.scope.generate_code(generator)
+        self.left.generate_code(generator)
+        self.right.generate_code(generator)
+        result_var = generator.define_local(IntegerType().code_type)
+        if isinstance(self.left.return_type, StringType):
+            stmt = '{result} = (pytiger2c_strcmp({left}, {right}) {op} 0);'
+        elif isinstance(self.left, NilType):
+            stmt = '{result} = ((({left_type}) {left}) {op} {right});'
+        elif isinstance(self.right, NilType):
+            stmt = '{result} = ({left} {op} (({right_type}) {right}));'
+        else:
+            stmt = '{result} = ({left} {op} {right});'
+        stmt = stmt.format(result=result_var, 
+                           op=self._code_operator,
+                           left=self.left.code_name, 
+                           right=self.right.code_name,
+                           left_type=self.left.return_type.code_type,
+                           right_type=self.right.return_type.code_type)
+        generator.add_statement(stmt)
+        self._code_name = result_var

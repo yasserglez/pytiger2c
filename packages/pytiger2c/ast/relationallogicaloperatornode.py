@@ -28,7 +28,7 @@ class RelationalLogicalOperatorNode(LogicalOperatorNode):
         en la clase C{BinaryOperatorNode}.        
         """
         super(RelationalLogicalOperatorNode, self).__init__(left, right)
-        self._operator = None
+        self._code_operator = None
 
     def check_semantics(self, scope, errors):
         """
@@ -106,10 +106,10 @@ class RelationalLogicalOperatorNode(LogicalOperatorNode):
         result_var = generator.define_local(IntegerType().code_type)
         if isinstance(self.left.return_type, StringType):
             stmt = '{result} = (pytiger2c_strcmp({left}, {right}) {op} 0);'
-        elif isinstance(self.left.return_type, IntegerType):
+        else:
             stmt = '{result} = ({left} {op} {right});'
         stmt = stmt.format(result=result_var, 
-                           op=self._operator,
+                           op=self._code_operator,
                            left=self.left.code_name, 
                            right=self.right.code_name)
         generator.add_statement(stmt)

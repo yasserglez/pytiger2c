@@ -24,4 +24,4 @@ class GreaterThanOperatorNode(RelationalLogicalOperatorNode):
         en la clase C{BinaryOperatorNode}.           
         """
         super(GreaterThanOperatorNode, self).__init__(left, right)
-        self._operator = '>'
+        self._code_operator = '>'
