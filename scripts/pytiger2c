@@ -79,6 +79,11 @@ def main(argv):
             tiger2dot(tiger_filename, output_filename)
         elif options.output_type == 'c':
             tiger2c(tiger_filename, output_filename)
+            # Translation completed. Beautify the code using GNU Indent.
+            INDENT_CMD = ['indent', '-linux', '-o', output_filename, output_filename]
+            if subprocess.call(INDENT_CMD) != EXIT_SUCCESS:
+                # Leave the c file for debugging.
+                sys.exit(EXIT_FAILURE)            
         elif options.output_type == 'binary':
             basename = os.path.basename(tiger_filename)
             index = basename.rfind('.')
@@ -88,7 +93,7 @@ def main(argv):
             # Translation completed. Compile using GCC.
             GCC_CMD = ['gcc', '-std=c99', '-o', output_filename, c_filename]
             if subprocess.call(GCC_CMD) != EXIT_SUCCESS:
-                # Leave the temporal c file for debug.
+                # Leave the temporal c file for debugging.
                 sys.exit(EXIT_FAILURE)
             os.unlink(c_filename)
     except PyTiger2CError, error:
