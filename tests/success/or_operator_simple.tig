@@ -1,0 +1,1 @@
+(printi(0 | 0); printi(0 | 1); printi(1 | 0); printi(1 | 1); print("\n"))
