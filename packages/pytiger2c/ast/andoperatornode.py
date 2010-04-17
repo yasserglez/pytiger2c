@@ -5,6 +5,7 @@ Clase C{AndOperatorNode} del árbol de sintáxis abstracta.
 """
 
 from pytiger2c.ast.binarylogicaloperatornode import BinaryLogicalOperatorNode
+from pytiger2c.types.integertype import IntegerType
 
 
 class AndOperatorNode(BinaryLogicalOperatorNode):
@@ -25,3 +26,30 @@ class AndOperatorNode(BinaryLogicalOperatorNode):
         en la clase C{BinaryOperatorNode}.        
         """
         super(AndOperatorNode, self).__init__(left, right)
+
+    def generate_code(self, generator):
+        """
+        Genera el código C correspondiente a la estructura del lenguaje Tiger
+        representada por el nodo.
+
+        @type generator: C{CodeGenerator}
+        @param generator: Clase auxiliar utilizada en la generación del 
+            código C correspondiente a un programa Tiger.        
+        
+        @raise CodeGenerationError: Esta excepción se lanzará cuando se produzca
+            algún error durante la generación del código correspondiente al nodo.
+            La excepción contendrá información acerca del error.
+        """
+        self.scope.generate_code(generator)
+        result_var = generator.define_local(IntegerType().code_type)
+        self.left.generate_code(generator)
+        generator.add_statement('if (!{left}) {{'.format(left=self.left.code_name))
+        generator.add_statement('{result} = 0; }}'.format(result=result_var))
+        generator.add_statement('else {')
+        self.right.generate_code(generator)
+        generator.add_statement('if ({right}) {{'.format(right=self.right.code_name))
+        generator.add_statement('{result} = 1; }}'.format(result=result_var))
+        generator.add_statement('else {')
+        generator.add_statement('{result} = 0; }}'.format(result=result_var))
+        generator.add_statement('}')
+        self._code_name = result_var

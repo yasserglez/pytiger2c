@@ -1,1 +1,1 @@
-printi((print("Left\n"); 1) | (print("Right\n"); 1))
+(print("Left\n"); 1) | (print("Right\n"); 1)
