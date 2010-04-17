@@ -1,0 +1,18 @@
+let
+    var output := "wrong output\n"
+    var output2 := "wrong output\n"
+    var i := 0
+in
+    output2 :=
+    let
+        var right := "output\n"
+    in
+        output := right;
+        print(output);
+        i := 1;
+        if i then printi(i);
+        print("\n");
+        "output\n"
+    end;
+    print(output2)
+end
