@@ -1,3 +1,4 @@
+
 # -*- coding: utf-8 -*-
 
 """
@@ -54,19 +55,19 @@ class ExpressionSequenceNode(ValuedExpressionNode):
         # Check semantics of the expressions in the sequence.
         self._has_return_value = False
 
-        if len(self._expressions) > 0:
+        if len(self.expressions) > 0:
             errors_before_last = len(errors)
-            self._expressions[-1].check_semantics(scope, errors)
-            self._has_return_value = self._expressions[-1].has_return_value()
+            self.expressions[-1].check_semantics(scope, errors)
+            self._has_return_value = self.expressions[-1].has_return_value()
 
-        for expression in self._expressions[0:-1]:
+        for expression in self.expressions[0:-1]:
             errors_before_last = len(errors)
             expression.check_semantics(scope, errors)
 
         if errors_before_last == len(errors):
             try:
-                if self._expressions[-1].has_return_value():
-                    self._return_type = self._expressions[-1].return_type
+                if self.expressions[-1].has_return_value():
+                    self._return_type = self.expressions[-1].return_type
             except IndexError:
                 # Ignore this exception, the node does not have a return value.
                 pass
@@ -97,3 +98,18 @@ class ExpressionSequenceNode(ValuedExpressionNode):
             expression = expression.generate_dot(generator)
             generator.add_edge(me, expression)
         return me
+
+    def generate_code(self, generator):
+        """
+        Genera el código correspondiente a la estructura del lenguaje Tiger
+        representada por el nodo.
+
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método C{generate_code}
+        de la clase C{LanguageNode}.
+        """
+        self.scope.generate_code(generator)
+        for expression in self.expressions:
+            expression.generate_code(generator)
+        if self.has_return_value():
+            self._code_name = self.expressions[-1].code_name
