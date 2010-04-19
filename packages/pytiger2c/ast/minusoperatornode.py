@@ -24,6 +24,7 @@ class MinusOperatorNode(ArithmeticOperatorNode):
         consulte la documentación del método C{__init__} en la clase C{BinaryOperatorNode}.
         """
         super(MinusOperatorNode, self).__init__(left, right)
+        self._operator = '-'
         
     def check_semantics(self, scope, errors):
         """

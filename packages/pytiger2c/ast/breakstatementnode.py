@@ -57,6 +57,15 @@ class BreakStatementNode(NonValuedExpressionNode):
         elif current_node.has_return_value():
             message = 'Invalid usage of the break statement at line {line}'
             errors.append(message.format(line=self.line_number))
-        elif isinstance(current_node, CallableDeclarationNode):
-            message = 'Invalid usage of the break statement at line {line}'
-            errors.append(message.format(line=self.line_number))
+            
+    def generate_code(self, generator):
+        """
+        Genera el código correspondiente a la estructura del lenguaje Tiger
+        representada por el nodo.
+
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método C{generate_code}
+        de la clase C{LanguageNode}.
+        """
+        self.scope.generate_code(generator)
+        generator.add_statement('break ;')

@@ -25,6 +25,7 @@ class TimesOperatorNode(ArithmeticOperatorNode):
         C{BinaryOperatorNode}.
         """
         super(TimesOperatorNode, self).__init__(left, right)
+        self._operator = '*'
     
     def check_semantics(self, scope, errors):
         """

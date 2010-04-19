@@ -1,0 +1,7 @@
+let
+    var output := "wrong output\n"
+    var right := "output\n"
+in
+    output := right;
+    print(output)
+end

@@ -111,3 +111,28 @@ class ArrayAccessNode(AccessNode):
         generator.add_edge(me, array)
         generator.add_edge(me, position)
         return me
+    
+    def generate_code(self, generator):
+        """
+        Genera el código correspondiente a la estructura del lenguaje Tiger
+        representada por el nodo.
+        
+        En particular el nodo de acceso a un C{array}, no genera ninguna
+        instrucción de código C{C} sino que toma valor la propiedad C{code_name}.
+
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método C{generate_code}
+        de la clase C{LanguageNode}.
+        """
+        self.scope.generate_code(generator)
+        self.array.generate_code(generator)
+        self.position.generate_code(generator)
+        
+        statement = 'if({pos} > (int)({array}->length)-1){{pytiger2c_error("{msg}.");}}'
+        statement = statement.format(pos = self.position.code_name, 
+                                     array = self.array.code_name, 
+                                     msg = "Index out of range")
+        generator.add_statement(statement)
+        self._code_name = '(({0}*)({1}->data))[{2}]'.format(self.return_type.code_type,
+                                                         self.array.code_name, 
+                                                         self.position.code_name)

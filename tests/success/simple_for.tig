@@ -1,0 +1,2 @@
+for index:=1 to 10 do 
+    (printi(index); print("\n"))

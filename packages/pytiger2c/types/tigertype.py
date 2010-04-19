@@ -18,7 +18,13 @@ class TigerType(object):
         """
         return self._code_type
     
-    code_type = property(_get_code_type)
+    def _set_code_type(self, value):
+        """
+        Método para cambiar el valor de la propiedad C{code_type}.
+        """
+        self._code_type = value
+    
+    code_type = property(_get_code_type, _set_code_type)
 
     def __init__(self):
         """

@@ -59,3 +59,20 @@ class UnaryMinusOperatorNode(UnaryOperatorNode):
                 errors.append(message.format(line=self.line_number))
 
         self._return_type = IntegerType()
+        
+    def generate_code(self, generator):
+        """
+        Genera el código correspondiente a la estructura del lenguaje Tiger
+        representada por el nodo.
+
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método C{generate_code}
+        de la clase C{LanguageNode}.
+        """
+        self.scope.generate_code(generator)
+        self.expression.generate_code(generator)
+        int_code_type = IntegerType().code_type
+        local_var = generator.define_local(int_code_type)
+        generator.add_statement('{0} = -{1};'.format(local_var, 
+                                                     self.expression.code_name))
+        self._code_name = local_var

@@ -1,0 +1,5 @@
+let
+    var output := "output\n"
+in
+    print(output)
+end

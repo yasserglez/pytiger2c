@@ -154,3 +154,39 @@ class ForStatementNode(NonValuedExpressionNode):
         generator.add_edge(me, upper_expression)
         generator.add_edge(me, expression)
         return me
+
+    def generate_code(self, generator):
+        """
+        Genera el código correspondiente a la estructura del lenguaje Tiger
+        representada por el nodo.
+
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método C{generate_code}
+        de la clase C{LanguageNode}.
+        """
+        self.scope.generate_code(generator)
+        if self.scope.parent:
+            statement = '{scope}->parent = {parent};'
+            statement = statement.format(scope=self.scope.code_name, 
+                                         parent=self.scope.parent.code_name)
+            generator.add_statement(statement)
+        
+        self.lower_expression.generate_code(generator)
+        self.upper_expression.generate_code(generator)
+        
+        index_code_name = self.scope.get_variable_code(self.index_name)
+        generator.add_statement('{0} = {1};'.format(index_code_name, 
+                                                    self.lower_expression.code_name))
+        statement = 'while({0} <= {1})'.format(index_code_name, 
+                                               self._upper_expression.code_name)
+        generator.add_statement(statement)
+        generator.add_statement('{{')
+        self.expression.generate_code(generator)
+        generator.add_statement('{0}++;'.format(index_code_name))
+        generator.add_statement('}}')
+        
+        if self.has_return_value():
+            self._code_name = self.expressions.code_name
+            
+            
+            
