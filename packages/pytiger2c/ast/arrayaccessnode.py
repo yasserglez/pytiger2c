@@ -128,7 +128,7 @@ class ArrayAccessNode(AccessNode):
         self.array.generate_code(generator)
         self.position.generate_code(generator)
         
-        statement = 'if({pos} > (int)({array}->length)-1){{pytiger2c_error("{msg}.");}}'
+        statement = 'if({pos} >= (int)({array}->length)){{pytiger2c_error("{msg}.");}}'
         statement = statement.format(pos = self.position.code_name, 
                                      array = self.array.code_name, 
                                      msg = "Index out of range")

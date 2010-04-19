@@ -100,6 +100,7 @@ class ArrayLiteralExpressionNode(ValuedExpressionNode):
             return
             
         if isinstance(self.return_type, ArrayType):
+            
             self.count.check_semantics(self.scope, errors)
             if errors_before != len(errors):
                 return            
@@ -165,9 +166,13 @@ class ArrayLiteralExpressionNode(ValuedExpressionNode):
         array_code_type = self.return_type.code_type
         local_var = generator.define_local(array_code_type)
         # Allocate memory for the struct and the data.
+        statement = '{0}->data = pytiger2c_malloc(1);'
+        statement = statement.format(local_var)
+        generator.add_statement(statement, allocate = True)
+        generator.add_statement('free({0}->data);'.format(local_var))
         statement = '{0}->data = pytiger2c_malloc(sizeof({1})*{2});'
         statement = statement.format(local_var, self.value.code_name, self.count.code_name)
-        generator.add_statement(statement, allocate = True)
+        generator.add_statement(statement)
         statement = '{0} = pytiger2c_malloc(sizeof({1}));'.format(local_var, array_code_type)
         generator.add_statement(statement, allocate = True)
         generator.add_statement('{0}->length = {1};'.format(local_var, self.count.code_name))
