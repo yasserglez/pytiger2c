@@ -17,4 +17,4 @@ class IntegerType(BasicType):
         Inicializa la clase representando el tipo array.
         """
         super(IntegerType, self).__init__()
-        self._code_type = 'int64_t'
+        self._code_type = 'int'
