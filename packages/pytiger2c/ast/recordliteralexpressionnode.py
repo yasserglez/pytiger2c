@@ -163,3 +163,30 @@ class RecordLiteralExpressionNode(ValuedExpressionNode):
             field_value = field_value.generate_dot(generator)
             generator.add_edge(field_name, field_value)
         return me
+    
+    def generate_code(self, generator):
+        """
+        Genera el código correspondiente a la estructura del lenguaje Tiger
+        representada por el nodo.
+
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método C{generate_code}
+        de la clase C{LanguageNode}.
+        """
+        self.scope.generate_code(generator)
+        
+        record_code_type = self.return_type.code_type
+        local_var = generator.define_local(record_code_type)
+        statement = '{0} = pytiger2c_malloc(sizeof({1}));'.format(local_var, 
+                                                                  record_code_type)
+        generator.add_statement(statement, allocate = True)
+        # Initialize the record.
+        for field_value in self.fields_values:
+            field_value.generate_code(generator)
+        for field_value, field_code_name in zip(self.fields_values, 
+                                                self.return_type.field_code_names):
+            statement = '{0}->{1} = {2};'.format(local_var, field_code_name,
+                                                field_value.code_name)
+            generator.add_statement(statement)
+        generator.add_statement('free({0});'.format(local_var), free = True)
+        self._code_name = local_var 

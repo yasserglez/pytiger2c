@@ -109,3 +109,25 @@ class RecordAccessNode(AccessNode):
         field_name = generator.add_node(self.field_name)
         generator.add_edge(me, field_name)
         return me
+    
+    def generate_code(self, generator):
+        """
+        Genera el código correspondiente a la estructura del lenguaje Tiger
+        representada por el nodo.
+        
+        En particular el nodo de acceso a un C{array}, no genera ninguna
+        instrucción de código C{C} sino que toma valor la propiedad C{code_name}.
+
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método C{generate_code}
+        de la clase C{LanguageNode}.
+        """
+        self.scope.generate_code(generator)
+        self.record.generate_code(generator)
+        
+        record_type = self.record.return_type
+        index = record_type.fields_names.index(self.field_name)
+        field_code_name = record_type.field_code_names[index]        
+        self._code_name = '{1}->{2}'.format(self.return_type.code_type,
+                                                         self.record.code_name, 
+                                                         field_code_name)
