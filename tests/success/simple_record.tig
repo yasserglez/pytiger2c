@@ -1,0 +1,7 @@
+let
+    type output = { value : string, count : int }
+    var a := output{value = "output\n", count=5}
+in
+    for i:= 0 to a.count do
+        print(a.value)
+end
