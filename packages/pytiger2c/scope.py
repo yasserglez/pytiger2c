@@ -68,11 +68,15 @@ class Scope(object):
         if self._code_type is None:
             names = self._members.keys()
             members = self._members.values()
+            type_names = self._types.keys()
+            types = self._types.itervalues()
             parent = None
             if self.parent:
                 self.parent.generate_code(generator)
                 parent = self.parent.code_name
-            code_name, code_type = generator.define_scope(names, members, parent)
+            code_name, code_type = generator.define_scope(names, members, 
+                                                          type_names, types, 
+                                                          parent)
             self._code_name = code_name
             self._code_type = code_type
     
@@ -454,6 +458,17 @@ class FakeScope(Scope):
         self._current_siblings = None
         self._relationships = {}
         self._max_depth = 5
+        
+    def generate_code(self, generator):
+        """
+        Genera una estructura del lenguaje C que contiene las definiciones
+        de las variables incluídas en este ámbito de ejecución.
+        
+        @type generator: C{CodeGenerator}
+        @param generator: Clase auxiliar utilizada en la generación del 
+            código C correspondiente a un programa Tiger.        
+        """
+        self.parent.generate_code(generator)
 
     def define_type(self, name, tiger_type):
         """
@@ -479,14 +494,6 @@ class FakeScope(Scope):
         """
         self.parent.define_variable(name, tiger_type)
         
-    def generate_code(self):
-        """
-        Para obtener información acerca de los parámetros recibidos por
-        este método consulte la documentación del método con el mismo nombre
-        en la clase C{Scope}.
-        """
-        self.parent.generate_code()
-
     def get_variable_code(self, name):
         """
         Para obtener información acerca de los parámetros recibidos por

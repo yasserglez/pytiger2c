@@ -149,3 +149,39 @@ class ArrayLiteralExpressionNode(ValuedExpressionNode):
         value = self.value.generate_dot(generator)
         generator.add_edge(me, value)        
         return me
+
+    def generate_code(self, generator):
+        """
+        Genera el código correspondiente a la estructura del lenguaje Tiger
+        representada por el nodo.
+
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método C{generate_code}
+        de la clase C{LanguageNode}.
+        """
+        self.scope.generate_code(generator)
+        self.count.generate_code(generator)
+        self.value.generate_code(generator)
+        array_code_type = self.return_type.code_type
+        local_var = generator.define_local(array_code_type)
+        # Allocate memory for the struct and the data.
+        statement = '{0}->data = pytiger2c_malloc(sizeof({1})*{2});'
+        statement = statement.format(local_var, self.value.code_name, self.count.code_name)
+        generator.add_statement(statement, allocate = True)
+        statement = '{0} = pytiger2c_malloc(sizeof({1}));'.format(local_var, array_code_type)
+        generator.add_statement(statement, allocate = True)
+        generator.add_statement('{0}->length = {1};'.format(local_var, self.count.code_name))
+        # Initializa the data.
+        # TODO Change it for use memcpy.
+        statement = 'for(int tiger_index = 0; tiger_index < {0}-> length; tiger_index++)'
+        statement = statement.format(local_var)
+        generator.add_statement(statement)
+        generator.add_statement('{')
+        statement = '(({0}*)({1}->data))[tiger_index] = {2};'
+        statement = statement.format(self.value.return_type.code_type, local_var,
+                                     self.value.code_name)
+        generator.add_statement(statement)
+        generator.add_statement('}')
+        generator.add_statement('free({0}->data);'.format(local_var), free = True)
+        generator.add_statement('free({0});'.format(local_var), free = True)
+        self._code_name = local_var 

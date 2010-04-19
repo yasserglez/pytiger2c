@@ -101,20 +101,22 @@ class CodeGenerator(object):
             name += '_'
         return name
     
-    def define_struct(self, name, field_names, field_code_types):
+    def define_struct(self, code_name, field_names, field_code_types):
         """
         Define un nuevo tipo correspondiente a una estructura del lenguaje C.
-        Se tratará de definir el nuevo tipo con el nombre especificado por el
-        parámetro C{name} si este no coincide con una palabra reservada del 
-        lenguaje C o un tipo definido anteriormente. De manera semejante sucede
-        con cada uno de los nombres dados para los campos de la estructura
-        mediante el parámetro C{field_names}. 
+        Se definirá un nuevo tipo con el parametro C{code_name} por nombre, y 
+        se tratarán de definir los campos de la estructuras con el nombre 
+        correspondiente en el parámetro C{field_names}, en caso de que este
+        coincida con una palabra reservada del lenguaje C, se tratará de a
+        signarle uno similar.
         
-        Esta función se utiliza para generar el código de los ámbitos de ejecución 
-        y de los C{records} del lenguaje Tiger que se definan en el programa.
+        Esta función se utiliza para generar el código de los ámbitos de 
+        ejecución, de los C{arrays} y C{records} del lenguaje Tiger que se 
+        definan en el programa.
         
-        @type name: C{str}
-        @param name: Nombre que se propone para el tipo de la nueva estructura.
+        @type code_name: C{str}
+        @param code_name: Nombre fue definido para el tipo de la nueva 
+            estructura.
         
         @type field_names: C{list}
         @param field_names: Nombres que se proponen para cada uno de los campos
@@ -125,16 +127,11 @@ class CodeGenerator(object):
             por métodos de esta clase correspondientes a los tipos de cada uno
             de los campos de la estructura.
         
-        @rtype: C{tuple}
-        @return: Este método retorna una tupla con dos elementos. El primer elemento
-            es el identificador de código que se debe utilizar para referirse al 
-            tipo de la nueva estructura definida. El segundo elemento es una lista
-            con los identificadores de código que se pueden utilizar para acceder
-            a cada uno de los campos de la estructura. 
+        @rtype: C{list}
+        @return: Lista con los identificadores de código que se pueden utilizar 
+            para acceder a cada uno de los campos de la estructura. 
         """
-        code_name = self._disambiguate(name, self._keywords)
-        code_name = self._disambiguate(code_name, self._type_defs)
-        definition = 'struct {0}\n'.format(name)
+        definition = 'struct {0}\n'.format(code_name)
         definition += '{\n'
         field_code_names = []
         for field_name, field_code_type in zip(field_names, field_code_types):
@@ -142,10 +139,29 @@ class CodeGenerator(object):
             field_code_names.append(field_name_code)
             definition += '{0} {1};\n'.format(field_code_type, field_name_code)
         definition += '};'
-        self._type_defs[name] = definition
-        return (code_name, field_code_names)
+        self._type_defs[code_name] = definition
+        return field_code_names
     
-    def define_scope(self, member_names, member_types, parent_code_name=None):
+    def define_type_name(self, name):
+        """
+        Se tratará de definir un nuevo nombre para el tipo definido con el
+        nombre dado en el parámetro C{name} si este no coincide con una palabra 
+        reservada del lenguaje C o un tipo definido anteriormente, en este caso
+        se tratará de definir un nombre lo más semejante posible. 
+        
+        @type name: C{str}
+        @param name: Nombre del tipo al que se le quiere definir un nuevo tipo.
+        
+        @rtype: C{str}
+        @return: Nombre que fue definido para este tipo.
+        """
+        code_name = self._disambiguate(name, self._keywords)
+        code_name = self._disambiguate(code_name, self._type_defs)
+        self._type_defs[code_name] = None
+        return code_name
+        
+    def define_scope(self, member_names, member_types, type_names, 
+                     types, parent_code_name=None):
         """
         Utilizado para generar las estructuras de código C que representan los 
         ámbitos de ejecución de un programa Tiger. Este método llama a 
@@ -157,6 +173,14 @@ class CodeGenerator(object):
         retorno de este método consulte la documentación del método
         C{define_struct} definido en esta misma clase.
         
+        @type type_names: C{list}
+        @param type_names: Lista con los nombres de los tipos definidos en este
+            ámbito
+            
+        @type types: C{list}
+        @param types: Lista con las instancias de C{TigerTypes} correspondientes
+            a los tipos definidos en este ámbito.
+        
         @type parent_code_name: C{str}
         @param parent_code_name: Identificador en el código generado 
             correspondiente a la estructura representando el ámbito de ejecución 
@@ -165,13 +189,22 @@ class CodeGenerator(object):
         """
         self._scopes_count += 1
         code_name = 'scope{0}'.format(self._scopes_count)
+        code_name = self.define_type_name(code_name)
         code_type = 'struct {0}* {0};'.format(code_name)
         func = self._func_stack[0]
         self._func_locals[func].append(code_type)
-        self._func_stmts[func].append('{0} = pytiger2c_malloc(sizeof(struct {0}));'.format(code_name))
+        statement = '{0} = pytiger2c_malloc(sizeof(struct {0}));'.format(code_name)
+        self._func_stmts[func].append(statement)
         self._func_cleanups[func].append('free({0});'.format(code_name))
         field_names, field_types = [], []
         variable_types = []
+        # Reserving the type names for the types of the scope.
+        for type_name, tiger_type in zip(type_names, types):
+            if not tiger_type.code_type:
+                tmp_code_name = self.define_type_name(type_name)
+                tiger_type.code_name = tmp_code_name
+                tiger_type.code_type = 'struct {0}*'.format(tmp_code_name)
+                
         for member_name, member_type in zip(member_names, member_types):
             if isinstance(member_type, FunctionType):
                 self.define_function(member_name, member_type)
@@ -182,16 +215,33 @@ class CodeGenerator(object):
         if parent_code_name:
             field_names.insert(0, 'parent')
             field_types.insert(0, 'struct {0}*'.format(parent_code_name))
-        code_name, field_code_names = self.define_struct(code_name, field_names, field_types)
+        field_code_names = self.define_struct(code_name, field_names, field_types)
         if parent_code_name:
             field_code_names = field_code_names[1:]
-        for variable_type, variable_code_name in zip(variable_types, field_code_names):
+        
+        for variable_type, variable_code_name in zip(variable_types, 
+                                                     field_code_names):
             variable_type.code_name = variable_code_name
+        
         return code_name, code_type
         
-    def define_array(self):
+    def define_array(self, code_name, field_code_type):
         """
+        Define un nuevo tipo C{array} del lenguaje Tiger que corresopnde a 
+        una estructura del lenguaje C. Con campos data y length, para más 
+        información consultar las anotaciones sobre el código generado. 
+                
+        @type code_name: C{str}
+        @param code_name: Nombre fue definido para el tipo de la nueva estructura.
+        
+        @type field_type: C{str}
+        @param field_type: Nombre de la estructura del lenguaje C que representa
+            el tipo correspondiente a los valores del C{array}.
         """
+        field_names = ['data', 'length']
+        field_code_types = ['{0}*'.format(field_code_type), 'size_t']
+        self.define_struct(code_name, field_names, field_code_types)
+        
         
     def define_function(self, function_name, function_type):
         """

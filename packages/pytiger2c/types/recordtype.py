@@ -12,6 +12,20 @@ class RecordType(TigerType):
     Clase de la jerarquía de tipos de Tiger representando el tipo record.
     """
     
+    def _get_code_name(self):
+        """
+        Método para obtener el valor de la propiedad C{code_name}.
+        """
+        return self._code_name
+    
+    def _set_code_name(self, value):
+        """
+        Método para cambiar el valor de la propiedad C{code_name}.
+        """
+        self._code_name = value
+    
+    code_name = property(_get_code_name, _set_code_name)
+    
     def _get_fields_typenames(self):
         """
         Método para obtener el valor de la propiedad C{fields_typenames}.
@@ -56,3 +70,4 @@ class RecordType(TigerType):
         self._fields_typenames = fields_typenames
         self._fields_names = fields_names
         self._fields_types = None
+        self._code_name = None
