@@ -180,13 +180,9 @@ class ForStatementNode(NonValuedExpressionNode):
         statement = 'while({0} <= {1})'.format(index_code_name, 
                                                self._upper_expression.code_name)
         generator.add_statement(statement)
-        generator.add_statement('{{')
+        generator.add_statement('{')
         self.expression.generate_code(generator)
         generator.add_statement('{0}++;'.format(index_code_name))
-        generator.add_statement('}}')
-        
-        if self.has_return_value():
-            self._code_name = self.expressions.code_name
-            
+        generator.add_statement('}')
             
             

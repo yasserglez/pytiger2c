@@ -128,11 +128,11 @@ class WhileStatementNode(NonValuedExpressionNode):
                                              cond = self.condition.code_name)
         generator.add_statement(statement)
         generator.add_statement('while({0})'.format(local_var))
-        generator.add_statement('{{')
+        generator.add_statement('{')
         self.expression.generate_code(generator)
         generator.add_statement('/* Condition code*/')
         self.condition.generate_code(generator)
         statement = '{var} = {cond};'.format(var = local_var,
                                              cond = self.condition.code_name)
         generator.add_statement(statement)
-        generator.add_statement('}}')
+        generator.add_statement('}')
