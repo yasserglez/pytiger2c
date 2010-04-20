@@ -106,10 +106,10 @@ def t_STRLIT(token):
             message = "Invalid string literal at line {line} column {column}"
             line, column = token.lexer.lineno, compute_column(token)
             raise SyntacticError(message.format(line=line, column=column))
-    repl = lambda match: _escape(ord(match.group(1)) - 64)
-    token.value = re.sub(r'\\^([@A-Z[\]^_])', repl, token.value)
     repl = lambda match: _escape(int(match.group(1)))
     token.value = re.sub(r'\\([0-9]{3})', repl, token.value)
+    repl = lambda match: _escape(ord(match.group(1)) - 64)    
+    token.value = re.sub(r'\\\^([@A-Z[\\\]^_])', repl, token.value)
     # Update the line counter here before stripping whitespaces.
     token.lexer.lineno += token.value.count('\n')
     # Strip whitespaces between \s.

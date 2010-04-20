@@ -70,13 +70,13 @@ class Scope(object):
             members = self._members.values()
             type_names = self._types.keys()
             types = self._types.itervalues()
-            parent = None
+            parent_code_type = None
             if self.parent:
                 self.parent.generate_code(generator)
-                parent = self.parent.code_name
-            code_name, code_type = generator.define_scope(names, members, 
-                                                          type_names, types, 
-                                                          parent)
+                parent_code_type = self.parent.code_type
+            code_name, code_type = \
+                generator.define_scope(names, members, type_names, 
+                                       types, parent_code_type)
             self._code_name = code_name
             self._code_type = code_type
     
@@ -107,7 +107,7 @@ class Scope(object):
         variable_code = variable_code.format(scope_code_name=self._code_name, 
                                              parent_path_code=parent_path_code,
                                              var_code_name=var_code_name)
-        return  variable_code
+        return variable_code
         
     def define_type(self, name, tiger_type):
         """
@@ -308,27 +308,27 @@ class RootScope(Scope):
         int_type = IntegerType()
         string_type = StringType()
         
-        print_type = FunctionType(None, [string_type], [''])
+        print_type = FunctionType(None, [string_type], [''], True)
         print_type.code_name = 'tiger_print'
-        printi_type = FunctionType(None, [int_type], [''])
+        printi_type = FunctionType(None, [int_type], [''], True)
         printi_type.code_name = 'tiger_printi'
-        flush_type = FunctionType(None, [], [])
+        flush_type = FunctionType(None, [], [], True)
         flush_type.code_name = 'tiger_flush'
-        getchar_type = FunctionType(string_type, [], [])
+        getchar_type = FunctionType(string_type, [], [], True)
         getchar_type.code_name = 'tiger_getchar'
-        ord_type = FunctionType(int_type, [string_type], [''])
+        ord_type = FunctionType(int_type, [string_type], [''], True)
         ord_type.code_name = 'tiger_ord'
-        chr_type = FunctionType(string_type, [int_type], [''])
+        chr_type = FunctionType(string_type, [int_type], [''], True)
         chr_type.code_name = 'tiger_chr'
-        size_type = FunctionType(int_type, [string_type], [''])
+        size_type = FunctionType(int_type, [string_type], [''], True)
         size_type.code_name = 'tiger_size'
-        substring_type = FunctionType(string_type, [string_type, int_type, int_type], ['', '', ''])
+        substring_type = FunctionType(string_type, [string_type, int_type, int_type], ['', '', ''], True)
         substring_type.code_name = 'tiger_substring'
-        concat_type = FunctionType(string_type, [string_type, string_type], ['', ''])
+        concat_type = FunctionType(string_type, [string_type, string_type], ['', ''], True)
         concat_type.code_name = 'tiger_concat'
-        not_type = FunctionType(int_type, [int_type], [''])
+        not_type = FunctionType(int_type, [int_type], [''], True)
         not_type.code_name = 'tiger_not'
-        exit_type = FunctionType(None, [int_type], [''])
+        exit_type = FunctionType(None, [int_type], [''], True)
         exit_type.code_name = 'tiger_exit'
 
         self.define_function('print', print_type)

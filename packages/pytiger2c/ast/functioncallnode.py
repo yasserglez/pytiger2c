@@ -147,11 +147,15 @@ class FunctionCallNode(ValuedExpressionNode):
         for parameter in self.parameters:
             parameter.generate_code(generator)
         function_type = self.scope.get_function_definition(self._name)
-        call = '{function}({scope}'.format(function=function_type.code_name, 
-                                           scope=self.scope.code_name)
-        for parameter in self.parameters:
-            call += ', {0}'.format(parameter.code_name)
-        call += ');'
+        params = ', '.join([p.code_name for p in self.parameters])
+        if function_type.stdlib_function:
+            call = '{function}({params}'
+        else:
+            call = '{function}({scope}, {params}'
+        call = call.format(function=function_type.code_name, 
+                           scope=self.scope.code_name,
+                           params=params)
+        call = call.rstrip(', ') + ');'
         if self.has_return_value():
             local_var = generator.define_local(function_type.return_type.code_type)
             call = '{variable} = {call}'.format(variable=local_var, call=call)

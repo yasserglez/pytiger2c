@@ -11,7 +11,7 @@ import subprocess
 
 SRC_DIR = os.path.join(os.path.dirname(__file__), os.pardir)
 
-PYTIGER2C_SCRIPT = os.path.abspath(os.path.join(SRC_DIR, 'scripts', 'pytiger2c'))
+PYTIGER2C_SCRIPT = os.path.abspath(os.path.join(SRC_DIR, 'scripts', 'pytiger2c.py'))
 
 PYTIGER2C_CMD = ['python', PYTIGER2C_SCRIPT]
 
