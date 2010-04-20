@@ -59,20 +59,17 @@ class StringLiteralExpressionNode(ValuedExpressionNode):
         self.scope.generate_code(generator)
         string_code_type = StringType().code_type
         local_var = generator.define_local(string_code_type)
-        statement = '{local_var} = NULL;'
-        statement = statement.format(local_var = local_var)
+        statement = '{local_var}->data = "{value}";'
+        statement = statement.format(local_var = local_var,
+                                     value = self.string)
+        generator.add_statement(statement, allocate = True)
+        statement = '{local_var}->length = strlen("{value}");'
+        statement = statement.format(local_var = local_var,
+                                     value = self.string)
         generator.add_statement(statement, allocate = True)
         statement = '{local_var} = pytiger2c_malloc(sizeof({type}));'
         statement = statement.format(local_var = local_var, 
                                      type = string_code_type[:-1])
-        generator.add_statement(statement)
-        statement = '{local_var}->data = "{value}";'
-        statement = statement.format(local_var = local_var,
-                                     value = self.string)
-        generator.add_statement(statement)
-        statement = '{local_var}->length = strlen("{value}");'
-        statement = statement.format(local_var = local_var,
-                                     value = self.string)
-        generator.add_statement(statement)
+        generator.add_statement(statement, allocate = True)
         generator.add_statement('free({0});'.format(local_var), free = True)
         self._code_name = local_var
