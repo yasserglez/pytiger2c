@@ -130,7 +130,7 @@ void pytiger2c_error(char *msg)
 	exit(EXIT_FAILURE);
 }
 
-/* Wrapper malloc to print a runtime error if could not allocate memory. */
+/* malloc wrapper to print a runtime error if could not allocate memory. */
 void *pytiger2c_malloc(size_t size)
 {
 	void *mem;

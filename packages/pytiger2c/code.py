@@ -224,7 +224,8 @@ class CodeGenerator(object):
                 
         for member_name, member_type in zip(member_names, member_types):
             if isinstance(member_type, FunctionType):
-                if not member_type.stdlib_function:
+                # Avoiding defining function of the standard library.
+                if not member_type.code_name:
                     self.define_function(member_name, member_type, 
                                          code_type, code_name)
             else:
@@ -486,4 +487,3 @@ class CodeGenerator(object):
                 output_fd.write(self._func_return[func])
                 output_fd.write('\n')
             output_fd.write('}\n\n')
-

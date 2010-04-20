@@ -143,18 +143,25 @@ class FunctionCallNode(ValuedExpressionNode):
         este método consulte la documentación del método C{generate_code}
         de la clase C{LanguageNode}.
         """
+        function_type = self.scope.get_function_definition(self._name)
         self.scope.generate_code(generator)
         for parameter in self.parameters:
             parameter.generate_code(generator)
-        function_type = self.scope.get_function_definition(self._name)
-        params = ', '.join([p.code_name for p in self.parameters])
-        if function_type.stdlib_function:
+        # Constructing the function call.
+        if function_type.scope_depth == -1:
             call = '{function}({params}'
         else:
             call = '{function}({scope}, {params}'
+        params = ', '.join([p.code_name for p in self.parameters])
+        # Constructing the scope parameter.
+        k = self.scope.depth - function_type.scope_depth
+        scope = self.scope.code_name
+        while k > 0:
+            scope += '->parent'
+            k -= 1
+        # Constructing the final function call.
         call = call.format(function=function_type.code_name, 
-                           scope=self.scope.code_name,
-                           params=params)
+                           scope=scope, params=params)
         call = call.rstrip(', ') + ');'
         if self.has_return_value():
             local_var = generator.define_local(function_type.return_type.code_type)

@@ -4,7 +4,6 @@
 Clases C{Scope} y C{RootScope} que representan ámbitos de ejecución en Tiger.
 """
 
-from pytiger2c.types.tigertype import TigerType
 from pytiger2c.types.functiontype import FunctionType
 from pytiger2c.types.integertype import IntegerType
 from pytiger2c.types.stringtype import StringType
@@ -26,6 +25,14 @@ class Scope(object):
         return self._parent
     
     parent = property(_get_parent)
+    
+    def _get_depth(self):
+        """
+        Método para obtener el valor de la propiedad C{depth}.
+        """
+        return self._depth
+    
+    depth = property(_get_depth)
     
     def _get_code_name(self):
         """
@@ -51,6 +58,7 @@ class Scope(object):
         @param parent: Ámbito en el que se define este nuevo ámbito. 
         """
         self._parent = parent
+        self._depth = (parent.depth + 1) if (parent is not None) else 0
         self._types = {}
         self._members = {}
         self._code_name = None
@@ -130,7 +138,7 @@ class Scope(object):
             el tipo que se intenta declarar fue definido anteriormente 
             en este ámbito. 
         """
-        if not (name in self._types):
+        if not name in self._types:
             self._types[name] = tiger_type
         else:
             raise ValueError('Type already defined in this scope')
@@ -179,7 +187,8 @@ class Scope(object):
         @raise ValueError: Se lanza una excepción C{ValueError} si la función 
             que se intenta definir se definió anteriormente en este ámbito. 
         """
-        if not (name in self._members):
+        if not name in self._members:
+            function_type.scope_depth = self._depth
             self._members[name] = function_type
         else:
             raise ValueError('Function already defined in this scope')
@@ -308,40 +317,40 @@ class RootScope(Scope):
         int_type = IntegerType()
         string_type = StringType()
         
-        print_type = FunctionType(None, [string_type], [''], True)
+        print_type = FunctionType(None, [string_type], [''])
         print_type.code_name = 'tiger_print'
-        printi_type = FunctionType(None, [int_type], [''], True)
+        printi_type = FunctionType(None, [int_type], [''])
         printi_type.code_name = 'tiger_printi'
-        flush_type = FunctionType(None, [], [], True)
+        flush_type = FunctionType(None, [], [])
         flush_type.code_name = 'tiger_flush'
-        getchar_type = FunctionType(string_type, [], [], True)
+        getchar_type = FunctionType(string_type, [], [])
         getchar_type.code_name = 'tiger_getchar'
-        ord_type = FunctionType(int_type, [string_type], [''], True)
+        ord_type = FunctionType(int_type, [string_type], [''])
         ord_type.code_name = 'tiger_ord'
-        chr_type = FunctionType(string_type, [int_type], [''], True)
+        chr_type = FunctionType(string_type, [int_type], [''])
         chr_type.code_name = 'tiger_chr'
-        size_type = FunctionType(int_type, [string_type], [''], True)
+        size_type = FunctionType(int_type, [string_type], [''])
         size_type.code_name = 'tiger_size'
-        substring_type = FunctionType(string_type, [string_type, int_type, int_type], ['', '', ''], True)
+        substring_type = FunctionType(string_type, [string_type, int_type, int_type], ['', '', ''])
         substring_type.code_name = 'tiger_substring'
-        concat_type = FunctionType(string_type, [string_type, string_type], ['', ''], True)
+        concat_type = FunctionType(string_type, [string_type, string_type], ['', ''])
         concat_type.code_name = 'tiger_concat'
-        not_type = FunctionType(int_type, [int_type], [''], True)
+        not_type = FunctionType(int_type, [int_type], [''])
         not_type.code_name = 'tiger_not'
-        exit_type = FunctionType(None, [int_type], [''], True)
+        exit_type = FunctionType(None, [int_type], [''])
         exit_type.code_name = 'tiger_exit'
 
-        self.define_function('print', print_type)
-        self.define_function('printi', printi_type)
-        self.define_function('flush', flush_type)
-        self.define_function('getchar', getchar_type)
-        self.define_function('ord', ord_type)
-        self.define_function('chr', chr_type)
-        self.define_function('size', size_type)
-        self.define_function('substring', substring_type)
-        self.define_function('concat', concat_type)
-        self.define_function('not', not_type)
-        self.define_function('exit', exit_type)
+        self._members['print'] = print_type
+        self._members['printi'] = printi_type
+        self._members['flush'] = flush_type
+        self._members['getchar'] = getchar_type
+        self._members['ord'] = ord_type
+        self._members['chr'] = chr_type
+        self._members['size'] = size_type
+        self._members['substring'] = substring_type
+        self._members['concat'] = concat_type
+        self._members['not'] = not_type
+        self._members['exit'] = exit_type
         
     def get_type_definition(self, name):
         """
@@ -388,7 +397,7 @@ class FakeScope(Scope):
     diferentes. Si la situación anterior se detecta se lanzará una excepción 
     indicando que el tipo no está definido en lugar de continuar la búsqueda 
     a través del ámbito padre.
-    """
+    """    
     
     def _get_current_member(self):
         """
@@ -426,19 +435,19 @@ class FakeScope(Scope):
     
     relationships = property(_get_relationships)
     
-    def _get_max_depth(self):
+    def _get_max_recursion_depth(self):
         """
-        Método para obtener el valor de la propiedad C{max_depth}.
+        Método para obtener el valor de la propiedad C{max_recursion_depth}.
         """
-        return self._max_depth
+        return self._max_recursion_depth
     
-    def _set_max_depth(self, value):
+    def _set_max_recursion_depth(self, value):
         """
-        Método para cambiar el valor de la propiedad C{max_depth}.
+        Método para cambiar el valor de la propiedad C{max_recursion_depth}.
         """
-        self._max_depth = value
+        self._max_recursion_depth = value
     
-    max_depth = property(_get_max_depth, _set_max_depth)
+    max_recursion_depth = property(_get_max_recursion_depth, _set_max_recursion_depth)
     
     def __init__(self, parent):
         """
@@ -447,10 +456,11 @@ class FakeScope(Scope):
         en la clase C{Scope}.
         """
         super(FakeScope, self).__init__(parent)
+        self._depth = parent.depth
         self._current_member = None
         self._current_siblings = None
         self._relationships = {}
-        self._max_depth = 5
+        self._max_recursion_depth = 5
         
     def generate_code(self, generator):
         """
@@ -462,6 +472,8 @@ class FakeScope(Scope):
             código C correspondiente a un programa Tiger.        
         """
         self.parent.generate_code(generator)
+        self._code_name = self.parent.code_name
+        self._code_type = self.parent.code_type
 
     def define_type(self, name, tiger_type):
         """
@@ -558,15 +570,15 @@ class FakeScope(Scope):
         if self.current_member != None and self.current_siblings != None:
             if name in self.current_siblings:
                 name_relationships = list(self._relationships.get(name, set()))
-                current = 0
-                while len(name_relationships) > 0 and current < self.max_depth:
+                current_member = 0
+                while (len(name_relationships) > 0 
+                       and current_member < self.max_recursion_depth):
                     if self.current_member in name_relationships:
                         raise KeyError('Mutually recursive type or function definition')
-                    next = name_relationships[0]
-                    name_relationships.remove(next)
-                    name_relationships.extend(self._relationships.get(next, set()))
-                    current += 1
+                    next_member = name_relationships[0]
+                    name_relationships.remove(next_member)
+                    name_relationships.extend(self._relationships.get(next_member, set()))
+                    current_member += 1
             current_relationships = self.relationships.get(self.current_member, set())
             current_relationships.add(name)
             self.relationships[self.current_member] = current_relationships
-

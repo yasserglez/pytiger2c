@@ -135,6 +135,10 @@ class CallableDeclarationNode(DeclarationNode):
         """
         generator.begin_function(self.type.code_name)
         self.scope.generate_code(generator)
+        stmt = '{scope}->parent = {parent};'
+        stmt = stmt.format(scope=self.scope.code_name, 
+                           parent=self.scope.parent.code_name)
+        generator.add_statement(stmt)        
         for index, var_name in enumerate(self.parameters_names):
             parameter_name = generator.get_function_parameter(index)
             var_name = self.scope.get_variable_code(var_name)

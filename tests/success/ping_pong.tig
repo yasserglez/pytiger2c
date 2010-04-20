@@ -1,0 +1,9 @@
+let
+    function ping(k: int) = 
+        if k > 0 then (print("Ping!\n");  pong(k))
+        
+    function pong(k: int) =
+        (print("Pong!\n"); ping(k - 1))
+in
+    ping(10)
+end
