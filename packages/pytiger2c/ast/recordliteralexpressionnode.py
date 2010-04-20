@@ -193,5 +193,4 @@ class RecordLiteralExpressionNode(ValuedExpressionNode):
                                          field = field_code_name,
                                          value = field_value.code_name)
             generator.add_statement(statement)
-        generator.add_statement('free({0});'.format(local_var), free = True)
         self._code_name = local_var 

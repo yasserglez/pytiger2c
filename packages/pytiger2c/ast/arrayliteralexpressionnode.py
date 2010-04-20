@@ -196,6 +196,4 @@ class ArrayLiteralExpressionNode(ValuedExpressionNode):
                                      local_var=local_var, value=self.value.code_name)
         generator.add_statement(statement)
         generator.add_statement('}')
-        generator.add_statement('free({0}->data);'.format(local_var), free = True)
-        generator.add_statement('free({0});'.format(local_var), free = True)
         self._code_name = local_var 
