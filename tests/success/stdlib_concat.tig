@@ -1,0 +1,72 @@
+let
+    var start0 := ""
+    var end0 := "This is PyTiger2C"
+    var start1 := "T"
+    var end1 := "his is PyTiger2C"
+    var start2 := "Th"
+    var end2 := "is is PyTiger2C"
+    var start3 := "Thi"
+    var end3 := "s is PyTiger2C"
+    var start4 := "This"
+    var end4 := " is PyTiger2C"
+    var start5 := "This "
+    var end5 := "is PyTiger2C"
+    var start6 := "This i"
+    var end6 := "s PyTiger2C"
+    var start7 := "This is"
+    var end7 := " PyTiger2C"
+    var start8 := "This is "
+    var end8 := "PyTiger2C"
+    var start9 := "This is P"
+    var end9 := "yTiger2C"
+    var start10 := "This is Py"
+    var end10 := "Tiger2C"
+    var start11 := "This is PyT"
+    var end11 := "iger2C"
+    var start12 := "This is PyTi"
+    var end12 := "ger2C"
+    var start13 := "This is PyTig"
+    var end13 := "er2C"
+    var start14 := "This is PyTige"
+    var end14 := "r2C"
+    var start15 := "This is PyTiger"
+    var end15 := "2C"
+    var start16 := "This is PyTiger2"
+    var end16 := "C"
+in
+    print(concat(start0, end0));
+    print("\n");
+    print(concat(start1, end1));
+    print("\n");
+    print(concat(start2, end2));
+    print("\n");
+    print(concat(start3, end3));
+    print("\n");
+    print(concat(start4, end4));
+    print("\n");
+    print(concat(start5, end5));
+    print("\n");
+    print(concat(start6, end6));
+    print("\n");
+    print(concat(start7, end7));
+    print("\n");
+    print(concat(start8, end8));
+    print("\n");
+    print(concat(start9, end9));
+    print("\n");
+    print(concat(start10, end10));
+    print("\n");
+    print(concat(start11, end11));
+    print("\n");
+    print(concat(start12, end12));
+    print("\n");
+    print(concat(start13, end13));
+    print("\n");
+    print(concat(start14, end14));
+    print("\n");
+    print(concat(start15, end15));
+    print("\n");
+    print(concat(start16, end16));
+    print("\n");
+    "end"
+end

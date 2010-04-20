@@ -1,8 +1,15 @@
 let
     type arr = array of string
+    type arr2 = array of int
     var a := arr[10] of "output\n"
+    var b := arr2[10] of 0
 in
     print(a[0]);
     a[1] := "new output\n";
-    print(a[1])
+    print(a[1]);
+    b[1] := 2;
+    printi( b[0]);
+    print("\n");
+    printi( b[1]);
+    print("\n")
 end
