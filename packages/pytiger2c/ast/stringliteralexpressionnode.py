@@ -71,5 +71,4 @@ class StringLiteralExpressionNode(ValuedExpressionNode):
         statement = statement.format(local_var = local_var, 
                                      type = string_code_type[:-1])
         generator.add_statement(statement, allocate = True)
-        generator.add_statement('free({0});'.format(local_var), free = True)
         self._code_name = local_var
