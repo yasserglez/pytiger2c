@@ -48,6 +48,20 @@ class RecordType(TigerType):
     
     fields_types = property(_get_fields_types, _set_fields_types)
     
+    def _get_field_code_names(self):
+        """
+        Método para obtener el valor de la propiedad C{field_code_names}.
+        """
+        return self._field_code_names
+    
+    def _set_field_code_names(self, value):
+        """
+        Método para cambiar el valor de la propiedad C{field_code_names}.
+        """
+        self._field_code_names = value
+        
+    field_code_names = property(_get_field_code_names, _set_field_code_names)
+    
     def _get_fields_names(self):
         """
         Método para obtener el valor de la propiedad C{fields_names}.
@@ -71,3 +85,4 @@ class RecordType(TigerType):
         self._fields_names = fields_names
         self._fields_types = None
         self._code_name = None
+        self._field_code_names = None

@@ -102,3 +102,20 @@ class RecordDeclarationNode(TypeDeclarationNode):
             field_typename = generator.add_node(field_typename)
             generator.add_edge(field_name, field_typename)
         return me
+    
+    def generate_code(self, generator):
+        """
+        Genera el código correspondiente a la estructura del lenguaje Tiger
+        representada por el nodo.
+
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método C{generate_code}
+        de la clase C{LanguageNode}.
+        """
+        self.scope.generate_code(generator)
+        code_name = self.type.code_name
+        field_names = self.type.fields_names
+        field_code_types = [i.code_type for i in self.type.fields_types]
+        field_code_names = generator.define_struct(code_name, field_names,
+                                                   field_code_types)
+        self.type.field_code_names = field_code_names
