@@ -99,3 +99,18 @@ class ProcedureDeclarationNode(CallableDeclarationNode):
         body = self.body.generate_dot(generator)
         generator.add_edge(me, body)
         return me
+
+    def generate_code(self, generator):
+        """
+        Genera el código C correspondiente a la estructura del lenguaje Tiger
+        representada por el nodo.
+
+        @type generator: C{CodeGenerator}
+        @param generator: Clase auxiliar utilizada en la generación del 
+            código C correspondiente a un programa Tiger.        
+        
+        @raise CodeGenerationError: Esta excepción se lanzará cuando se produzca
+            algún error durante la generación del código correspondiente al nodo.
+            La excepción contendrá información acerca del error.
+        """
+        self.scope.generate_code(generator)

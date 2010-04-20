@@ -1,7 +1,7 @@
 /* Tiger standard library functions. */
 
 /* Print the string on the standard output. */
-void tiger_print(void *scope, struct tiger_string *s)
+void tiger_print(struct tiger_string *s)
 {
 	if (s->length > 0) {
 		fwrite(s->data, s->length, 1, stdout);
@@ -9,7 +9,7 @@ void tiger_print(void *scope, struct tiger_string *s)
 }
 
 /* Print the integer on the standard output. */
-void tiger_printi(void *scope, int n)
+void tiger_printi(int n)
 {
 	fprintf(stdout, "%i", n);
 }
@@ -42,7 +42,7 @@ struct tiger_string *tiger_getchar(void *scope)
 }
 
 /* Return the ASCII value of the first character of s, or -1 if s is empty. */
-int tiger_ord(void *scope, struct tiger_string *s)
+int tiger_ord(struct tiger_string *s)
 {
 	if (s->length == 0) {
 		return -1;
@@ -53,7 +53,7 @@ int tiger_ord(void *scope, struct tiger_string *s)
 
 /* Return a single-character string for the integer ASCII value i. The program will
  * terminate if the argument i is out of range. */
-struct tiger_string *tiger_chr(void *scope, int i)
+struct tiger_string *tiger_chr(int i)
 {
 	struct tiger_string *dest;
 
@@ -69,14 +69,14 @@ struct tiger_string *tiger_chr(void *scope, int i)
 }
 
 /* Return the number of characters in s. */
-int tiger_size(void *scope, struct tiger_string *s)
+int tiger_size(struct tiger_string *s)
 {
 	return (int) s->length;
 }
 
 /* Return the substring of s starting at the character f (first character is numbered
  * zero) and going for n characters. */
-struct tiger_string *tiger_substring(void *scope, struct tiger_string *s, int f, int n)
+struct tiger_string *tiger_substring(struct tiger_string *s, int f, int n)
 {
 	struct tiger_string *sub;
 
@@ -93,7 +93,7 @@ struct tiger_string *tiger_substring(void *scope, struct tiger_string *s, int f,
 }
 
 /* Return a new string consisting of s1 followed by s2. */
-struct tiger_string *tiger_concat(void *scope, struct tiger_string *s1, struct tiger_string *s2)
+struct tiger_string *tiger_concat(struct tiger_string *s1, struct tiger_string *s2)
 {
 	struct tiger_string *conc;
 	size_t conc_len;
@@ -109,13 +109,13 @@ struct tiger_string *tiger_concat(void *scope, struct tiger_string *s1, struct t
 }
 
 /* Return 1 if i is zero, 0 otherwise. */
-int tiger_not(void *scope, int i)
+int tiger_not(int i)
 {
 	return (i == 0) ? 1 : 0;
 }
 
 /* Terminate execution of the program with code i. */
-int tiger_exit(void *scope, int i)
+int tiger_exit(int i)
 {
 	exit(i);
 }

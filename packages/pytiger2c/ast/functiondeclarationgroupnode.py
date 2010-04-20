@@ -91,4 +91,5 @@ class FunctionDeclarationGroupNode(DeclarationGroupNode):
         este método consulte la documentación del método C{generate_code}
         de la clase C{LanguageNode}.
         """
-        raise NotImplementedError()
+        for declaration in self.declarations:
+            declaration.generate_code(generator)

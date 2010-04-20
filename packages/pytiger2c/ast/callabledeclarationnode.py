@@ -123,3 +123,27 @@ class CallableDeclarationNode(DeclarationNode):
                                      line=self.line_number)
             errors.append(message)            
         self.type.parameters_types = parameters_types
+
+    def generate_code(self, generator):
+        """
+        Genera el código correspondiente a la estructura del lenguaje Tiger
+        representada por el nodo.
+
+        Para obtener información acerca de los parámetros recibidos por
+        este método consulte la documentación del método C{generate_code}
+        de la clase C{LanguageNode}.
+        """
+        generator.begin_function(self.type.code_name)
+        self.scope.generate_code(generator)
+        for index, var_name in enumerate(self.parameters_names):
+            parameter_name = generator.get_function_parameter(index)
+            var_name = self.scope.get_variable_code(var_name)
+            stmt = '{var} = {param};'.format(var=var_name, param=parameter_name)
+            generator.add_statement(stmt)
+            
+        self.body.generate_code(generator)
+        if self.body.has_return_value():
+            return_var = self.body.code_name
+        else:
+            return_var = None
+        generator.end_function(return_var)
