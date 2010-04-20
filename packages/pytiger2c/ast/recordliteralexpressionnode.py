@@ -177,16 +177,21 @@ class RecordLiteralExpressionNode(ValuedExpressionNode):
         
         record_code_type = self.return_type.code_type
         local_var = generator.define_local(record_code_type)
-        statement = '{0} = pytiger2c_malloc(sizeof({1}));'.format(local_var, 
-                                                                  record_code_type)
+        statement = '{local_var} = NULL;'.format(local_var = local_var)
         generator.add_statement(statement, allocate = True)
+        statement = '{local_var} = pytiger2c_malloc(sizeof({type}));'
+        statement = statement.format(local_var = local_var, 
+                                     type = record_code_type[:-1])
+        generator.add_statement(statement)
         # Initialize the record.
         for field_value in self.fields_values:
             field_value.generate_code(generator)
         for field_value, field_code_name in zip(self.fields_values, 
                                                 self.return_type.field_code_names):
-            statement = '{0}->{1} = {2};'.format(local_var, field_code_name,
-                                                field_value.code_name)
+            statement = '{local_var}->{field} = {value};'
+            statement = statement.format(local_var = local_var, 
+                                         field = field_code_name,
+                                         value = field_value.code_name)
             generator.add_statement(statement)
         generator.add_statement('free({0});'.format(local_var), free = True)
         self._code_name = local_var 

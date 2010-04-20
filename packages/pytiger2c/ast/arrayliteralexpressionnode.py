@@ -166,15 +166,24 @@ class ArrayLiteralExpressionNode(ValuedExpressionNode):
         array_code_type = self.return_type.code_type
         local_var = generator.define_local(array_code_type)
         # Allocate memory for the struct and the data.
-        statement = '{0}->data = pytiger2c_malloc(1);'
-        statement = statement.format(local_var)
+        statement = '{local_var}->data = NULL;'
+        statement = statement.format(local_var = local_var)
         generator.add_statement(statement, allocate = True)
-        generator.add_statement('free({0}->data);'.format(local_var))
-        statement = '{0}->data = pytiger2c_malloc(sizeof({1})*{2});'
-        statement = statement.format(local_var, self.value.code_name, self.count.code_name)
+        statement = '{local_var} = pytiger2c_malloc(sizeof({type}));'
+        statement = statement.format(local_var = local_var, 
+                                     type = array_code_type[:-1])
+        generator.add_statement(statement, allocate = True)
+        value_type = None   
+        if isinstance(self.value.return_type, IntegerType):
+            value_type = self.value.return_type.code_type
+        else:
+            value_type = self.value.return_type.code_type[:-1]
+        statement = '{local_var}->data = pytiger2c_malloc(sizeof({type})*{value});'
+        
+        statement = statement.format(local_var = local_var, 
+                                     type = value_type, 
+                                     value = self.count.code_name)
         generator.add_statement(statement)
-        statement = '{0} = pytiger2c_malloc(sizeof({1}));'.format(local_var, array_code_type)
-        generator.add_statement(statement, allocate = True)
         generator.add_statement('{0}->length = {1};'.format(local_var, self.count.code_name))
         # Initializa the data.
         # TODO Change it for use memcpy.
@@ -182,9 +191,9 @@ class ArrayLiteralExpressionNode(ValuedExpressionNode):
         statement = statement.format(local_var)
         generator.add_statement(statement)
         generator.add_statement('{')
-        statement = '(({0}*)({1}->data))[tiger_index] = {2};'
-        statement = statement.format(self.value.return_type.code_type, local_var,
-                                     self.value.code_name)
+        statement = '(({type}*)({local_var}->data))[tiger_index] = {value};'
+        statement = statement.format(type=self.value.return_type.code_type, 
+                                     local_var=local_var, value=self.value.code_name)
         generator.add_statement(statement)
         generator.add_statement('}')
         generator.add_statement('free({0}->data);'.format(local_var), free = True)
