@@ -140,10 +140,12 @@ class CallableDeclarationNode(DeclarationNode):
             var_name = self.scope.get_variable_code(var_name)
             stmt = '{var} = {param};'.format(var=var_name, param=parameter_name)
             generator.add_statement(stmt)
-            
         self.body.generate_code(generator)
         if self.body.has_return_value():
-            return_var = self.body.code_name
+            return_var = generator.define_local(self.body.return_type.code_type)
+            stmt = '{return_var} = {body_var};'
+            stmt = stmt.format(return_var=return_var, body_var=self.body.code_name)
+            generator.add_statement(stmt)
         else:
             return_var = None
         generator.end_function(return_var)
