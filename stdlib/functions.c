@@ -15,14 +15,14 @@ void tiger_printi(int n)
 }
 
 /* Flush the standard output buffer. */
-void tiger_flush(void *scope)
+void tiger_flush()
 {
 	fflush(stdout);
 }
 
 /* Read and return a character from the standard input, return an empty string
  * if the end of the file is found. */
-struct tiger_string *tiger_getchar(void *scope)
+struct tiger_string *tiger_getchar()
 {
 	int c;
 	struct tiger_string *dest;

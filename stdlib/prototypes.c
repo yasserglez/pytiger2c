@@ -5,9 +5,9 @@ void tiger_print(struct tiger_string *s);
 
 void tiger_printi(int n);
 
-void tiger_flush(void *scope);
+void tiger_flush();
 
-struct tiger_string *tiger_getchar(void *scope);
+struct tiger_string *tiger_getchar();
 
 int tiger_ord(struct tiger_string *s);
 
