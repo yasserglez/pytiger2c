@@ -127,12 +127,9 @@ class ArrayAccessNode(AccessNode):
         self.scope.generate_code(generator)
         self.array.generate_code(generator)
         self.position.generate_code(generator)
-        
-        statement = 'if({pos} >= (int)({array}->length)){{pytiger2c_error("{msg}.");}}'
-        statement = statement.format(pos = self.position.code_name, 
-                                     array = self.array.code_name, 
-                                     msg = "Index out of range")
-        generator.add_statement(statement)
-        self._code_name = '(({0}*)({1}->data))[{2}]'.format(self.return_type.code_type,
-                                                         self.array.code_name, 
-                                                         self.position.code_name)
+        stmt = 'pytiger2c_validate_index({array}->length, {pos});'
+        stmt = stmt.format(pos=self.position.code_name, array=self.array.code_name) 
+        generator.add_statement(stmt)
+        stmt = '{array}->data[{pos}]'
+        self._code_name = stmt.format(pos=self.position.code_name, 
+                                      array=self.array.code_name)

@@ -80,7 +80,7 @@ def main(argv):
         elif options.output_type == 'c':
             tiger2c(tiger_filename, output_filename)
             # Translation completed. Beautify the code using GNU Indent.
-            INDENT_CMD = ['indent', '-linux', '-o', output_filename, output_filename]
+            INDENT_CMD = ['indent', '-gnu', '-l100', '-o', output_filename, output_filename]
             if subprocess.call(INDENT_CMD) != EXIT_SUCCESS:
                 # Leave the c file for debugging.
                 sys.exit(EXIT_FAILURE)            
