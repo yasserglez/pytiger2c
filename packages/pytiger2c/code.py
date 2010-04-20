@@ -208,10 +208,12 @@ class CodeGenerator(object):
         func = self._func_stack[0]
         stmt = '{type}* {name};'.format(type=code_type, name=code_name)
         self._func_locals[func].append(stmt)
+        stmt = '{name} = NULL;'.format(name = code_name)
+        self.add_statement(stmt, allocate = True)
         stmt = '{name} = pytiger2c_malloc(sizeof({type}));' \
             .format(type=code_type, name=code_name)
-        self._func_stmts[func].append(stmt)
-        self._func_cleanups[func].append('free({0});'.format(code_name))
+        self.add_statement(stmt)
+        self.add_statement('free({0});'.format(code_name), free = True)
         field_names, field_types = [], []
         variable_types = []
         
