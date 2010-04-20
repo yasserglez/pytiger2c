@@ -51,8 +51,8 @@ int tiger_ord(struct tiger_string *s)
 	}
 }
 
-/* Return a single-character string for the integer ASCII value i. The program will
- * terminate if the argument i is out of range. */
+/* Return a single-character string for the integer ASCII value i. The program
+ * will terminate if the argument i is out of range. */
 struct tiger_string *tiger_chr(int i)
 {
 	struct tiger_string *dest;
@@ -74,8 +74,8 @@ int tiger_size(struct tiger_string *s)
 	return (int) s->length;
 }
 
-/* Return the substring of s starting at the character f (first character is numbered
- * zero) and going for n characters. */
+/* Return the substring of s starting at the character f (first character is
+ * numbered zero) and going for n characters. */
 struct tiger_string *tiger_substring(struct tiger_string *s, int f, int n)
 {
 	struct tiger_string *sub;
@@ -158,6 +158,14 @@ int pytiger2c_strcmp(struct tiger_string *a, struct tiger_string *b)
     }
 
     return result;
+}
+
+/* Auxiliar function used to check the array indexes. */
+void pytiger2c_validate_index(size_t length, int index)
+{
+	if (index < 0 || index >= length) {
+		pytiger2c_error("Array index is out of range.");
+	}
 }
 
 /* Functions defined in the program. */

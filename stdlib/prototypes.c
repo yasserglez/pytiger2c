@@ -31,5 +31,7 @@ void *pytiger2c_malloc(size_t size);
 
 int pytiger2c_strcmp(struct tiger_string *a, struct tiger_string *b);
 
+void pytiger2c_validate_index(size_t length, int index);
+
 /* Functions defined in the program. */
 
