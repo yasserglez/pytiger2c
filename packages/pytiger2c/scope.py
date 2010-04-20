@@ -108,8 +108,11 @@ class Scope(object):
         parent_path_code = ''
         current = self
         while not name in current._members:
-            parent_path_code += 'parent->'
-            current = current.parent
+            if isinstance(current, FakeScope):
+                current = current.parent
+            else:
+                parent_path_code += 'parent->'
+                current = current.parent
         var_code_name = current._members[name].code_name
         variable_code = '{scope_code_name}->{parent_path_code}{var_code_name}'
         variable_code = variable_code.format(scope_code_name=self._code_name, 
