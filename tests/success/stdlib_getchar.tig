@@ -1,0 +1,9 @@
+let
+    var c: string := ""
+in
+    while 1 do ( 
+        c := getchar();
+        if size(c) = 0 then break;
+	print(c)
+    )
+end
