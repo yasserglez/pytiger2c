@@ -1,0 +1,11 @@
+let
+    var true := 1
+    var false := 0
+in
+    if not(true)
+        then print("wrong output\n")
+        else print("output\n");
+    if not(false)
+        then print("output\n")
+        else print("wrong output\n")
+end
