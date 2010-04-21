@@ -36,7 +36,7 @@ def _parse_args(argv):
     """
     usage = '%prog <tiger-file> --output <output-file> [--output-type <output-type>]'
     version = '%%prog (PyTiger2C) %s\n' % __version__
-    authors = '\n'.join(['Copyright (C) 2009 %s' % a for a in __authors__])
+    authors = '\n'.join(['Copyright (C) 2009, 2010 %s' % a for a in __authors__])
     desc = 'Translates a Tiger program received as argument into a C program ' \
         'and then compiles the C program into an executable using a C compiler. ' \
         'This behavior can be modified using the --output-type option.'
