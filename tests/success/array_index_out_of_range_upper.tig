@@ -1,0 +1,6 @@
+let
+    type ints = array of int
+    var a := ints[10] of 0
+in
+    a[100]
+end
