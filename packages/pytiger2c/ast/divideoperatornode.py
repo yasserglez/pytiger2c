@@ -80,16 +80,17 @@ class DivideOperatorNode(ArithmeticOperatorNode):
         self.scope.generate_code(generator)
         self.right.generate_code(generator)
         self.left.generate_code(generator)
-        #Check if zero division
-        statement = 'if({var} == 0){{pytiger2c_error("{msg}.");}}'
-        statement = statement.format(var = self.right.code_name, 
-                                     msg = "Integer divison by zero")       
+        # Check integer division by zero.
+        statement = 'if({var} == 0) {{ pytiger2c_error("{msg}"); }}'
+        statement = statement.format(var=self.right.code_name, 
+                                     msg="Integer division by zero.")       
         generator.add_statement(statement)
         int_code_type = IntegerType().code_type
         local_var = generator.define_local(int_code_type)
         statement = '{var} = {left} {operator} {right};'
-        statement = statement.format(var = local_var, left = self.left.code_name, 
-                                     operator = self._operator, 
-                                     right = self.right.code_name)
+        statement = statement.format(var=local_var, 
+                                     left=self.left.code_name, 
+                                     operator=self._operator, 
+                                     right=self.right.code_name)
         generator.add_statement(statement)
         self._code_name = local_var

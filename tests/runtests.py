@@ -89,12 +89,21 @@ class SuccessTigerTestCase(TigerTestCase):
             self.fail('Compilation failed!')
         # Execute the program.
         exec_stdin = open(self._in_file) if self._in_file else None
-        with open(self._tmp_file, 'w') as exec_stdout:
-            subprocess.call([self._exec_file], stdin=exec_stdin, stdout=exec_stdout, stderr=subprocess.PIPE)
-            if exec_stdin is not None:
-                exec_stdin.close()
-        # Compare the output of the programs.
-        self.failIfDifferent(self._tmp_file, self._out_file)                    
+        if self._out_file is not None:
+            out_file = self._out_file
+            with open(self._tmp_file, 'w') as exec_stdout:
+                subprocess.call([self._exec_file], stdin=exec_stdin, stdout=exec_stdout, stderr=subprocess.PIPE)
+        elif self._err_file is not None:
+            out_file = self._err_file
+            with open(self._tmp_file, 'w') as exec_stderr:
+                subprocess.call([self._exec_file], stdin=exec_stdin, stdout=subprocess.PIPE, stderr=exec_stderr)
+        else:
+            out_file = None
+        if exec_stdin is not None:
+            exec_stdin.close()
+        if out_file is not None:
+            # Compare the output of the program.
+            self.failIfDifferent(self._tmp_file, out_file)
         
     
 class FailTigerTestCase(TigerTestCase):

@@ -21,7 +21,7 @@ from pytiger2c.code import CodeGenerator
 from pytiger2c.errors import PyTiger2CError, SemanticError, CodeGenerationError
 
 
-__version__ = '0.1'
+__version__ = '1.0'
 
 __authors__ = (
     'Yasser González Fernández <yglez@uh.cu>',
