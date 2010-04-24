@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language id="tiger" _name="Tiger" version="2.0" _section="Sources">
+    <metadata>
+      <property name="mimetypes">text/x-tiger</property>
+      <property name="globs">*.tig;*.tiger</property>
+    </metadata>
+    
+    <styles>
+        <style id="keyword" _name="Keyword" map-to="def:keyword"/> 
+        <style id="type" _name="Data Type" map-to="def:type"/>
+        <style id="string" _name="String" map-to="def:string"/>   
+        <style id="escaped-character" _name="Escaped Character" map-to="def:string"/>          
+        <style id="decimal" _name="Decimal number" map-to="def:decimal"/>      
+        <style id="comment" _name="Comment" map-to="def:comment"/>             
+    </styles>
+    
+    <definitions>
+        <context id="tiger">
+            <include>
+                <context id="keywords" style-ref="keyword">
+                    <keyword>array</keyword>
+                    <keyword>break</keyword>
+                    <keyword>do</keyword>
+                    <keyword>else</keyword>
+                    <keyword>end</keyword>
+                    <keyword>for</keyword>
+                    <keyword>function</keyword>
+                    <keyword>if</keyword>
+                    <keyword>in</keyword>
+                    <keyword>let</keyword>
+                    <keyword>of</keyword>
+                    <keyword>then</keyword>
+                    <keyword>to</keyword>
+                    <keyword>type</keyword>
+                    <keyword>var</keyword>
+                    <keyword>while</keyword>      
+                </context>
+
+                <context id="types" style-ref="type">
+                    <keyword>int</keyword>
+                    <keyword>string</keyword>
+                    <keyword>nil</keyword>
+                </context>
+                
+                <context id="string" end-at-line-end="true" style-ref="string">
+                    <start>"</start>
+                    <end>"</end>
+                    <include>
+                        <context id="escaped-character" style-ref="escaped-character">
+                            <match>\\.</match>
+                        </context>
+                        <context ref="def:line-continue"/>
+                    </include>
+                </context>
+             
+                <context id="decimal" style-ref="decimal">
+                    <match extended="true">
+                        (?&lt;![\w\.])[0-9]+(?![\w\.])
+                    </match>
+                </context>
+                
+                <context id="comment-multiline" style-ref="comment">
+                    <start>/\*</start>
+                    <end>\*/</end>
+                    <include>
+                        <context ref="def:in-comment"/>
+                        <context ref="comment-multiline"/>                        
+                    </include>
+                </context>                   
+            </include>
+        </context>
+    </definitions>
+</language>

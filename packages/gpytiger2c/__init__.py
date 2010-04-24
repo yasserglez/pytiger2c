@@ -13,8 +13,8 @@ class UserInterface(object):
     
     def __init__(self, data_dir, pytiger2c_script):
         super(UserInterface, self).__init__()
-#        icon_file = os.path.join(data_dir, 'images/pytiger2c.svg')
-#        gtk.window_set_default_icon_from_file(icon_file)
+        icon_file = os.path.join(data_dir, 'images/pytiger2c.svg')
+        gtk.window_set_default_icon_from_file(icon_file)
         self._main_window = MainWindow(data_dir, pytiger2c_script)
         
     def start(self):
