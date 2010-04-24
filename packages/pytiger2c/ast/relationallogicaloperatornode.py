@@ -81,7 +81,7 @@ class RelationalLogicalOperatorNode(LogicalOperatorNode):
                 errors.append(message.format(line=self.line_number))
                 
             if self.right.return_type != self.left.return_type:
-                message = 'Types of left and right operands of the binary  ' \
+                message = 'Types of left and right operands of the binary ' \
                           'relational operator at line {line} does not match'
                 errors.append(message.format(line=self.line_number))
         
