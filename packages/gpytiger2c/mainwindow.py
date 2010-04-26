@@ -121,7 +121,7 @@ class MainWindow(XMLWidget):
     def _init_filenames(self):
         if self._filename is not None:
             last_dot = self._filename.rfind('.')
-            if len(self._filename) - last_dot <= 6:
+            if last_dot > 0 and len(self._filename) - last_dot <= 6:
                 prefix = self._filename[:last_dot]
             else:
                 prefix = self._filename

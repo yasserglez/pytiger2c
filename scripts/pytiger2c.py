@@ -87,7 +87,7 @@ def main(argv):
         elif options.output_type == 'binary':
             basename = os.path.basename(tiger_filename)
             index = basename.rfind('.')
-            c_filename = '%s.c' % basename[:index] if index > 0 else basename
+            c_filename = '%s.c' % (basename[:index] if index > 0 else basename)
             c_filename = os.path.join(os.path.dirname(tiger_filename), c_filename)
             tiger2c(tiger_filename, c_filename)
             # Translation completed. Compile using GCC.
