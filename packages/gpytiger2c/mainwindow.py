@@ -28,10 +28,7 @@ class MainWindow(XMLWidget):
     def __init__(self, data_dir, pytiger2c_script):
         super(MainWindow, self).__init__(data_dir, 'main_window')
         self._filename = None
-        self._c_filename = None
-        self._exe_filename = None
-        self._dot_filename = None
-        self._jpg_filename = None
+        self._init_filenames()
         self._data_dir = data_dir
         self._init_accelerators()
         self._init_source_view()
@@ -121,6 +118,23 @@ class MainWindow(XMLWidget):
         output_view.set_buffer(self._output_buffer)
         output_view.modify_font(pango.FontDescription('monospace'))
         
+    def _init_filenames(self):
+        if self._filename is not None:
+            last_dot = self._filename.rfind('.')
+            if len(self._filename) - last_dot <= 6:
+                prefix = self._filename[:last_dot]
+            else:
+                prefix = self._filename
+            self._c_filename = prefix + '.c'
+            self._bin_filename = prefix + '.bin'
+            self._dot_filename = prefix + '.dot'
+            self._jpg_filename = prefix + '.jpg'
+        else:
+            self._c_filename = None
+            self._bin_filename = None
+            self._dot_filename = None
+            self._jpg_filename = None            
+        
     def on_quit(self):
         self._losing_changes()
         return False
@@ -206,25 +220,30 @@ class MainWindow(XMLWidget):
         if not (self._filename is None or self._source_buffer.get_modified()):
             self._builder.get_object('notebook').set_current_page(1)
             self._errors_buffer.set_text('')
-            pytiger2c_cmd = [PYTHON, PYTIGER2C, self._filename, '-o', self._exe_filename]
+            pytiger2c_cmd = [PYTHON, PYTIGER2C, self._filename, '-o', self._bin_filename]
             pytiger2c_process = subprocess.Popen(pytiger2c_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             pytiger2c_ret = pytiger2c_process.wait()
             if pytiger2c_ret == PYTIGER2C_EXIT_SUCCESS:
                 self._errors_buffer.set_text('Build succeeded.')
+                success = True
             else:
                 self._errors_buffer.set_text(pytiger2c_process.stderr.read())
+                success = False
         else:
             self._error_dialog('Build error', 'File is not saved.')
+            success = False
+        return success
     
     def on_run(self, widget=None):
-        self.on_build()
-        self._output_buffer.set_text('')
-        self._builder.get_object('notebook').set_current_page(0)
-        if self._filename is not None and os.path.isfile(self._exe_filename):
-            program_cmd = [self._exe_filename]
-            program_process = subprocess.Popen(program_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            program_process.wait()
-            self._output_buffer.set_text(program_process.stderr.read() + program_process.stdout.read())
+        build_success = self.on_build()
+        if build_success:
+            self._output_buffer.set_text('')
+            self._builder.get_object('notebook').set_current_page(0)
+            if self._filename is not None and os.path.isfile(self._bin_filename):
+                program_cmd = [self._bin_filename]
+                program_process = subprocess.Popen(program_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                program_process.wait()
+                self._output_buffer.set_text(program_process.stderr.read() + program_process.stdout.read())
     
     def on_new(self, widget=None):
         self._losing_changes()
@@ -243,21 +262,12 @@ class MainWindow(XMLWidget):
         response = chooser.run()        
         if response == gtk.RESPONSE_OK:
             self._filename = os.path.abspath(chooser.get_filename())
-            last_dot = self._filename.rfind('.')
-            if len(self._filename) - last_dot <= 6:
-                prefix = self._filename[:last_dot]
-            else:
-                prefix = self._filename
-            self._c_filename = prefix + '.c'
-            self._exe_filename = prefix + '.exe'
-            self._dot_filename = prefix + '.dot'
-            self._jpg_filename = prefix + '.jpg'
             self._load_source_buffer()
         chooser.destroy()
     
     def on_save(self, widget=None):
         if self._filename is None:
-            self.on_saveas(None)
+            self.on_saveas()
         else:
             self._save_source_buffer()
     
@@ -292,6 +302,7 @@ class MainWindow(XMLWidget):
         except:
             self._error_dialog('Error opening the file', 'Could not open the file.')
         else:
+            self._init_filenames()
             self._source_buffer.set_text(text)
             self._source_buffer.set_modified(False)
             self._source_buffer.place_cursor(self._source_buffer.get_start_iter())
