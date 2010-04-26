@@ -91,7 +91,7 @@ def main(argv):
             c_filename = os.path.join(os.path.dirname(tiger_filename), c_filename)
             tiger2c(tiger_filename, c_filename)
             # Translation completed. Compile using GCC.
-            GCC_CMD = ['gcc', '-std=c99', '-o', output_filename, c_filename]
+            GCC_CMD = ['gcc', '-std=c99', '-lgc', '-o', output_filename, c_filename]
             if subprocess.call(GCC_CMD) != EXIT_SUCCESS:
                 # Leave the temporal c file for debugging.
                 sys.exit(EXIT_FAILURE)

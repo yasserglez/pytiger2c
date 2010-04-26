@@ -213,7 +213,6 @@ class CodeGenerator(object):
         stmt = '{name} = pytiger2c_malloc(sizeof({type}));' \
             .format(type=code_type, name=code_name)
         self.add_statement(stmt)
-        self.add_statement('free({0});'.format(code_name), free = True)
         field_names, field_types = [], []
         variable_types = []
         
