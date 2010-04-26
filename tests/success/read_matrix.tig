@@ -1,0 +1,29 @@
+/* Reads the input, formatting into a square matrix with the same
+dimenson of the first digit of the input. */
+
+let
+    type arr_int = array of int
+    type jagged_arr_int = array of arr_int
+    var data := jagged_arr_int[1] of arr_int[1] of 0 
+    var size := 0
+    var current := " "
+    var initial_path := arr_int[1] of 0
+    var initial_visited := initial_path
+    function read_data() = (
+        size := ord(getchar()) - 48;
+        data := jagged_arr_int[size] of arr_int[size] of 0;
+        for i:= 0 to size-1 do
+            data[i] := arr_int[size] of i;
+        for i:= 0 to size-1 do
+            for j:= 0 to size-1 do(
+                 data[i][j] := ord(getchar())-48))
+    function print_data() = 
+        for i:= 0 to size-1 do(
+            for j:= 0 to size-1 do(
+                 printi(data[i][j]);
+                 print(" "));
+            print("\n"))
+in
+    read_data();
+    print_data()
+end

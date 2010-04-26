@@ -166,13 +166,10 @@ class ArrayLiteralExpressionNode(ValuedExpressionNode):
         array_code_type = self.return_type.code_type
         local_var = generator.define_local(array_code_type)
         # Allocate memory for the struct and the data.
-        statement = '{local_var}->data = NULL;'
-        statement = statement.format(local_var = local_var)
-        generator.add_statement(statement, allocate = True)
         statement = '{local_var} = pytiger2c_malloc(sizeof({type}));'
         statement = statement.format(local_var = local_var, 
                                      type = array_code_type[:-1])
-        generator.add_statement(statement, allocate = True)
+        generator.add_statement(statement)
         value_type = None   
         if isinstance(self.value.return_type, IntegerType):
             value_type = self.value.return_type.code_type
@@ -191,7 +188,7 @@ class ArrayLiteralExpressionNode(ValuedExpressionNode):
         statement = statement.format(local_var)
         generator.add_statement(statement)
         generator.add_statement('{')
-        statement = '(({type}*)({local_var}->data))[tiger_index] = {value};'
+        statement = '{local_var}->data[tiger_index] = {value};'
         statement = statement.format(type=self.value.return_type.code_type, 
                                      local_var=local_var, value=self.value.code_name)
         generator.add_statement(statement)
