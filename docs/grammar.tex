@@ -6,7 +6,7 @@
 
 \title{
 	\LARGE{PyTiger2C} \\
-	\Large{Gramática LR del lenguaje Tiger utilizada por PyTiger2C}
+	\Large{Anotaciones sobre la comprobación sintáctica}
 }
 
 \author{
@@ -29,151 +29,259 @@
 
 \setcounter{page}{1}
 
-A continuación se enumeran las reglas de la gramática libre del contexto
-utilizada por PyTiger2C para reconocer las estructuras del lenguaje Tiger.
+\section{Análisis lexicográfico}
 
-La gramática presenta algunas ambigüedades que se reportan en forma de 
-conflictos \emph{SHIFT-REDUCE} al hacer el análisis LR. En algunos casos, 
-es posible hacer modificaciones a la gramática para evitar estos conflictos 
-pero decidimos no hacer dichas modificaciones y en su lugar utilizar reglas 
-de precedencia para evitar perder claridad en las estructuras del lenguaje 
-Tiger que reconocen cada una de las producciones.
+Durante el análisis lexicográfico se separa el flujo de caracteres de entrada
+en un conjunto de \emph{tokens}. A continuación se enumeran las expresiones
+regulares utilizadas para reconocer cada \emph{token} del lenguaje Tiger.
 
-Las reglas de precedencia indican que acción se debe tomar ante un conflicto 
-\emph{SHIFT-REDUCE}, indicando si se debe introducir en la pila el 
-\emph{token} de la cadena de entrada o reducir la producción con la que 
-se produce el conflicto.
+\begin{enumerate}
+  \item \verb|ARRAY : array|
+
+  \item \verb|IF : if|
+
+  \item \verb|THEN : then|
+
+  \item \verb|ELSE : else|
+
+  \item \verb|WHILE : while|
+
+  \item \verb|FOR : for|
+
+  \item \verb|TO : to|
+
+  \item \verb|DO : do|
+
+  \item \verb|LET : let|
+
+  \item \verb|IN : in|
+
+  \item \verb|END : end|
+
+  \item \verb|OF : of|
+
+  \item \verb|BREAK : break|
+
+  \item \verb|NIL : nil|
+
+  \item \verb|FUNCTION : function|
+
+  \item \verb|VAR : var|
+
+  \item \verb|TYPE : type|
+
+  \item \verb|ID : [a-zA-Z][a-zA-Z0-9_]*|
+
+  \item \verb|STRLIT :|
+  \begin{verbatim}
+  "(
+      (\\[nt])
+    | (\\")
+    | (\\\\)
+    | (\\\^[@A-Z[\]^_])
+    | (\\[0-9][0-9][0-9])
+    | (\\\s+\\)
+    | ([^\\"])
+  )*"
+  \end{verbatim}
+
+  \item \verb|INTLIT : [0-9]+|
+
+  \item \verb|PLUS : \+|
+
+  \item \verb|MINUS : \-|
+
+  \item \verb|TIMES : \*|
+
+  \item \verb|DIVIDE : /|
+
+  \item \verb|EQ : =|
+
+  \item \verb|NE : <>|
+
+  \item \verb|LT : <|
+
+  \item \verb|LE : <=|
+
+  \item \verb|GT : >|
+
+  \item \verb|GE : >=|
+
+  \item \verb|AND : &|
+
+  \item \verb$OR : \|$
+
+  \item \verb|ASSIGN : :=|
+
+  \item \verb|PERIOD : \.|
+
+  \item \verb|COMMA : ,|
+
+  \item \verb|COLON : :|
+
+  \item \verb|SEMICOLON : ;|
+
+  \item \verb|LPAREN : \(|
+
+  \item \verb|RPAREN : \)|
+
+  \item \verb|LBRACKET : \[|
+
+  \item \verb|RBRACKET : \]|
+
+  \item \verb|LBRACE : \{|
+
+  \item \verb|RBRACE : \}|
+\end{enumerate}
+
+\section{Análisis sintáctico}
+
+El análisis sintáctico reconoce estructuras del lenguaje a partir del flujo de
+\emph{tokens} obtenidos del análisis lexicográfico. A continuación se enumeran
+las reglas de la gramática libre del contexto utilizada por PyTiger2C para
+reconocer las estructuras del lenguaje Tiger.
 
 \begin{enumerate}
 
-\item \verb|program : expr|
+  \item \verb|program ::= expr|
 
-\item \verb|expr : NIL|
+  \item \verb|expr ::= NIL|
 
-\item \verb|expr : INTLIT|
+  \item \verb|expr ::= INTLIT|
 
-\item \verb|expr : STRLIT|
+  \item \verb|expr ::= STRLIT|
 
-\item \verb|expr : lvalue|
+  \item \verb|expr ::= lvalue|
 
-\item \verb|expr : ID LBRACKET expr RBRACKET OF expr|
+  \item \verb|expr ::= ID LBRACKET expr RBRACKET OF expr|
 
-\item \verb|expr : ID LBRACE field_list RBRACE|
+  \item \verb|expr ::= ID LBRACE field_list RBRACE|
 
-\item \verb|expr : MINUS expr|
+  \item \verb|expr ::= MINUS expr|
 
-\item \verb|expr : expr PLUS expr|
+  \item \verb|expr ::= expr PLUS expr|
 
-\item \verb|expr : expr MINUS expr|
+  \item \verb|expr ::= expr MINUS expr|
 
-\item \verb|expr : expr TIMES expr|
+  \item \verb|expr ::= expr TIMES expr|
 
-\item \verb|expr : expr DIVIDE expr|
+  \item \verb|expr ::= expr DIVIDE expr|
 
-\item \verb|expr : expr EQ expr|
+  \item \verb|expr ::= expr EQ expr|
 
-\item \verb|expr : expr NE expr|
+  \item \verb|expr ::= expr NE expr|
 
-\item \verb|expr : expr LT expr|
+  \item \verb|expr ::= expr LT expr|
 
-\item \verb|expr : expr LE expr|
+  \item \verb|expr ::= expr LE expr|
 
-\item \verb|expr : expr GT expr|
+  \item \verb|expr ::= expr GT expr|
 
-\item \verb|expr : expr GE expr|
+  \item \verb|expr ::= expr GE expr|
 
-\item \verb|expr : expr AND expr|
+  \item \verb|expr ::= expr AND expr|
 
-\item \verb|expr : expr OR expr|
+  \item \verb|expr ::= expr OR expr|
 
-\item \verb|expr : LPAREN expr_seq RPAREN|
+  \item \verb|expr ::= LPAREN expr_seq RPAREN|
 
-\item \verb|expr : lvalue ASSIGN expr|
+  \item \verb|expr ::= lvalue ASSIGN expr|
 
-\item \verb|expr : ID LPAREN expr_list RPAREN|
+  \item \verb|expr ::= ID LPAREN expr_list RPAREN|
 
-\item \verb|expr : IF expr THEN expr|
+  \item \verb|expr ::= IF expr THEN expr|
 
-\item \verb|expr : IF expr THEN expr ELSE expr|
+  \item \verb|expr ::= IF expr THEN expr ELSE expr|
 
-\item \verb|expr : WHILE expr DO expr|
+  \item \verb|expr ::= WHILE expr DO expr|
 
-\item \verb|expr : FOR ID ASSIGN expr TO expr DO expr|
+  \item \verb|expr ::= FOR ID ASSIGN expr TO expr DO expr|
 
-\item \verb|expr : BREAK|
+  \item \verb|expr ::= BREAK|
 
-\item \verb|expr : LET dec_group IN expr_seq END|
+  \item \verb|expr ::= LET dec_group IN expr_seq END|
 
-\item \verb|lvalue : ID|
+  \item \verb|lvalue ::= ID|
 
-\item \verb|lvalue : lvalue PERIOD ID|
+  \item \verb|lvalue ::= lvalue PERIOD ID|
 
-\item \verb|lvalue : ID LBRACKET expr RBRACKET|
+  \item \verb|lvalue ::= ID LBRACKET expr RBRACKET|
 
-\item \verb|lvalue : lvalue LBRACKET expr RBRACKET|
+  \item \verb|lvalue ::= lvalue LBRACKET expr RBRACKET|
 
-\item \verb|expr_seq :|
+  \item \verb|expr_seq ::=|
 
-\item \verb|expr_seq : expr_seq SEMICOLON expr|
+  \item \verb|expr_seq ::= expr_seq SEMICOLON expr|
 
-\item \verb|expr_seq : expr|
+  \item \verb|expr_seq ::= expr|
 
-\item \verb|dec_group :|
+  \item \verb|dec_group ::=|
 
-\item \verb|dec_group : dec_group dec|
+  \item \verb|dec_group ::= dec_group dec|
 
-\item \verb|field_list :|
+  \item \verb|field_list ::=|
 
-\item \verb|field_list : field_assign|
+  \item \verb|field_list ::= field_assign|
 
-\item \verb|field_list : field_list COMMA field_assign|
+  \item \verb|field_list ::= field_list COMMA field_assign|
 
-\item \verb|field_assign : ID EQ expr|
+  \item \verb|field_assign ::= ID EQ expr|
 
-\item \verb|expr_list :|
+  \item \verb|expr_list ::=|
 
-\item \verb|expr_list : expr_list COMMA expr|
+  \item \verb|expr_list ::= expr_list COMMA expr|
 
-\item \verb|expr_list : expr|
+  \item \verb|expr_list ::= expr|
 
-\item \verb|dec : type_dec_group|
+  \item \verb|dec ::= type_dec_group|
 
-\item \verb|dec : var_dec|
+  \item \verb|dec ::= var_dec|
 
-\item \verb|dec : func_dec_group|
+  \item \verb|dec ::= func_dec_group|
 
-\item \verb|func_dec_group : func_dec|
+  \item \verb|func_dec_group ::= func_dec|
 
-\item \verb|func_dec_group : func_dec_group func_dec|
+  \item \verb|func_dec_group ::= func_dec_group func_dec|
 
-\item \verb|type_dec_group : type_dec|
+  \item \verb|type_dec_group ::= type_dec|
 
-\item \verb|type_dec_group : type_dec_group type_dec|
+  \item \verb|type_dec_group ::= type_dec_group type_dec|
 
-\item \verb|type_dec : TYPE ID EQ type|
+  \item \verb|type_dec ::= TYPE ID EQ type|
 
-\item \verb|type : ID|
+  \item \verb|type ::= ID|
 
-\item \verb|type : LBRACE field_types RBRACE|
+  \item \verb|type ::= LBRACE field_types RBRACE|
 
-\item \verb|type : ARRAY OF ID|
+  \item \verb|type ::= ARRAY OF ID|
 
-\item \verb|field_types :|
+  \item \verb|field_types ::=|
 
-\item \verb|field_types : field_type|
+  \item \verb|field_types ::= field_type|
 
-\item \verb|field_types : field_types COMMA field_type|
+  \item \verb|field_types ::= field_types COMMA field_type|
 
-\item \verb|field_type : ID COLON ID|
+  \item \verb|field_type ::= ID COLON ID|
 
-\item \verb|var_dec : VAR ID ASSIGN expr|
+  \item \verb|var_dec ::= VAR ID ASSIGN expr|
 
-\item \verb|var_dec : VAR ID COLON ID ASSIGN expr|
+  \item \verb|var_dec ::= VAR ID COLON ID ASSIGN expr|
 
-\item \verb|func_dec : FUNCTION ID LPAREN field_types RPAREN EQ expr|
+  \item \verb|func_dec ::= FUNCTION ID LPAREN field_types RPAREN EQ expr|
 
-\item \verb|func_dec : FUNCTION ID LPAREN field_types RPAREN COLON ID EQ expr|
-
+  \item \verb|func_dec ::= FUNCTION ID LPAREN field_types RPAREN COLON ID EQ expr|
 \end{enumerate}
+
+La gramática anterior presenta algunas ambigüedades que se reportan en forma de
+conflictos \emph{SHIFT-REDUCE} al hacer el análisis LR. En algunos casos,
+es posible hacer modificaciones a la gramática para evitar estos conflictos
+pero decidimos no hacer dichas modificaciones y en su lugar utilizar reglas
+de precedencia para evitar perder claridad en las estructuras del lenguaje
+Tiger que reconocen cada una de las producciones.
+
+Las reglas de precedencia indican que acción se debe tomar ante un conflicto
+\emph{SHIFT-REDUCE}, indicando si se debe introducir en la pila el
+\emph{token} de la cadena de entrada o reducir la producción con la que
+se produce el conflicto.
 
 \end{document}
