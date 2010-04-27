@@ -176,14 +176,12 @@ class ArrayLiteralExpressionNode(ValuedExpressionNode):
         else:
             value_type = self.value.return_type.code_type[:-1]
         statement = '{local_var}->data = pytiger2c_malloc(sizeof({type})*{value});'
-        
         statement = statement.format(local_var = local_var, 
                                      type = value_type, 
                                      value = self.count.code_name)
         generator.add_statement(statement)
         generator.add_statement('{0}->length = {1};'.format(local_var, self.count.code_name))
         # Initializa the data.
-        # TODO Change it for use memcpy.
         statement = 'for(int tiger_index = 0; tiger_index < {0}-> length; tiger_index++)'
         statement = statement.format(local_var)
         generator.add_statement(statement)

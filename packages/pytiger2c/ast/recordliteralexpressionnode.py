@@ -177,8 +177,6 @@ class RecordLiteralExpressionNode(ValuedExpressionNode):
         
         record_code_type = self.return_type.code_type
         local_var = generator.define_local(record_code_type)
-        statement = '{local_var} = NULL;'.format(local_var = local_var)
-        generator.add_statement(statement, allocate = True)
         statement = '{local_var} = pytiger2c_malloc(sizeof({type}));'
         statement = statement.format(local_var = local_var, 
                                      type = record_code_type[:-1])

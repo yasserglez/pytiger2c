@@ -208,8 +208,6 @@ class CodeGenerator(object):
         func = self._func_stack[0]
         stmt = '{type}* {name};'.format(type=code_type, name=code_name)
         self._func_locals[func].append(stmt)
-        stmt = '{name} = NULL;'.format(name = code_name)
-        self.add_statement(stmt, allocate = True)
         stmt = '{name} = pytiger2c_malloc(sizeof({type}));' \
             .format(type=code_type, name=code_name)
         self.add_statement(stmt)
@@ -383,35 +381,16 @@ class CodeGenerator(object):
         self._func_locals[func].append(declaration)
         return local_name
         
-    def add_statement(self, statement, free=False, allocate=False):
+    def add_statement(self, statement):
         """
-        Añade una instrucción al cuerpo de la función actual. Si la instrucción es 
-        una llamada para liberar la memoria utilizada por alguna variable se debe 
-        especificar el parámetro C{free} como C{True} para que sea ejecutada luego 
-        de todas las funciones en el cuerpo de la función y antes de que termine 
-        la función. 
+        Añade una instrucción al cuerpo de la función actual.
         
         @type statement: C{str}
         @param statement: Instrucción que se debe añadir al cuerpo de la función
             actual del generador de código.
-            
-        @type free: C{bool}
-        @param free: Indica que la instrucción que se añade libera la memoria 
-            utilizada por alguna variable y debe ser ejecutada luego de las 
-            instrucciones del cuerpo de la función.
-            
-        @type allocate: C{bool}
-        @param allocate: Indica que la instrucción que se añade reserva memoria 
-            para alguna variable y debe ser ejecutada luego de las declaraciones 
-            de las variables del cuerpo de la función.
         """
         func = self._func_stack[0]
-        if free:
-            self._func_cleanups[func].append(statement)
-        elif allocate:
-            self._func_stmts[func].insert(0,statement)
-        else:
-            self._func_stmts[func].append(statement)
+        self._func_stmts[func].append(statement)
         
     def close(self):
         """
