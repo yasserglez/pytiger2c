@@ -1,0 +1,16 @@
+let
+	type ints = array of int
+	
+	function zero(): int = (
+		print("Print this only one time.\n"); 
+		0
+	)
+	
+	var num_ints := 10
+	var ints := ints[num_ints] of zero()
+in
+	for i := 0 to (num_ints - 1) do (
+		printi(ints[i]);
+		print("\n")			
+	)
+end

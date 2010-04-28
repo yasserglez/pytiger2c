@@ -61,18 +61,21 @@ class ArrayDeclarationNode(TypeDeclarationNode):
         propiedad C{type}.
         """
         self._scope = scope
-        type = None
-        type_name = self.type.fields_typenames[0]
+        elem_type = None
+        elem_type_name = self.type.fields_typenames[0]
         
         try:
-            type = self.scope.get_type_definition(type_name)
+            elem_type = self.scope.get_type_definition(elem_type_name)
         except KeyError:
             message = 'Undefined type {type} in the array {name} ' \
                       'declaration at line {line}'
-            errors.append(message.format(type=type_name, name=self.name, 
+            errors.append(message.format(type=elem_type_name, name=self.name, 
                                          line=self.line_number))
+        if elem_type == self._type:
+            message = 'Invalid recursive definition of the array {name} at line {line}' 
+            errors.append(message.format(name=self.name, line=self.line_number))
 
-        self.type.fields_types = [type]
+        self.type.fields_types = [elem_type]
 
     def generate_dot(self, generator):
         """

@@ -1,0 +1,6 @@
+let
+	type a = b
+	type b = c
+	type c = array of a
+in
+end
