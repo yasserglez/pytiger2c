@@ -1,0 +1,42 @@
+let
+    type str = string
+    type mov = {desc: str, next: mov}
+
+    var movs: mov := nil
+    
+    function hanoi_towers(discs: int, start: str, aux: str, final: str) =
+        if discs > 0 then
+            let
+                var msg := concat(concat("Move a disc from ", start), 
+                                  concat(" to ", concat(final, ".\n")))
+            in
+                hanoi_towers(discs - 1, start, final, aux);
+                
+                if (movs = nil) then
+                    movs := mov {desc=msg, next=nil}
+                else
+                    let
+                        var last := movs
+                    in
+                        while (last.next <> nil) do last := last.next;
+                        last.next := mov {desc=msg, next=nil}
+                    end;
+
+                hanoi_towers(discs - 1, aux, start, final)                     
+            end
+in
+    hanoi_towers(10, "A", "B", "C");
+    let
+    	var total_mov := 0
+        var current_mov: mov := nil
+    in
+        current_mov := movs;
+        while (current_mov <> nil) do 
+            (print(current_mov.desc);
+             total_mov := total_mov + 1;
+             current_mov := current_mov.next);
+        print("\nTotal number of movements: ");
+        printi(total_mov);
+        print(".\n")
+    end
+end

@@ -126,7 +126,7 @@ class MainWindow(XMLWidget):
             else:
                 prefix = self._filename
             self._c_filename = prefix + '.c'
-            self._bin_filename = prefix + '.bin'
+            self._bin_filename = prefix + '.exe'
             self._dot_filename = prefix + '.dot'
             self._jpg_filename = prefix + '.jpg'
         else:

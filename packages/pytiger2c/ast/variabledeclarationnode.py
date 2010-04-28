@@ -54,23 +54,7 @@ class VariableDeclarationNode(DeclarationNode):
         super(VariableDeclarationNode, self).__init__()
         self._name = name
         self._value = value
-        self._type = None        
-
-    def generate_dot(self, generator):
-        """
-        Genera un grafo en formato Graphviz DOT correspondiente al árbol de 
-        sintáxis abstracta del programa Tiger del cual este nodo es raíz.
-        
-        Para obtener información acerca de los parámetros recibidos por
-        este método consulte la documentación del método C{generate_dot}
-        de la clase C{LanguageNode}.
-        """
-        label = '{type} \\n {name}'
-        label = label.format(type=self.__class__.__name__, name=self.name)
-        me = generator.add_node(label)        
-        value = self.value.generate_dot(generator)
-        generator.add_edge(me, value)
-        return me
+        self._type = None
     
     def generate_code(self, generator):
         """

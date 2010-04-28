@@ -50,7 +50,7 @@ class VariableType(TigerType):
     
     code_name = property(_get_code_name, _set_code_name)
     
-    def __init__(self, tiger_type, read_only = False):
+    def __init__(self, tiger_type, read_only=False):
         """
         Inicializa la clase representando la definición de una variable.
         
