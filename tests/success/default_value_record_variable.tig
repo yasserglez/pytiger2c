@@ -1,0 +1,7 @@
+let
+	type record = {name: string, age: int}
+	var a: record := f()
+	function f(): record = a
+in
+	printi(a = nil)
+end

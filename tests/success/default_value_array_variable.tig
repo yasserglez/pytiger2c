@@ -1,0 +1,7 @@
+let
+	type ints = array of int
+	var a: ints := f()
+	function f(): ints = a
+in
+	printi(a[1])
+end

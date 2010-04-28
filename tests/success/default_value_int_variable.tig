@@ -1,0 +1,7 @@
+let
+	var a: int := f()
+	function f(): int = a
+in
+	printi(a);
+	print("\n")
+end

@@ -5,7 +5,10 @@ Clase C{VariableDeclarationNode} del árbol de sintáxis abstracta.
 """
 
 from pytiger2c.ast.declarationnode import DeclarationNode
-from pytiger2c.scope import Scope
+from pytiger2c.types.integertype import IntegerType
+from pytiger2c.types.stringtype import StringType
+from pytiger2c.types.recordtype import RecordType
+from pytiger2c.types.arraytype import ArrayType
 
 
 class VariableDeclarationNode(DeclarationNode):
@@ -79,8 +82,22 @@ class VariableDeclarationNode(DeclarationNode):
         de la clase C{LanguageNode}.
         """
         self.scope.generate_code(generator)
-        
-        self.value.generate_code(generator)
-        
         var_code = self.scope.get_variable_code(self.name)
-        generator.add_statement('{0} = {1};'.format(var_code, self.value.code_name))       
+        # Give a default value to the variables. This should be done before generating
+        # code for the value of the variable because the value could be a function
+        # call that returns the value of the variable being defined.
+        if isinstance(self._type.type, IntegerType):
+            generator.add_statement('{var} = 0;'.format(var=var_code))
+        elif isinstance(self._type.type, (StringType, ArrayType)):
+            stmt = '{var} = pytiger2c_malloc(sizeof({type}));'
+            stmt = stmt.format(var=var_code, type=self._type.type.code_type[:-1])
+            generator.add_statement(stmt)
+            stmt = '{var}->data = NULL;'.format(var=var_code)
+            generator.add_statement(stmt)
+            stmt = '{var}->length = 0;'.format(var=var_code)
+            generator.add_statement(stmt)
+        elif isinstance(self._type.type, RecordType):
+            generator.add_statement('{0} = NULL;'.format(var_code))
+        self.value.generate_code(generator)
+        stmt = '{var} = {value};'.format(var=var_code, value=self.value.code_name)
+        generator.add_statement(stmt)

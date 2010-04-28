@@ -1,0 +1,6 @@
+let
+	var a: string := f()
+	function f(): string = a
+in
+	print(a)
+end
