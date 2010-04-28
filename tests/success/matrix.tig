@@ -1,0 +1,22 @@
+let
+	type A = array of int
+	type M = array of A
+	var n:= 10 - 2
+	var m:= M[n] of A[0] of -1
+in
+	for j:= 0 to n - 1 do
+	(
+		m[j]:= A[n] of -1;
+		for k:= 0 to n - 1 do
+			m[j][k]:= (j + 1)*(k + 1)
+	);
+	for j:= 0 to n - 1 do
+	(
+		for k:= 0 to n - 1 do
+		(
+			printi(m[j][k]);
+			print(" ")
+		);
+		print("\n")
+	)
+end

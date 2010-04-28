@@ -1,0 +1,17 @@
+let
+	function f(argf : int) =
+	let
+		var localf:= argf
+		function g() = localf:= localf - 1
+	in
+		printi(localf);
+		if localf < 0 then 
+			localf:= localf - 1
+		else 
+			g();
+		if localf > 0
+			then f(localf)
+	end
+in
+	f(2)
+end

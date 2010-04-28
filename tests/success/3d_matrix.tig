@@ -1,0 +1,15 @@
+let
+	type A = array of string
+	type M = array of A
+	type T = array of M
+	type R = { x : T }
+	var t: R:= R{ x = T[2] of M[10] of A[10] of "hello" }
+in
+	for l:= 0 to 1 do
+		for j:= 0 to 9 do
+		(
+			for k:= 0 to 9 do
+				print(concat(t.x[l][j][k], " "));
+			print("\n")
+		)
+end

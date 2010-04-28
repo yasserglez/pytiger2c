@@ -1,0 +1,8 @@
+let
+	type Tree = { f : int, tl : TreeList }
+	type TreeList = { t : Tree, tl : TreeList }
+	var tl:= TreeList { t = nil, tl = nil }
+in
+	tl.t:= Tree { f = 10, tl = nil };
+	printi(tl.t.f)
+end

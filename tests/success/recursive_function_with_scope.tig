@@ -1,0 +1,12 @@
+let
+	function f(n : int) =
+	let
+		var x := n
+	in
+		printi(x);
+		if n <> 0 then f(n - 1);
+		printi(x)
+	end
+in
+	f(1)
+end

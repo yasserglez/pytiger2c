@@ -1,0 +1,9 @@
+let
+	type R = { x : A }
+	type A = B
+	type B = int
+	type arrtype = array of R
+	var a:= arrtype[2] of R{x = 5}
+in
+	printi(a[0].x)
+end

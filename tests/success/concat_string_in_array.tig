@@ -1,0 +1,13 @@
+let
+	type S = array of string
+	type K = { s : S }
+	type R = { k : K }
+	var k: int:= 1
+	var r:= R{ k = K{ s = S[1] of "hello" }}
+in
+	while k < size(r.k.s[0]) do
+	(
+		print(concat(r.k.s[0], "\n"));
+		k:= k+1
+	)
+end

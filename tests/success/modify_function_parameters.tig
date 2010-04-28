@@ -1,0 +1,15 @@
+let
+	var n:= 10
+	function f(n : int) =
+	let
+		function g() = n := n + 1
+	in
+		printi(n); print("\n");
+		g();
+		printi(n); print("\n")
+	end
+in
+	printi(n); print("\n");
+	f(n);
+	printi(n)
+end

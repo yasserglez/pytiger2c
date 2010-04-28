@@ -1,0 +1,6 @@
+let
+	var p:= 10
+	function f(n : int) : int = n*p
+in
+	printi(f(p))
+end

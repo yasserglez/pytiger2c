@@ -1,0 +1,10 @@
+for j:= 1 to 10 do
+(
+	for k:= 1 to 10 do
+	(
+		for l:= 1 to 10 do
+			( printi(j*k*l); print(" ") );
+		if k = 5 then break
+	);
+	if j = 5 then break
+)

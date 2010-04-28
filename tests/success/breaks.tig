@@ -1,0 +1,10 @@
+(
+for j:= 0 to 9 do
+let
+	var k:= j
+in
+	if k <> j | j = 6
+		then break
+		else printi(j)
+end
+)

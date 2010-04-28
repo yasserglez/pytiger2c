@@ -1,0 +1,36 @@
+let
+	type linked_list = { node : int, next : linked_list }
+	var list := linked_list { node = -1, next = nil }
+	var head := list
+	var it : linked_list := nil
+	var n:= 0
+	function readi() : int =
+	 let var i := 0
+	     var buffer := getchar()
+	     function isdigit(s : string) : int = 
+		          ord(buffer)>=ord("0") & ord(buffer)<=ord("9")
+	     function skipto() =
+	       while buffer=" " | buffer="\n"
+		 do buffer := getchar()
+	  in skipto();
+	     while isdigit(buffer)
+	       do (i := i*10+ord(buffer)-ord("0"); buffer := getchar());
+	     i
+	 end
+	
+in
+	n:= readi();
+	while n <> 11 do
+	(
+		list.next:= linked_list { node = n, next = nil };
+		list:= list.next;
+		n:= readi()
+	);
+	it:= head.next;
+	while it <> nil do
+	(
+		printi(it.node);
+		print("\n");
+		it:= it.next
+	)
+end

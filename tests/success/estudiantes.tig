@@ -1,0 +1,89 @@
+let
+	type arrRecEstudiantes = array of recEstudiante
+	type recEstudiante = { nombre : string, edad : int }
+	type recAula = { estudiantes : arrRecEstudiantes, cantidad : int }
+	
+	var est1 : recEstudiante := recEstudiante { nombre = "Isis", edad = 21 }
+	var est2 : recEstudiante := recEstudiante { nombre = "Armando", edad = 22 }
+	var est3 : recEstudiante := recEstudiante { nombre = "Mariela", edad = 21 }
+	var est4 : recEstudiante := recEstudiante { nombre = "anitalavalatina", edad = 21 }
+	
+	var estudiantes := arrRecEstudiantes[4] of nil
+	var aula : recAula := nil
+	
+	function ObtenerPosicionEstudiante( aula : recAula, estudiante : recEstudiante ) : int =	
+		let
+			var result := -1
+		in
+		(
+			for i := 0 to aula.cantidad - 1 do
+			(
+				if aula.estudiantes[i].nombre = estudiante.nombre
+					then 
+						(result := i
+						;
+						break
+						)
+			);
+			result
+		)	
+		end	
+		
+	function NombrePalindromo ( estudiante : recEstudiante ) : int =
+		let
+			function Palindromo ( nombre : string ) : int =  
+				let
+					var fin := size(nombre) - 1
+					var result := 1
+				in
+					(
+						for i := 0 to size(nombre)/2 do
+						(
+							if substring(nombre, i, 1) <> substring(nombre, fin, 1)
+								then 
+									( 
+										result := 0
+									;
+										break
+									)
+							;
+							fin := fin -1
+						)
+						;
+						result
+					)
+				end
+		in
+			Palindromo(estudiante.nombre)
+		end
+in
+	(
+		estudiantes[0] := est1;
+		estudiantes[1] := est2;
+		estudiantes[2] := est3;
+		estudiantes[3] := est4;
+		
+		aula := recAula { estudiantes = estudiantes, cantidad = 4 };
+		
+		print("Posicion del estudiante anitalavalatina: ");
+		
+		printi(ObtenerPosicionEstudiante(aula, est4));
+		
+		print("\nPosicion del estudiante tonita: ");
+		
+		printi(ObtenerPosicionEstudiante(aula, recEstudiante { nombre = "tonita", edad = 21 }));
+		
+		print("\nEs palindromo el nombre de la estudiante anitalavalatina: ");
+		
+		if NombrePalindromo(est4) 
+			then print("Es palindromo") 
+			else print("No es palindromo")
+		;
+			
+		print("\nEs palindromo el nombre de la estudiante Mariela: ");
+		
+		if NombrePalindromo(est3) 
+			then print("Es palindromo") 
+			else print("No es palindromo")
+	)
+end

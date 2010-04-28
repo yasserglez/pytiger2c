@@ -1,0 +1,17 @@
+let
+	type R = { x : int }
+	type A = array of int
+	function mult(a : A, l : int) : int =
+	let
+		var rez:= 1
+	in
+		for j:= 0 to l - 1 do rez:= rez * a[j];
+		rez
+	end
+	function f(n : int, s : string, a : A, l : int, r : R) : int = n * size(s) * mult(a, l) * r.x
+	var x:= 0
+	var a:= A[4] of 2
+in
+	x:= f(2, "hello", a, 4, R{ x = 2 });
+	printi(x)
+end
