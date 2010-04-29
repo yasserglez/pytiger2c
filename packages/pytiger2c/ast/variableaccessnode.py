@@ -60,7 +60,7 @@ class VariableAccessNode(AccessNode):
             message = 'The name {name} used at line {line} is not a variable'
             errors.append(message.format(name = self.name, line=self.line_number))
         except KeyError:
-            message = 'Variable {name} at line {line} is not a defined'
+            message = 'Undefined variable {name} at line {line}'
             errors.append(message.format(name = self.name, line=self.line_number))
 
     def generate_dot(self, generator):
