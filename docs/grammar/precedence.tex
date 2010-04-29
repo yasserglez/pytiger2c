@@ -1,0 +1,24 @@
+\begin{Verbatim}[commandchars=@\[\]]
+precedence @PYbe[=] (
+    @PYaE[# The following fixes the shift/reduce conflict caused by rules ending with]
+    @PYaE[# the non-terminal expr and the rules for binary operators.]
+    (@PYaB[']@PYaB[nonassoc]@PYaB['], @PYaB[']@PYaB[OF]@PYaB['], @PYaB[']@PYaB[THEN]@PYaB['], @PYaB[']@PYaB[DO]@PYaB[']),
+    @PYaE[# The token ELSE has higher priority to fix the dangling-else shift/reduce]
+    @PYaE[# conflict. If an ELSE if found it should be shifted instead of reducing the]
+    @PYaE[# if-then without the else clause.]
+    (@PYaB[']@PYaB[nonassoc]@PYaB['], @PYaB[']@PYaB[ELSE]@PYaB[']),
+    @PYaE[# The following fixes the shift/reduce conflict between shifting the]
+    @PYaE[# @PYZlb[] token in the p_expr_array production (array literal) or reducing]
+    @PYaE[# the p_lvalue_id production.]
+    (@PYaB[']@PYaB[nonassoc]@PYaB['], @PYaB[']@PYaB[LVALUE_ID]@PYaB[']),
+    (@PYaB[']@PYaB[nonassoc]@PYaB['], @PYaB[']@PYaB[LBRACKET]@PYaB[']),
+    @PYaE[# Operator precedence.]
+    (@PYaB[']@PYaB[nonassoc]@PYaB['], @PYaB[']@PYaB[ASSIGN]@PYaB[']),
+    (@PYaB[']@PYaB[left]@PYaB['], @PYaB[']@PYaB[OR]@PYaB[']),
+    (@PYaB[']@PYaB[left]@PYaB['], @PYaB[']@PYaB[AND]@PYaB[']),
+    (@PYaB[']@PYaB[nonassoc]@PYaB['], @PYaB[']@PYaB[EQ]@PYaB['], @PYaB[']@PYaB[NE]@PYaB['], @PYaB[']@PYaB[LT]@PYaB['], @PYaB[']@PYaB[LE]@PYaB['], @PYaB[']@PYaB[GT]@PYaB['], @PYaB[']@PYaB[GE]@PYaB[']),
+    (@PYaB[']@PYaB[left]@PYaB['], @PYaB[']@PYaB[PLUS]@PYaB['], @PYaB[']@PYaB[MINUS]@PYaB[']),
+    (@PYaB[']@PYaB[left]@PYaB['], @PYaB[']@PYaB[TIMES]@PYaB['], @PYaB[']@PYaB[DIVIDE]@PYaB[']),
+    (@PYaB[']@PYaB[right]@PYaB['], @PYaB[']@PYaB[UMINUS]@PYaB[']),
+)
+\end{Verbatim}

@@ -24,7 +24,7 @@ precedence = (
     # if-then without the else clause.
     ('nonassoc', 'ELSE'),
     # The following fixes the shift/reduce conflict between shifting the
-    # [ token in the p_expr_array production (array declaration) or reducing 
+    # [ token in the p_expr_array production (array literal) or reducing 
     # the p_lvalue_id production.
     ('nonassoc', 'LVALUE_ID'),
     ('nonassoc', 'LBRACKET'),

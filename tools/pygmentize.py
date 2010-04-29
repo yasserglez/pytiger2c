@@ -12,6 +12,7 @@ from pygments import highlight
 from pygments.token import *
 from pygments.lexer import RegexLexer
 from pygments.lexers.compiled import CLexer
+from pygments.lexers.agile import PythonLexer
 from pygments.formatters import LatexFormatter
 
 
@@ -60,12 +61,14 @@ def main():
         print 'Usage: {0} <input-file>'.format(os.path.basename(sys.argv[0]))
     else:
         input_file = os.path.abspath(sys.argv[1])
-        if input_file.endswith('.c') or input_file.endswith('.h'):
+        if input_file.endswith('.py'):
+            lexer = PythonLexer()
+        elif input_file.endswith('.c') or input_file.endswith('.h'):
             lexer = CLexer()
         elif input_file.endswith('.tiger') or input_file.endswith('.tig'):
             lexer = TigerLexer()
         else:
-            print 'Error: Invalid input file. Only C and Tiger programs accepted.'
+            print 'Error: Invalid input file. Only C, Python and Tiger programs accepted.'
             sys.exit()
         dot_index = - len(input_file) + input_file.rfind('.')
         output_file = '%s.tex' % input_file[:dot_index]

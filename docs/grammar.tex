@@ -3,6 +3,10 @@
 \usepackage[spanish]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage{fullpage}
+\usepackage{fancyvrb}
+\usepackage{color}
+
+\input{common/pygments}
 
 \title{
 	\LARGE{PyTiger2C} \\
@@ -272,6 +276,8 @@ reconocer las estructuras del lenguaje Tiger.
   \item \verb|func_dec ::= FUNCTION ID LPAREN field_types RPAREN COLON ID EQ expr|
 \end{enumerate}
 
+\subsection{Reglas de precedencia}
+
 La gramática anterior presenta algunas ambigüedades que se reportan en forma de
 conflictos \emph{SHIFT-REDUCE} al hacer el análisis LR. En algunos casos,
 es posible hacer modificaciones a la gramática para evitar estos conflictos
@@ -281,7 +287,42 @@ Tiger que reconocen cada una de las producciones.
 
 Las reglas de precedencia indican que acción se debe tomar ante un conflicto
 \emph{SHIFT-REDUCE}, indicando si se debe introducir en la pila el
-\emph{token} de la cadena de entrada o reducir la producción con la que
-se produce el conflicto.
+\emph{token} de la cadena de entrada o reducir la producción del conflicto.
+
+Utilizando PLY, las reglas de precedencia se especifican asignando valores
+de prioridad a los \emph{tokens} de la gramática mediante una lista. Un
+\emph{token} en la lista tendrá mayor prioridad que todos los \emph{tokens} que
+aparezcan anteriormente. Se seleccionará hacer \emph{REDUCE} a una regla o hacer
+\emph{SHIFT} a un \emph{token} en favor del que tenga mayor prioridad. La
+prioridad de una regla está dada por la prioridad del último \emph{token}
+presente en la regla.
+
+A continuación se muestran las reglas de precedencia utilizadas para la
+gramática anterior.
+
+\begin{quote}
+\input{grammar/precedence}
+\end{quote}
+
+Un grupo de conflictos \emph{SHIFT-REDUCE} es producido por todas las reglas
+de la gramática que terminen en el no terminal \verb|expr| y las reglas
+utilizadas para los operadores binarios. Se utilizan reglas de precedencia
+para indicar que en estos casos se debe introducir el \emph{token} correspondiente
+al operador en la pila en lugar de reducir las reglas que terminan en \verb|expr|.
+
+Además, se produce un conflicto \emph{SHIFT-REDUCE} al reconocer las expresiones
+\texttt{if-then} y \texttt{if-then-else}. Este problema es conocido en la
+literatura como \emph{dangling else} y se puede solucionar introduciendo el
+\emph{token} \emph{else} en la pila, indicando que este \emph{else} corresponde
+a la estructura \emph{if-then} anterior.
+
+Otro conflicto \emph{SHIFT-REDUCE} se produce con la producción que reconoce un
+identificador como un \emph{lvalue} y el \emph{token} \verb|LBRACKET| en la
+declaración de un literal de \emph{array}. En este caso se indica que se introduzca
+el token \verb|LBRACKET| en la pila para tratar de reconocer la declaración de
+un literal de \emph{array}.
+
+El resto de las reglas de precedencia se utilizan para garantizar la precedencia
+y asociatividad entre los operadores.
 
 \end{document}
