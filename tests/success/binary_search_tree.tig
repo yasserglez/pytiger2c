@@ -1,0 +1,52 @@
+let
+    type tree = {root: node}
+   
+    type node = {value: int, left: node, right: node}
+    
+    
+    function insert(tree: tree, value: int) =
+        if tree.root = nil then
+            tree.root := node {value=value, left=nil, right=nil}
+        else
+            let
+                function insert(root: node, value: int): node =
+                    if root = nil then
+                        node {value=value, left=nil, right=nil}
+                    else
+                        (if value <= root.value then
+                             root.left := insert(root.left, value)
+                         else
+                             root.right := insert(root.right, value);
+                         root)
+            in
+                tree.root := insert(tree.root, value)
+            end
+            
+    function contains(tree: tree, value: int): int =
+        let
+            var return_value := 0
+            var current_node: node := nil
+        in
+            current_node := tree.root;
+            while current_node <> nil do
+                (if value = current_node.value then
+                     (return_value := 1; break);
+                 if value < current_node.value then
+                     current_node := current_node.left
+                 else
+                     current_node := current_node.right);
+            return_value
+        end
+    
+    
+    var tree := tree {root=nil}
+in
+    print("Inserting integers between 1 and 100 in the tree...");
+    for i := 1 to 100 do insert(tree, i);
+    print("DONE!\n");
+    print("Is 0 in the tree? "); printi(contains(tree, 0)); print("\n"); 
+    print("Is 1 in the tree? "); printi(contains(tree, 1)); print("\n");
+    print("Is 50 in the tree? "); printi(contains(tree, 50)); print("\n");
+    print("Is 100 in the tree? "); printi(contains(tree, 100)); print("\n");        
+    print("Is 101 in the tree? "); printi(contains(tree, 101)); print("\n")
+end
