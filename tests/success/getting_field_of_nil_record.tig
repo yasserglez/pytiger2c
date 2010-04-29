@@ -1,0 +1,6 @@
+let
+	type person = {name: string, age: int}
+	var person: person := nil
+in
+	print(person.name)
+end

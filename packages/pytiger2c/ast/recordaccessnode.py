@@ -124,10 +124,10 @@ class RecordAccessNode(AccessNode):
         """
         self.scope.generate_code(generator)
         self.record.generate_code(generator)
-        
         record_type = self.record.return_type
         index = record_type.fields_names.index(self.field_name)
-        field_code_name = record_type.field_code_names[index]        
-        self._code_name = '{1}->{2}'.format(self.return_type.code_type,
-                                                         self.record.code_name, 
-                                                         field_code_name)
+        field_code_name = record_type.field_code_names[index]
+        stmt = 'if({record} == NULL) {{ pytiger2c_error("{msg}"); }}'
+        stmt = stmt.format(record=self.record.code_name, msg='Getting a field of a nil record.')       
+        generator.add_statement(stmt)
+        self._code_name = '{record}->{field}'.format(record=self.record.code_name, field=field_code_name)

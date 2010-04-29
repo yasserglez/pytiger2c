@@ -71,8 +71,7 @@ class UnaryMinusOperatorNode(UnaryOperatorNode):
         """
         self.scope.generate_code(generator)
         self.expression.generate_code(generator)
-        int_code_type = IntegerType().code_type
-        local_var = generator.define_local(int_code_type)
-        generator.add_statement('{0} = -{1};'.format(local_var, 
-                                                     self.expression.code_name))
+        local_var = generator.define_local(IntegerType().code_type)
+        stmt = '{var} = -1 * {expr};'.format(var=local_var, expr=self.expression.code_name)
+        generator.add_statement(stmt)
         self._code_name = local_var
