@@ -1,22 +1,22 @@
 \begin{Verbatim}[commandchars=@\[\]]
-@PYay[struct] main_scope {
-    @PYaJ[int64_t] c;
+@PYay[struct] scope1 {
+    @PYaJ[int] c;
 };
 
-@PYay[struct] f_scope {
-    @PYay[struct] main_scope @PYbe[*]parent;
-    @PYaJ[int64_t] v;
+@PYay[struct] scope2 {
+    @PYay[struct] scope1 @PYbe[*]parent;
+    @PYaJ[int] v;
 };
 
-@PYay[struct] g_scope {
-    @PYay[struct] f_scope @PYbe[*]parent;
-    @PYaJ[int64_t] h;
+@PYay[struct] scope3 {
+    @PYay[struct] scope2 @PYbe[*]parent;
+    @PYaJ[int] h;
 };
 
-@PYaJ[int64_t] @PYaL[f](@PYay[struct] main_scope @PYbe[*]parent, @PYaJ[int64_t] v)
+@PYaJ[int] @PYaL[f](@PYay[struct] scope1 @PYbe[*]parent, @PYaJ[int] v)
 {
-    @PYay[struct] f_scope @PYbe[*]scope;
-    @PYaJ[int64_t] local_var1;
+    @PYay[struct] scope2 @PYbe[*]scope;
+    @PYaJ[int] local_var1;
 
     @PYaE[/* Reservar memoria para la estructura scope. */]
 
@@ -24,15 +24,13 @@
     scope@PYbe[-]@PYbe[>]v @PYbe[=] v;
     local_var1 @PYbe[=] g(scope, @PYag[5]);
 
-    @PYaE[/* Liberar memoria de la estructura scope. */]
-
     @PYay[return] local_var1;
 }
 
-@PYaJ[int64_t] @PYaL[g](@PYay[struct] f_scope @PYbe[*]parent, @PYaJ[int64_t] h)
+@PYaJ[int] @PYaL[g](@PYay[struct] scope2 @PYbe[*]parent, @PYaJ[int] h)
 {
-    @PYay[struct] g_scope @PYbe[*]scope;
-    @PYaJ[int64_t] local_var1;
+    @PYay[struct] scope3 @PYbe[*]scope;
+    @PYaJ[int] local_var1;
 
     @PYaE[/* Reservar memoria para la estructura scope. */]
 
@@ -40,20 +38,16 @@
     scope@PYbe[-]@PYbe[>]h @PYbe[=] h;
     local_var1 @PYbe[=] scope@PYbe[-]@PYbe[>]parent@PYbe[-]@PYbe[>]v @PYbe[+] scope@PYbe[-]@PYbe[>]h;
 
-    @PYaE[/* Liberar memoria de la estructura scope. */]
-
     @PYay[return] local_var1;
 }
 
 @PYaJ[int] @PYaL[main]()
 {
-    @PYay[struct] main_scope @PYbe[*]scope;
+    @PYay[struct] scope1 @PYbe[*]scope;
 
     @PYaE[/* Reservar memoria para la estructura scope. */]
 
     scope@PYbe[-]@PYbe[>]c @PYbe[=] @PYag[0];
     scope@PYbe[-]@PYbe[>]c @PYbe[=] f(scope, @PYag[10]);
-
-    @PYaE[/* Liberar memoria de la estructura scope. */]
 }
 \end{Verbatim}

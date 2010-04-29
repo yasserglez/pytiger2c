@@ -1,12 +1,12 @@
-struct main_scope {
-    int64_t a;
-    int64_t b;
-    int64_t c;
+struct scope1 {
+    int a;
+    int b;
+    int c;
 };
 
 int main()
 {
-    struct main_scope* scope;
+    struct scope1* scope;
     
     /* Reservar memoria para la estructura scope. */
 
@@ -14,6 +14,4 @@ int main()
     scope->b = 10;
     scope->c = 0;
     scope->c = scope->a + scope->b;
-
-    /* Liberar memoria de la estructura scope. */
 }

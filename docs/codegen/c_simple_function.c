@@ -1,17 +1,17 @@
-struct main_scope {
-    int64_t c;
+struct scope1 {
+    int c;
 };
 
-struct f_scope {
-    struct main_scope *parent;
-    int64_t a;
-    int64_t b;
+struct scope2 {
+    struct scope1 *parent;
+    int a;
+    int b;
 };
 
-int64_t f(struct main_scope *parent, int64_t a, int64_t b)
+int f(struct scope1 *parent, int a, int b)
 {
-    struct f_scope *scope;
-    int64_t local_var1;
+    struct scope2 *scope;
+    int local_var1;
 
     /* Reservar memoria para la estructura scope. */
 
@@ -20,19 +20,15 @@ int64_t f(struct main_scope *parent, int64_t a, int64_t b)
     scope->b = b;
     local_var1 = scope->a + scope->b;
 
-    /* Liberar memoria de la estructura scope. */
-
     return local_var1;
 }
 
 int main()
 {
-    struct main_scope *scope;
+    struct scope1 *scope;
 
     /* Reservar memoria para la estructura scope. */
 
     scope->c =  0;
     scope->c = f(scope, 5, 10);
-
-    /* Liberar memoria de la estructura scope. */
 }

@@ -1,4 +1,4 @@
 struct people {
-    struct string *name;
-    int64_t age;
+    struct tiger_string *name;
+    int age;
 }

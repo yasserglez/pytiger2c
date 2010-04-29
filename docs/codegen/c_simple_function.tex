@@ -1,18 +1,18 @@
 \begin{Verbatim}[commandchars=@\[\]]
-@PYay[struct] main_scope {
-    @PYaJ[int64_t] c;
+@PYay[struct] scope1 {
+    @PYaJ[int] c;
 };
 
-@PYay[struct] f_scope {
-    @PYay[struct] main_scope @PYbe[*]parent;
-    @PYaJ[int64_t] a;
-    @PYaJ[int64_t] b;
+@PYay[struct] scope2 {
+    @PYay[struct] scope1 @PYbe[*]parent;
+    @PYaJ[int] a;
+    @PYaJ[int] b;
 };
 
-@PYaJ[int64_t] @PYaL[f](@PYay[struct] main_scope @PYbe[*]parent, @PYaJ[int64_t] a, @PYaJ[int64_t] b)
+@PYaJ[int] @PYaL[f](@PYay[struct] scope1 @PYbe[*]parent, @PYaJ[int] a, @PYaJ[int] b)
 {
-    @PYay[struct] f_scope @PYbe[*]scope;
-    @PYaJ[int64_t] local_var1;
+    @PYay[struct] scope2 @PYbe[*]scope;
+    @PYaJ[int] local_var1;
 
     @PYaE[/* Reservar memoria para la estructura scope. */]
 
@@ -21,20 +21,16 @@
     scope@PYbe[-]@PYbe[>]b @PYbe[=] b;
     local_var1 @PYbe[=] scope@PYbe[-]@PYbe[>]a @PYbe[+] scope@PYbe[-]@PYbe[>]b;
 
-    @PYaE[/* Liberar memoria de la estructura scope. */]
-
     @PYay[return] local_var1;
 }
 
 @PYaJ[int] @PYaL[main]()
 {
-    @PYay[struct] main_scope @PYbe[*]scope;
+    @PYay[struct] scope1 @PYbe[*]scope;
 
     @PYaE[/* Reservar memoria para la estructura scope. */]
 
     scope@PYbe[-]@PYbe[>]c @PYbe[=]  @PYag[0];
     scope@PYbe[-]@PYbe[>]c @PYbe[=] f(scope, @PYag[5], @PYag[10]);
-
-    @PYaE[/* Liberar memoria de la estructura scope. */]
 }
 \end{Verbatim}

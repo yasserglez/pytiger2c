@@ -1,4 +1,4 @@
 struct integers {
-    int64_t *data;
+    int *data;
     size_t length;
 }
