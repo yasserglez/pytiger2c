@@ -1,0 +1,65 @@
+let
+    type arr_int = array of int
+    
+    function merge_sort(list : arr_int, count : int):arr_int = 
+        let
+            var middle := if count / 2 <> 0 then count / 2 else 1
+            var before := arr_int[middle] of 0
+            var after := arr_int[count-middle] of 0
+            var result := arr_int[0] of 0
+        in
+            if count = 1 
+            then
+                arr_int[1] of list[0]
+            else(
+                for i:= 0 to middle-1 do
+                    before[i] := list[i];
+                for i:= 0 to count-middle-1 do
+                    after[i] := list[i + middle];
+                merge(merge_sort(before, middle), middle,
+                      merge_sort(after, count-middle), count-middle))                
+        end
+        
+    function merge(list1 : arr_int, count1 : int, list2 : arr_int, count2 : int) : arr_int = 
+        let
+             var result := arr_int[count1+count2] of 0
+             var index1 := 0
+             var index2 := 0
+        in
+             for i:= 0 to count1+count2-1 do
+                 if( if index1 >= count1 then 0 else
+                     if index2 >= count2 then 1 else
+                     list1[index1] <= list2[index2])
+                 then(
+                     result[i] := list1[index1];
+                     index1 := index1 + 1)
+                 else(
+                     result[i] := list2[index2];
+                     index2 := index2 + 1);
+             result
+        end
+        
+    function print_list(list : arr_int, count : int) = (
+        for i := 0 to count - 1 do(
+            print(" ");
+            printi(list[i]);
+            print(","));
+        print("\n"))
+   
+   var list := arr_int[10] of 0
+in
+        list[0] := 12;
+        list[1] := 20;
+        list[2] := 18;
+        list[3] := 10;
+        list[4] := 14;
+        list[5] := 2;
+        list[6] := 4;        
+        list[7] := 6;        
+        list[8] := 16;        
+        list[9] := 8;        
+        print("before\n");
+        print_list(list, 10);
+        print("after\n");
+        print_list(merge_sort(list, 10), 10)
+end
