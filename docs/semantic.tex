@@ -1,0 +1,197 @@
+\documentclass{article}
+
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{fullpage}
+\usepackage{fancyvrb}
+\usepackage{color}
+
+\input{common/pygments}
+
+\title{
+	\LARGE{PyTiger2C} \\
+	\Large{Anotaciones sobre la comprobación semántica}
+}
+
+\author{
+  	Yasser González Fernández \\
+  	\small{yglez@uh.cu}
+  	\and
+  	Ariel Hernández Amador \\
+  	\small{gnuaha7@uh.cu}
+}
+
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\thispagestyle{empty}
+
+\newpage
+
+\setcounter{page}{1}
+
+\section{Expresiones}
+
+\subsection{Operadores}
+
+En el lenguaje Tiger los operadores binarios permitidos son 
+\verb%+ - * / = <> < <= > => & |%, agrupándolos de la manera convencional
+mediante el uso de paréntesis.
+
+Los operadores binarios aritméticos \verb|+ - *| y \verb|/| sólo pueden ser
+aplicados entre enteros y retornan el valor entero resultante.
+
+Los operadores binaros de comparación \verb|< <= >| y \verb|=>| comparan sus
+operandos y pueden ser aplicados entre string o entre enteros, comparando los
+strings del modo lexicográfico usual. Estos operadores retornan 1 si la
+comparación es verdadera y 0 en otro caso.
+
+Los operadores binarios de igualdad \verb|=| y \verb|<>| comparan operandos del
+mismo tipo retornando 1 si la comparación es verdadera y 0 en otro caso. En el
+caso de la comparación entre strings, se comparan sus valore. En caso de los
+records está permitido compararlos con \verb|nil| o con otro de su mismo tipo,
+comparandolos por referencia y no por valor. En el caso de los array tambien se
+realiza una comparación por referencia y no por valor.
+
+Los operadores lógicos \verb$|$ y \verb$&$ son evaluados en cortocircuito (el
+operando de la derecha no se evalua si el operando de la izquierda determina
+el valor), y sólo pueden ser aplicados entre enteros.
+
+Los operadores aritméticos son asociativos a la izquierda de modo convencional,
+sin embargo los operadores de comparación no son asociativos, por lo que
+\verb|a=b=c| sería ilegal.
+
+\subsection{Estructuras de Control}
+Las estructuras de control disponibles en el lenguaje Tiger son los
+condicionales \emph{if-then} e \emph{if-then-else}, las estructuras de ciclos 
+\emph{while-do} y \emph{for-do} y la estructura \emph{break}.
+
+La estructura \emph{if-then} sintácticamente expresada como 
+\verb|if expr1 then expr2| evalua la expresión \verb|expr1| que debe retornar
+un valor entero y si su resultado es distinto de cero entonces se evalua la
+expresión \verb|expr2| que no debe retornar valor. La estructura \emph{if-then}
+no retorna valor.
+
+La estructura \emph{if-then-else} sintácticamente expresada como
+\verb|if expr1 then expr2 else expr3| evalua la expresión \verb|expr1| que debe
+retornar un valor entero y si su resultado es distinto de cero entonces se
+evalua la expresión \verb|expr2|, en caso contrario se evalua la expresión
+\verb|expr3|. En caso de que una de las expresiones \verb|expr2| o \verb|expr3|
+retornen valor, entonces ambas deben retornar valor y el tipo de retorno de
+ambos deve ser del mismo tipo. La estructura \emph{if-then-else} retorna valor
+si ambas expresiones retornan valor y su tipo de retorno es el mismo que ambas
+expresiones.
+
+La estructura \emph{while-do} sintácticamente expresada como 
+\verb|while expr1 do expr2| evalua la expresión \verb|expr1|, que debe retornar
+un valor entero y si su resultado es distinto de cero entonces se evalua la
+expresión \verb|expr2| que no debe retornar valor. Este proceso se realizará
+mientras la expresión \verb|expr1| sea evaluada y su valor sea distinto de cero.
+La estructura  \emph{while-do} no retorna valor.
+
+La estructura  \emph{for-do} sintácticamente expresada como
+\verb|for ID := expr1 to expr2 do expr3| declara una variable de tipo entera
+nombrada con el valor del \emph{token} \verb|ID|, esta variable toma el valor
+de retorno de la expresión \verb|expr1| y solo esta definida en la expresión
+\verb|expr3|. Luego se evalua la expresión \verb|expr3| que no debe retornar
+valor y que además no puede modificar el valor de la variable anteriormente
+mencionada, una vez evaluada esta, la variable aumenta su valor en 1. Este
+proceso se repite hasta que la variable alcanza el valor retornado por la
+expresión \verb|expr3|. La estructura \emph{for-do} no retorna valor.
+
+La estructura \emph{break} termina el ciclo en el que esté contenida, por lo
+tanto debe esta contenida en un ciclo. Esta estructura no puede estar contenida
+en ninguna estructura que retorne valor y ella misma no retorna valor.
+
+\subsection{Let}
+
+La estructura \emph{let-in-end} sintácticamente expresada como
+\verb|let declaration_list in expr end| realiza la declaración de los tipos,
+variables y funciones contenidas en la lista de declaraciones
+\verb|declaration_list| que estarán definidas sólo en la evaluación de la
+expresión \verb|expr|. Luego se evalua la expresión \verb|expr|. La estructura
+\emph{let-in-end} retorna valor si la expresión \verb|expr| retrona valor y el
+valor de retorno de ambas es el mismo.
+
+\section{Declaraciones}
+
+\subsection{Variables}
+
+En el lenguaje Tiger las declaraciones de variables permiten al programador
+especificar de manera explícita el tipo de esta o dejar que el compilador
+infiera el tipo de la misma.
+
+La declaración de manera explícita del tipo de la variable, sintácticamente
+expresada como \verb|var ID1 : ID2 := expr| declara una variable con el nombre
+\verb|ID1| que tendrá tipo \verb|ID2| y que tomará como valor el valor de
+retorno de la expresión \verb|expr|. La expresión \verb|expr| debe tener
+\verb|ID2| como tipo de retorno, en caso de que el tipo \verb|ID2| sea un
+record, entonces la expresión \verb|expr| puede ser \verb|nil| tambien. Esta es
+la única manera de declarar una variable con \verb|nil| como valor.
+
+La declaración de variables con inferencia de tipos, sintácticamente expresada
+como \verb|var ID1 := expr|  declara una variable con el nombre \verb|ID1| que
+tendrá el mismo tipo de retorno que la expresión \verb|expr| y su valor sera el
+que retorne la misma. La expresión \verb|expr| no puede ser \verb|nil| pues en
+ese caso no se podría determinar su tipo de retorno.
+
+\subsection{Funciones}
+
+En el lenguaje Tiger las declaraciones de funciones permiten al programador
+declarar funciones que retornen valor o no, en el caso de que las funciones no
+retornen valor las llamaremos \emph{procedimientos}.
+
+La declaración de un procedimiento, sintácticamente expresada como
+\verb|function ID (field_types) = expr| declara una función de nombre
+\verb|ID|, que tiene como parámetros aquellos especificados en la lista
+\verb|field_types| que son pares del tipo \verb|ID1 : ID2| separados por
+coma donde \verb|ID1| es el nombre del parámetro e \verb|ID2| es el tipo del
+mismo. La expresión \verb|expr| corresponde al cuerpo de la función y esta no
+debe retornar valor. Un procedimiento no retorna valor.
+
+La declaración de una función, sintácitamente expresada como 
+\verb|function ID1 (field_types) : ID2 = expr| declara una función con nombre
+\verb|ID1|, que tiene como parámetros aquellos especificados en la lista
+\verb|field_types|. El tipo de retorno de esta función será \verb|ID2| y debe
+ser el mismo que el tipo de retorno de la expresión \verb|expr| que
+corresponderá al cuerpo de la función.
+
+Una secuencia de declaraciones de funciones (sin declaraciones de variables o
+variables entre ellas) puede ser mutuamente recursiva. En otro caso las
+funciones no pueden ser mutuamente recursivas.
+
+\subsection{Tipos}
+
+Los tipos en Tiger pueden ser declarados de 3 modos distintos, mediante
+\emph{alias}, \emph{array} y \emph{records}.
+
+Los \emph{alias}, definidos sintácticamente como \verb|type ID1 = ID2| definen
+un tipo con nombre \verb|ID1| que es equivalente al tipo con nombre \verb|ID2|.
+Una instancia de \verb|ID1| y una instancia de \verb|ID2| son perfectamente
+intercambiables, pues su única diferencia es en el nombre de su tipo.
+
+Los \emph{array}, definidos sintácticamente como \verb|type ID1 = array of ID2|
+definen un tipo con nombre \verb|ID1| que será una lista de tamaño fijo de
+elementos del tipo \verb|ID2|. Dos instancias de tipos \emph{array} distintos
+siempre serán distintas.
+
+Los \emph{records}, definidos sintácticamente como \verb|type ID = {field_types}|
+definen un tipo con nombre \verb|ID| que tendrá los campos contenidos en la
+lista \verb|field_types|, que sigue el mismo formato que los parámetros de las
+funciones. Dos intancias de \emph{records} distintos siempre serán distintas.
+
+Una secuencia de declaraciones de tipos (sin declaraciones de funciones o
+variables entre ellas) puede ser mutuamente recursiva. En otro caso los tipos
+no pueden ser mutuamente recursivos.
+
+
+
+ 'AliasTypeDeclarationNode',
+    'ArrayDeclarationNode',
+    'RecordDeclarationNode',
+    
+ \end{document}
+ 
