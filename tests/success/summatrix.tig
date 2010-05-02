@@ -1,0 +1,54 @@
+let
+    type row = array of int
+    type matrix = array of row
+
+    function getint(): int =
+        let 
+            var buffer := getchar()
+            var i := 0
+            
+            function isdigit(s: string): int =
+                ord(buffer) >= ord("0") & ord(buffer) <= ord("9")
+                
+            function skipto() =
+                while buffer=" " | buffer="\n" do buffer := getchar()
+        in 
+            skipto();
+            while isdigit(buffer) do 
+                (i := i*10 + ord(buffer) - ord("0"); 
+                 buffer := getchar());
+            i
+        end
+
+    function getmatrix(m: int, n: int): matrix =
+        let
+            var M := matrix[m] of row[n] of 0
+            var k := -1
+        in
+            for i := 0 to m-1 do
+                for j := 0 to n-1 do 
+                    M[i][j] := getint();
+            M
+        end
+
+    function summatrix(A: matrix, B: matrix): matrix =
+        let
+            var R := matrix[m] of row[n] of 0
+        in
+            for i := 0 to m-1 do
+                for j := 0 to n-1 do 
+                    R[i][j] := A[i][j] + B[i][j];
+            R
+        end
+
+    var m := getint()
+    var n := getint()
+    var A := getmatrix(m, n)
+    var B := matrix[n] of row[m] of 1
+    var R := summatrix(A, B)
+in
+    for i := 0 to m-1 do
+        (for j := 0 to n-1 do 
+         (printi(R[i][j]); print(" "));
+         print("\n"))
+end
