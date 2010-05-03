@@ -1,0 +1,13 @@
+/* At least, 1 Mb of memory is allocated on each iteration of the 
+ * following loop. It is repeated until 5 Gb are allocated.
+ * This should produce an "Out of memory" error in an implementation
+ * without a garbage collector. */
+for i := 1 to 5 * 1024 do
+    let
+       type ints = array of int
+       var bytes := 1 * 1024 * 1024
+       var elements := bytes / 4
+       var ints := ints[elements] of 0
+    in
+    	ints[0] = ints[elements - 1]
+    end
