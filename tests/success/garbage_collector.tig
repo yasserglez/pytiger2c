@@ -9,5 +9,5 @@ for i := 1 to 5 * 1024 do
        var elements := bytes / 4
        var ints := ints[elements] of 0
     in
-    	ints[0] = ints[elements - 1]
+    	ints[0] := ints[elements - 1]
     end
