@@ -24,8 +24,8 @@ from pytiger2c.errors import PyTiger2CError, SemanticError, CodeGenerationError
 __version__ = '1.0'
 
 __authors__ = (
-    'Yasser González Fernández <yglez@uh.cu>',
-    'Ariel Hernández Amador <gnuaha7@uh.cu>',
+    'Yasser González Fernández <ygonzalezfernandez@gmail.com>',
+    'Ariel Hernández Amador <gnuaha7@gmail.com>',
 )
 
 
