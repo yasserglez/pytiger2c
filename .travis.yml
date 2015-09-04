@@ -1,0 +1,11 @@
+sudo: false
+language: python
+python:
+  - 2.7
+script:
+  - python tests/runtests.py
+addons:
+  apt:
+    packages:
+    - build-essential
+    - libgc-dev
