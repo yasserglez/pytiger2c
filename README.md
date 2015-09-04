@@ -1,6 +1,8 @@
 PyTiger2C
 ---------
 
+[![Build Status](https://travis-ci.org/yasserglez/pytiger2c.svg?branch=master)](https://travis-ci.org/yasserglez/pytiger2c)
+
 A compiler for the Tiger programming language written in Python.
 
 Tiger is an Algol-like programming language outlined in the book
